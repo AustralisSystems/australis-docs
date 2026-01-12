@@ -1,9 +1,29 @@
 # Australis Systems Documentation Repository
 
-**Repository**: Australis Systems Docs
-**Status**: Active
-**Last Updated**: 2026-01-12
-**License**: Proprietary
+**Repository**: Australis Systems Docs  
+**Status**: Active  
+**Last Updated**: 2026-01-12  
+**License**: Proprietary  
+
+---
+
+## ⚠️ IMPORTANT: Governance Registry Onboarding Required
+
+**This repository has NOT been properly onboarded as a governed repository to the Australis Systems registry.**
+
+**Action Required**: This repository needs to be completed and registered with the Australis Systems governance framework to ensure:
+- Compliance with organizational standards
+- Proper access control and permissions
+- Integration with the central repository registry
+- Adherence to code of conduct and contribution policies
+
+**Next Steps**:
+1. Submit repository metadata to Australis Systems Governance Registry
+2. Complete governance onboarding procedures
+3. Configure automated compliance checks
+4. Register in central repository inventory
+
+**Responsible Party**: Australis Systems Development Team
 
 ---
 
