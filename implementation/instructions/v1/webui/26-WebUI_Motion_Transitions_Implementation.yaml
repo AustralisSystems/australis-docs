@@ -1,0 +1,768 @@
+prompt_name: "WebUI_Motion_Transitions_Implementation"
+version: "1.0.0"
+type: "webui_motion_transitions"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor adding motion and transitions following design system specifications"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute motion/transitions implementation phase by applying design system motion specifications,
+    implementing CSS transitions and animations, adding HTMX swap timing/easing, ensuring reduced-
+    motion support (prefers-reduced-motion), and validating all transitions meet WCAG 2.2 Animation
+    from Interactions (Level AAA) criteria.
+
+  reference_docs:
+    primary:
+      - "motion_transition_spec.md"
+      - "component_tokens.json (motion section)"
+      - "design_system_foundations.md"
+    supporting:
+      - "WCAG 2.2 Guideline 2.3 (Seizures and Physical Reactions)"
+      - "layout_tokens.json"
+
+  color_scheme_mandate:
+    reference: "COLOR_SCHEME_DIRECTIVE.md"
+    transitions: "Color transitions MUST use DaisyUI semantic classes for theme compatibility"
+    css_transitions: "transition-colors works automatically with semantic classes across themes"
+    note: "Animations work seamlessly in light/dark themes when using bg-base-*, text-base-content, etc."
+    example: "transition-colors duration-200 (works with any theme when using semantic classes)"
+
+  codebase_scaffolding_mandate:
+    priority: "MANDATORY - NO EXCEPTIONS"
+    description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+    priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+  prerequisite_validation:
+    - "[ ] Interactive behavior implementation phase (Step 25) completed"
+    - "[ ] All HTMX interactions functional"
+    - "[ ] motion_transition_spec.md reviewed"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+
+instructions:
+  objective: >
+    Add motion and transitions to UI components following design system specifications, implement
+    CSS-based transitions (HTMX swap timing), create animation utilities (with reduced-motion
+    support), ensure all motion meets WCAG 2.2 accessibility criteria, and validate cross-browser
+    consistency.
+
+  motion_principles:
+    - "Purpose-driven: Motion communicates state changes and guides attention"
+    - "Subtle: Transitions should feel natural, not distracting"
+    - "Fast: Durations 150-300ms for most interactions"
+    - "Consistent: Same type of transitions use same duration/easing"
+    - "Accessible: Full reduced-motion support (prefers-reduced-motion)"
+    - "Performance: GPU-accelerated properties (transform, opacity)"
+
+  steps:
+    - step: 1
+      name: "Audit Motion Requirements from Design System"
+      reference: "motion_transition_spec.md, component_tokens.json"
+      actions:
+        - "Extract motion specifications from motion_transition_spec.md"
+        - "Identify required motion patterns:"
+        - "  - Fade (opacity transitions)"
+        - "  - Slide (transform translateX/translateY)"
+        - "  - Scale (transform scale)"
+        - "  - Expand/Collapse (height transitions with max-height)"
+        - "  - Rotate (transform rotate)"
+        - "  - Blur (filter blur - use sparingly)"
+        - "Extract motion tokens from component_tokens.json:"
+        - "  - Durations (instant, fast, medium, slow)"
+        - "  - Easing functions (ease-in, ease-out, ease-in-out, spring)"
+        - "  - Delays (none, short, medium, long)"
+        - "Map motion patterns to UI components"
+        - "Identify HTMX swap operations needing timing"
+      outputs:
+        - "motion_patterns: List[MotionPattern]"
+        - "motion_tokens: MotionTokens"
+        - "component_motion_map: Dict[str, List[MotionPattern]]"
+      gates:
+        - "All motion specifications extracted"
+        - "Motion tokens catalogued"
+        - "Component motion requirements mapped"
+
+    - step: 2
+      name: "Create CSS Motion Utilities"
+      actions:
+        - "Create motion utility classes in Tailwind config"
+        - "Define transition durations:"
+        - "  - duration-instant: 0ms"
+        - "  - duration-fast: 150ms"
+        - "  - duration-medium: 300ms"
+        - "  - duration-slow: 500ms"
+        - "Define easing functions:"
+        - "  - ease-in: cubic-bezier(0.4, 0, 1, 1)"
+        - "  - ease-out: cubic-bezier(0, 0, 0.2, 1)"
+        - "  - ease-in-out: cubic-bezier(0.4, 0, 0.2, 1)"
+        - "  - ease-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+        - "Create animation keyframes:"
+        - "  - @keyframes fade-in"
+        - "  - @keyframes slide-in-right"
+        - "  - @keyframes scale-in"
+        - "  - @keyframes expand"
+        - "CRITICAL: Add reduced-motion support for ALL animations"
+      implementation_pattern: |
+        /* tailwind.config.js - Motion Extensions */
+
+        module.exports = {
+          theme: {
+            extend: {
+              transitionDuration: {
+                'instant': '0ms',
+                'fast': '150ms',
+                'medium': '300ms',
+                'slow': '500ms',
+              },
+              transitionTimingFunction: {
+                'ease-in': 'cubic-bezier(0.4, 0, 1, 1)',
+                'ease-out': 'cubic-bezier(0, 0, 0.2, 1)',
+                'ease-in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
+                'ease-spring': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+              },
+              keyframes: {
+                'fade-in': {
+                  '0%': { opacity: '0' },
+                  '100%': { opacity: '1' },
+                },
+                'fade-out': {
+                  '0%': { opacity: '1' },
+                  '100%': { opacity: '0' },
+                },
+                'slide-in-right': {
+                  '0%': { transform: 'translateX(100%)' },
+                  '100%': { transform: 'translateX(0)' },
+                },
+                'slide-in-left': {
+                  '0%': { transform: 'translateX(-100%)' },
+                  '100%': { transform: 'translateX(0)' },
+                },
+                'slide-in-top': {
+                  '0%': { transform: 'translateY(-100%)' },
+                  '100%': { transform: 'translateY(0)' },
+                },
+                'slide-in-bottom': {
+                  '0%': { transform: 'translateY(100%)' },
+                  '100%': { transform: 'translateY(0)' },
+                },
+                'scale-in': {
+                  '0%': { transform: 'scale(0.95)', opacity: '0' },
+                  '100%': { transform: 'scale(1)', opacity: '1' },
+                },
+                'scale-out': {
+                  '0%': { transform: 'scale(1)', opacity: '1' },
+                  '100%': { transform: 'scale(0.95)', opacity: '0' },
+                },
+                'expand': {
+                  '0%': { maxHeight: '0', opacity: '0' },
+                  '100%': { maxHeight: '500px', opacity: '1' },
+                },
+                'collapse': {
+                  '0%': { maxHeight: '500px', opacity: '1' },
+                  '100%': { maxHeight: '0', opacity: '0' },
+                },
+              },
+              animation: {
+                'fade-in': 'fade-in 150ms ease-out',
+                'fade-out': 'fade-out 150ms ease-in',
+                'slide-in-right': 'slide-in-right 300ms ease-out',
+                'slide-in-left': 'slide-in-left 300ms ease-out',
+                'slide-in-top': 'slide-in-top 300ms ease-out',
+                'slide-in-bottom': 'slide-in-bottom 300ms ease-out',
+                'scale-in': 'scale-in 200ms ease-out',
+                'scale-out': 'scale-out 200ms ease-in',
+                'expand': 'expand 300ms ease-out',
+                'collapse': 'collapse 300ms ease-in',
+              },
+            },
+          },
+        };
+
+        /* Custom CSS - Reduced Motion Support */
+
+        @media (prefers-reduced-motion: reduce) {
+          *,
+          *::before,
+          *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+          }
+        }
+
+        /* Transition Utilities */
+
+        .transition-default {
+          transition-property: all;
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          transition-duration: 150ms;
+        }
+
+        .transition-colors {
+          transition-property: color, background-color, border-color;
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          transition-duration: 150ms;
+        }
+
+        .transition-transform {
+          transition-property: transform;
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          transition-duration: 300ms;
+        }
+
+        .transition-opacity {
+          transition-property: opacity;
+          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+          transition-duration: 150ms;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .transition-default,
+          .transition-colors,
+          .transition-transform,
+          .transition-opacity {
+            transition-duration: 0.01ms !important;
+          }
+        }
+      validation:
+        - "[ ] Motion durations defined (instant, fast, medium, slow)"
+        - "[ ] Easing functions defined (ease-in, ease-out, ease-in-out, spring)"
+        - "[ ] Animation keyframes created (fade, slide, scale, expand)"
+        - "[ ] Reduced-motion support implemented (@media prefers-reduced-motion)"
+        - "[ ] Transition utilities created (colors, transform, opacity)"
+      gates:
+        - "All motion utilities available in Tailwind"
+        - "Reduced-motion support functional"
+
+    - step: 3
+      name: "Add HTMX Swap Timing and Easing"
+      actions:
+        - "Configure HTMX swap strategies with timing:"
+        - "  - hx-swap='innerHTML swap:300ms'"
+        - "  - hx-swap='outerHTML swap:200ms settle:100ms'"
+        - "  - hx-swap='beforeend swap:150ms'"
+        - "Define swap easing in CSS:"
+        - "  - .htmx-swapping { opacity: 0; transition: opacity 150ms; }"
+        - "  - .htmx-settling { opacity: 1; }"
+        - "Apply swap timing to all HTMX interactions"
+      implementation_pattern: |
+        <!-- HTMX Swap Timing Examples -->
+
+        <!-- Fade swap (most common) -->
+        <button
+          hx-get="/api/users"
+          hx-target="#results"
+          hx-swap="innerHTML swap:300ms">
+          Load Users
+        </button>
+
+        <!-- Replace row with fade and settle -->
+        <button
+          hx-delete="/api/users/123"
+          hx-target="closest tr"
+          hx-swap="outerHTML swap:200ms settle:100ms"
+          hx-confirm="Delete this user?">
+          Delete
+        </button>
+
+        <!-- Append with slide-in effect -->
+        <div
+          hx-get="/api/users?page=2"
+          hx-trigger="revealed"
+          hx-swap="beforeend swap:300ms"
+          hx-target="#user-list"
+          class="animate-slide-in-bottom">
+          Load More
+        </div>
+
+        /* HTMX Swap CSS Classes */
+
+        .htmx-swapping {
+          opacity: 0;
+          transform: scale(0.98);
+          transition: opacity 150ms ease-out, transform 150ms ease-out;
+        }
+
+        .htmx-settling {
+          opacity: 1;
+          transform: scale(1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .htmx-swapping {
+            transition-duration: 0.01ms !important;
+            transform: none !important;
+          }
+        }
+
+        /* Optional: Add to specific targets */
+
+        #results.htmx-swapping {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+
+        #results.htmx-settling {
+          opacity: 1;
+          transform: translateY(0);
+          transition: opacity 300ms ease-out, transform 300ms ease-out;
+        }
+      validation:
+        - "[ ] hx-swap timing added to all HTMX interactions"
+        - "[ ] .htmx-swapping and .htmx-settling CSS classes defined"
+        - "[ ] Swap timing follows design system (150-300ms)"
+        - "[ ] Reduced-motion support for HTMX swaps"
+        - "[ ] Smooth transitions on all content updates"
+      gates:
+        - "All HTMX swaps have smooth transitions"
+        - "Swap timing consistent across application"
+
+    - step: 4
+      name: "Apply Component-Specific Animations"
+      actions:
+        - "Add animations to interactive components:"
+        - ""
+        - "1. Buttons: Hover/active states with transitions"
+        - "   - transition-colors duration-fast"
+        - "   - transform scale on active (scale-95)"
+        - ""
+        - "2. Cards: Hover effects"
+        - "   - transition-shadow duration-medium"
+        - "   - transform translateY(-2px) on hover"
+        - ""
+        - "3. Modals: Fade + scale entrance"
+        - "   - animate-fade-in"
+        - "   - animate-scale-in"
+        - ""
+        - "4. Dropdowns: Slide + fade"
+        - "   - animate-slide-in-top"
+        - "   - animate-fade-in"
+        - ""
+        - "5. Toasts/Alerts: Slide from side"
+        - "   - animate-slide-in-right"
+        - ""
+        - "6. Accordions: Expand/collapse"
+        - "   - animate-expand / animate-collapse"
+        - ""
+        - "7. Loading States: Fade + pulse"
+        - "   - animate-pulse (DaisyUI loading)"
+        - ""
+        - "8. Form Validation: Shake on error"
+        - "   - animate-shake (custom keyframe)"
+      implementation_pattern: |
+        <!-- Button Transitions -->
+        <button class="btn btn-primary transition-colors duration-fast hover:brightness-110 active:scale-95">
+          Click Me
+        </button>
+
+        <!-- Card Hover Effect -->
+        <div class="card transition-all duration-medium hover:shadow-lg hover:-translate-y-1">
+          <div class="card-body">
+            Card content
+          </div>
+        </div>
+
+        <!-- Modal with Entrance Animation -->
+        <div
+          x-show="open"
+          x-transition:enter="animate-fade-in"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100"
+          x-transition:leave="animate-fade-out"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+          class="modal modal-open">
+          <div class="modal-box">
+            Modal content
+          </div>
+        </div>
+
+        <!-- Dropdown with Slide Animation -->
+        <div
+          x-show="open"
+          x-transition:enter="animate-slide-in-top duration-medium"
+          x-transition:leave="animate-fade-out duration-fast"
+          class="dropdown-content">
+          <ul class="menu">
+            <li><a>Option 1</a></li>
+            <li><a>Option 2</a></li>
+          </ul>
+        </div>
+
+        <!-- Toast Notification (slide from right) -->
+        <div
+          class="toast toast-end animate-slide-in-right"
+          role="alert">
+          <div class="alert alert-success">
+            <span>Success! Changes saved.</span>
+          </div>
+        </div>
+
+        <!-- Accordion (expand/collapse) -->
+        <div class="collapse collapse-arrow">
+          <input type="checkbox" />
+          <div class="collapse-title">
+            Click to expand
+          </div>
+          <div class="collapse-content animate-expand">
+            <p>Hidden content here</p>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div
+          hx-get="/api/data"
+          hx-indicator="#loading"
+          hx-target="#results">
+          <button class="btn">Load Data</button>
+        </div>
+        <div id="loading" class="htmx-indicator">
+          <span class="loading loading-spinner loading-lg animate-pulse"></span>
+        </div>
+
+        <!-- Form Validation Error (shake animation) -->
+        <input
+          type="email"
+          class="input input-bordered invalid:border-error invalid:animate-shake"
+          required>
+
+        /* Shake Animation for Form Errors */
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+          20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .animate-shake {
+          animation: shake 400ms ease-in-out;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .animate-shake {
+            animation: none;
+          }
+        }
+      validation:
+        - "[ ] Button transitions added (colors, scale)"
+        - "[ ] Card hover effects added (shadow, translateY)"
+        - "[ ] Modal entrance animations added (fade + scale)"
+        - "[ ] Dropdown animations added (slide + fade)"
+        - "[ ] Toast/alert animations added (slide from side)"
+        - "[ ] Accordion expand/collapse animations added"
+        - "[ ] Loading state animations added (pulse)"
+        - "[ ] Form error animations added (shake)"
+        - "[ ] All animations respect reduced-motion"
+      gates:
+        - "All interactive components have smooth animations"
+        - "Animations consistent across application"
+        - "Reduced-motion support verified"
+
+    - step: 5
+      name: "Validate WCAG 2.2 Animation Compliance"
+      actions:
+        - "Review WCAG 2.2 Guideline 2.3 (Seizures and Physical Reactions)"
+        - "Validate compliance with:"
+        - "  - 2.3.1 Three Flashes or Below Threshold (Level A)"
+        - "  - 2.3.2 Three Flashes (Level AAA)"
+        - "  - 2.3.3 Animation from Interactions (Level AAA)"
+        - "Check all animations:"
+        - "  - No flashing content (< 3 flashes per second)"
+        - "  - No parallax scrolling (motion sickness risk)"
+        - "  - No auto-play animations (user-initiated only)"
+        - "  - Full reduced-motion support (prefers-reduced-motion)"
+        - "Test reduced-motion behavior:"
+        - "  - Enable 'Reduce motion' in OS settings"
+        - "  - Verify all animations disabled/minimal"
+        - "  - Verify functionality preserved (no broken UI)"
+        - "Create WCAG compliance report"
+      validation_checklist: |
+        WCAG 2.2 Animation Compliance Checklist:
+
+        [ ] 2.3.1 Three Flashes or Below Threshold (Level A)
+            - Zero flashing content in application
+            - No animations exceed 3 flashes per second
+
+        [ ] 2.3.2 Three Flashes (Level AAA)
+            - Zero flashing content (stricter than 2.3.1)
+
+        [ ] 2.3.3 Animation from Interactions (Level AAA)
+            - All animations user-initiated (click, hover, focus)
+            - No auto-play animations
+            - Full reduced-motion support via prefers-reduced-motion
+            - Functionality preserved when animations disabled
+
+        [ ] Reduced-Motion Testing
+            - Windows: Settings → Accessibility → Visual effects → Animation effects OFF
+            - macOS: System Preferences → Accessibility → Display → Reduce motion
+            - All animations disabled or minimal (< 10ms duration)
+            - UI functionality intact (buttons work, content loads)
+            - No broken layouts or hidden content
+
+        [ ] Motion Sickness Considerations
+            - No parallax scrolling
+            - No continuous background animations
+            - No vestibular motion effects
+
+        [ ] Performance
+            - All animations use GPU-accelerated properties (transform, opacity)
+            - No animations cause layout reflow (avoid width, height, margin transitions)
+            - 60fps smooth performance
+      validation:
+        - "[ ] No flashing content (< 3 flashes per second)"
+        - "[ ] No auto-play animations"
+        - "[ ] All animations user-initiated"
+        - "[ ] Full reduced-motion support implemented"
+        - "[ ] Reduced-motion tested on Windows and macOS"
+        - "[ ] UI functionality preserved with reduced motion"
+        - "[ ] No parallax scrolling"
+        - "[ ] GPU-accelerated properties used (transform, opacity)"
+        - "[ ] WCAG compliance report created"
+      gates:
+        - "All WCAG 2.2 animation criteria met"
+        - "Reduced-motion fully functional"
+        - "Zero accessibility violations"
+
+    - step: 6
+      name: "Cross-Browser Motion Testing"
+      actions:
+        - "Test animations in target browsers:"
+        - "  - Chrome/Edge (Chromium)"
+        - "  - Firefox"
+        - "  - Safari (macOS/iOS)"
+        - "Validate consistency:"
+        - "  - Transition durations match"
+        - "  - Easing functions consistent"
+        - "  - HTMX swap timing works"
+        - "  - Reduced-motion support works"
+        - "Test on different devices:"
+        - "  - Desktop (Windows, macOS)"
+        - "  - Mobile (iOS, Android)"
+        - "  - Tablet"
+        - "Document browser-specific issues and workarounds"
+      testing_matrix: |
+        Cross-Browser Animation Testing Matrix:
+
+        Chrome/Edge (Chromium):
+        [ ] Transition durations accurate
+        [ ] Keyframe animations smooth
+        [ ] HTMX swap timing works
+        [ ] Reduced-motion respected
+        [ ] 60fps performance
+
+        Firefox:
+        [ ] Transition durations accurate
+        [ ] Keyframe animations smooth
+        [ ] HTMX swap timing works
+        [ ] Reduced-motion respected
+        [ ] 60fps performance
+
+        Safari (Desktop):
+        [ ] Transition durations accurate
+        [ ] Keyframe animations smooth
+        [ ] HTMX swap timing works
+        [ ] Reduced-motion respected
+        [ ] 60fps performance
+
+        Safari (iOS):
+        [ ] Touch interactions smooth
+        [ ] Animations don't block UI
+        [ ] Reduced-motion respected
+        [ ] No jank on scroll
+
+        Known Issues:
+        - Safari: Backdrop-filter may have performance issues
+        - Firefox: Some CSS filters slower than Chromium
+        - iOS Safari: Fixed positioning with transforms can be buggy
+
+        Workarounds:
+        - Use will-change: transform for complex animations
+        - Avoid animating backdrop-filter on Safari
+        - Test fixed + transform combinations on iOS
+      validation:
+        - "[ ] Animations tested on Chrome/Edge"
+        - "[ ] Animations tested on Firefox"
+        - "[ ] Animations tested on Safari (macOS)"
+        - "[ ] Animations tested on Safari (iOS)"
+        - "[ ] Reduced-motion tested on all browsers"
+        - "[ ] Performance profiled (60fps target)"
+        - "[ ] Browser-specific issues documented"
+      gates:
+        - "Animations consistent across all target browsers"
+        - "60fps performance achieved"
+        - "Zero critical browser bugs"
+
+    - step: 7
+      name: "Document Motion/Transitions Implementation"
+      actions:
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Motion pattern audit results"
+        - "  - CSS motion utilities created"
+        - "  - HTMX swap timing configuration"
+        - "  - Component-specific animations"
+        - "  - WCAG 2.2 compliance validation results"
+        - "  - Cross-browser testing results"
+        - "  - Reduced-motion implementation details"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN with Phase 5 Motion/Transitions completion"
+        - "CRITICAL: DO NOT create temporal documents"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property"
+        - "  - Motion implementation decisions"
+        - "  - WCAG compliance status"
+        - "  - Browser compatibility notes"
+        - "  - Relationships: session → implements → motion_system"
+      outputs:
+        - "spec_updated: Boolean"
+        - "plan_updated: Boolean"
+        - "wcag_compliance_report: String"
+        - "browser_compatibility_report: String"
+        - "memory_entities_created: List[str]"
+      gates:
+        - "SPEC document updated comprehensively"
+        - "IMPLEMENTATION_PLAN Phase 5 checklist updated"
+        - "WCAG compliance report archived"
+        - "Browser compatibility report archived"
+        - "Memory entities created with Date properties"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: All animations MUST respect prefers-reduced-motion"
+  - "CRITICAL: All animations MUST be user-initiated (no auto-play)"
+  - "CRITICAL: HTMX swap timing MUST be 150-300ms (design system)"
+  - "CRITICAL: All transitions MUST use GPU-accelerated properties (transform, opacity)"
+  - "CRITICAL: All animations MUST meet WCAG 2.2 Guideline 2.3 criteria"
+  - "Transition durations follow design system (instant/fast/medium/slow)"
+  - "Easing functions consistent (ease-in, ease-out, ease-in-out, spring)"
+  - "60fps performance target for all animations"
+
+forbidden:
+  - "Auto-play animations (WCAG violation)"
+  - "Flashing content (> 3 flashes per second)"
+  - "Parallax scrolling (motion sickness risk)"
+  - "Animations without reduced-motion support"
+  - "Transitions on width, height, margin (causes layout reflow)"
+  - "Animations blocking user interaction"
+  - "Creating temporal documents (all updates in SPEC and IMPLEMENTATION_PLAN)"
+
+output_format:
+  require_sections:
+    - "Section 1: Motion Pattern Audit Results"
+    - "Section 2: CSS Motion Utilities Created"
+    - "Section 3: HTMX Swap Timing Configuration"
+    - "Section 4: Component-Specific Animations"
+    - "Section 5: WCAG 2.2 Compliance Validation"
+    - "Section 6: Cross-Browser Testing Results"
+    - "Section 7: Memory Writes (session entity, decisions, compliance status)"
+    - "Section 8: Next Steps (proceed to Accessibility WCAG Validation Phase 27)"
+  language: "Australian English"
+
+success_criteria:
+  - "All motion patterns implemented from design system"
+  - "CSS motion utilities created with reduced-motion support"
+  - "HTMX swap timing configured (150-300ms)"
+  - "All components have smooth animations"
+  - "WCAG 2.2 Guideline 2.3 compliance achieved"
+  - "Reduced-motion fully functional and tested"
+  - "Cross-browser consistency validated"
+  - "60fps performance achieved"
+  - "SPEC and IMPLEMENTATION_PLAN updated (no temporal documents)"
+  - "Memory entities created with Date properties"
+
+halt_condition: "After successful motion/transitions implementation and memory persistence, halt and await instruction to proceed to Phase 27 (Accessibility WCAG Validation)."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Motion/Transitions Implementation Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, WCAG 2.2 Guideline 2.3"
+  language: "en-AU"
+  references:
+    - "motion_transition_spec.md"
+    - "component_tokens.json (motion section)"
+    - "design_system_foundations.md"
+    - "WCAG 2.2 Guideline 2.3 (Seizures and Physical Reactions)"
+
+# EXECUTION PROTOCOL
+# Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/26-WebUI_Motion_Transitions_Implementation.yaml under those enforced rules.

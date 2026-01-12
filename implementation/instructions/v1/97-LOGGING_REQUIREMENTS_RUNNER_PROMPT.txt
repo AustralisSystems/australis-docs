@@ -1,0 +1,6 @@
+Load and obey @docs/implementation/instructions/97-LOGGING_REQUIREMENTS_INSTRUCTION.yaml
+The logger factory (@src/services/logging/logger_factory.py) is the ONLY logger that must be used.
+ALL logging MUST use logger factory functions (get_logger, get_component_logger, create_debug_logger) - NO direct logging.getLogger(), logging.basicConfig(), or print() statements.
+Security modules MUST use audit logging (get_component_logger("audit", "security")) for cybersecurity compliance.
+Service modules MUST have debug logging capability (create_debug_logger(__name__)) for troubleshooting.
+Console output MUST be JSON formatted, file output MUST be detailed text formatted. Non-compliance is a blocking issue.

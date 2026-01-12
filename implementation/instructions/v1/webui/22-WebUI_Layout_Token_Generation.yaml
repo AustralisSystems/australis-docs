@@ -1,0 +1,559 @@
+prompt_name: "WebUI_Layout_Token_Generation"
+version: "1.0.0"
+type: "webui_token_generation"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor generating framework configuration from design tokens"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute layout token generation phase by transforming layout_tokens.json and component_tokens.json
+    into framework-specific configuration files (tailwind.config.js for Tailwind CSS v4, DaisyUI theme
+    extensions). Ensure all spacing, typography, colors, shadows, and motion specifications are compiled
+    and validated for consistency across React and HTMX/Jinja2 rendering stacks.
+
+  reference_docs:
+    primary:
+      - "layout_tokens.json"
+      - "component_tokens.json"
+      - "tailwind_generator_template.js"
+      - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+    supporting:
+      - "design_system_foundations.md"
+      - "motion_transition_spec.md"
+
+  codebase_scaffolding_mandate:
+    priority: "MANDATORY - NO EXCEPTIONS"
+    description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+    priority_hierarchy:
+      tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+      tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+      tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+      tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+      tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+      tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+      tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+      tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+      tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+    instructions:
+      objective: >
+        Ensure ALL code is sourced from existing public GitHub repositories,
+        official SDKs, CNCF projects, open source libraries, or public packages
+        BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+        of sourcing options to maximize code reuse, reliability, and maintainability.
+      workflow:
+        step_1_search:
+          description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+          search_sequence:
+            1_check_golden_template:
+              location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+              tools: ["filesystem (list_dir, read_file)", "grep_search"]
+              action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+              patterns:
+                - "Search src/ directory structure"
+                - "Check routers/ for endpoint patterns"
+                - "Check services/ for business logic"
+                - "Check models/ for Pydantic schemas"
+                - "Check templates/ for Jinja2/HTMX examples"
+            2_search_local_repos:
+              locations:
+                - "C:\\github_development\\projects\\*"
+                - "C:\\github_development\\templates\\*"
+              tools: ["filesystem (list_dir, read_file)", "grep_search"]
+              action: "Search local repositories for relevant code patterns"
+              examples:
+                - "list_dir('C:\\\\github_development\\\\projects')"
+                - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+            3_search_tristanaburns_github:
+              account: "tristanaburns"
+              tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+              action: "Search tristanaburns GitHub account (public and private repos)"
+              examples:
+                - "gh repo list tristanaburns --limit 100"
+                - "gh search repos --owner=tristanaburns <search_term>"
+                - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+            4_search_public_github:
+              tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+              action: "Search public GitHub repos for production-ready or demo code"
+              patterns: "Search by language, framework, file paths, actual code patterns"
+              examples:
+                - "language=['Python'] path='requirements.txt' query='fastapi'"
+                - "language=['TypeScript','TSX'] query='import React from'"
+          halt_if_found: "Stop searching when suitable code found in higher priority tier"
+        step_2_document:
+          action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+          required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+        step_3_clone_bulk:
+          action: "Clone ALL relevant repos to temporary directory"
+        step_4_scaffold:
+          action: "Extract needed code/configs/assets from cloned repos"
+        step_5_delete:
+          action: "Remove ALL cloned repos after extraction"
+        step_6_validate:
+          action: "Run validation tools"
+        step_7_update_spec:
+          action: "Update SPEC with final integration details"
+      custom_code_justification:
+        required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+        must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+      prohibited_actions:
+        - "Writing custom code without documented GitHub search attempts"
+        - "Ignoring official SDKs when available"
+        - "Preferring custom implementations over proven open source solutions"
+        - "Neglecting to explore all relevant GitHub repositories"
+        - "Failing to document source repos in SPEC files"
+    reference: "98-Codebase_Scaffolding_Mandate.yaml"
+    filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+  prerequisite_validation:
+    - "[ ] Component mapping phase (Step 21) completed with ui-model.json generated"
+    - "[ ] layout_tokens.json exists and is valid JSON"
+    - "[ ] component_tokens.json exists and is valid JSON"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+    - "[ ] Target project directory identified and writable"
+
+instructions:
+  objective: >
+    Generate production-ready Tailwind CSS v4 configuration and DaisyUI theme extensions from
+    design token files. Compile all spacing, typography, color, shadow, and motion tokens into
+    framework-specific format. Validate token consistency and completeness for both React and
+    HTMX/Jinja2 stacks.
+
+  steps:
+    - step: 1
+      name: "Load and Validate Design Token Files"
+      actions:
+        - "Read layout_tokens.json and parse as JSON object"
+        - "Read component_tokens.json and parse as JSON object"
+        - "Validate required token categories present:"
+        - "  - spacing: 8pt grid scale (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16)"
+        - "  - colors: MUST use DaisyUI theme colors (see COLOR_SCHEME_DIRECTIVE.md)"
+        - "    CRITICAL: NO hardcoded colors - use semantic tokens (primary, secondary, accent, base-*, success, warning, info, error)"
+        - "  - typography: fontSize, fontWeight, lineHeight, fontFamily"
+        - "  - shadows: shadow.sm, shadow.md, shadow.lg (dual-shadow system)"
+        - "  - radius: border radius values"
+        - "  - motion: durations, easing, named transitions"
+        - "Check for token consistency (no conflicts between files)"
+        - "Document any missing or incomplete token categories"
+      outputs:
+        - "layout_tokens: Dict[str, Any]"
+        - "component_tokens: Dict[str, Any]"
+        - "validation_results: Dict[str, bool]"
+      gates:
+        - "Both token files must parse as valid JSON"
+        - "All required token categories must be present"
+        - "Do not proceed if token validation fails"
+
+    - step: 2
+      name: "Generate Tailwind CSS v4 Configuration"
+      reference: "tailwind_generator_template.js"
+      actions:
+        - "Create tailwind.config.js in project root directory"
+        - "Map layout_tokens.json to Tailwind theme sections:"
+        - "  - spacing → theme.spacing"
+        - "  - colors → theme.colors (with nested primary/secondary/neutral/semantic)"
+        - "  - typography.fontSize → theme.fontSize (with lineHeight tuples)"
+        - "  - typography.fontWeight → theme.fontWeight"
+        - "  - typography.fontFamily → theme.fontFamily"
+        - "  - shadows → theme.boxShadow"
+        - "  - radius → theme.borderRadius"
+        - "Add DaisyUI plugin configuration"
+        - "Add motion/transition utilities from motion_transition_spec.md"
+        - "Configure content paths for template scanning:"
+        - "  - HTMX/Jinja2: 'src/**/templates/**/*.html'"
+        - "  - React: 'src/**/*.{js,ts,jsx,tsx}', 'app/**/*.{js,ts,jsx,tsx}'"
+        - "Enable JIT mode and optimize for production"
+      implementation_pattern: |
+        // tailwind.config.js (generated from tokens)
+
+        const colors = require('./layout_tokens.json').colors;
+        const spacing = require('./layout_tokens.json').spacing;
+        const typography = require('./layout_tokens.json').typography;
+
+        module.exports = {
+          content: [
+            // HTMX/Jinja2 templates
+            './src/**/templates/**/*.html',
+            './src/**/templates/**/*.jinja2',
+            // React components
+            './src/**/*.{js,ts,jsx,tsx}',
+            './app/**/*.{js,ts,jsx,tsx}',
+          ],
+
+          theme: {
+            extend: {
+              // Spacing (8pt grid)
+              spacing: {
+                '0': '0',
+                '1': '0.25rem',   // 4px
+                '2': '0.5rem',    // 8px
+                '3': '0.75rem',   // 12px
+                '4': '1rem',      // 16px
+                '5': '1.25rem',   // 20px
+                '6': '1.5rem',    // 24px
+                '8': '2rem',      // 32px
+                '10': '2.5rem',   // 40px
+                '12': '3rem',     // 48px
+                '16': '4rem',     // 64px
+              },
+
+              // Colors (from layout_tokens.json)
+              colors: {
+                primary: colors.primary,
+                secondary: colors.secondary,
+                neutral: colors.neutral,
+                semantic: colors.semantic,
+              },
+
+              // Typography
+              fontSize: {
+                'xs': ['0.75rem', { lineHeight: '1.4' }],
+                'sm': ['0.875rem', { lineHeight: '1.5' }],
+                'base': ['1rem', { lineHeight: '1.5' }],
+                'lg': ['1.25rem', { lineHeight: '1.5' }],
+                'xl': ['1.5rem', { lineHeight: '1.4' }],
+                '2xl': ['1.875rem', { lineHeight: '1.3' }],
+                '3xl': ['2.25rem', { lineHeight: '1.2' }],
+              },
+
+              fontWeight: typography.fontWeight,
+
+              // Dual-shadow system (from design_system_foundations.md)
+              boxShadow: {
+                'sm': '0 -1px 2px 0 rgba(255, 255, 255, 0.05), 0 2px 4px 0 rgba(0, 0, 0, 0.1)',
+                'md': '0 -2px 4px 0 rgba(255, 255, 255, 0.05), 0 4px 8px 0 rgba(0, 0, 0, 0.15)',
+                'lg': '0 -4px 8px 0 rgba(255, 255, 255, 0.05), 0 8px 16px 0 rgba(0, 0, 0, 0.2)',
+              },
+
+              // Border radius
+              borderRadius: {
+                'sm': '0.25rem',
+                'md': '0.5rem',
+                'lg': '0.75rem',
+                'xl': '1rem',
+              },
+
+              // Motion (from motion_transition_spec.md)
+              transitionDuration: {
+                'instant': '100ms',
+                'fast': '200ms',
+                'normal': '300ms',
+                'slow': '500ms',
+              },
+
+              transitionTimingFunction: {
+                'ease-out-cubic': 'cubic-bezier(0.33, 1, 0.68, 1)',
+                'ease-in-out-cubic': 'cubic-bezier(0.65, 0, 0.35, 1)',
+              },
+            },
+          },
+
+          plugins: [
+            require('daisyui'),
+          ],
+
+          daisyui: {
+            themes: [
+              {
+                light: {
+                  'primary': colors.primary.DEFAULT,
+                  'secondary': colors.secondary.DEFAULT,
+                  'accent': colors.secondary.DEFAULT,
+                  'neutral': colors.neutral['100'],
+                  'base-100': colors.neutral['50'],
+                  'info': colors.semantic.info,
+                  'success': colors.semantic.success,
+                  'warning': colors.semantic.warning,
+                  'error': colors.semantic.error,
+                },
+              },
+            ],
+          },
+        };
+      validation:
+        - "[ ] tailwind.config.js created in project root"
+        - "[ ] All spacing tokens mapped to theme.spacing"
+        - "[ ] All color tokens mapped to theme.colors"
+        - "[ ] Typography tokens mapped (fontSize, fontWeight, fontFamily)"
+        - "[ ] Dual-shadow system implemented in theme.boxShadow"
+        - "[ ] Motion tokens mapped to transition utilities"
+        - "[ ] DaisyUI plugin configured with theme colors"
+        - "[ ] Content paths configured for template scanning"
+        - "[ ] Configuration validated (no syntax errors)"
+      gates:
+        - "tailwind.config.js exists and is valid JavaScript"
+        - "All validation checkboxes marked as complete"
+
+    - step: 3
+      name: "Generate DaisyUI Theme Extensions"
+      reference: "SCAFFOLDING_LIBRARIES_OVERVIEW.md Section 3"
+      actions:
+        - "Extend DaisyUI theme with custom component styles"
+        - "Create src/styles/daisyui-extensions.css (or equivalent)"
+        - "Add custom utility classes for:"
+        - "  - Dual-shadow system (.shadow-dual-sm, .shadow-dual-md, .shadow-dual-lg)"
+        - "  - Tonal layering (.surface-front, .surface-back)"
+        - "  - Container query utilities (.container-sm, .container-md, .container-lg)"
+        - "  - Three-tier visibility (.must-show, .should-show, .nice-to-show)"
+        - "Import into main stylesheet or Tailwind @layer directive"
+      implementation_pattern: |
+        /* daisyui-extensions.css */
+
+        @layer components {
+          /* Dual-shadow utilities (design_system_foundations.md Section 2.1) */
+          .shadow-dual-sm {
+            box-shadow:
+              0 -1px 2px 0 rgba(255, 255, 255, 0.05),  /* Top light */
+              0 2px 4px 0 rgba(0, 0, 0, 0.1);          /* Bottom dark */
+          }
+
+          .shadow-dual-md {
+            box-shadow:
+              0 -2px 4px 0 rgba(255, 255, 255, 0.05),
+              0 4px 8px 0 rgba(0, 0, 0, 0.15);
+          }
+
+          .shadow-dual-lg {
+            box-shadow:
+              0 -4px 8px 0 rgba(255, 255, 255, 0.05),
+              0 8px 16px 0 rgba(0, 0, 0, 0.2);
+          }
+
+          /* Tonal layering (color depth) */
+          .surface-front {
+            background-color: theme('colors.neutral.100');
+          }
+
+          .surface-back {
+            background-color: theme('colors.neutral.200');
+          }
+
+          /* Container query utilities (responsive_layout_principles.md) */
+          .container-query {
+            container-type: inline-size;
+            container-name: component-container;
+          }
+
+          /* Three-tier visibility (responsive_layout_principles.md Section 2.13) */
+          .must-show {
+            display: block;
+          }
+
+          @container component-container (max-width: 480px) {
+            .should-show {
+              display: none;
+            }
+            .nice-to-show {
+              display: none;
+            }
+          }
+
+          @container component-container (max-width: 767px) {
+            .nice-to-show {
+              display: none;
+            }
+          }
+        }
+      validation:
+        - "[ ] daisyui-extensions.css created"
+        - "[ ] Dual-shadow utilities implemented"
+        - "[ ] Tonal layering utilities implemented"
+        - "[ ] Container query utilities implemented"
+        - "[ ] Three-tier visibility utilities implemented"
+        - "[ ] CSS validates (no syntax errors)"
+      gates:
+        - "Custom utilities align with design_system_foundations.md"
+        - "CSS file imported into main stylesheet"
+
+    - step: 4
+      name: "Generate Motion/Transition CSS"
+      reference: "motion_transition_spec.md"
+      actions:
+        - "Create src/styles/motion.css with named transitions"
+        - "Implement transition classes:"
+        - "  - .transition-fade (opacity changes)"
+        - "  - .transition-slide (position changes)"
+        - "  - .transition-scale (size changes)"
+        - "  - .transition-layout (layout transformations)"
+        - "Add @keyframes for complex animations:"
+        - "  - @keyframes fadeIn, fadeOut"
+        - "  - @keyframes slideIn, slideOut"
+        - "  - @keyframes scaleUp, scaleDown"
+        - "Implement @media (prefers-reduced-motion: reduce) overrides"
+        - "Set default durations and easing from layout_tokens.json"
+      implementation_pattern: |
+        /* motion.css */
+
+        @layer utilities {
+          /* Fade transitions */
+          .transition-fade {
+            transition: opacity var(--duration-normal) var(--easing-out);
+          }
+
+          /* Slide transitions */
+          .transition-slide {
+            transition: transform var(--duration-normal) var(--easing-out);
+          }
+
+          /* Scale transitions */
+          .transition-scale {
+            transition: scale var(--duration-fast) var(--easing-out);
+          }
+
+          /* Layout transformations (table → cards) */
+          .transition-layout {
+            transition: all var(--duration-slow) var(--easing-in-out);
+          }
+        }
+
+        /* Keyframe animations */
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+          from { transform: translateY(20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Reduced motion support (WCAG compliance) */
+        @media (prefers-reduced-motion: reduce) {
+          *,
+          *::before,
+          *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+
+        /* CSS custom properties from tokens */
+        :root {
+          --duration-instant: 100ms;
+          --duration-fast: 200ms;
+          --duration-normal: 300ms;
+          --duration-slow: 500ms;
+          --easing-out: cubic-bezier(0.33, 1, 0.68, 1);
+          --easing-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+        }
+      validation:
+        - "[ ] motion.css created with transition utilities"
+        - "[ ] Keyframe animations implemented"
+        - "[ ] @media (prefers-reduced-motion) overrides implemented"
+        - "[ ] CSS custom properties defined from tokens"
+        - "[ ] All transitions follow motion_transition_spec.md timing"
+      gates:
+        - "Motion CSS aligns with WCAG AA reduced motion requirements"
+
+    - step: 5
+      name: "Validate Token Consistency Across Stacks"
+      actions:
+        - "Verify generated Tailwind config matches both stacks:"
+        - "  - HTMX/Jinja2: DaisyUI components + Tailwind utilities"
+        - "  - React/Next.js: Tailwind utilities + custom components"
+        - "Test token references in sample templates:"
+        - "  - Create test HTML with DaisyUI + Tailwind classes"
+        - "  - Create test React component with Tailwind classes"
+        - "  - Verify classes resolve correctly (no missing utilities)"
+        - "Run Tailwind CLI build to validate configuration:"
+        - "  - npx tailwindcss -i ./src/styles/input.css -o ./dist/output.css"
+        - "Check output.css for expected utilities and custom classes"
+        - "Document any token inconsistencies or missing utilities"
+      validation:
+        - "[ ] Tailwind config valid for both HTMX and React stacks"
+        - "[ ] Test templates render with correct styles"
+        - "[ ] Tailwind CLI build succeeds (no errors)"
+        - "[ ] output.css contains expected utilities"
+        - "[ ] No token inconsistencies between stacks"
+      gates:
+        - "Configuration validated across both rendering stacks"
+
+    - step: 6
+      name: "Document Token Generation Decisions"
+      actions:
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Token file analysis summary"
+        - "  - Tailwind configuration generation results"
+        - "  - DaisyUI theme extension details"
+        - "  - Motion CSS implementation details"
+        - "  - Cross-stack validation results"
+        - "  - File paths for generated configurations"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN with Phase 2 Token Generation completion"
+        - "CRITICAL: DO NOT create temporal documents - all updates in SPEC and IMPLEMENTATION_PLAN"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property"
+        - "  - Token generation decisions and rationale"
+        - "  - Relationships: session → generates → configuration"
+      outputs:
+        - "spec_updated: Boolean"
+        - "plan_updated: Boolean"
+        - "memory_entities_created: List[str]"
+      gates:
+        - "SPEC document updated with all generation details"
+        - "IMPLEMENTATION_PLAN Phase 2 checklist updated"
+        - "Memory entities created with Date properties"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: tailwind.config.js MUST be generated from layout_tokens.json (no hardcoded values)"
+  - "CRITICAL: Dual-shadow system MUST be implemented per design_system_foundations.md"
+  - "CRITICAL: Container query utilities MUST be provided (no viewport @media queries)"
+  - "CRITICAL: Three-tier visibility utilities MUST be implemented"
+  - "CRITICAL: Motion CSS MUST include @media (prefers-reduced-motion) support"
+  - "All configuration must reference design_system_foundations.md principles"
+  - "DaisyUI plugin MUST be configured for HTMX/Jinja2 stack"
+  - "WCAG AA compliance for all motion and color tokens"
+
+forbidden:
+  - "Hardcoded color values in configuration (use tokens only)"
+  - "Viewport @media queries in utilities (use container queries)"
+  - "Single shadows (use dual-shadow system)"
+  - "Missing reduced motion support (WCAG requirement)"
+  - "Creating temporal documents (all updates in SPEC and IMPLEMENTATION_PLAN)"
+  - "Skipping DaisyUI configuration for HTMX stack"
+  - "Arbitrary transition durations (use tokens from motion_transition_spec.md)"
+
+output_format:
+  require_sections:
+    - "Section 1: Token File Analysis (layout_tokens.json, component_tokens.json)"
+    - "Section 2: Tailwind Configuration Generation (tailwind.config.js)"
+    - "Section 3: DaisyUI Theme Extensions (daisyui-extensions.css)"
+    - "Section 4: Motion CSS Generation (motion.css)"
+    - "Section 5: Cross-Stack Validation Results (HTMX vs React)"
+    - "Section 6: Memory Writes (session entity, generation decisions, relationships)"
+    - "Section 7: Next Steps (proceed to Template Scaffolding Phase 23)"
+  language: "Australian English"
+
+success_criteria:
+  - "Token files loaded and validated"
+  - "tailwind.config.js generated from tokens (no hardcoded values)"
+  - "DaisyUI plugin configured with theme colors"
+  - "daisyui-extensions.css created with custom utilities"
+  - "motion.css created with transitions and reduced motion support"
+  - "Configuration validated across HTMX and React stacks"
+  - "SPEC and IMPLEMENTATION_PLAN updated (no temporal documents)"
+  - "Memory entities created with Date properties"
+
+halt_condition: "After successful token generation completion and memory persistence, halt and await instruction to proceed to Phase 23 (Template Scaffolding)."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Layout Token Generation Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol"
+  language: "en-AU"
+  references:
+    - "layout_tokens.json"
+    - "component_tokens.json"
+    - "tailwind_generator_template.js"
+    - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+    - "design_system_foundations.md"
+    - "motion_transition_spec.md"
+
+# EXECUTION PROTOCOL
+# Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/22-WebUI_Layout_Token_Generation.yaml under those enforced rules.

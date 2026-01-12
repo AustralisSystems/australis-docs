@@ -1,0 +1,584 @@
+mcp:
+  name: code-documentation-protocol
+  version: "1.0.0"
+  type: documentation_protocol
+  language: en-AU
+  description: >
+    Code Documentation Protocol. Defines comprehensive code documentation methodology
+    for production code documentation and API reference creation. Governs system component
+    discovery, API documentation, developer guides, operations documentation, security
+    documentation, module dependencies, performance documentation, and quality validation.
+    Ensures consistent code documentation creation with proper completeness validation and
+    professional standards. Documentation creation only - NO implementation code or system changes.
+
+references:
+  - governance/au-sys-governance/documentation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md
+  - governance/au-sys-governance/documentation/DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/architecture/RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md
+  - docs/implementation/instructions/v2/013-PROTOCOL-Diataxis_Documentation_Framework-v1.0.0.yaml
+  - docs/implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml
+  - docs/implementation/instructions/v2/001-PROTOCOL-The_GoldenRule_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/007-PROTOCOL-MCP_Tools_Workflow-v1.0.0.yaml
+
+---
+context:
+  role: Code Documentation Specialist
+  intent: Create comprehensive code documentation and API references
+  workflow: Discover → Document APIs → Create Guides → Document Operations → Document Security → Map Dependencies → Document Performance → Generate → Validate → Deliver
+  execution_mode: Documentation creation only - NO implementation code or system changes
+  framework: "Comprehensive Code Documentation Framework (10 phases)"
+  version: "1.0.0 (November 2025)"
+
+code_documentation_overview:
+  framework_name: "Code Documentation Framework"
+  purpose: "Comprehensive production code documentation and API reference creation"
+  core_principle: "Complete documentation coverage with professional standards and accuracy"
+
+  documentation_scope_types:
+    comprehensive:
+      description: "Complete documentation of entire codebase"
+      coverage: "All components, APIs, operations, security, dependencies, performance"
+
+    api_focused:
+      description: "API documentation and function references"
+      coverage: "Public APIs, function specifications, parameter documentation, examples"
+
+    developer_guide:
+      description: "Developer documentation and implementation guides"
+      coverage: "Architecture, design patterns, implementation details, workflows"
+
+    operations:
+      description: "Operations documentation and runbooks"
+      coverage: "Deployment, maintenance, monitoring, troubleshooting"
+
+    security:
+      description: "Security documentation and compliance guides"
+      coverage: "Security architecture, authentication, authorization, compliance"
+
+    module_specific:
+      description: "Module-specific documentation"
+      coverage: "Module structure, dependencies, integration specifications"
+
+  codebase_target_types:
+    entire_codebase:
+      description: "Complete codebase documentation"
+      scope: "All modules, services, components, APIs"
+
+    specific_modules:
+      description: "Specific module documentation"
+      scope: "Selected modules and their dependencies"
+
+    services:
+      description: "Service-level documentation"
+      scope: "Microservices architecture and service interfaces"
+
+    components:
+      description: "Component-level documentation"
+      scope: "Individual components and their interactions"
+
+    api_layer:
+      description: "API layer documentation"
+      scope: "REST APIs, endpoints, request/response schemas"
+
+    data_layer:
+      description: "Data layer documentation"
+      scope: "Data models, storage, access patterns"
+
+ten_phase_execution_protocol:
+  phase_1_system_component_discovery:
+    name: "System Component Discovery and Analysis"
+    mandatory_actions:
+      - "DISCOVER and catalog all application components and entry points"
+      - "ANALYZE service topology and component interactions"
+      - "INVENTORY module structure and dependencies"
+      - "MAP data architecture and storage mechanisms"
+      - "DOCUMENT infrastructure components and integrations"
+
+    discovery_requirements:
+      application_components:
+        - "CATALOG all executable entry points and CLI tools"
+        - "INVENTORY services and microservices architecture"
+        - "MAP utility scripts and helper functions"
+        - "DOCUMENT test harnesses and validation tools"
+
+      service_topology:
+        - "MAP service dependencies and interactions"
+        - "DOCUMENT service interfaces and contracts"
+        - "ANALYZE communication patterns and protocols"
+        - "CREATE service dependency graphs and documentation"
+
+      module_structure:
+        - "INVENTORY all code modules and packages"
+        - "DOCUMENT module exports and public APIs"
+        - "MAP internal helper functions and utilities"
+        - "CREATE module dependency and relationship documentation"
+
+  phase_2_api_documentation:
+    name: "API Documentation and Reference Creation"
+    mandatory_actions:
+      - "DOCUMENT all public functions and methods with complete specifications"
+      - "CREATE comprehensive API reference documentation"
+      - "GENERATE parameter documentation with types and examples"
+      - "DOCUMENT return values, exceptions, and error conditions"
+      - "CREATE interactive API examples and usage scenarios"
+
+    api_requirements:
+      function_documentation:
+        - "DOCUMENT function synopsis and detailed descriptions"
+        - "SPECIFY parameter types, validation, and constraints"
+        - "DOCUMENT return value types and data structures"
+        - "PROVIDE comprehensive usage examples and scenarios"
+
+      api_specifications:
+        - "CREATE REST API documentation with endpoint specifications"
+        - "DOCUMENT request/response schemas and data formats"
+        - "SPECIFY authentication and authorization requirements"
+        - "PROVIDE API testing examples and integration guides"
+
+      error_documentation:
+        - "DOCUMENT all exception types and error conditions"
+        - "SPECIFY error handling patterns and recovery procedures"
+        - "PROVIDE troubleshooting guides for common issues"
+        - "CREATE error code reference and resolution documentation"
+
+  phase_3_developer_documentation:
+    name: "Developer Documentation and Implementation Guides"
+    mandatory_actions:
+      - "CREATE comprehensive developer onboarding guides"
+      - "DOCUMENT code architecture and design patterns"
+      - "GENERATE implementation details and algorithm documentation"
+      - "DOCUMENT configuration management and environment setup"
+      - "CREATE development workflow and contribution guidelines"
+
+    developer_requirements:
+      architecture_documentation:
+        - "DOCUMENT design patterns and architectural decisions"
+        - "MAP SOLID principle adherence and implementation"
+        - "ANALYZE dependency injection and extension points"
+        - "CREATE architecture decision records (ADRs)"
+
+      implementation_guides:
+        - "DOCUMENT algorithms and business logic explanations"
+        - "PROVIDE code examples and implementation patterns"
+        - "SPECIFY edge case handling and validation procedures"
+        - "CREATE debugging and troubleshooting guides"
+
+      development_workflow:
+        - "DOCUMENT development environment setup procedures"
+        - "SPECIFY coding standards and style guidelines"
+        - "CREATE testing strategies and quality assurance procedures"
+        - "DOCUMENT version control and collaboration workflows"
+
+  phase_4_operations_documentation:
+    name: "Operations Documentation and Runbooks"
+    mandatory_actions:
+      - "CREATE deployment guides and installation procedures"
+      - "DOCUMENT operational tasks and maintenance procedures"
+      - "GENERATE monitoring and alerting documentation"
+      - "DOCUMENT performance tuning and optimization guides"
+      - "CREATE incident response and troubleshooting runbooks"
+
+    operations_requirements:
+      deployment_documentation:
+        - "DOCUMENT installation prerequisites and dependencies"
+        - "SPECIFY deployment procedures and configuration management"
+        - "CREATE environment setup and validation procedures"
+        - "PROVIDE rollback and recovery procedures"
+
+      maintenance_procedures:
+        - "DOCUMENT routine maintenance tasks and schedules"
+        - "SPECIFY update and patch management procedures"
+        - "CREATE backup and recovery documentation"
+        - "PROVIDE system health check and validation procedures"
+
+      monitoring_documentation:
+        - "DOCUMENT monitoring setup and configuration"
+        - "SPECIFY alerting rules and escalation procedures"
+        - "CREATE performance baseline and tuning guides"
+        - "PROVIDE log analysis and diagnostic procedures"
+
+  phase_5_security_documentation:
+    name: "Security Documentation and Compliance"
+    mandatory_actions:
+      - "DOCUMENT security architecture and implementation"
+      - "CREATE authentication and authorization guides"
+      - "DOCUMENT data protection and encryption procedures"
+      - "GENERATE compliance and audit documentation"
+      - "CREATE security best practices and guidelines"
+
+    security_requirements:
+      security_implementation:
+        - "DOCUMENT authentication mechanisms and setup procedures"
+        - "SPECIFY authorization models and access control policies"
+        - "CREATE encryption implementation and key management guides"
+        - "PROVIDE security validation and testing procedures"
+
+      compliance_documentation:
+        - "DOCUMENT regulatory compliance requirements and procedures"
+        - "SPECIFY audit logging and evidence collection"
+        - "CREATE compliance monitoring and reporting procedures"
+        - "PROVIDE security incident response and recovery procedures"
+
+      security_operations:
+        - "DOCUMENT security monitoring and threat detection"
+        - "SPECIFY vulnerability management and patching procedures"
+        - "CREATE security assessment and penetration testing guides"
+        - "PROVIDE security awareness and training documentation"
+
+  phase_6_module_dependencies:
+    name: "Module Dependencies and Integration Documentation"
+    mandatory_actions:
+      - "DOCUMENT module dependency graphs and relationships"
+      - "CREATE integration guides and interface specifications"
+      - "GENERATE dependency management and version control documentation"
+      - "DOCUMENT external API integrations and third-party dependencies"
+      - "CREATE compatibility matrices and upgrade procedures"
+
+    dependency_requirements:
+      module_relationships:
+        - "MAP module dependency hierarchies and circular dependencies"
+        - "DOCUMENT module interfaces and communication patterns"
+        - "SPECIFY module lifecycle and initialization procedures"
+        - "CREATE module isolation and testing strategies"
+
+      integration_documentation:
+        - "DOCUMENT external system integrations and APIs"
+        - "SPECIFY data exchange formats and protocols"
+        - "CREATE integration testing and validation procedures"
+        - "PROVIDE troubleshooting guides for integration issues"
+
+      version_management:
+        - "DOCUMENT dependency version requirements and constraints"
+        - "SPECIFY upgrade procedures and compatibility testing"
+        - "CREATE dependency conflict resolution procedures"
+        - "PROVIDE rollback and recovery procedures for failed upgrades"
+
+  phase_7_performance_documentation:
+    name: "Performance and Optimization Documentation"
+    mandatory_actions:
+      - "DOCUMENT performance characteristics and benchmarks"
+      - "CREATE optimization guides and tuning procedures"
+      - "GENERATE performance monitoring and analysis documentation"
+      - "DOCUMENT capacity planning and scaling procedures"
+      - "CREATE performance troubleshooting and diagnostic guides"
+
+    performance_requirements:
+      performance_analysis:
+        - "DOCUMENT performance baselines and targets"
+        - "SPECIFY bottleneck identification and analysis procedures"
+        - "CREATE performance testing and validation procedures"
+        - "PROVIDE optimization strategies and implementation guides"
+
+      scaling_documentation:
+        - "DOCUMENT horizontal and vertical scaling strategies"
+        - "SPECIFY auto-scaling configuration and policies"
+        - "CREATE load testing and capacity planning procedures"
+        - "PROVIDE scaling troubleshooting and optimization guides"
+
+      optimization_guides:
+        - "DOCUMENT code optimization techniques and patterns"
+        - "SPECIFY database optimization and query tuning"
+        - "CREATE caching strategies and implementation guides"
+        - "PROVIDE resource optimization and efficiency procedures"
+
+  phase_8_documentation_generation:
+    name: "Documentation Generation and Automation"
+    mandatory_actions:
+      - "GENERATE automated documentation from code annotations"
+      - "CREATE interactive documentation with live examples"
+      - "DEVELOP documentation validation and testing procedures"
+      - "DOCUMENT documentation maintenance and update procedures"
+      - "CREATE documentation publishing and distribution workflows"
+
+    generation_requirements:
+      automated_documentation:
+        - "EXTRACT function documentation and generate references"
+        - "CREATE dependency graphs and relationship diagrams"
+        - "GENERATE sequence diagrams and interaction flows"
+        - "PROVIDE code metrics and quality analysis documentation"
+
+      interactive_documentation:
+        - "CREATE live code examples and interactive tutorials"
+        - "DEVELOP parameter exploration and testing interfaces"
+        - "GENERATE real-time API testing and validation tools"
+        - "PROVIDE visual data flow and system interaction demonstrations"
+
+      validation_procedures:
+        - "DOCUMENT documentation completeness validation procedures"
+        - "SPECIFY example accuracy and testing procedures"
+        - "CREATE link validation and reference checking procedures"
+        - "PROVIDE documentation quality assurance and review procedures"
+
+  phase_9_quality_assurance:
+    name: "Documentation Quality Assurance and Validation"
+    mandatory_actions:
+      - "VALIDATE documentation completeness and accuracy"
+      - "VERIFY example code execution and correctness"
+      - "CHECK documentation links and cross-references"
+      - "ENSURE professional presentation and formatting"
+      - "CREATE documentation review and approval procedures"
+
+    quality_requirements:
+      completeness_validation:
+        - "VERIFY all public APIs and functions are documented"
+        - "CHECK parameter and return value documentation completeness"
+        - "VALIDATE example coverage and accuracy"
+        - "ENSURE operational procedure documentation completeness"
+
+      accuracy_verification:
+        - "TEST all code examples and verify execution"
+        - "VALIDATE technical specifications and implementation details"
+        - "CHECK cross-references and link validity"
+        - "VERIFY documentation matches current implementation"
+
+      presentation_standards:
+        - "ENSURE consistent formatting and style guidelines"
+        - "VALIDATE professional presentation and readability"
+        - "CHECK accessibility and navigation features"
+        - "VERIFY comprehensive indexing and search capabilities"
+
+  phase_10_final_compilation:
+    name: "Documentation Compilation and Deliverable Creation"
+    mandatory_actions:
+      - "COMPILE comprehensive code documentation package"
+      - "GENERATE markdown document deliverables with proper structure"
+      - "CREATE documentation index and navigation features"
+      - "VALIDATE final documentation package completeness"
+      - "DELIVER timestamped documentation artifacts"
+
+    compilation_requirements:
+      deliverable_format: "MANDATORY: Create all documentation deliverables in markdown document format (.md files ONLY)"
+      comprehensive_coverage: "MANDATORY: Include comprehensive code examples and demonstrations"
+      technical_accuracy: "MANDATORY: Validate technical accuracy and completeness"
+      professional_presentation: "MANDATORY: Ensure professional presentation and navigation"
+      forbidden: "FORBIDDEN: Incomplete or partial documentation deliverables"
+      forbidden_jupyter: "FORBIDDEN: Creating Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+quality_framework:
+  documentation_standards:
+    completeness_score:
+      - "Function documentation: 100% required"
+      - "Parameter documentation: 100% required"
+      - "Example coverage: 80% minimum"
+      - "Test documentation: 90% minimum"
+
+    documentation_quality:
+      - "Comprehensive: Every public API documented"
+      - "Accurate: Documentation matches implementation"
+      - "Current: No outdated information"
+      - "Accessible: Clear language and examples"
+      - "Searchable: Proper indexing and cross-references"
+
+    professional_standards:
+      - "Consistent terminology and naming conventions"
+      - "Appropriate technical depth for audience"
+      - "Effective use of diagrams and visual aids"
+      - "Clear navigation and information organization"
+      - "Professional presentation and formatting"
+
+date_stamp_requirements:
+  naming_convention: "MANDATORY: ALL documentation output files MUST use reverse date stamp format: YYYY-MM-DD-HHMMSS"
+  date_stamp_format: "YYYY-MM-DD-HHMMSS"
+  example_format: "2025-09-22-142155"
+
+  required_outputs:
+    - "Documentation_Complete_{YYYY-MM-DD-HHMMSS}.md (documentation complete)"
+    - "API_Documentation_{YYYY-MM-DD-HHMMSS}.md (api documentation)"
+    - "Developer_Guide_{YYYY-MM-DD-HHMMSS}.md (developer guide)"
+    - "Operations_Runbook_{YYYY-MM-DD-HHMMSS}.md (operations runbook)"
+    - "Security_Documentation_{YYYY-MM-DD-HHMMSS}.md (security documentation)"
+
+  date_stamp_requirements:
+    - "MANDATORY: Follow `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md` for all file naming"
+    - "MANDATORY: Adhere to `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md` for metadata and versioning"
+    - "MANDATORY: Use `RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md` enforcement logic"
+    - "MANDATORY: ALL documentation output files MUST use reverse date stamp format if temporal: YYYY-MM-DD"
+    - "MANDATORY: Include Metadata Table in ALL documents"
+    - "MANDATORY: Create markdown files (.md) ONLY - NO Jupyter notebooks (.ipynb)"
+    - "FORBIDDEN: Creating documentation files without proper naming conventions"
+    - "FORBIDDEN: Using different date formats within same documentation session"
+    - "FORBIDDEN: Creating Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+validation_criteria:
+  component_discovery: "MANDATORY - Complete system component analysis and inventory"
+  api_documentation: "MANDATORY - Comprehensive API reference and function documentation"
+  developer_guides: "MANDATORY - Complete developer documentation and implementation guides"
+  operations_documentation: "MANDATORY - Comprehensive operations and maintenance documentation"
+  security_documentation: "MANDATORY - Complete security implementation and compliance documentation"
+  module_dependencies: "MANDATORY - Module dependency analysis and integration documentation"
+  performance_documentation: "MANDATORY - Performance analysis and optimization documentation"
+  automation_procedures: "MANDATORY - Documentation generation and automation procedures"
+  quality_validation: "MANDATORY - Documentation quality assurance and validation"
+  deliverable_completion: "MANDATORY - All deliverables created and validated with timestamps"
+  markdown_only: "MANDATORY - All deliverables created as markdown files (.md) ONLY"
+
+mandatory_requirements:
+  framework_compliance:
+    - "ALL documentation MUST be comprehensive and complete"
+    - "ALL public APIs MUST be documented with examples"
+    - "ALL system components MUST be analyzed and documented"
+    - "ALL operational procedures MUST be documented"
+    - "ALL security implementations MUST be documented"
+    - "ALL documentation MUST be created in markdown document format (.md files ONLY)"
+    - "ALWAYS use systematic documentation methodology"
+    - "NEVER create implementation code or execute changes"
+    - "NEVER create Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+  documentation_only:
+    - "STRICTLY documentation only - NO implementation code creation"
+    - "NO system changes or environment modifications"
+    - "NO test code or test specifications"
+    - "NO placeholder or incomplete documentation"
+    - "NO Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+forbidden_practices:
+  absolutely_forbidden:
+    - "Creating implementation code or executing changes"
+    - "Making changes to live systems or environments"
+    - "Partial or incomplete code documentation"
+    - "Skipping API documentation or function references"
+    - "Creating documentation without proper code analysis"
+    - "Missing critical documentation components"
+    - "Proceeding without comprehensive documentation coverage"
+    - "Creating documentation without professional presentation standards"
+    - "Creating documentation files without proper date stamps"
+    - "Using different date formats within same documentation session"
+    - "Creating Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+  anti_patterns:
+    incomplete_documentation:
+      wrong: "Creating partial or incomplete documentation"
+      right: "Creating comprehensive, complete documentation"
+
+    skipping_standard_adherence:
+      wrong: "Creating documentation without checking new global standards"
+      right: "Strictly adhering to Naming, Versioning, and RFC2119 standards"
+
+    skipping_analysis:
+      wrong: "Creating documentation without proper code analysis"
+      right: "Completing full code analysis before documentation creation"
+
+    missing_apis:
+      wrong: "Skipping API documentation or function references"
+      right: "Documenting all public APIs and functions comprehensively"
+
+    jupyter_notebooks:
+      wrong: "Creating Jupyter notebook files (.ipynb)"
+      right: "Creating markdown files (.md) ONLY"
+
+instruction: |
+  =========================
+  CODE DOCUMENTATION PROTOCOL
+  =========================
+
+  This protocol defines comprehensive code documentation methodology for production code
+  documentation and API reference creation.
+
+  FRAMEWORK OVERVIEW:
+  The Code Documentation Framework provides comprehensive documentation coverage across
+  10 phases:
+
+  1. System Component Discovery and Analysis
+  2. API Documentation and Reference Creation
+  3. Developer Documentation and Implementation Guides
+  4. Operations Documentation and Runbooks
+  5. Security Documentation and Compliance
+  6. Module Dependencies and Integration Documentation
+  7. Performance and Optimization Documentation
+  8. Documentation Generation and Automation
+  9. Documentation Quality Assurance and Validation
+  10. Documentation Compilation and Deliverable Creation
+
+  Reference: `ten_phase_execution_protocol`
+
+  DOCUMENTATION SCOPE TYPES:
+  - Comprehensive: Complete documentation of entire codebase
+  - API-Focused: API documentation and function references
+  - Developer Guide: Developer documentation and implementation guides
+  - Operations: Operations documentation and runbooks
+  - Security: Security documentation and compliance guides
+  - Module-Specific: Module-specific documentation
+
+  Reference: `code_documentation_overview`
+
+  CODEBASE TARGET TYPES:
+  - Entire Codebase: Complete codebase documentation
+  - Specific Modules: Specific module documentation
+  - Services: Service-level documentation
+  - Components: Component-level documentation
+  - API Layer: API layer documentation
+  - Data Layer: Data layer documentation
+
+  Reference: `code_documentation_overview`
+
+  TEN PHASE EXECUTION PROTOCOL:
+  1. System Component Discovery: Discover and catalog all components
+  2. API Documentation: Document all public APIs and functions
+  3. Developer Documentation: Create developer guides and implementation details
+  4. Operations Documentation: Document deployment and maintenance procedures
+  5. Security Documentation: Document security architecture and compliance
+  6. Module Dependencies: Map dependencies and integration specifications
+  7. Performance Documentation: Document performance characteristics and optimization
+  8. Documentation Generation: Generate automated documentation
+  9. Quality Assurance: Validate completeness and accuracy
+  10. Final Compilation: Compile and deliver timestamped documentation
+
+  Reference: `ten_phase_execution_protocol`
+
+  QUALITY FRAMEWORK:
+  Documentation standards include:
+  - Completeness Score: Function (100%), Parameter (100%), Example (80%), Test (90%)
+  - Documentation Quality: Comprehensive, Accurate, Current, Accessible, Searchable
+  - Professional Standards: Consistent terminology, appropriate depth, effective visuals
+
+  Reference: `quality_framework`
+
+  DATE STAMP & STANDARDS REQUIREMENTS:
+  ALL documentation output files MUST follow the `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md`.
+  ALL content MUST adhere to `RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md`.
+  ALL metadata MUST follow `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md`.
+
+  CRITICAL: Create markdown files (.md) ONLY - NO Jupyter notebooks (.ipynb)
+
+  Reference: `date_stamp_requirements`
+
+  VALIDATION CRITERIA:
+  Documentation MUST meet all validation criteria:
+  - Component discovery completed
+  - API documentation comprehensive
+  - Developer guides complete
+  - Operations documentation complete
+  - Security documentation complete
+  - Module dependencies mapped
+  - Performance documentation complete
+  - Automation procedures documented
+  - Quality validated
+  - Deliverables completed with timestamps
+  - Markdown files (.md) ONLY created
+
+  Reference: `validation_criteria`
+
+  MANDATORY REQUIREMENTS:
+  - ALL documentation MUST be comprehensive and complete
+  - ALL public APIs MUST be documented with examples
+  - ALL system components MUST be analyzed and documented
+  - ALL documentation MUST be created in markdown document format (.md files ONLY)
+  - STRICTLY documentation only - NO implementation code creation
+  - NEVER create Jupyter notebook files (.ipynb) - markdown files (.md) ONLY
+
+  Reference: `mandatory_requirements`
+
+  FORBIDDEN PRACTICES:
+  - Creating implementation code or executing changes
+  - Making changes to live systems or environments
+  - Partial or incomplete code documentation
+  - Skipping API documentation or function references
+  - Creating documentation without proper code analysis
+  - Creating Jupyter notebook files (.ipynb) - markdown files (.md) ONLY
+
+  Reference: `forbidden_practices`
+
+  Remember: This protocol is for code documentation creation ONLY. Follow comprehensive
+  documentation methodology, ensure complete coverage, validate quality, and create
+  professional markdown documentation with proper date stamps. Markdown files (.md) ONLY
+  - NO Jupyter notebooks (.ipynb).

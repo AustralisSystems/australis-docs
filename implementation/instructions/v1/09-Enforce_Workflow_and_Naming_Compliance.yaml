@@ -1,0 +1,283 @@
+prompt_name: "Enforce_Workflow_and_Naming_Compliance"
+version: "1.0.0"
+type: "workflow_and_naming_compliance_enforcement"
+context:
+  role: "AI workflow and naming compliance enforcement agent"
+  governance:
+    canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  description: >
+    This protocol enforces strict compliance with the implementation workflow guide and
+    documentation naming convention. It ensures all SPECs are in correct directories,
+    all temporal documents follow naming conventions or are moved to temporal/,
+    and the entire documentation structure adheres to canonical standards.
+  critical_rule: >
+    **CRITICAL DIRECTORY RULE**: The directories backlog/, in_progress/, and done/ MUST ONLY
+    contain SPEC documents (files matching pattern *_SPEC_v*.md). ALL other documents
+    (temporal documents, status reports, completion reports, session summaries, etc.) MUST
+    be moved to temporal/ AFTER important information has been extracted and used to update
+    the implementation plan and other documentation. This rule is NON-NEGOTIABLE and must be
+    enforced strictly during all audits.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    status reports, progress reports, completion reports, session summaries, and findings
+    MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the relevant SPEC(s) and
+    IMPLEMENTATION_PLAN with all progress, findings, and status information. This rule is
+    NON-NEGOTIABLE and must be enforced strictly during all audits.
+  doc_references:
+    - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+    - "docs/implementation/README_TEMPLATE.md"
+    - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+    - "docs/implementation/SPEC_README.md"
+    - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+instructions:
+  objective: >
+    Enforce strict compliance with workflow guide and naming convention. Audit all
+    documentation, verify SPECs are in correct directories, ensure temporal documents
+    follow naming convention or are moved to temporal/, and maintain canonical
+    documentation structure throughout the repository.
+  steps:
+    - step: 1
+      name: "Load Canonical Standards"
+      actions:
+        - "Parse and understand DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+        - "Parse and understand IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+        - "Extract all naming rules: TEMPORAL (_YYYY-MM-DD.md), ENDURING (_vX.Y.Z.md), STANDARD (no suffix)"
+        - "Extract workflow rules: SPECs ONLY in backlog/in_progress/done/, ALL temporal docs MUST be in temporal/"
+        - "Extract directory structure requirements"
+        - "Ensure full comprehension before proceeding"
+      expected_outcome: "All canonical standards fully understood and loaded into context."
+
+    - step: 2
+      name: "Audit Directory Structure"
+      actions:
+        - "Verify existence of required directories:"
+          - "docs/implementation/backlog/"
+          - "docs/implementation/in_progress/"
+          - "docs/implementation/done/"
+          - "docs/implementation/temporal/"
+        - "If any directory missing, create it"
+        - "List all files in docs/implementation/ root directory"
+        - "Identify files that should be in subdirectories"
+      expected_outcome: "Directory structure verified and compliant; missing directories created."
+
+    - step: 3
+      name: "Audit SPEC Files Location"
+      actions:
+        - "Scan docs/implementation/ for all files matching pattern: *_SPEC_v*.md"
+        - "For each SPEC file found:"
+          - "Verify it is in one of: backlog/, in_progress/, or done/"
+          - "If SPEC is in wrong location (root, temporal/, or other):"
+            - "Determine correct location based on status"
+            - "Move SPEC to correct directory"
+            - "Log the move action"
+        - "Verify no SPECs are in temporal/ directory"
+        - "Verify no SPECs are in root docs/implementation/ directory"
+      expected_outcome: "All SPECs are in correct directories (backlog/in_progress/done/ only)."
+
+    - step: 4
+      name: "Audit SPEC File Naming"
+      actions:
+        - "For each SPEC file found in Step 3:"
+          - "Verify filename follows pattern: [NAME]_SPEC_vX.Y.Z.md"
+          - "Verify version format is semantic (vMAJOR.MINOR.PATCH)"
+          - "If naming non-compliant:"
+            - "Rename file to follow convention"
+            - "Update all references to renamed file"
+            - "Log the rename action"
+      expected_outcome: "All SPECs follow naming convention: [NAME]_SPEC_vX.Y.Z.md"
+
+    - step: 5
+      name: "Audit Temporal Documents"
+      actions:
+        - "CRITICAL: Scan backlog/, in_progress/, and done/ directories for ALL non-SPEC files"
+        - "For each non-SPEC file found in backlog/, in_progress/, or done/:"
+          - "Extract important information from the document"
+          - "Update IMPLEMENTATION_PLAN and other documentation with extracted information"
+          - "Move the file to docs/implementation/temporal/"
+          - "Log the move action with reason: 'Non-SPEC file in SPEC directory - moved to temporal/ after information extraction'"
+        - "Scan docs/implementation/ recursively for all other markdown files"
+        - "For each markdown file:"
+          - "Determine if it is a temporal document (point-in-time, not maintained)"
+          - "Check if filename follows TEMPORAL format: DOCUMENT_NAME_YYYY-MM-DD.md"
+          - "If temporal document and naming NON-compliant:"
+            - "Move to docs/implementation/temporal/"
+            - "Log the move action with reason"
+        - "Verify no SPECs are in temporal/ directory"
+        - "Verify no enduring documents are in temporal/ directory"
+        - "CRITICAL: Verify backlog/, in_progress/, and done/ contain ONLY SPEC documents"
+      expected_outcome: "All non-SPEC files moved from backlog/in_progress/done/ to temporal/ after information extraction. All non-compliant temporal documents moved to temporal/."
+
+    - step: 6
+      name: "Audit Enduring Documents"
+      actions:
+        - "Scan docs/implementation/ root for enduring documents"
+        - "For each enduring document:"
+          - "Verify filename follows pattern: DOCUMENT_NAME_vX.Y.Z.md"
+          - "Verify version format is semantic (vMAJOR.MINOR.PATCH)"
+          - "If naming non-compliant:"
+            - "Rename to follow convention"
+            - "Update all references"
+            - "Log the rename action"
+        - "Verify enduring documents are NOT in temporal/"
+        - "Verify enduring documents are NOT in backlog/in_progress/done/"
+      expected_outcome: "All enduring documents follow naming convention and are in root directory."
+
+    - step: 7
+      name: "Audit Standard Files"
+      actions:
+        - "Identify standard files (README.md, TEMPLATE.md, etc.)"
+        - "Verify they have no suffix (no _YYYY-MM-DD.md, no _vX.Y.Z.md)"
+        - "Verify they are in appropriate locations"
+        - "If non-compliant, rename or move as appropriate"
+      expected_outcome: "All standard files follow naming convention (no suffix)."
+
+    - step: 8
+      name: "Verify Workflow Compliance"
+      actions:
+        - "CRITICAL: Verify SPEC workflow compliance:"
+          - "backlog/ contains ONLY SPEC documents (no temporal docs, no status reports)"
+          - "in_progress/ contains ONLY SPEC documents (no temporal docs, no status reports)"
+          - "done/ contains ONLY SPEC documents (no temporal docs, no completion reports)"
+          - "SPECs in backlog/ are queued (not started)"
+          - "SPECs in in_progress/ are actively being worked on"
+          - "SPECs in done/ are complete"
+          - "No SPECs in temporal/ or root directory"
+        - "CRITICAL: Verify temporal document compliance:"
+          - "ALL temporal documents are in temporal/ directory (not in backlog/in_progress/done/)"
+          - "Non-compliant temporal docs are in temporal/"
+          - "Compliant temporal docs are also in temporal/ (not in backlog/in_progress/done/)"
+          - "No SPECs in temporal/"
+        - "Verify directory counts match IMPLEMENTATION_PLAN"
+      expected_outcome: "Workflow compliance verified; backlog/in_progress/done/ contain ONLY SPECs; ALL temporal documents in temporal/."
+
+    - step: 9
+      name: "Update References"
+      actions:
+        - "For each file moved or renamed:"
+          - "Search all documentation files for references to old name/path"
+          - "Update references to new name/path"
+          - "Update IMPLEMENTATION_PLAN if it references moved/renamed files"
+          - "Update SPEC_INDEX if it references moved/renamed files"
+          - "Update SERVICE_STATUS_INDEX if it references moved/renamed files"
+          - "Update README if it references moved/renamed files"
+      expected_outcome: "All references updated to reflect file moves and renames."
+
+    - step: 10
+      name: "Generate Compliance Report"
+      actions:
+        - "Run scripts/Audit-WorkflowCompliance.ps1 to perform automated audit"
+        - "Review audit results and identify any remaining violations"
+        - "If non-SPEC files found in SPEC directories:"
+          - "Extract important information from these files"
+          - "CRITICAL: Update IMPLEMENTATION_PLAN and SPEC documents with extracted information"
+          - "CRITICAL: DO NOT create temporal documents - all information goes into SPECs and IMPLEMENTATION_PLAN"
+          - "Run scripts/Move-NonSpecFilesFromSpecDirectories.ps1 to move files"
+        - "Create compliance report with:"
+          - "Files moved (with old and new locations)"
+          - "Files renamed (with old and new names)"
+          - "Files verified compliant (no action needed)"
+          - "Directory structure status"
+          - "Naming convention compliance status"
+          - "Workflow compliance status"
+          - "Audit script results summary"
+        - "Save report as: docs/implementation/temporal/WORKFLOW_COMPLIANCE_AUDIT_YYYY-MM-DD.md"
+      expected_outcome: "Compliance audit report generated and saved. All violations remediated."
+
+constraints:
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: ALL non-SPEC files MUST be moved to temporal/ AFTER information extraction and plan/documentation updates"
+  - "CRITICAL: Never leave temporal documents, status reports, or completion reports in backlog/, in_progress/, or done/"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all updates go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Status reports, progress updates, completion summaries MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+  - "Do not move SPECs to temporal/ directory (SPECs go in backlog/in_progress/done/ only)"
+  - "Do not move enduring documents to temporal/ directory"
+  - "Do not rename files without updating all references"
+  - "Do not skip verification steps"
+  - "Always log all moves and renames for audit trail"
+  - "Maintain exact directory structure as defined in workflow guide"
+  - "Enforce naming convention strictly - no exceptions"
+
+examples:
+  spec_location_correction:
+    description: "Example of moving SPEC from wrong location"
+    from: "docs/implementation/API_AUTH_SPEC_v1.0.0.md (root directory)"
+    to: "docs/implementation/backlog/API_AUTH_SPEC_v1.0.0.md"
+    reason: "SPEC files must be in backlog/, in_progress/, or done/ directories"
+
+  temporal_doc_move:
+    description: "Example of moving non-compliant temporal document"
+    from: "docs/implementation/session_notes.txt"
+    to: "docs/implementation/temporal/session_notes.txt"
+    reason: "Temporal document doesn't follow DOCUMENT_NAME_YYYY-MM-DD.md format"
+
+  temporal_doc_compliant:
+    description: "Example of compliant temporal document that MUST be moved"
+    file: "docs/implementation/done/SESSION_REPORT_2025-11-08.md"
+    action: "Extract information  Update IMPLEMENTATION_PLAN  Run Move-NonSpecFilesFromSpecDirectories.ps1  Move to temporal/"
+    reason: "CRITICAL: Even compliant temporal documents MUST be moved from done/ to temporal/ after information extraction. done/ must ONLY contain SPECs."
+
+  automation_usage:
+    description: "Using automation scripts for compliance"
+    audit_script: "scripts/Audit-WorkflowCompliance.ps1 - Identifies violations and provides recommendations"
+    move_script: "scripts/Move-NonSpecFilesFromSpecDirectories.ps1 - Moves non-SPEC files after information extraction"
+    workflow: "1. Run Audit-WorkflowCompliance.ps1  2. Extract info from violations  3. Update plans/docs  4. Run Move-NonSpecFilesFromSpecDirectories.ps1"
+
+  spec_naming_fix:
+    description: "Example of renaming non-compliant SPEC"
+    from: "docs/implementation/in_progress/API_AUTH_SPEC.md"
+    to: "docs/implementation/in_progress/API_AUTH_SPEC_v1.0.0.md"
+    reason: "SPECs must follow [NAME]_SPEC_vX.Y.Z.md format"
+
+output_format:
+  section_1: "Canonical standards loaded and understood"
+  section_2: "Directory structure audit results"
+  section_3: "SPEC location audit results (files moved)"
+  section_4: "SPEC naming audit results (files renamed)"
+  section_5: "Temporal document audit results (files moved to temporal/)"
+  section_6: "Enduring document audit results (files renamed)"
+  section_7: "Standard files audit results"
+  section_8: "Workflow compliance verification"
+  section_9: "Reference updates completed"
+  section_10: "Compliance audit report location"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-11-09"
+  version: "1.0.0"
+  classification: "Enterprise Workflow and Naming Compliance Enforcement Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, IMPLEMENTATION_WORKFLOW_GUIDE, and DOCUMENTATION_NAMING_CONVENTION"
+  language: "en-AU"
+
+
+[END OF INSTRUCTIONS]
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/09-Enforce_Workflow_and_Naming_Compliance.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/09-Enforce_Workflow_and_Naming_Compliance.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/09-Enforce_Workflow_and_Naming_Compliance.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/09-Enforce_Workflow_and_Naming_Compliance.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/09-Enforce_Workflow_and_Naming_Compliance.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/09-Enforce_Workflow_and_Naming_Compliance.yaml under those enforced rules.

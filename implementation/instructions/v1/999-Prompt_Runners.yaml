@@ -1,0 +1,116 @@
+### 00-Enterprise_Cannonical_Execution_Protocol.yaml and ### 01-The_GoldenRule_Execution_Protocol.yaml ###
+# Use for compliance and adhoc execution of instructions.
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework.
+# List your instructions here.
+instructions:
+  Step 1:
+  Step 2:
+  Step 3:
+  Step 4:
+  Step 5:
+  Step 6:
+  Step 7:
+  Step 8:
+
+### 02-Align_Implementation_Docs_and_Specs.yaml  ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/02-Align_Implementation_Docs_and_Specs.yaml under those enforced rules.
+
+### 03-Process_Session_Outcome_and_Documentation_and_Specs ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/03-Process_Session_Outcome_and_Documentation_and_Specs.yaml under those enforced rules.
+
+The following list defines the review_docs:
+- "{{review_docs_filename}}"
+- "{{review_docs_filename}}"
+- "{{review_docs_filename}}"
+- "{{review_docs_filename}}"
+
+### 04-Execute_Implementation_Phase_Task.yaml  ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml under those enforced rules.
+
+### 05-Run_Locally_and_Test_API_UI.yaml  ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/05-Run_Locally_and_Test_API_UI.yaml under those enforced rules.
+
+### 06-Validate_Code_Quality_and_Compliance.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml under those enforced rules.
+
+### 07-Remediate_And_Refactor_Codebase.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/07-Remediate_And_Refactor_Codebase.yaml under those enforced rules.
+
+### 08-Debug_And_Troubleshoot_Codebase.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/08-Debug_And_Troubleshoot_Codebase.yaml under those enforced rules.
+
+### 09-Enforce_Workflow_and_Naming_Compliance.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/09-Enforce_Workflow_and_Naming_Compliance.yaml under those enforced rules.
+
+### 10-Build_and_Deploy_API_and_UI.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/10-Build_and_Deploy_API_and_UI.yaml under those enforced rules.
+
+### 11-Manual_API_Endpoint_Regression_Testing.yaml  ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/11-Manual_API_Endpoint_Regression_Testing.yaml under those enforced rules.
+
+### 12-Manual_WebUI_Regression_Testing.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/12-Manual_WebUI_Regression_Testing.yaml under those enforced rules.
+
+### 13-Manual_WebUI_Browser_Regression_Testing.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/13-Manual_WebUI_Browser_Regression_Testing.yaml under those enforced rules.
+
+### 97-LOGGING_REQUIREMENTS_INSTRUCTION.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/97-LOGGING_REQUIREMENTS_INSTRUCTION.yaml under those enforced rules.
+
+
+##################################################################
+## WebUI Implementation Phase Task Instructions Below ##
+##################################################################
+
+### webui/20-WebUI_Design_Phase_Tasks.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/webui/20-WebUI_Design_Phase_Tasks.yaml under those enforced rules.
+
+### webui/21-WebUI_Component_Mapping_Phase.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/webui/21-WebUI_Component_Mapping_Phase.yaml under those enforced rules.
+
+### webui/22-WebUI_Implementation_Phase_Tasks.yaml ###
+System: Load and obey  ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/webui/22-WebUI_Implementation_Phase_Tasks.yaml under those enforced rules.
+
+### webui/23-WebUI_Testing_and_Validation_Phase_Tasks.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/webui/23-WebUI_Testing_and_Validation_Phase_Tasks.yaml under those enforced rules.
+
+### webui/24-WebUI_Deployment_and_Release_Phase_Tasks.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute  ./docs/implementation/instructions/webui/24-WebUI_Deployment_and_Release_Phase_Tasks.yaml under those enforced rules.
+
+### webui/25-WebUI_Regression_Testing_Phase_Tasks.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/webui/25-WebUI_Regression_Testing_Phase_Tasks.yaml under those enforced rules.
+
+### webui/26-WebUI_Maintenance_and_Updates_Phase_Tasks.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/webui/26-WebUI_Maintenance_and_Updates_Phase_Tasks.yaml under those enforced rules.
+
+### webui/27-WebUI_Documentation_and_Training_Phase_Tasks.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/webui/27-WebUI_Documentation_and_Training_Phase_Tasks.yaml under those enforced rules.
+
+### webui/28-WebUI_User_Feedback_and_Improvements_Phase_Tasks.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/webui/28-WebUI_User_Feedback_and_Improvements_Phase_Tasks.yaml under those enforced rules.
+
+### webui/30-WebUI_Refactoring_Phase.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Canonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/webui/30-WebUI_Refactoring_Phase.yaml under those enforced rules.
+
+
+##################################################################
+## Codebase Scaffolding Mandate Task Instructions Below ##
+##################################################################
+
+### 98-Codebase_Scaffolding_Mandate.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml under those enforced rules.
+
+##################################################################
+## Handover Document Creation and Maintenance Task Instructions Below ##
+##################################################################
+
+### 100-Handover_Document_Creation_and_Maintenance_Instruction.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/100-Handover_Document_Creation_and_Maintenance_Instruction.yaml under those enforced rules.
+
+##################################################################
+## Zero Tolerance Remediation Task Instructions Below ##
+##################################################################
+
+### 101-Zero_Tolerance_Remediation_Instruction.yaml ###
+System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/101-Zero_Tolerance_Remediation_Instruction.yaml under those enforced rules.
+

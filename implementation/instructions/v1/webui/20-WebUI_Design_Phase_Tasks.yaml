@@ -1,0 +1,760 @@
+prompt_name: "WebUI_Design_Phase_Tasks"
+version: "1.0.0"
+type: "webui_design_execution"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor applying design system principles to web UI development"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute the design phase of web UI development by applying foundational design principles
+    (shadows, depth, responsive layout, color systems, typography, spacing) to HTML/HTMX/Jinja2
+    templates and React components. Ensure all implementations follow the design system foundations
+    and are validated against established principles before proceeding to component mapping.
+
+  reference_docs:
+    primary:
+      - "design_system_foundations.md"
+      - "figma_guideline_deck.md"
+      - "responsive_layout_principles.md"
+      - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+    supporting:
+      - "motion_transition_spec.md"
+      - "component_tokens.json"
+
+  codebase_scaffolding_mandate:
+  priority: "MANDATORY - NO EXCEPTIONS"
+  description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+  priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+  technology_stack_hierarchy:
+    description: "MANDATORY priority order for frontend technologies (highest to lowest priority)"
+    priority_order:
+      1_htmx_primitives:
+        priority: "HIGHEST"
+        technologies:
+          - "HTMX core attributes (hx-get, hx-post, hx-put, hx-delete, hx-patch)"
+          - "HTMX response handling (hx-target, hx-swap, hx-select)"
+          - "HTMX triggers (hx-trigger, hx-include)"
+          - "HTMX indicators (hx-indicator)"
+          - "HTMX history (hx-push-url, hx-replace-url)"
+        rule: "ALWAYS use HTMX primitives FIRST before considering any JavaScript"
+      2_htmx_extensions:
+        priority: "HIGH"
+        technologies:
+          - "HTMX official extensions (loading-states, multi-swap, response-targets)"
+          - "HTMX community extensions from public repos"
+          - "HTMX plugins from CDN (https://unpkg.com/htmx.org@*/dist/ext/)"
+        rule: "Use HTMX extensions from public repos before Alpine.js or custom JS"
+        source_requirements:
+          - "Must be from official HTMX GitHub or well-maintained public repos"
+          - "Document extension source URL and version"
+      3_alpinejs:
+        priority: "MEDIUM"
+        technologies:
+          - "Alpine.js core (x-data, x-show, x-if, x-for, x-on)"
+          - "Alpine.js plugins from public repos"
+          - "Alpine.js from CDN (https://cdn.jsdelivr.net/npm/alpinejs@3.x.x)"
+        rule: "Use Alpine.js only when HTMX primitives + extensions cannot achieve the functionality"
+        use_cases:
+          - "Client-side state management (dropdowns, toggles)"
+          - "Form validation before submission"
+          - "Interactive UI without server round-trip"
+        source_requirements:
+          - "Must use CDN or npm package (no custom builds)"
+          - "Document Alpine.js version"
+      4_public_js_libraries:
+        priority: "MEDIUM-LOW"
+        technologies:
+          - "Chart.js, D3.js (data visualization)"
+          - "Sortable.js (drag and drop)"
+          - "Choices.js, Tom Select (enhanced selects)"
+          - "Flatpickr, Pikaday (date pickers)"
+          - "Other well-maintained public libraries"
+        rule: "Use public, maintained libraries from npm/CDN before writing custom JS"
+        source_requirements:
+          - "Must have active maintenance (commits within last 6 months)"
+          - "Must have > 1000 GitHub stars or be industry standard"
+          - "Must be from npm, CDN (unpkg, jsdelivr, cdnjs)"
+          - "Document library name, version, and CDN URL"
+      5_custom_javascript:
+        priority: "LOWEST (LAST RESORT)"
+        rule: "ONLY write custom JavaScript when ALL above options are exhausted"
+        justification_required:
+          - "Document why HTMX primitives cannot work"
+          - "Document why HTMX extensions cannot work"
+          - "Document why Alpine.js cannot work"
+          - "Document why no public library exists"
+        constraints:
+          - "Keep custom JS minimal (<50 lines per file)"
+          - "Use vanilla JS (no jQuery or custom frameworks)"
+          - "Add comprehensive comments explaining necessity"
+          - "Prefer event delegation over direct event listeners"
+
+    styling_stack:
+      mandatory:
+        - "DaisyUI component library (https://daisyui.com/)"
+        - "Tailwind CSS v4 utility classes"
+      rule: "ALWAYS use DaisyUI + Tailwind for HTMX/Jinja2 templates"
+      custom_css: "LAST RESORT - only when DaisyUI + Tailwind cannot achieve design"
+
+instructions:
+  objective: >
+    Apply design system foundations to create visually consistent, accessible, and responsive
+    web UI components. Each design principle must be implemented with validation gates before
+    proceeding to the next phase.
+
+  color_scheme_mandate:
+    reference: "COLOR_SCHEME_DIRECTIVE.md"
+    rule: "MANDATORY - All components MUST use DaisyUI semantic color utilities (bg-base-*, text-base-content, etc.)"
+    prohibited:
+      - "bg-white"
+      - "bg-gray-*"
+      - "text-black"
+      - "text-gray-*"
+      - "border-gray-*"
+      - "hardcoded hex colors"
+    required:
+      - "bg-base-{100,200,300}"
+      - "text-base-content"
+      - "border-base-300"
+      - "btn btn-{primary,secondary,accent}"
+    enforcement: "AUTOMATIC REJECTION of any code containing prohibited color patterns"
+
+  prerequisite_validation:
+    - "[ ] All reference documentation files exist and are readable"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+    - "[ ] OpenAPI specification accessible and valid"
+    - "[ ] Target framework identified (HTMX/Jinja2 or React/TypeScript)"
+
+  steps:
+    - step: 1
+      name: "Review Design System Foundations"
+      actions:
+        - "Read design_system_foundations.md (all sections)"
+        - "Extract core principles: Shadows & Depth, Responsiveness, Color Systems"
+        - "Note AI automation prompts (Section 4) for later validation"
+        - "Review enforcement rules (Section 5) as mandatory gates"
+      outputs:
+        - "design_principles_summary: Dict[str, List[str]]"
+        - "enforcement_rules: List[str]"
+      gates:
+        - "All 6 sections of design_system_foundations.md reviewed and summarized"
+        - "Enforcement rules extracted and understood"
+
+    - step: 2
+      name: "Apply Shadows & Depth System"
+      reference: "design_system_foundations.md Section 2.1"
+      actions:
+        - "CRITICAL: Implement colour layering (3-4 tonal variations per base colour)"
+        - "Apply dual-shadow system:"
+        - "  - Light shadow on top (subtle highlight)"
+        - "  - Darker shadow underneath (depth)"
+        - "  - Use 3 elevation levels: small (shadow.sm), medium (shadow.md), large (shadow.lg)"
+        - "Maintain consistent top-down lighting direction"
+        - "OPTIONAL: Add subtle linear gradients with inner shadows (especially for dark mode)"
+        - "CRITICAL: Remove ALL borders - replace with tonal contrast"
+      implementation_pattern: |
+        /* Colour Layering Example (Tailwind CSS) */
+        .card-surface {
+          background: theme('colors.neutral.100');  /* Lightest at front */
+        }
+        .card-container {
+          background: theme('colors.neutral.200');  /* Darker at back */
+        }
+
+        /* Dual Shadow System */
+        .elevated-sm {
+          box-shadow:
+            0 -1px 2px 0 rgba(255, 255, 255, 0.05),  /* Top light */
+            0 2px 4px 0 rgba(0, 0, 0, 0.1);          /* Bottom dark */
+        }
+        .elevated-md {
+          box-shadow:
+            0 -2px 4px 0 rgba(255, 255, 255, 0.05),
+            0 4px 8px 0 rgba(0, 0, 0, 0.15);
+        }
+        .elevated-lg {
+          box-shadow:
+            0 -4px 8px 0 rgba(255, 255, 255, 0.05),
+            0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+      validation:
+        - "[ ] COLOR_SCHEME_DIRECTIVE.md: All colors use semantic classes (bg-base-*, text-base-content)"
+        - "[ ] 3-4 tonal variations created for each base colour"
+        - "[ ] All elevated elements use dual-shadow system (not single shadow)"
+        - "[ ] Shadow tokens defined: shadow.sm, shadow.md, shadow.lg"
+        - "[ ] Top-down lighting consistent across all components"
+        - "[ ] ZERO borders used (all replaced with tonal contrast)"
+        - "[ ] Optional: Gradients added for dark mode (if dark mode supported)"
+      gates:
+        - "All validation checkboxes marked as complete"
+        - "No border properties found in CSS (border: 0 or no border declarations)"
+
+    - step: 3
+      name: "Implement Responsive Layout System"
+      reference: "design_system_foundations.md Section 2.2, responsive_layout_principles.md"
+      actions:
+        - "CRITICAL: Use systems of boxes (nested parent-child relationships)"
+        - "CRITICAL: Use container queries over viewport breakpoints (Principle 2.7)"
+        - "Implement purposeful rearrangement (not shrinking):"
+        - "  - Prioritize elements by importance (Must Show → Should Show → Nice to Show)"
+        - "  - Allow reflow instead of squishing components"
+        - "  - Use carousels or stacked layouts where needed"
+        - "Define container query breakpoints:"
+        - "  - Mobile: < 480px (use secondary tokens)"
+        - "  - Tablet: 480-767px (density-based token selection)"
+        - "  - Desktop: ≥ 768px (use primary tokens)"
+        - "Read responsive_layout_principles.md for 15 core principles"
+      implementation_pattern: |
+        /* Container Query Pattern (NOT viewport breakpoint) */
+        .component {
+          container-type: inline-size;
+          container-name: component-container;
+        }
+
+        /* Rearrange based on container width */
+        @container component-container (max-width: 480px) {
+          .layout { display: flex; flex-direction: column; }  /* Stack */
+        }
+        @container component-container (min-width: 768px) {
+          .layout { display: grid; grid-template-columns: repeat(3, 1fr); }  /* Grid */
+        }
+
+        /* Three-Tier Visibility (responsive_layout_principles.md Section 2.13) */
+        .must-show { display: block; }  /* Always visible */
+        @container component-container (max-width: 480px) {
+          .should-show { display: none; }  /* Hidden on mobile */
+          .nice-to-show { display: none; }  /* Hidden on mobile */
+        }
+      validation:
+        - "[ ] All layouts use container queries (NOT @media viewport queries)"
+        - "[ ] Parent-child box relationships documented"
+        - "[ ] Three-tier visibility hierarchy implemented (Must/Should/Nice)"
+        - "[ ] Rearrangement rules defined (not just scaling down)"
+        - "[ ] Container query breakpoints: <480px, 480-767px, ≥768px"
+        - "[ ] No components shrink below readable size (avoid squishing)"
+      gates:
+        - "Zero viewport @media queries used (all container queries)"
+        - "All validation checkboxes marked as complete"
+
+    - step: 4
+      name: "Apply Colour System Roles"
+      reference: "design_system_foundations.md Section 2.3"
+      actions:
+        - "Define colour palette with 4 roles:"
+        - "  1. PRIMARY: CTAs, action anchors (used sparingly)"
+        - "  2. SECONDARY: Supporting actions, accents"
+        - "  3. NEUTRAL: Backgrounds, surfaces, typography (dominates)"
+        - "  4. SEMANTIC: Success, warning, info, error (matches meaning)"
+        - "CRITICAL: Use neutrals for structure (80-90% of UI)"
+        - "CRITICAL: Use saturated colours sparingly (CTAs, alerts)"
+        - "CRITICAL: Semantic colours MUST match meaning (green=success, red=error)"
+        - "Create colour tokens in component_tokens.json format"
+      implementation_pattern: |
+        /* Colour Token Structure */
+        colors: {
+          primary: {
+            DEFAULT: '#3B82F6',  /* Action anchor */
+            hover: '#2563EB',
+            pressed: '#1D4ED8'
+          },
+          secondary: {
+            DEFAULT: '#8B5CF6',  /* Accent */
+          },
+          neutral: {
+            50: '#FAFAFA',   /* Lightest */
+            100: '#F5F5F5',
+            200: '#E5E5E5',
+            /* ... through to 900 */
+            900: '#171717'   /* Darkest */
+          },
+          semantic: {
+            success: '#10B981',  /* Green - positive action */
+            warning: '#F59E0B',  /* Amber - caution */
+            info: '#3B82F6',     /* Blue - information */
+            error: '#EF4444'     /* Red - destructive/error */
+          }
+        }
+
+        /* Usage Example */
+        .cta-button {
+          background: theme('colors.primary.DEFAULT');  /* Primary for CTA */
+        }
+        .card-surface {
+          background: theme('colors.neutral.100');  /* Neutral for structure */
+        }
+        .alert-success {
+          background: theme('colors.semantic.success');  /* Green = success */
+        }
+      validation:
+        - "[ ] PRIMARY colour used ONLY for CTAs and action anchors"
+        - "[ ] SECONDARY colour used for accents (not structure)"
+        - "[ ] NEUTRAL colours dominate (backgrounds, surfaces, text)"
+        - "[ ] SEMANTIC colours match meaning (green=success, red=error, amber=warning, blue=info)"
+        - "[ ] Colour tokens created with DEFAULT/hover/pressed states"
+        - "[ ] High contrast maintained for accessibility (WCAG AA minimum)"
+      gates:
+        - "Colour usage audit passes: 80-90% neutral, <10% saturated"
+        - "Semantic colour meanings validated"
+        - "All validation checkboxes marked as complete"
+
+    - step: 5
+      name: "Implement Typography System"
+      reference: "design_system_foundations.md Section 3.4"
+      actions:
+        - "Define modular scale (e.g., 1.25 ratio or 1.333 ratio)"
+        - "Create type scale from base size (e.g., 16px base):"
+        - "  - xs: 12px (0.75rem)"
+        - "  - sm: 14px (0.875rem)"
+        - "  - base: 16px (1rem)"
+        - "  - lg: 20px (1.25rem)"
+        - "  - xl: 24px (1.5rem)"
+        - "  - 2xl: 30px (1.875rem)"
+        - "  - 3xl: 36px (2.25rem)"
+        - "Use font weights: 400 (regular), 500 (medium), 600 (semibold), 700 (bold)"
+        - "Set line-heights for readability:"
+        - "  - Headings: 1.2-1.3"
+        - "  - Body: 1.5-1.6"
+        - "  - Small text: 1.4"
+      implementation_pattern: |
+        /* Typography Scale */
+        fontSize: {
+          xs: ['0.75rem', { lineHeight: '1.4' }],
+          sm: ['0.875rem', { lineHeight: '1.5' }],
+          base: ['1rem', { lineHeight: '1.5' }],
+          lg: ['1.25rem', { lineHeight: '1.5' }],
+          xl: ['1.5rem', { lineHeight: '1.4' }],
+          '2xl': ['1.875rem', { lineHeight: '1.3' }],
+          '3xl': ['2.25rem', { lineHeight: '1.2' }],
+        }
+
+        /* Font Weight Scale */
+        fontWeight: {
+          normal: '400',
+          medium: '500',
+          semibold: '600',
+          bold: '700'
+        }
+      validation:
+        - "[ ] Modular scale defined with consistent ratio"
+        - "[ ] Font sizes use rem units (not px)"
+        - "[ ] Line heights tuned: headings 1.2-1.3, body 1.5-1.6"
+        - "[ ] Font weights limited to 400-700 range"
+        - "[ ] Type scale tested at mobile and desktop sizes"
+      gates:
+        - "Typography scale generates readable text at all sizes"
+        - "All validation checkboxes marked as complete"
+
+    - step: 6
+      name: "Implement Spacing System"
+      reference: "design_system_foundations.md Section 3.3"
+      actions:
+        - "CRITICAL: Use 8pt grid system (all spacing in multiples of 8px)"
+        - "Define spacing scale mapped to utility classes:"
+        - "  - 0: 0px"
+        - "  - 1: 0.25rem (4px)"
+        - "  - 2: 0.5rem (8px)"
+        - "  - 3: 0.75rem (12px)"
+        - "  - 4: 1rem (16px)"
+        - "  - 5: 1.25rem (20px)"
+        - "  - 6: 1.5rem (24px)"
+        - "  - 8: 2rem (32px)"
+        - "  - 10: 2.5rem (40px)"
+        - "  - 12: 3rem (48px)"
+        - "  - 16: 4rem (64px)"
+        - "Apply spacing consistently to padding, margin, gaps"
+      implementation_pattern: |
+        /* Spacing Scale (Tailwind format) */
+        spacing: {
+          0: '0',
+          1: '0.25rem',  /* 4px */
+          2: '0.5rem',   /* 8px */
+          3: '0.75rem',  /* 12px */
+          4: '1rem',     /* 16px */
+          5: '1.25rem',  /* 20px */
+          6: '1.5rem',   /* 24px */
+          8: '2rem',     /* 32px */
+          10: '2.5rem',  /* 40px */
+          12: '3rem',    /* 48px */
+          16: '4rem',    /* 64px */
+        }
+
+        /* Usage */
+        .card {
+          padding: theme('spacing.6');   /* 24px */
+          margin-bottom: theme('spacing.4');  /* 16px */
+        }
+      validation:
+        - "[ ] All spacing values are multiples of 8px (except 4px for fine-tuning)"
+        - "[ ] Spacing scale uses rem units"
+        - "[ ] Spacing applied consistently (no arbitrary pixel values)"
+        - "[ ] Spacing creates clear visual hierarchy"
+      gates:
+        - "No arbitrary spacing values found (all use defined scale)"
+        - "All validation checkboxes marked as complete"
+
+    - step: 7
+      name: "Validate Technology Stack Hierarchy"
+      reference: "SCAFFOLDING_LIBRARIES_OVERVIEW.md Section 7"
+      actions:
+        - "CRITICAL: Audit all interactive elements for technology hierarchy compliance"
+        - "Verify HTMX primitives used for all server interactions:"
+        - "  - Forms: hx-post, hx-target, hx-swap"
+        - "  - Buttons: hx-get, hx-delete, hx-confirm"
+        - "  - Dynamic content: hx-trigger='load', hx-trigger='every Xs'"
+        - "Check for HTMX extensions if advanced functionality needed:"
+        - "  - loading-states extension for loading indicators"
+        - "  - response-targets extension for conditional targeting"
+        - "  - multi-swap extension for multiple DOM updates"
+        - "Verify Alpine.js used ONLY when HTMX cannot achieve functionality:"
+        - "  - Client-side dropdowns (x-data, x-show)"
+        - "  - Form validation before submission"
+        - "  - Interactive toggles without server round-trip"
+        - "Verify all JavaScript libraries are public and maintained:"
+        - "  - Check GitHub stars > 1000 OR industry standard"
+        - "  - Check last commit within 6 months"
+        - "  - Document library name, version, CDN URL"
+        - "CRITICAL: Verify NO custom JavaScript unless fully justified"
+        - "Verify DaisyUI + Tailwind used for all styling (no custom CSS frameworks)"
+      validation_checklist:
+        - "[ ] All server interactions use HTMX primitives (hx-get, hx-post, etc.)"
+        - "[ ] HTMX extensions used before Alpine.js (if advanced features needed)"
+        - "[ ] Alpine.js used only for client-side state (justified use cases)"
+        - "[ ] All external JS libraries from public, maintained repos"
+        - "[ ] All external dependencies documented (name, version, CDN URL)"
+        - "[ ] Zero custom JavaScript OR fully justified with documentation"
+        - "[ ] DaisyUI + Tailwind used for all styling"
+        - "[ ] No jQuery or custom JS frameworks"
+      implementation_pattern: |
+        <!-- ✅ CORRECT: HTMX primitive for server interaction -->
+        <button hx-delete="/api/users/123"
+                hx-confirm="Are you sure?"
+                hx-target="#user-list"
+                hx-swap="outerHTML"
+                class="btn btn-error">
+          Delete User
+        </button>
+
+        <!-- ✅ CORRECT: HTMX extension for loading state -->
+        <div hx-ext="loading-states">
+          <button hx-get="/api/data"
+                  data-loading-disable
+                  data-loading-class="loading">
+            Load Data
+          </button>
+        </div>
+
+        <!-- ✅ CORRECT: Alpine.js for client-side dropdown (no server call) -->
+        <div x-data="{ open: false }">
+          <button @click="open = !open">Toggle Menu</button>
+          <div x-show="open">Menu items...</div>
+        </div>
+
+        <!-- ✅ CORRECT: Public library from CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+
+        <!-- ❌ INCORRECT: Custom JavaScript for server interaction -->
+        <button onclick="deleteUser(123)">Delete User</button>
+        <script>
+        function deleteUser(id) {
+          fetch('/api/users/' + id, {method: 'DELETE'})...
+        }
+        </script>
+
+        <!-- ❌ INCORRECT: jQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+        <!-- ❌ INCORRECT: Unmaintained library or private repo -->
+        <script src="https://cdn.example.com/my-custom-framework.js"></script>
+      justification_template: |
+        # Custom JavaScript Justification
+
+        **Location:** templates/pages/dashboard/custom-chart.html
+
+        **Functionality Required:** Real-time WebSocket chart updates with custom zoom/pan
+
+        **Why HTMX Cannot Work:**
+        - WebSocket updates require persistent connection (HTMX is request/response)
+        - Chart.js library requires JavaScript initialization and data updates
+
+        **Why HTMX Extensions Cannot Work:**
+        - No HTMX extension for Chart.js integration
+        - SSE extension doesn't support bidirectional WebSocket communication
+
+        **Why Alpine.js Cannot Work:**
+        - Chart.js requires imperative API calls (new Chart(), chart.update())
+        - Alpine.js is declarative and cannot wrap Chart.js initialization
+
+        **Why No Public Library Exists:**
+        - Chart.js is the public library (used)
+        - No public HTMX + Chart.js + WebSocket integration library exists
+
+        **Custom Code (47 lines):**
+        - WebSocket connection management
+        - Chart.js initialization and data update logic
+        - Error handling and reconnection logic
+
+        **Approval:** Required before proceeding
+      gates:
+        - "Technology hierarchy followed (HTMX → HTMX extensions → Alpine.js → public libs → custom)"
+        - "All external dependencies from public, maintained repos"
+        - "Custom JavaScript justified OR zero custom JS"
+        - "All validation checkboxes marked as complete"
+
+    - step: 8
+      name: "Validate Router & Service Integration"
+      actions:
+        - "CRITICAL: Verify all template URLs use relative paths:"
+        - "  - CORRECT: hx-get=\"/api/users\" or hx-get=\"../api/users\""
+        - "  - INCORRECT: hx-get=\"http://localhost:8080/api/users\""
+        - "CRITICAL: Verify all service imports use relative imports:"
+        - "  - CORRECT: from ..services.user_service import get_user_service"
+        - "  - INCORRECT: from src.services.user_service import get_user_service"
+        - "CRITICAL: Verify all HTMX endpoints reference existing router endpoints:"
+        - "  - Check router prefix matches HTMX hx-get/hx-post paths"
+        - "  - Example: If router prefix=\"/api/users\", then hx-get=\"/api/users/123\" is valid"
+        - "Verify template rendering works with FastAPI TemplateResponse"
+        - "Test template with actual router (not just static HTML)"
+      validation_checklist:
+        - "[ ] All URLs in templates use relative paths (no absolute http:// URLs)"
+        - "[ ] All service imports use relative imports (..services.*, ..models.*, etc.)"
+        - "[ ] All HTMX endpoints reference existing router endpoints (verified against OpenAPI spec)"
+        - "[ ] Templates render correctly via FastAPI TemplateResponse"
+        - "[ ] Router prefix matches template URL paths"
+        - "[ ] Static assets use relative paths (/static/*, not absolute)"
+      implementation_pattern: |
+        <!-- CORRECT: Relative URL for HTMX -->
+        <button hx-get="/api/users" hx-target="#user-list">Load Users</button>
+
+        <!-- INCORRECT: Absolute URL -->
+        <button hx-get="http://localhost:8080/api/users">Load Users</button>
+
+        # CORRECT: Relative import in router
+        from ..services.user_service import get_user_service
+        from ..models.user import UserResponse
+
+        # INCORRECT: Absolute import
+        from src.ui.services.user_service import get_user_service
+      gates:
+        - "Zero absolute URLs found in templates"
+        - "Zero absolute imports found in router/service files"
+        - "All HTMX endpoints validated against router definitions"
+        - "All validation checkboxes marked as complete"
+
+    - step: 9
+      name: "Validate Against Design Enforcement Rules"
+      reference: "design_system_foundations.md Section 5"
+      actions:
+        - "Verify ALL components use design tokens (no hardcoded values)"
+        - "Verify semantic colours align to meaning (green=success, red=error)"
+        - "Verify shadows use dual-shadow system (not single shadow)"
+        - "Test responsive layouts at 3 breakpoints: <480px, 480-767px, ≥768px"
+        - "Verify typography follows modular scale (no arbitrary sizes)"
+        - "Run accessibility audit:"
+        - "  - Contrast ratios meet WCAG AA (4.5:1 text, 3:1 UI components)"
+        - "  - Focus states visible on interactive elements"
+        - "  - Keyboard navigation works without mouse"
+      validation_checklist:
+        - "[ ] All components use design tokens (zero hardcoded colours/sizes)"
+        - "[ ] Semantic colours match meaning (validated manually)"
+        - "[ ] Shadows use dual-shadow system (light top + dark bottom)"
+        - "[ ] Responsive tested at 3 breakpoints (screenshots captured)"
+        - "[ ] Typography follows modular scale (no arbitrary font-size)"
+        - "[ ] WCAG AA contrast ratios achieved (4.5:1 text, 3:1 UI)"
+        - "[ ] Focus states visible and styled"
+        - "[ ] Keyboard navigation functional"
+      gates:
+        - "ALL enforcement rules validated (8/8 checkboxes checked)"
+        - "No violations found in any category"
+
+    - step: 10
+      name: "Document Design Decisions & Update Memory"
+      actions:
+        - "Create design decision log in SPEC document:"
+        - "  - Colour palette choices and rationale"
+        - "  - Shadow system configuration"
+        - "  - Responsive breakpoint strategy"
+        - "  - Typography scale and font choices"
+        - "  - Spacing system decisions"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property (YYYY-MM-DD HH:MM:SS)"
+        - "  - Design decisions with rationale"
+        - "  - Validation results"
+        - "  - Relationships: session → implements → design_system"
+        - "Update IMPLEMENTATION_PLAN with Phase 1 Design completion status"
+      outputs:
+        - "design_decisions_log: Document path"
+        - "memory_entities_created: List[str]"
+        - "validation_results: Dict[str, bool]"
+      gates:
+        - "Design decisions documented in SPEC"
+        - "Memory entities created with Date properties"
+        - "IMPLEMENTATION_PLAN updated"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: Zero hardcoded colours, shadows, spacing (all via design tokens)"
+  - "CRITICAL: Zero borders (replaced with tonal contrast)"
+  - "CRITICAL: Container queries only (no viewport @media queries)"
+  - "CRITICAL: Semantic colours must match meaning"
+  - "CRITICAL: All router URLs must use relative paths (no absolute URLs)"
+  - "CRITICAL: All service imports must use relative imports (no absolute paths)"
+  - "CRITICAL: All HTMX endpoints must reference existing router endpoints"
+  - "CRITICAL: All templates must work with FastAPI router structure"
+  - "CRITICAL: DaisyUI + Tailwind v4 mandatory for HTMX/Jinja2 templates"
+  - "CRITICAL: HTMX primitives BEFORE Alpine.js BEFORE custom JavaScript"
+  - "CRITICAL: All external dependencies from public, maintained repos"
+  - "All design implementations must reference design_system_foundations.md"
+  - "All spacing must use 8pt grid (multiples of 8px)"
+  - "All typography must follow modular scale"
+  - "WCAG AA minimum contrast ratios required"
+
+forbidden:
+  - "Viewport @media queries (use container queries instead)"
+  - "Hardcoded colour values in CSS (use design tokens)"
+  - "Single shadows (use dual-shadow system)"
+  - "Borders (use tonal contrast instead)"
+  - "Arbitrary font sizes (use modular scale)"
+  - "Arbitrary spacing values (use 8pt grid)"
+  - "Semantic colour mismatches (red for success, green for error)"
+  - "Absolute URLs in templates (http://, https://)"
+  - "Absolute imports (from src.services.* - use relative imports)"
+  - "HTMX endpoints that don't reference existing routers"
+  - "Hardcoded host/port values (localhost:8080, etc.)"
+  - "Custom JavaScript without exhausting HTMX/Alpine.js options first"
+  - "jQuery or custom JavaScript frameworks"
+  - "Custom CSS frameworks (must use DaisyUI + Tailwind)"
+  - "Unmaintained or private JavaScript libraries"
+  - "JavaScript libraries without version documentation"
+  - "Inline JavaScript in templates (extract to separate files)"
+
+ai_automation_prompts:
+  shadows_prompt: "Apply dual shadows, tonal layering, and subtle gradients. Avoid borders. Maintain top-down lighting."
+  responsive_prompt: "Rearrange elements by priority at breakpoints. Preserve hierarchy. Avoid shrinking components."
+  colour_system_prompt: "Use primary for CTAs, secondary for accents, neutral for structure, semantic for state. Maintain contrast."
+
+output_format:
+  require_sections:
+    - "Section 1: Design Principles Applied (shadows, responsive, colours, typography, spacing)"
+    - "Section 2: Validation Results (8/8 enforcement rules with pass/fail)"
+    - "Section 3: Design Tokens Created (colours, shadows, spacing, typography)"
+    - "Section 4: Responsive Breakpoints Tested (screenshots at 3 breakpoints)"
+    - "Section 5: Accessibility Audit Results (WCAG AA compliance)"
+    - "Section 6: Memory Writes (session entity, design decisions, relationships)"
+    - "Section 7: Next Steps (proceed to Component Mapping phase 21)"
+  language: "Australian English"
+
+success_criteria:
+  - "All 10 design steps completed with validation gates passed"
+  - "Technology stack hierarchy enforced (HTMX → Alpine.js → public libs → custom)"
+  - "DaisyUI + Tailwind used for all styling"
+  - "All external dependencies from public, maintained repos"
+  - "All enforcement rules satisfied (Section 5 of design_system_foundations.md)"
+  - "Router & service integration validated (relative paths, relative imports)"
+  - "All HTMX endpoints reference existing router endpoints"
+  - "Design tokens created and used consistently"
+  - "Responsive layouts tested at 3 breakpoints"
+  - "WCAG AA contrast ratios achieved"
+  - "Memory entities created with Date properties"
+  - "SPEC and IMPLEMENTATION_PLAN updated"
+
+halt_condition: "After successful design phase completion and memory persistence, halt and await instruction to proceed to Phase 21 (Component Mapping)."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Design Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol"
+  language: "en-AU"
+  references:
+    - "design_system_foundations.md"
+    - "figma_guideline_deck.md"
+    - "responsive_layout_principles.md"
+    - "motion_transition_spec.md"
+    - "component_tokens.json"
+
+# EXECUTION PROTOCOL
+# Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/20-WebUI_Design_Phase_Tasks.yaml under those enforced rules.

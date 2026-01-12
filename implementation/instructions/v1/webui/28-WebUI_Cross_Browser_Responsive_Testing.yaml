@@ -1,0 +1,839 @@
+prompt_name: "WebUI_Cross_Browser_Responsive_Testing"
+version: "1.0.0"
+type: "webui_cross_browser_testing"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor validating cross-browser and responsive behavior"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute cross-browser responsive testing phase by validating layout, styling, interactions,
+    and animations across all target browsers (Chrome, Firefox, Safari, Edge) and devices
+    (mobile, tablet, desktop), creating browser compatibility matrix, documenting known issues
+    and workarounds, and generating final WebUI implementation completion report.
+
+  reference_docs:
+    primary:
+      - "responsive_layout_principles.md"
+      - "design_system_foundations.md"
+      - "browser_support_matrix.md"
+    supporting:
+      - "component_tokens.json"
+      - "ui-model.json"
+
+  color_scheme_mandate:
+    reference: "COLOR_SCHEME_DIRECTIVE.md"
+    browser_testing: "Test theme switching (light/dark) in all browsers - DaisyUI themes work universally"
+    css_variables: "Semantic colors use CSS custom properties (oklch) - supported in all modern browsers"
+    fallbacks: "DaisyUI provides automatic fallbacks for older browsers (degrades gracefully)"
+    validation: "Verify semantic color rendering consistency across Chrome, Firefox, Safari, Edge"
+
+  github_scaffolding_mandate:
+    priority: "MANDATORY - NO EXCEPTIONS"
+    description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+    priority_hierarchy:
+      tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+      tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+      tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+      tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+      tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+      tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+      tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+      tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+      tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+
+  prerequisite_validation:
+    - "[ ] Accessibility validation phase (Step 27) completed"
+    - "[ ] WCAG 2.2 Level AAA compliance achieved"
+    - "[ ] All target browsers installed or accessible"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+
+instructions:
+  objective: >
+    Validate WebUI implementation across all target browsers and devices by testing responsive
+    layout behavior, cross-browser CSS compatibility, interactive component functionality, animation
+    consistency, performance metrics, and generating comprehensive browser compatibility report with
+    final implementation sign-off.
+
+  browser_support_matrix:
+    desktop:
+      chrome:
+        version: "Latest - 2"
+        market_share: "65%"
+        priority: "HIGH"
+      firefox:
+        version: "Latest - 2"
+        market_share: "7%"
+        priority: "MEDIUM"
+      safari:
+        version: "Latest - 2 (macOS)"
+        market_share: "18%"
+        priority: "HIGH"
+      edge:
+        version: "Latest - 2"
+        market_share: "5%"
+        priority: "LOW"
+    mobile:
+      safari_ios:
+        version: "iOS 15+"
+        market_share: "25%"
+        priority: "HIGH"
+      chrome_android:
+        version: "Latest - 2"
+        market_share: "60%"
+        priority: "HIGH"
+      samsung_internet:
+        version: "Latest"
+        market_share: "5%"
+        priority: "LOW"
+
+  responsive_breakpoints:
+    mobile: "320px - 767px"
+    tablet: "768px - 1023px"
+    desktop: "1024px - 1919px"
+    wide: "1920px+"
+
+  steps:
+    - step: 1
+      name: "Validate Responsive Layout Across Breakpoints"
+      reference: "responsive_layout_principles.md, design_system_foundations.md"
+      actions:
+        - "Test application at all breakpoints:"
+        - "  - 320px (mobile - iPhone SE)"
+        - "  - 375px (mobile - iPhone 12/13)"
+        - "  - 414px (mobile - iPhone 12 Pro Max)"
+        - "  - 768px (tablet - iPad Mini)"
+        - "  - 1024px (tablet landscape - iPad)"
+        - "  - 1280px (desktop - small laptop)"
+        - "  - 1920px (desktop - FHD monitor)"
+        - "  - 2560px (desktop - QHD monitor)"
+        - "Validate for each breakpoint:"
+        - "  - Layout not broken (no horizontal scroll)"
+        - "  - Text readable (font sizes appropriate)"
+        - "  - Images/media scale correctly"
+        - "  - Navigation accessible (hamburger menu on mobile)"
+        - "  - Forms usable (inputs not cut off)"
+        - "  - Buttons touchable (44px minimum on mobile)"
+        - "  - Content hierarchy preserved"
+        - "Use browser DevTools responsive mode"
+        - "Test on physical devices where possible"
+      testing_checklist: |
+        Responsive Layout Testing Checklist:
+
+        Mobile (320px - 767px):
+        [ ] No horizontal scroll
+        [ ] Navigation collapsed to hamburger menu
+        [ ] Text readable (minimum 16px body text)
+        [ ] Images scale to container width
+        [ ] Form inputs full width (easy to tap)
+        [ ] Buttons minimum 44px height (touch target)
+        [ ] Tables scroll horizontally or stack vertically
+        [ ] Modals full screen on mobile
+        [ ] Cards stack vertically (single column)
+        [ ] Adequate spacing between interactive elements (8px minimum)
+
+        Tablet (768px - 1023px):
+        [ ] Two-column layouts work correctly
+        [ ] Navigation expands (no hamburger)
+        [ ] Forms use optimal input widths
+        [ ] Images scale proportionally
+        [ ] Sidebars visible (if designed)
+        [ ] Tables display fully (no horizontal scroll)
+        [ ] Modals centered with margins
+
+        Desktop (1024px+):
+        [ ] Multi-column layouts work correctly
+        [ ] Content centered with max-width constraints
+        [ ] Sidebars positioned correctly
+        [ ] Images sized appropriately (not overly large)
+        [ ] Forms optimized (not full width)
+        [ ] Navigation fully expanded
+        [ ] Proper use of white space
+
+        Common Issues:
+        - Text too small on mobile (< 16px)
+        - Horizontal scroll on narrow viewports
+        - Touch targets too small (< 44px)
+        - Fixed-width elements breaking layout
+        - Images not scaling (fixed width/height)
+        - Navigation not accessible on mobile
+      validation:
+        - "[ ] All breakpoints tested (320px, 375px, 414px, 768px, 1024px, 1280px, 1920px, 2560px)"
+        - "[ ] No horizontal scroll at any breakpoint"
+        - "[ ] Text readable at all sizes"
+        - "[ ] Images scale correctly"
+        - "[ ] Navigation accessible at all breakpoints"
+        - "[ ] Forms usable on mobile"
+        - "[ ] Touch targets minimum 44px on mobile"
+        - "[ ] Content hierarchy preserved"
+      gates:
+        - "Responsive layout validated across all breakpoints"
+        - "Zero critical layout breakage"
+
+    - step: 2
+      name: "Cross-Browser CSS Compatibility Testing"
+      actions:
+        - "Test CSS features across browsers:"
+        - "  - Flexbox layout (all browsers support)"
+        - "  - CSS Grid layout (all browsers support)"
+        - "  - Container queries (Chrome 105+, Firefox 110+, Safari 16+)"
+        - "  - CSS custom properties (all browsers support)"
+        - "  - Backdrop-filter (Chrome, Firefox, Safari - performance varies)"
+        - "  - CSS clamp() (all modern browsers)"
+        - "  - Aspect-ratio (all modern browsers)"
+        - "  - :focus-visible (all modern browsers)"
+        - "Validate Tailwind CSS output consistency"
+        - "Check DaisyUI component rendering"
+        - "Test CSS animations/transitions"
+        - "Document browser-specific issues"
+      browser_testing_matrix: |
+        CSS Feature Compatibility:
+
+        Chrome (Latest - 2):
+        [ ] Flexbox renders correctly
+        [ ] CSS Grid renders correctly
+        [ ] Container queries work (Chrome 105+)
+        [ ] Custom properties work
+        [ ] Backdrop-filter works (good performance)
+        [ ] Tailwind classes applied correctly
+        [ ] DaisyUI components render correctly
+        [ ] Animations smooth (60fps)
+
+        Firefox (Latest - 2):
+        [ ] Flexbox renders correctly
+        [ ] CSS Grid renders correctly
+        [ ] Container queries work (Firefox 110+)
+        [ ] Custom properties work
+        [ ] Backdrop-filter works (slower than Chrome)
+        [ ] Tailwind classes applied correctly
+        [ ] DaisyUI components render correctly
+        [ ] Animations smooth
+
+        Safari (Latest - 2):
+        [ ] Flexbox renders correctly
+        [ ] CSS Grid renders correctly
+        [ ] Container queries work (Safari 16+)
+        [ ] Custom properties work
+        [ ] Backdrop-filter works (may have visual glitches)
+        [ ] Tailwind classes applied correctly
+        [ ] DaisyUI components render correctly
+        [ ] Animations smooth
+        [ ] iOS Safari touch interactions work
+
+        Edge (Latest - 2):
+        [ ] Same as Chrome (Chromium-based)
+
+        Known Issues:
+        - Safari: Backdrop-filter may cause visual artifacts
+        - Firefox: Some CSS filters slower than Chromium
+        - Safari iOS: Fixed positioning with transforms buggy
+        - Safari: Date input appearance inconsistent
+
+        Workarounds:
+        - Avoid backdrop-filter on Safari if performance issues
+        - Use will-change: transform for complex animations
+        - Test fixed + transform on iOS Safari carefully
+        - Consider polyfill for container queries on older browsers
+      validation:
+        - "[ ] Flexbox tested on all browsers"
+        - "[ ] CSS Grid tested on all browsers"
+        - "[ ] Container queries tested (with fallbacks if needed)"
+        - "[ ] Custom properties tested"
+        - "[ ] Backdrop-filter tested (performance assessed)"
+        - "[ ] Tailwind output validated"
+        - "[ ] DaisyUI components validated"
+        - "[ ] Animations validated"
+        - "[ ] Browser-specific issues documented"
+      gates:
+        - "CSS renders consistently across all target browsers"
+        - "Critical CSS issues documented with workarounds"
+
+    - step: 3
+      name: "Interactive Component Cross-Browser Testing"
+      actions:
+        - "Test all interactive components on each browser:"
+        - "  - HTMX requests (GET, POST, PUT, DELETE)"
+        - "  - HTMX swap timing and animations"
+        - "  - HTMX extensions (WebSocket, SSE)"
+        - "  - Alpine.js components (modals, dropdowns, tabs)"
+        - "  - Form submissions and validation"
+        - "  - Keyboard navigation"
+        - "  - Focus management"
+        - "  - Loading states and indicators"
+        - "Validate on desktop and mobile browsers"
+        - "Test touch interactions on mobile devices"
+        - "Check for JavaScript console errors"
+        - "Document browser-specific issues"
+      testing_checklist: |
+        Interactive Component Testing:
+
+        HTMX Interactions:
+        [ ] hx-get requests work on all browsers
+        [ ] hx-post, hx-put, hx-delete work
+        [ ] hx-swap animations smooth
+        [ ] hx-trigger events fire correctly
+        [ ] hx-indicator shows/hides correctly
+        [ ] WebSocket extension works (if used)
+        [ ] SSE extension works (if used)
+        [ ] No console errors
+
+        Alpine.js Components:
+        [ ] Modals open/close correctly
+        [ ] Dropdowns toggle correctly
+        [ ] Tabs switch correctly
+        [ ] x-show/x-if directives work
+        [ ] x-transition animations work
+        [ ] Event handlers (@click, @keydown) work
+        [ ] No Alpine.js errors in console
+
+        Forms:
+        [ ] Form submissions work (HTMX and standard)
+        [ ] Client-side validation triggers
+        [ ] Server-side validation errors display
+        [ ] Input types render correctly (date, email, etc.)
+        [ ] File uploads work
+        [ ] Multi-step forms progress correctly
+
+        Keyboard Navigation:
+        [ ] Tab key navigates correctly
+        [ ] Enter/Space activate buttons
+        [ ] Arrow keys work in menus/tabs
+        [ ] Escape closes modals/dropdowns
+        [ ] Skip link works
+        [ ] Focus visible on all elements
+
+        Mobile-Specific:
+        [ ] Touch interactions work (tap, swipe)
+        [ ] Virtual keyboard doesn't break layout
+        [ ] Pinch-to-zoom disabled where appropriate
+        [ ] Touch targets sufficiently large (44px)
+        [ ] Horizontal swipe doesn't navigate browser history
+
+        Known Issues:
+        - Safari iOS: Fixed positioning issues with keyboard
+        - Safari: Date input renders differently than Chrome
+        - Firefox: Some HTMX animations may lag
+        - Samsung Internet: May have unique rendering quirks
+      validation:
+        - "[ ] HTMX interactions tested on all browsers"
+        - "[ ] Alpine.js components tested on all browsers"
+        - "[ ] Forms tested on all browsers"
+        - "[ ] Keyboard navigation tested"
+        - "[ ] Touch interactions tested on mobile"
+        - "[ ] No JavaScript console errors"
+        - "[ ] Browser-specific issues documented"
+      gates:
+        - "All interactive components functional across browsers"
+        - "Zero critical interaction failures"
+
+    - step: 4
+      name: "Performance Metrics Validation"
+      actions:
+        - "Measure performance metrics on each browser:"
+        - "  - Page load time (target: < 3 seconds)"
+        - "  - Time to Interactive (target: < 5 seconds)"
+        - "  - First Contentful Paint (target: < 2 seconds)"
+        - "  - Largest Contentful Paint (target: < 2.5 seconds)"
+        - "  - Cumulative Layout Shift (target: < 0.1)"
+        - "  - Animation frame rate (target: 60fps)"
+        - "Use Chrome DevTools Lighthouse"
+        - "Use Firefox DevTools Performance"
+        - "Use Safari Web Inspector Timelines"
+        - "Test on 3G network throttling (mobile)"
+        - "Document performance bottlenecks"
+      performance_benchmarks: |
+        Performance Metrics Targets:
+
+        Chrome Lighthouse Scores:
+        [ ] Performance: > 90
+        [ ] Accessibility: 100 (WCAG 2.2 AAA)
+        [ ] Best Practices: > 95
+        [ ] SEO: > 90
+
+        Core Web Vitals:
+        [ ] First Contentful Paint (FCP): < 2.0s
+        [ ] Largest Contentful Paint (LCP): < 2.5s
+        [ ] Cumulative Layout Shift (CLS): < 0.1
+        [ ] First Input Delay (FID): < 100ms
+        [ ] Interaction to Next Paint (INP): < 200ms
+
+        Animation Performance:
+        [ ] 60fps during transitions (16.67ms per frame)
+        [ ] No janky scrolling
+        [ ] Smooth HTMX swap animations
+        [ ] GPU-accelerated properties used (transform, opacity)
+
+        Network Performance (3G Throttling):
+        [ ] Page load < 5s on 3G
+        [ ] Critical CSS inlined
+        [ ] Images optimized (WebP format)
+        [ ] Lazy loading for images below fold
+        [ ] Bundle size < 300KB (JS + CSS combined)
+
+        Browser-Specific Performance:
+        Chrome:
+        [ ] V8 JavaScript engine optimized
+        [ ] Blink rendering engine efficient
+
+        Firefox:
+        [ ] SpiderMonkey JavaScript engine optimized
+        [ ] Gecko rendering engine efficient
+        [ ] May be slower on some CSS filters
+
+        Safari:
+        [ ] JavaScriptCore engine optimized
+        [ ] WebKit rendering engine efficient
+        [ ] Backdrop-filter may impact performance
+        [ ] iOS Safari memory constraints considered
+
+        Performance Optimizations:
+        - Lazy load images with loading="lazy"
+        - Use will-change for complex animations
+        - Minimize JavaScript bundle size
+        - Use HTTP/2 for parallel asset loading
+        - Enable Brotli compression for assets
+      validation:
+        - "[ ] Lighthouse Performance score > 90"
+        - "[ ] Core Web Vitals pass"
+        - "[ ] 60fps animation performance"
+        - "[ ] 3G network performance acceptable"
+        - "[ ] Bundle size < 300KB"
+        - "[ ] Performance tested on all browsers"
+        - "[ ] Bottlenecks documented"
+      gates:
+        - "Performance metrics meet targets"
+        - "No critical performance regressions"
+
+    - step: 5
+      name: "Automated Cross-Browser Testing"
+      actions:
+        - "Set up automated browser testing:"
+        - "  - Playwright (cross-browser automation)"
+        - "  - Selenium WebDriver (alternative)"
+        - "  - BrowserStack / Sauce Labs (cloud testing)"
+        - "Create test suite:"
+        - "  - Visual regression tests (screenshot comparison)"
+        - "  - Functional tests (user flows)"
+        - "  - Accessibility tests (axe-core)"
+        - "  - Performance tests (Lighthouse CI)"
+        - "Run tests on all target browsers"
+        - "Generate test report with pass/fail status"
+      implementation_pattern: |
+        # Playwright Cross-Browser Test Suite
+
+        # Install Playwright
+        npm install -D @playwright/test
+        npx playwright install
+
+        # playwright.config.js
+        module.exports = {
+          testDir: './tests',
+          projects: [
+            {
+              name: 'chromium',
+              use: { browserName: 'chromium' },
+            },
+            {
+              name: 'firefox',
+              use: { browserName: 'firefox' },
+            },
+            {
+              name: 'webkit',
+              use: { browserName: 'webkit' },
+            },
+          ],
+          use: {
+            baseURL: 'http://localhost:8080',
+            screenshot: 'only-on-failure',
+            video: 'retain-on-failure',
+          },
+        };
+
+        # tests/homepage.spec.js
+        const { test, expect } = require('@playwright/test');
+
+        test.describe('Homepage', () => {
+          test('should load correctly', async ({ page }) => {
+            await page.goto('/');
+            await expect(page).toHaveTitle(/Application Name/);
+            await expect(page.locator('h1')).toBeVisible();
+          });
+
+          test('should be responsive', async ({ page }) => {
+            // Test mobile
+            await page.setViewportSize({ width: 375, height: 667 });
+            await page.goto('/');
+            await expect(page.locator('.hamburger-menu')).toBeVisible();
+
+            // Test desktop
+            await page.setViewportSize({ width: 1920, height: 1080 });
+            await expect(page.locator('.desktop-nav')).toBeVisible();
+          });
+
+          test('should pass accessibility tests', async ({ page }) => {
+            await page.goto('/');
+            const accessibilityScanResults = await page.accessibility.snapshot();
+            expect(accessibilityScanResults).toBeDefined();
+          });
+        });
+
+        # tests/user-flow.spec.js
+        test('user can create a new user', async ({ page }) => {
+          await page.goto('/users');
+
+          // Click "Create User" button
+          await page.click('text=Create User');
+
+          // Fill form
+          await page.fill('[name="name"]', 'John Doe');
+          await page.fill('[name="email"]', 'john@example.com');
+
+          // Submit
+          await page.click('button[type="submit"]');
+
+          // Verify success
+          await expect(page.locator('.alert-success')).toBeVisible();
+          await expect(page.locator('text=John Doe')).toBeVisible();
+        });
+
+        # Run tests
+        npx playwright test --project=chromium
+        npx playwright test --project=firefox
+        npx playwright test --project=webkit
+        npx playwright test  # Run all projects
+
+        # Generate HTML report
+        npx playwright show-report
+      validation:
+        - "[ ] Playwright installed and configured"
+        - "[ ] Test suite created (visual, functional, accessibility)"
+        - "[ ] Tests run on Chromium"
+        - "[ ] Tests run on Firefox"
+        - "[ ] Tests run on WebKit"
+        - "[ ] Test report generated"
+        - "[ ] All tests passing"
+      gates:
+        - "Automated testing suite functional"
+        - "All tests pass on target browsers"
+
+    - step: 6
+      name: "Generate Browser Compatibility Report"
+      actions:
+        - "Compile comprehensive browser compatibility report:"
+        - "  - Supported browsers and versions"
+        - "  - Responsive layout validation results"
+        - "  - CSS compatibility results"
+        - "  - Interactive component results"
+        - "  - Performance metrics by browser"
+        - "  - Automated testing results"
+        - "  - Known issues and workarounds"
+        - "  - Unsupported browsers (if any)"
+        - "Include screenshots for visual comparison"
+        - "Document browser-specific workarounds applied"
+      report_template: |
+        # Browser Compatibility Report
+
+        ## Executive Summary
+        - Target Browsers: Chrome, Firefox, Safari (Desktop/iOS), Edge
+        - Responsive Breakpoints: Mobile (320-767px), Tablet (768-1023px), Desktop (1024px+)
+        - Compatibility Status: ✅ PASS
+        - Known Issues: 0 Critical, 2 Minor
+
+        ## Supported Browsers
+        | Browser | Version | Support Level | Status |
+        |---------|---------|---------------|--------|
+        | Chrome | Latest - 2 | Full | ✅ PASS |
+        | Firefox | Latest - 2 | Full | ✅ PASS |
+        | Safari (Desktop) | Latest - 2 | Full | ✅ PASS |
+        | Safari (iOS) | iOS 15+ | Full | ✅ PASS |
+        | Edge | Latest - 2 | Full | ✅ PASS |
+        | Chrome (Android) | Latest - 2 | Full | ✅ PASS |
+
+        ## Responsive Layout Validation
+        | Breakpoint | Layout | Navigation | Forms | Images | Status |
+        |------------|--------|------------|-------|--------|--------|
+        | 320px (Mobile) | ✅ | ✅ | ✅ | ✅ | PASS |
+        | 375px (Mobile) | ✅ | ✅ | ✅ | ✅ | PASS |
+        | 768px (Tablet) | ✅ | ✅ | ✅ | ✅ | PASS |
+        | 1024px (Desktop) | ✅ | ✅ | ✅ | ✅ | PASS |
+        | 1920px (Desktop) | ✅ | ✅ | ✅ | ✅ | PASS |
+
+        ## CSS Compatibility
+        | Feature | Chrome | Firefox | Safari | Status |
+        |---------|--------|---------|--------|--------|
+        | Flexbox | ✅ | ✅ | ✅ | PASS |
+        | CSS Grid | ✅ | ✅ | ✅ | PASS |
+        | Container Queries | ✅ | ✅ | ✅ | PASS |
+        | Custom Properties | ✅ | ✅ | ✅ | PASS |
+        | Backdrop-filter | ✅ | ⚠️ (slower) | ⚠️ (glitches) | PASS |
+        | Animations | ✅ | ✅ | ✅ | PASS |
+
+        ## Interactive Components
+        | Component | Chrome | Firefox | Safari | Status |
+        |-----------|--------|---------|--------|--------|
+        | HTMX Requests | ✅ | ✅ | ✅ | PASS |
+        | Alpine.js Modals | ✅ | ✅ | ✅ | PASS |
+        | Forms | ✅ | ✅ | ✅ | PASS |
+        | Keyboard Nav | ✅ | ✅ | ✅ | PASS |
+        | Touch Interactions | ✅ | ✅ | ✅ | PASS |
+
+        ## Performance Metrics
+        | Metric | Chrome | Firefox | Safari | Target |
+        |--------|--------|---------|--------|--------|
+        | Lighthouse Score | 95 | N/A | N/A | > 90 |
+        | LCP | 1.8s | 2.1s | 2.0s | < 2.5s |
+        | CLS | 0.05 | 0.06 | 0.05 | < 0.1 |
+        | FID | 50ms | 60ms | 55ms | < 100ms |
+        | Animation FPS | 60 | 58 | 60 | 60 |
+
+        ## Known Issues and Workarounds
+
+        ### Minor Issue 1: Safari Backdrop-Filter Performance
+        - **Severity**: Minor
+        - **Description**: Backdrop-filter may cause visual glitches on Safari
+        - **Affected**: Safari Desktop and iOS
+        - **Workaround**: Avoided backdrop-filter on critical UI elements
+        - **Status**: Mitigated
+
+        ### Minor Issue 2: Firefox CSS Filter Performance
+        - **Severity**: Minor
+        - **Description**: Some CSS filters slower than Chromium
+        - **Affected**: Firefox
+        - **Workaround**: Limited use of complex filters
+        - **Status**: Mitigated
+
+        ## Automated Testing Results
+        - Playwright Tests: 45/45 PASS (100%)
+        - Visual Regression Tests: 0 failures
+        - Accessibility Tests: 100% PASS (WCAG 2.2 AAA)
+        - Performance Tests: All metrics within targets
+
+        ## Unsupported Browsers
+        - Internet Explorer 11 (end of life)
+        - Safari < 15 (outdated)
+        - Chrome < 105 (container queries unsupported)
+
+        ## Recommendations
+        - Continue monitoring browser updates
+        - Re-test quarterly for new browser versions
+        - Monitor Core Web Vitals in production
+        - Implement automated CI/CD testing with Playwright
+
+        ## Sign-Off
+        - Cross-browser testing: ✅ COMPLETE
+        - Responsive validation: ✅ COMPLETE
+        - Performance validation: ✅ COMPLETE
+        - Accessibility validation: ✅ COMPLETE
+        - WebUI Implementation: ✅ PRODUCTION READY
+      validation:
+        - "[ ] Compatibility report generated"
+        - "[ ] All browsers documented"
+        - "[ ] Known issues documented"
+        - "[ ] Workarounds documented"
+        - "[ ] Screenshots included"
+        - "[ ] Performance metrics included"
+      gates:
+        - "Comprehensive compatibility report complete"
+        - "All critical issues resolved"
+
+    - step: 7
+      name: "Final WebUI Implementation Sign-Off"
+      actions:
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Responsive layout validation results"
+        - "  - Cross-browser CSS compatibility results"
+        - "  - Interactive component testing results"
+        - "  - Performance validation results"
+        - "  - Automated testing results"
+        - "  - Browser compatibility report"
+        - "  - Known issues and workarounds"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN with Phase 7 Cross-Browser Testing completion"
+        - "CRITICAL: Mark WebUI Implementation as PRODUCTION READY"
+        - "CRITICAL: DO NOT create temporal documents"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property"
+        - "  - WebUI implementation completion status"
+        - "  - Browser compatibility status"
+        - "  - Production readiness confirmation"
+        - "  - Relationships: session → completes → webui_implementation"
+        - "Generate final implementation summary:"
+        - "  - All phases completed (Design → Component Mapping → Tokens → Scaffolding → Routing → Behavior → Motion → Accessibility → Testing)"
+        - "  - WCAG 2.2 Level AAA compliance achieved"
+        - "  - Cross-browser compatibility validated"
+        - "  - Performance targets met"
+        - "  - Production deployment checklist"
+      final_summary_template: |
+        # WebUI Implementation Final Summary
+
+        ## Implementation Phases Completed
+
+        ✅ Phase 1: Design Phase (Step 20)
+        - Dual-shadow system implemented
+        - Responsive layout principles applied
+        - Design tokens defined
+        - Technology stack hierarchy established
+
+        ✅ Phase 2: Component Mapping (Step 21)
+        - OpenAPI schemas mapped to UI components
+        - ui-model.json generated
+        - Universal component mapping protocol applied
+
+        ✅ Phase 3: Layout Token Generation (Step 22)
+        - tailwind.config.js generated
+        - DaisyUI theme configured
+        - Motion CSS created
+
+        ✅ Phase 4: Template Scaffolding (Step 23)
+        - src_templates/ COPIED to project
+        - Base layouts created
+        - Page and partial templates created
+        - Jinja2 template system configured
+
+        ✅ Phase 5: Router/Service Integration (Step 24)
+        - FastAPI UI router created
+        - HTMX partials router created
+        - All template URLs validated
+        - Relative imports enforced
+
+        ✅ Phase 6: Interactive Behavior (Step 25)
+        - HTMX-first technology hierarchy applied (90%+ HTMX)
+        - Alpine.js components justified
+        - Interactive patterns implemented
+
+        ✅ Phase 7: Motion/Transitions (Step 26)
+        - CSS motion utilities created
+        - HTMX swap timing configured
+        - Reduced-motion support implemented
+        - WCAG 2.3 compliance achieved
+
+        ✅ Phase 8: Accessibility Validation (Step 27)
+        - Semantic HTML validated
+        - ARIA attributes implemented
+        - Keyboard navigation tested
+        - Color contrast AAA achieved (7:1)
+        - Screen reader testing passed
+        - WCAG 2.2 Level AAA compliance achieved
+
+        ✅ Phase 9: Cross-Browser Testing (Step 28)
+        - Responsive layout validated (320px - 2560px)
+        - Cross-browser CSS compatibility validated
+        - Interactive components tested
+        - Performance targets met
+        - Automated testing suite created
+
+        ## Quality Metrics
+        - WCAG 2.2 Compliance: Level AAA ✅
+        - Browser Compatibility: 100% (Chrome, Firefox, Safari, Edge) ✅
+        - Lighthouse Performance Score: 95/100 ✅
+        - Lighthouse Accessibility Score: 100/100 ✅
+        - Core Web Vitals: All PASS ✅
+        - Automated Tests: 45/45 PASS (100%) ✅
+        - Technology Hierarchy: 90%+ HTMX ✅
+
+        ## Production Readiness Checklist
+        [ ] All phases completed (1-9)
+        [ ] WCAG 2.2 Level AAA compliance achieved
+        [ ] Cross-browser compatibility validated
+        [ ] Performance targets met
+        [ ] Automated testing suite functional
+        [ ] Documentation complete
+        [ ] Known issues documented with workarounds
+        [ ] Browser compatibility report generated
+        [ ] Memory entities created with Date properties
+        [ ] SPEC and IMPLEMENTATION_PLAN updated
+
+        ## Deployment Checklist
+        [ ] Environment variables configured
+        [ ] Database migrations ready
+        [ ] Static assets compiled (Tailwind CSS)
+        [ ] CDN configured for assets
+        [ ] Monitoring and logging configured
+        [ ] Error tracking configured (Sentry)
+        [ ] Performance monitoring configured (Lighthouse CI)
+        [ ] Accessibility monitoring configured
+        [ ] Backup and rollback plan ready
+
+        ## Status: PRODUCTION READY ✅
+
+        WebUI implementation complete and validated. Ready for production deployment.
+      outputs:
+        - "spec_updated: Boolean"
+        - "plan_updated: Boolean"
+        - "compatibility_report: String"
+        - "final_summary: String"
+        - "production_ready: Boolean"
+        - "memory_entities_created: List[str]"
+      gates:
+        - "All implementation phases completed"
+        - "SPEC and IMPLEMENTATION_PLAN updated"
+        - "Browser compatibility report archived"
+        - "Final summary generated"
+        - "Production readiness confirmed"
+        - "Memory entities created with Date properties"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: Test on all target browsers (Chrome, Firefox, Safari, Edge)"
+  - "CRITICAL: Test at all responsive breakpoints (320px - 2560px)"
+  - "CRITICAL: Validate performance metrics meet targets"
+  - "CRITICAL: Document all known issues with workarounds"
+  - "CRITICAL: Generate comprehensive browser compatibility report"
+  - "CRITICAL: Confirm production readiness before sign-off"
+  - "Automated testing suite required (Playwright)"
+  - "Visual regression testing recommended"
+
+forbidden:
+  - "Skipping browser testing on any target browser"
+  - "Skipping responsive breakpoint testing"
+  - "Ignoring performance regressions"
+  - "Deploying with critical browser compatibility issues"
+  - "Missing documentation for known issues"
+  - "Creating temporal documents (all updates in SPEC and IMPLEMENTATION_PLAN)"
+
+output_format:
+  require_sections:
+    - "Section 1: Responsive Layout Validation Results"
+    - "Section 2: Cross-Browser CSS Compatibility Results"
+    - "Section 3: Interactive Component Testing Results"
+    - "Section 4: Performance Metrics Validation"
+    - "Section 5: Automated Testing Results"
+    - "Section 6: Browser Compatibility Report"
+    - "Section 7: Final WebUI Implementation Summary"
+    - "Section 8: Production Readiness Confirmation"
+    - "Section 9: Memory Writes (session entity, completion status)"
+  language: "Australian English"
+
+success_criteria:
+  - "Responsive layout validated across all breakpoints"
+  - "CSS renders consistently across all target browsers"
+  - "All interactive components functional across browsers"
+  - "Performance metrics meet targets (Lighthouse > 90, Core Web Vitals pass)"
+  - "Automated testing suite functional with 100% pass rate"
+  - "Comprehensive browser compatibility report generated"
+  - "All known issues documented with workarounds"
+  - "Final implementation summary generated"
+  - "Production readiness confirmed"
+  - "SPEC and IMPLEMENTATION_PLAN updated (no temporal documents)"
+  - "Memory entities created with Date properties"
+  - "WebUI implementation marked PRODUCTION READY"
+
+halt_condition: "After successful cross-browser testing validation, final sign-off, and memory persistence, halt. WebUI implementation complete and PRODUCTION READY."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Cross-Browser Responsive Testing Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol"
+  language: "en-AU"
+  references:
+    - "responsive_layout_principles.md"
+    - "design_system_foundations.md"
+    - "browser_support_matrix.md"
+    - "component_tokens.json"
+
+# EXECUTION PROTOCOL
+# Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/28-WebUI_Cross_Browser_Responsive_Testing.yaml under those enforced rules.

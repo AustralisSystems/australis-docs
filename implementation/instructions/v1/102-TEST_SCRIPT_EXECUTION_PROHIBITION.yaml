@@ -1,0 +1,458 @@
+---
+prompt_name: "TEST_SCRIPT_EXECUTION_PROHIBITION"
+version: "1.0.0"
+type: "mandatory_prohibition"
+language: "en-AU"
+references:
+  - "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+  - "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  - "docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml"
+  - "docs/implementation/instructions/101-Zero_Tolerance_Remediation_Instruction.yaml"
+  - "docs/implementation/instructions/102-TEST_SCRIPT_EXECUTION_PROHIBITION.yaml"
+
+---
+
+context:
+  role: "Execute test execution prohibition enforcement under enterprise canonical protocols"
+  intent: "Prevent creation of bespoke scripts that execute test scripts - enforce direct test execution only"
+  workflow: "Follow prohibition checklist before creating any script - verify compliance with absolute prohibition"
+  execution_mode: "STRICT - NO exceptions, NO interpretations, NO wiggle room"
+
+initialization_mode:
+  rule: "ACTIVE MODE - This instruction is ALWAYS ENFORCED"
+  behavior: "MUST check this prohibition BEFORE creating any script"
+  required_on_load:
+    - "Acknowledge prohibition loaded and understood"
+    - "Confirm readiness to enforce prohibition when creating scripts"
+    - "Verify understanding of forbidden vs permitted patterns"
+  response_template: |
+    "Test Script Execution Prohibition (v1.0.0) loaded and acknowledged.
+    Ready to enforce prohibition when creating scripts.
+    All script creation will be validated against this prohibition."
+
+documentation_policy:
+  code_only: true
+  rule: "This is a CODE-ONLY instruction - NO documentation shall be written unless explicitly requested"
+  explicit_request_definition: "User must explicitly state 'create documentation' or 'write documentation' - implicit requests DO NOT count"
+  exceptions:
+    - "SPEC protocols must ALWAYS be followed (SPEC creation, updates, lifecycle management) - MANDATORY, NO EXCEPTIONS"
+    - "Documentation explicitly requested by user with explicit wording"
+  forbidden:
+    - "Creating README files unless explicitly requested with explicit wording"
+    - "Creating markdown documentation files unless explicitly requested with explicit wording"
+    - "Creating temporal documentation reports unless explicitly requested with explicit wording"
+    - "Writing documentation comments beyond code docstrings (docstrings are REQUIRED, not optional)"
+  required:
+    - "Code docstrings and type hints (standard Python practice - REQUIRED, not optional)"
+    - "SPEC lifecycle management (in_progress → done/) - MANDATORY"
+  enforcement: "Violation of documentation policy = BLOCKING ISSUE - execution MUST STOP immediately"
+
+quick_reference:
+  protocols:
+    - "00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "01-The_GoldenRule_Execution_Protocol.yaml"
+    - "04-Execute_Implementation_Phase_Tasks.yaml"
+    - "101-Zero_Tolerance_Remediation_Instruction.yaml"
+
+  prohibition_summary:
+    - "NO scripts that execute test scripts"
+    - "NO scripts that execute other scripts"
+    - "NO workflow runners"
+    - "NO test orchestrators"
+    - "NO subprocess.run() on test files"
+    - "ONLY direct test execution (python/pytest)"
+
+absolute_prohibition:
+  classification: "CRITICAL - ABSOLUTE PROHIBITION"
+  enforcement_level: "IRON CLAD - NO EXCEPTIONS"
+  rule: "YOU ARE STRICTLY FORBIDDEN FROM CREATING ANY SCRIPTS THAT EXECUTE OTHER SCRIPTS"
+
+  scope:
+    description: "This prohibition applies to ALL scripts that execute other scripts"
+    applies_to:
+      - "Scripts that run test scripts"
+      - "Scripts that execute other Python scripts"
+      - "Workflow runners that call test scripts"
+      - "Orchestration scripts that execute tests"
+      - "Any script that uses `subprocess.run()` to execute test files"
+      - "Any script that imports and calls `main()` from test files"
+      - "Any script that uses `exec()` or `eval()` to run test code"
+      - "Any script that uses `importlib` to dynamically import and execute test modules"
+      - "Any script that wraps test execution"
+      - "Any script that orchestrates script execution"
+
+forbidden_patterns:
+  scripts_that_execute_test_scripts:
+    description: "NEVER CREATE scripts that execute test scripts"
+    forbidden_names:
+      - "workflow_runner.py"
+      - "run_tests.py"
+      - "execute_tests.py"
+      - "test_orchestrator.py"
+      - "test_executor.py"
+      - "test_runner.py"
+      - "orchestrate_tests.py"
+      - "workflow_executor.py"
+    forbidden_patterns:
+      - "Any script that calls `subprocess.run([sys.executable, 'test_*.py'])`"
+      - "Any script that imports test modules and calls their functions"
+      - "Any script that wraps test execution"
+      - "Any script that orchestrates multiple test files"
+      - "Any script that uses `pytest.main()` programmatically to run tests"
+      - "Any script that uses `unittest.main()` programmatically to run tests"
+
+  scripts_that_execute_other_scripts:
+    description: "NEVER CREATE scripts that execute other Python scripts"
+    forbidden_patterns:
+      - "Scripts that call `main()` from other modules"
+      - "Scripts that use `subprocess` to run other scripts"
+      - "Scripts that orchestrate script execution"
+      - "Scripts that chain script execution"
+      - "Scripts that use `exec()` or `eval()` to run code"
+      - "Scripts that use `importlib` to dynamically import and execute modules"
+
+permitted_patterns:
+  direct_test_execution:
+    description: "ONLY USE direct test execution methods"
+    allowed_methods:
+      - "Direct execution: `python tests/.../test_file.py`"
+      - "Pytest execution: `pytest tests/.../test_file.py`"
+      - "Pytest with options: `pytest tests/.../test_file.py -v --tb=short`"
+      - "Test files themselves (they can call helper functions, but NOT execute other test scripts)"
+    execution_context:
+      - "User executes tests directly via command line"
+      - "CI/CD pipelines execute tests directly via command line"
+      - "Test files are self-contained and executable"
+
+  helper_scripts:
+    description: "ALLOWED helper scripts that provide utilities (not execution)"
+    allowed_patterns:
+      - "Helper scripts that provide utilities (not execution)"
+      - "Helper scripts that are imported by tests (not executed by scripts)"
+      - "Helper scripts that are called directly by users (not by other scripts)"
+      - "Helper functions in test files"
+      - "Test fixtures and conftest.py files"
+      - "Test utilities that are imported, not executed"
+    examples:
+      - "tests/helpers/m365/get_auth_token.py (imported by tests, not executed by scripts)"
+      - "tests/conftest.py (pytest fixtures, not executed by scripts)"
+      - "Helper functions within test files"
+
+enforcement:
+  pre_creation_checklist:
+    description: "BEFORE CREATING ANY SCRIPT, ASK these questions"
+    mandatory_checks:
+      - question: "Does this script execute other scripts?"
+        answer_if_yes: "FORBIDDEN - DO NOT CREATE"
+      - question: "Does this script call `subprocess.run()` on test files?"
+        answer_if_yes: "FORBIDDEN - DO NOT CREATE"
+      - question: "Does this script import and call `main()` from test files?"
+        answer_if_yes: "FORBIDDEN - DO NOT CREATE"
+      - question: "Does this script orchestrate test execution?"
+        answer_if_yes: "FORBIDDEN - DO NOT CREATE"
+      - question: "Does this script wrap test execution?"
+        answer_if_yes: "FORBIDDEN - DO NOT CREATE"
+      - question: "Does this script have 'runner', 'orchestrator', 'executor', or 'workflow' in the name?"
+        answer_if_yes: "FORBIDDEN - DO NOT CREATE"
+    validation_rule: "If ANY answer is YES, the script is FORBIDDEN - DO NOT CREATE IT"
+
+  violation_detection:
+    description: "IF YOU FIND YOURSELF CREATING any of these patterns, STOP IMMEDIATELY"
+    red_flags:
+      - "A script with 'runner', 'orchestrator', 'executor', 'workflow' in the name"
+      - "A script that uses `subprocess.run()`"
+      - "A script that imports test modules"
+      - "A script that calls `pytest.main()` programmatically"
+      - "A script that calls `unittest.main()` programmatically"
+      - "A script that chains script execution"
+    verification_required:
+      - "If script uses `subprocess.run()` → VERIFY IT'S NOT EXECUTING TEST SCRIPTS"
+      - "If script imports test modules → VERIFY IT'S NOT CALLING THEIR FUNCTIONS"
+      - "If script has suspicious name → VERIFY IT'S NOT EXECUTING OTHER SCRIPTS"
+
+  violation_response:
+    description: "IF YOU VIOLATE THIS RULE, follow these steps IMMEDIATELY"
+    mandatory_steps:
+      - step: 1
+        action: "STOP IMMEDIATELY"
+        description: "Cease all work on the violating script"
+      - step: 2
+        action: "DELETE THE VIOLATING SCRIPT"
+        description: "Remove the script from the codebase completely"
+      - step: 3
+        action: "ACKNOWLEDGE THE VIOLATION"
+        description: "Document the violation and why it was forbidden"
+      - step: 4
+        action: "USE DIRECT TEST EXECUTION INSTEAD"
+        description: "Use `python tests/.../test_file.py` or `pytest tests/.../test_file.py`"
+
+examples:
+  forbidden_examples:
+    - description: "Script that executes test scripts"
+      code: |
+        # ❌ FORBIDDEN - Script that executes test scripts
+        import subprocess
+        import sys
+
+        def run_tests():
+            subprocess.run([sys.executable, "test_file.py"])
+
+        if __name__ == "__main__":
+            run_tests()
+
+    - description: "Script that orchestrates test execution"
+      code: |
+        # ❌ FORBIDDEN - Script that orchestrates test execution
+        import subprocess
+
+        test_files = ["test_file1.py", "test_file2.py", "test_file3.py"]
+
+        for test_file in test_files:
+            subprocess.run(["pytest", test_file])
+
+    - description: "Script that imports and calls test functions"
+      code: |
+        # ❌ FORBIDDEN - Script that imports and calls test functions
+        from tests.integration.test_file import test_function
+
+        if __name__ == "__main__":
+            test_function()  # Executing test code from script
+
+    - description: "Script that uses pytest.main() programmatically"
+      code: |
+        # ❌ FORBIDDEN - Script that uses pytest.main() programmatically
+        import pytest
+
+        if __name__ == "__main__":
+            pytest.main(["tests/integration/test_file.py"])
+
+  permitted_examples:
+    - description: "Direct test execution by user"
+      code: |
+        # ✅ PERMITTED - Direct test execution by user
+        # User runs: python tests/integration/test_file.py
+        # Or: pytest tests/integration/test_file.py
+        # Test file is self-contained and executable
+
+    - description: "Helper script imported by tests"
+      code: |
+        # ✅ PERMITTED - Helper script imported by tests
+        # File: tests/helpers/m365/get_auth_token.py
+        def get_auth_token(base_url: str) -> str:
+            # Helper function used by tests
+            pass
+
+        # Test file imports and uses it:
+        # from tests.helpers.m365.get_auth_token import get_auth_token
+
+    - description: "Test file with helper functions"
+      code: |
+        # ✅ PERMITTED - Test file with helper functions
+        import pytest
+
+        def helper_function():
+            # Helper function used within test file
+            pass
+
+        def test_example():
+            result = helper_function()
+            assert result is not None
+
+        if __name__ == "__main__":
+            pytest.main([__file__])  # Self-execution is permitted
+
+rationale:
+  user_directive: |
+    "u will mandate that stupid fucking bespoke scripts that are prone to failures and issues MUST FUCKING STOP... NO MORE... just use the /tests/* dir script... and do not create any other scripts... especially ones that run the fucknig scripts in the /tests/ dir... or directly bypass the tests/ dir script... that is fucking madness that MUST FUCKING STOP RIGHT NOW"
+
+  reasons:
+    - "Bespoke scripts are prone to failures and issues"
+    - "Test scripts in /tests/ directory should be executed directly"
+    - "No need for wrapper scripts that add complexity"
+    - "Direct execution is simpler, more reliable, and easier to debug"
+    - "Reduces maintenance burden and potential failure points"
+
+  enforcement_note: "THIS IS NOT A SUGGESTION - THIS IS AN ABSOLUTE PROHIBITION"
+
+workflow:
+  protocol: "docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml"
+  focus: "Enforce prohibition before creating any script - verify compliance with absolute prohibition"
+  mode: "CODE-ONLY - focus on preventing script creation violations"
+  execution_rule: "MUST check prohibition BEFORE creating any script - NO exceptions"
+  blocking_rule: "If ANY violation detected, MUST stop and delete script immediately - NO workarounds"
+
+  activation:
+    rule: "Prohibition is ALWAYS ACTIVE - check before EVERY script creation"
+    trigger: "Before creating any script file"
+    examples:
+      - "Before creating workflow_runner.py → CHECK PROHIBITION → FORBIDDEN"
+      - "Before creating run_tests.py → CHECK PROHIBITION → FORBIDDEN"
+      - "Before creating helper script → CHECK PROHIBITION → VERIFY NOT EXECUTING OTHER SCRIPTS"
+    always_active: "Prohibition is always enforced - no activation needed"
+
+  steps:
+    step_1:
+      name: "Pre-Creation Validation"
+      mandatory: true
+      rule: "MUST run pre-creation checklist before creating any script"
+      blocking: "Cannot create script until checklist passes"
+      checks:
+        - "Does script execute other scripts?"
+        - "Does script call subprocess.run() on test files?"
+        - "Does script import and call main() from test files?"
+        - "Does script orchestrate test execution?"
+        - "Does script have forbidden name pattern?"
+
+    step_2:
+      name: "Violation Detection"
+      mandatory: true
+      rule: "MUST detect violations during script creation"
+      blocking: "If violation detected, MUST stop immediately"
+      red_flags:
+        - "Script name contains 'runner', 'orchestrator', 'executor', 'workflow'"
+        - "Script uses subprocess.run()"
+        - "Script imports test modules"
+        - "Script calls pytest.main() or unittest.main() programmatically"
+
+    step_3:
+      name: "Violation Response"
+      mandatory: true
+      rule: "MUST follow violation response steps if violation detected"
+      blocking: "Cannot proceed until violation resolved"
+      steps:
+        - "STOP IMMEDIATELY"
+        - "DELETE THE VIOLATING SCRIPT"
+        - "ACKNOWLEDGE THE VIOLATION"
+        - "USE DIRECT TEST EXECUTION INSTEAD"
+
+enforcement_rules:
+  strict_mode: true
+  interpretation_policy: "NO interpretations allowed - prohibition is LITERAL and ABSOLUTE"
+  wiggle_room: "ZERO wiggle room - prohibition is IRON CLAD"
+
+  blocking_rules:
+    - "Creating scripts that execute test scripts = IMMEDIATE STOP - script BLOCKED until deleted"
+    - "Creating scripts that execute other scripts = IMMEDIATE STOP - script BLOCKED until deleted"
+    - "Script MUST NOT be created if it violates prohibition - NO exceptions, NO workarounds, NO deferrals"
+    - "Violation of prohibition = BLOCKING ISSUE - execution MUST STOP immediately"
+    - "Partial compliance = NON-COMPLIANCE - ONLY 100% compliance is acceptable"
+    - "Cannot proceed with script creation until prohibition compliance verified - NO exceptions"
+
+  violation_response:
+    action: "STOP immediately"
+    required_steps:
+      - "Identify violation"
+      - "Delete violating script"
+      - "Acknowledge violation"
+      - "Use direct test execution instead"
+    then: "ONLY then can script creation continue (if compliant)"
+
+  no_exceptions:
+    rule: "NO exceptions allowed - prohibition is ABSOLUTE"
+    examples:
+      - "Cannot say 'this is just a helper' - MUST verify it doesn't execute scripts"
+      - "Cannot say 'this is acceptable for now' - MUST delete if it violates prohibition"
+      - "Cannot say 'this is good enough' - MUST achieve 100% compliance"
+      - "Cannot interpret prohibition - MUST follow LITERALLY"
+
+output_format:
+  on_script_creation_attempt:
+    mode: "VALIDATION MODE - Check prohibition before creation"
+    required_output: |
+      "Checking script against Test Script Execution Prohibition..."
+      "Script name: <script_name>"
+      "Script purpose: <purpose>"
+      "Prohibition check: <PASS/FAIL>"
+      "If FAIL: Script is FORBIDDEN - DO NOT CREATE"
+      "If PASS: Script is permitted - proceed with creation"
+    forbidden_output:
+      - "DO NOT create script without prohibition check"
+      - "DO NOT proceed if prohibition check fails"
+      - "DO NOT create wrapper scripts"
+
+  on_violation_detection:
+    mode: "VIOLATION RESPONSE MODE - Stop and delete"
+    required_output: |
+      "VIOLATION DETECTED: <violation_type>"
+      "Action: STOP IMMEDIATELY"
+      "Action: DELETE VIOLATING SCRIPT"
+      "Action: ACKNOWLEDGE VIOLATION"
+      "Action: USE DIRECT TEST EXECUTION INSTEAD"
+      "Prohibition: Scripts that execute test scripts are FORBIDDEN"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-15"
+  version: "1.0.0"
+  classification: "CRITICAL - ABSOLUTE PROHIBITION"
+  enforcement_level: "IRON CLAD - NO EXCEPTIONS - PERMANENT AND ABSOLUTE"
+
+continuation_instruction: |
+  You are enforcing Test Script Execution Prohibition per Enterprise Canonical Execution Protocol v1.0.0.
+
+  CRITICAL PROHIBITION (ABSOLUTE - NO EXCEPTIONS)
+  - YOU ARE STRICTLY FORBIDDEN FROM CREATING ANY SCRIPTS THAT EXECUTE OTHER SCRIPTS
+  - This prohibition is PERMANENT AND ABSOLUTE - NO EXCEPTIONS
+  - This is NOT a suggestion - this is an ABSOLUTE PROHIBITION
+
+  FORBIDDEN PATTERNS (ABSOLUTE - NO EXCEPTIONS)
+  - Scripts that run test scripts (workflow_runner.py, run_tests.py, execute_tests.py, test_orchestrator.py)
+  - Scripts that execute other Python scripts
+  - Scripts that use subprocess.run() to execute test files
+  - Scripts that import and call main() from test files
+  - Scripts that use exec() or eval() to run test code
+  - Scripts that use importlib to dynamically import and execute test modules
+  - Scripts that wrap test execution
+  - Scripts that orchestrate script execution
+  - Scripts with 'runner', 'orchestrator', 'executor', 'workflow' in the name
+  - Scripts that use pytest.main() or unittest.main() programmatically
+
+  PERMITTED PATTERNS (ONLY ALLOWED METHODS)
+  - Direct execution: python tests/.../test_file.py
+  - Pytest execution: pytest tests/.../test_file.py
+  - Test files themselves (they can call helper functions, but NOT execute other test scripts)
+  - Helper scripts that provide utilities (not execution)
+  - Helper scripts that are imported by tests (not executed by scripts)
+  - Helper scripts that are called directly by users (not by other scripts)
+
+  PRE-CREATION CHECKLIST (MANDATORY - MUST RUN BEFORE CREATING ANY SCRIPT)
+  - Does this script execute other scripts? → IF YES: FORBIDDEN
+  - Does this script call subprocess.run() on test files? → IF YES: FORBIDDEN
+  - Does this script import and call main() from test files? → IF YES: FORBIDDEN
+  - Does this script orchestrate test execution? → IF YES: FORBIDDEN
+  - Does this script wrap test execution? → IF YES: FORBIDDEN
+  - Does this script have 'runner', 'orchestrator', 'executor', 'workflow' in the name? → IF YES: FORBIDDEN
+  - If ANY answer is YES, the script is FORBIDDEN - DO NOT CREATE IT
+
+  VIOLATION DETECTION (MANDATORY - STOP IMMEDIATELY IF DETECTED)
+  - Script name contains 'runner', 'orchestrator', 'executor', 'workflow' → STOP IMMEDIATELY
+  - Script uses subprocess.run() → VERIFY IT'S NOT EXECUTING TEST SCRIPTS
+  - Script imports test modules → VERIFY IT'S NOT CALLING THEIR FUNCTIONS
+  - Script calls pytest.main() or unittest.main() programmatically → STOP IMMEDIATELY
+
+  VIOLATION RESPONSE (MANDATORY - FOLLOW IMMEDIATELY)
+  Step 1: STOP IMMEDIATELY - Cease all work on the violating script
+  Step 2: DELETE THE VIOLATING SCRIPT - Remove the script from the codebase completely
+  Step 3: ACKNOWLEDGE THE VIOLATION - Document the violation and why it was forbidden
+  Step 4: USE DIRECT TEST EXECUTION INSTEAD - Use python tests/.../test_file.py or pytest tests/.../test_file.py
+
+  RATIONALE
+  - Bespoke scripts are prone to failures and issues
+  - Test scripts in /tests/ directory should be executed directly
+  - No need for wrapper scripts that add complexity
+  - Direct execution is simpler, more reliable, and easier to debug
+  - Reduces maintenance burden and potential failure points
+
+  ENFORCEMENT (STRICT MODE - IRON CLAD)
+  - NO interpretations allowed - prohibition is LITERAL and ABSOLUTE
+  - ZERO wiggle room - prohibition is IRON CLAD
+  - Creating scripts that execute test scripts = IMMEDIATE STOP - script BLOCKED until deleted
+  - Violation of prohibition = BLOCKING ISSUE - execution MUST STOP immediately
+  - Partial compliance = NON-COMPLIANCE - ONLY 100% compliance is acceptable
+  - Cannot proceed with script creation until prohibition compliance verified - NO exceptions
+
+  CURRENT SESSION CONTEXT
+  - Focus: Prevent creation of bespoke scripts that execute test scripts
+  - Priority: Enforce prohibition before creating any script, verify compliance with absolute prohibition
+  - Mode: CODE-ONLY - prevent script creation violations, use direct test execution
+  - Remember: THIS PROHIBITION IS PERMANENT AND ABSOLUTE - NO EXCEPTIONS

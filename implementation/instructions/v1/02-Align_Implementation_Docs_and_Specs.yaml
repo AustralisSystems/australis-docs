@@ -1,0 +1,190 @@
+prompt_name: "Align_Implementation_Docs_and_Specs"
+version: "1.0.0"
+type: "implementation_alignment_protocol"
+context:
+  role: "AI implementation executor operating under a documentation-governed compliance framework"
+  governance:
+    canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  description: >
+    This protocol governs how the agent aligns implementation documentation, SPECs, and
+    implementation plans in compliance with the canonical documentation system.
+    It ensures all workflow execution steps are traceable, auditable, and consistent
+    with current project standards and lifecycle requirements.
+  critical_rule: >
+    **CRITICAL DIRECTORY RULE**: The directories backlog/, in_progress/, and done/ MUST ONLY
+    contain SPEC documents (files matching pattern *_SPEC_v*.md). ALL other documents
+    (temporal documents, status reports, completion reports, session summaries, etc.) MUST
+    be moved to temporal/ AFTER important information has been extracted and used to update
+    the implementation plan and other documentation. This rule is NON-NEGOTIABLE.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    status reports, progress reports, completion reports, session summaries, and findings
+    MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents (e.g., STATUS_REPORT_YYYY-MM-DD.md,
+    COMPLETION_REPORT_YYYY-MM-DD.md, SESSION_SUMMARY_YYYY-MM-DD.md). Instead, update the
+    relevant SPEC(s) and IMPLEMENTATION_PLAN with all progress, findings, and status information.
+    This rule is NON-NEGOTIABLE and must be enforced strictly.
+  doc_references:
+    - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+    - "docs/implementation/README_TEMPLATE.md"
+    - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+    - "docs/implementation/SPEC_README.md"
+    - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+instructions:
+  objective: >
+    Ensure that all implementation documentation, SPECs, and implementation plans remain
+    synchronised with the canonical workflow. Execute current implementation tasks in strict
+    alignment with the defined documentation standards and update SPEC and PLAN files
+    incrementally as work progresses.
+  steps:
+    - step: 1
+      name: "Canonical Standards Review"
+      actions:
+        - "Parse and understand all canonical documentation listed in context.doc_references"
+        - "Extract protocols, naming conventions, SPEC lifecycle definitions, and workflow instructions"
+        - "Ensure comprehension and compliance before continuing"
+      expected_outcome: "Canonical implementation rules and lifecycle standards are fully understood and loaded into context."
+
+    - step: 2
+      name: "Implementation Plan Audit"
+      actions:
+        - "Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+        - "Verify that all phases, tasks, actions, and step checklists exist and reflect the current state of the codebase"
+        - "If discrepancies exist, flag them for update or correction before proceeding"
+      expected_outcome: "Implementation plan is validated and current; discrepancies logged for correction."
+
+    - step: 3
+      name: "Task Execution and SPEC Status Update"
+      actions:
+        - "Identify the next active phase/task/action/step to be executed from the implementation plan"
+        - "Locate the associated SPECs in docs/implementation/in_progress/"
+        - "CRITICAL: Before proceeding, verify in_progress/ contains ONLY SPEC documents"
+        - "If any non-SPEC files found in in_progress/:"
+          - "Extract important information from temporal documents"
+          - "Update IMPLEMENTATION_PLAN and SPEC documents with extracted information"
+          - "Move ALL non-SPEC files to docs/implementation/temporal/"
+        - "Execute the implementation steps defined in the SPEC(s)"
+        - "During progress:"
+          - "Update the SPEC(s) incrementally with real-time task status, progress notes, and findings"
+          - "Update IMPLEMENTATION_PLAN checklists to reflect progress"
+          - "CRITICAL: DO NOT create temporal documents - all updates go into SPECs and IMPLEMENTATION_PLAN"
+        - "On completion:"
+          - "Update the SPEC(s) with completion status, final outcomes, and validation results"
+          - "Update IMPLEMENTATION_PLAN with completion status"
+          - "Move the SPEC(s) to docs/implementation/done/"
+        - "CRITICAL: After completion, verify done/ contains ONLY SPEC documents"
+        - "If any non-SPEC files found in done/:"
+          - "Extract important information from temporal documents"
+          - "Update IMPLEMENTATION_PLAN and SPEC documents with extracted information"
+          - "Move ALL non-SPEC files to docs/implementation/temporal/"
+      expected_outcome: "SPECs are executed, tracked, and relocated appropriately. All updates documented in SPECs and IMPLEMENTATION_PLAN only. All non-SPEC files moved to temporal/ after information extraction."
+
+    - step: 4
+      name: "Progression Trigger"
+      actions:
+        - "If all items in the current phase are complete:"
+          - "Advance to the next phase/task as defined in the implementation plan"
+          - "Relocate next phase SPEC(s) from backlog/done  in_progress"
+          - "Resume execution and tracking using Step 3 workflow"
+      expected_outcome: "Phase progression occurs only after full completion and validation of prior tasks."
+
+    - step: 5
+      name: "Final Reconciliation"
+      actions:
+        - "Perform a final update to docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+        - "Confirm that all checklists, tasks, and phase statuses reflect the latest implementation state"
+        - "Validate audit readiness  this plan acts as the master implementation record"
+      expected_outcome: "Implementation plan and SPECs are synchronised and audit-ready."
+
+    - step: 6
+      name: "Audit and Clean SPEC Directories"
+      actions:
+        - "Run scripts/Audit-WorkflowCompliance.ps1 to check for compliance violations"
+        - "If non-SPEC files found in backlog/, in_progress/, or done/:"
+          - "Extract important information from these files"
+          - "Update IMPLEMENTATION_PLAN and other documentation with extracted information"
+          - "Run scripts/Move-NonSpecFilesFromSpecDirectories.ps1 to move files to temporal/"
+        - "Verify backlog/, in_progress/, and done/ contain ONLY SPEC documents"
+      expected_outcome: "SPEC directories cleaned; all non-SPEC files moved to temporal/ after information extraction."
+
+constraints:
+  - "Do not invent, infer, or fabricate tasks or instructions not defined in documentation"
+  - "Do not proceed unless all prior validation and audit steps are confirmed complete"
+  - "Do not bypass SPEC status tracking or directory workflow"
+  - "Always update SPECs and PLAN incrementally to maintain traceability"
+  - "Maintain file paths, directory structure, and naming conventions exactly as documented"
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: ALL non-SPEC files MUST be moved to temporal/ AFTER information extraction and plan/documentation updates"
+  - "CRITICAL: Never leave temporal documents, status reports, or completion reports in backlog/, in_progress/, or done/"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all updates go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Status reports, progress updates, completion summaries, session notes MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+
+examples:
+  spec_transition:
+    description: "Example of SPEC relocation workflow"
+    from: "docs/implementation/in_progress/API_AUTH_SPEC.md"
+    to: "docs/implementation/done/API_AUTH_SPEC.md"
+  checklist_update:
+    description: "Example of updated implementation plan checklist"
+    example_markdown: |
+      ## Phase 1: API Layer
+      - [x] Task 1: Configure route handlers
+      - [x] Task 2: Define auth schema
+      - [ ] Task 3: Integrate JWT validation
+
+output_format:
+  section_1: "Canonical documentation audit results"
+  section_2: "Implementation plan validation results"
+  section_3: "SPEC execution and status updates"
+  section_4: "Final reconciliation summary"
+  section_5: "Audit confirmation and next-phase trigger"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-11-08"
+  version: "1.0.0"
+  classification: "Enterprise Canonical Implementation Alignment Governance Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol and Golden Rule Execution Protocol"
+  language: "en-AU"
+
+
+[END OF INSTRUCTIONS]
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/02-Align_Implementation_Docs_and_Specs.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/02-Align_Implementation_Docs_and_Specs.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/02-Align_Implementation_Docs_and_Specs.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/02-Align_Implementation_Docs_and_Specs.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/02-Align_Implementation_Docs_and_Specs.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/02-Align_Implementation_Docs_and_Specs.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/02-Align_Implementation_Docs_and_Specs.yaml --enforce"

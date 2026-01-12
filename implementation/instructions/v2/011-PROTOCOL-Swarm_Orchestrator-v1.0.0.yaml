@@ -1,0 +1,1144 @@
+mcp:
+  name: swarm-orchestrator-protocol
+  version: "1.0.0"
+  type: orchestration_protocol
+  language: en-AU
+  description: >
+    Swarm Orchestrator Protocol. Defines the dual-purpose protocol for PRIME
+    protocol activation and universal agent spawn template. Provides single-word
+    activation for THE SWARM hierarchy and standardized spawn template for all
+    7 swarm orchestrators. Ensures consistent agent spawning across all orchestrators
+    with RFC 2119, GOLDEN RULE, and SOLID/DRY/KISS enforcement.
+
+references:
+  - docs/implementation/instructions/v2/000-DOCTRINE-PRIME_Strategic_Command-v1.0.0.yaml
+  - docs/implementation/instructions/v2/010-PROTOCOL-PRIME_Strategic_Orchestration-v1.0.0.yaml
+  - docs/implementation/instructions/v2/001-PROTOCOL-The_GoldenRule_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml
+
+---
+context:
+  role: Swarm Orchestrator - Dual Purpose (Entry Point + Template Provider)
+  intent: PRIME protocol activation and universal agent spawn template
+  workflow: Activate PRIME → Delegate to Orchestrators → Spawn Agents → Aggregate Results
+  execution_mode: Entry point for PRIME protocol and template provider for orchestrators
+  architecture: "2-TIER (PRIME → ORCHESTRATORS → AGENTS)"
+  version: "4.0.0 (November 2025)"
+
+dual_purpose:
+  purpose_1_prime_protocol_activation:
+    description: "PRIME Protocol Entry Point"
+    activation_phrases:
+      - "orchestrator"
+      - "swarm-orchestrator"
+      - "act as orchestrator"
+      - "/prime"
+    routes_to: "PRIME protocol (.claude/commands/prime.md)"
+    provides_access_to: "7 specialized swarm orchestrators"
+
+  purpose_2_universal_spawn_template:
+    description: "Universal Agent Spawn Template Provider"
+    template_location: ".claude/skills/swarm-orchestrator/prompt-template.yaml"
+    used_by: "All 7 swarm orchestrators"
+    ensures:
+      - "RFC 2119 compliance in all spawned agents"
+      - "GOLDEN RULE workflow (8-step mandatory process)"
+      - "SOLID/DRY/KISS principles (7 design standards)"
+      - "Standardized reporting format"
+      - "Model-specific CLI commands"
+      - "Variable replacement guide"
+
+available_orchestrators:
+  overview: "7 specialized swarm orchestrators (November 2025)"
+  total_capacity: "200+ concurrent agents"
+  universal_enforcement: "ALL orchestrators enforce RFC 2119 + GOLDEN RULE + SOLID/DRY/KISS"
+
+  orchestrators:
+    sonnet_swarm_orchestrator:
+      model: "Claude 4.5 Sonnet (anthropic/claude-4.5-sonnet)"
+      release: "October 2024"
+      capacity: "5 concurrent agents"
+      use: "Complex reasoning, architectural design, strategic planning"
+      cli: "Direct Claude CLI"
+      routing: "Direct CLI (no proxy)"
+      cli_command: "claude --model sonnet --print"
+      golden_rule: "ALWAYS MANDATORY - NO EXCEPTIONS"
+      solid_dry_kiss: "ALWAYS MANDATORY - NO EXCEPTIONS"
+      agent_file: ".claude/agents/sonnet-swarm-orchestrator.md"
+
+    haiku_swarm_orchestrator:
+      model: "Claude 4.5 Haiku (anthropic/claude-4.5-haiku)"
+      release: "November 2024"
+      capacity: "15 concurrent agents"
+      use: "Fast code generation, rapid execution"
+      cli: "Direct Claude CLI"
+      routing: "Direct CLI (no proxy)"
+      cli_command: "claude --model haiku --print"
+      golden_rule: "MANDATORY"
+      solid_dry_kiss: "MANDATORY"
+      agent_file: ".claude/agents/haiku-swarm-orchestrator.md"
+
+    codex_swarm_orchestrator:
+      model: "GPT-5.1/GPT-5-codex (openai/gpt-5.1 or openai/gpt-5-codex)"
+      release: "Various (o1-mini is codex CLI default)"
+      capacity: "10 concurrent agents"
+      use: "Simple code generation, CRUD, rapid prototyping (⭐ PREFERRED)"
+      cli: "Direct codex CLI"
+      routing: "Direct CLI (no proxy)"
+      cli_command: "codex exec -s danger-full-access --skip-git-repo-check"
+      replaces: "OpenAI Codex (deprecated March 2023)"
+      golden_rule: "MANDATORY"
+      solid_dry_kiss: "MANDATORY"
+      agent_file: ".claude/agents/codex-swarm-orchestrator.md"
+
+    gemini_swarm_orchestrator:
+      model: "Google Gemini 2.5 Pro (google/gemini-2.5-pro)"
+      release: "June 2025"
+      capacity: "10 concurrent agents"
+      use: "Strategic/complex analysis, 1M token context (⭐ PREFERRED)"
+      cli: "DUAL ROUTING"
+      routing: "PRIMARY: native gemini CLI (OAuth, NO API KEY), FALLBACK: qwen CLI → LiteLLM:47821 → OpenRouter"
+      cli_command: "qwen --openai-base-url http://localhost:47821/v1 --openai-api-key sk-1234 -m google/gemini-2.5-pro --yolo -p"
+      golden_rule: "MANDATORY"
+      solid_dry_kiss: "MANDATORY"
+      agent_file: ".claude/agents/gemini-swarm-orchestrator.md"
+
+    grok_swarm_orchestrator:
+      models:
+        - "Grok 1/Code Fast 1 (x-ai/grok-code-fast-1) - Released August 28, 2025 - 92 tok/s"
+        - "Grok 4 Fast (x-ai/grok-4-fast) - Released September 2025 - 2M context"
+      capacity: "15 concurrent agents"
+      use: "Fast execution (Grok 1) or complex tasks (Grok 4)"
+      cli: "DUAL ROUTING"
+      routing: "PRIMARY: native grok CLI (NO API KEY REQUIRED), FALLBACK: qwen CLI → LiteLLM:47821 → OpenRouter"
+      cli_command: "qwen --openai-base-url http://localhost:47821/v1 --openai-api-key sk-1234 -m x-ai/grok-code-fast-1 --yolo -p"
+      golden_rule: "MANDATORY"
+      solid_dry_kiss: "MANDATORY"
+      agent_file: ".claude/agents/grok-swarm-orchestrator.md"
+
+    kimi_swarm_orchestrator:
+      models:
+        - "Kimi K2 (moonshotai/kimi-k2) - Released November 2025 - Fast execution, 128K context"
+        - "Kimi K2 Thinking (moonshotai/kimi-k2-thinking) - Released November 2025 - 256K context, step-by-step reasoning"
+      capacity: "15 concurrent agents"
+      use: "Fast execution (Kimi K2) or complex reasoning (Kimi K2 Thinking)"
+      cli: "DUAL ROUTING"
+      routing: "PRIMARY: native kimi CLI (v1.0.1+) (API KEY REQUIRED), FALLBACK: qwen CLI → LiteLLM:47821 → OpenRouter"
+      cli_command: "qwen --openai-base-url http://localhost:47821/v1 --openai-api-key sk-1234 -m moonshotai/kimi-k2 --yolo -p"
+      golden_rule: "MANDATORY"
+      solid_dry_kiss: "MANDATORY"
+      agent_file: ".claude/agents/kimi-swarm-orchestrator.md"
+
+    qwen_swarm_orchestrator:
+      model: "Qwen3-Coder (qwen/qwen-3-coder)"
+      release: "July 2025"
+      capacity: "10 concurrent agents"
+      use: "Agentic AI coding (handles BOTH complex AND simple tasks)"
+      router: "qwen CLI → LiteLLM:47821"
+      routing: "qwen CLI → LiteLLM:47821 (no OpenRouter)"
+      cli_command: "qwen --openai-base-url http://localhost:47821/v1 --openai-api-key sk-1234 -m qwen/qwen-3-coder --yolo -p"
+      unique: "SAME MODEL for all complexity levels"
+      golden_rule: "MANDATORY"
+      solid_dry_kiss: "MANDATORY"
+      agent_file: ".claude/agents/qwen-swarm-orchestrator.md"
+
+the_swarm_hierarchy:
+  architecture: "2-TIER (PRIME → ORCHESTRATORS → AGENTS)"
+  structure:
+    tier_1_prime:
+      role: "PRIME (Claude 4.5 Sonnet)"
+      responsibilities:
+        - "Strategic decomposition"
+        - "Task classification"
+        - "Resource allocation"
+        - "Quality validation"
+      delegation_method: "Task tool spawns ORCHESTRATORS"
+
+    tier_2_orchestrators:
+      role: "ORCHESTRATORS (Spawning Services)"
+      responsibility: "Spawn agents via Bash subprocess, monitor via BashOutput, aggregate results, report to PRIME"
+      key_change: "Orchestrators are spawning services ONLY (no strategic decisions)"
+      template: ".claude/skills/swarm-orchestrator/prompt-template.yaml"
+      orchestrators: "7 specialized orchestrators (see available_orchestrators)"
+
+    tier_3_agents:
+      role: "AGENTS (Level 2 - Execution Units)"
+      responsibility: "Execute discrete work packages, report via stdout → Orchestrator aggregates → PRIME validates"
+      key_change: "Agents report directly to PRIME (via orchestrator aggregation)"
+
+      agent_tier_classification:
+        tier_2a_reasoning_agents:
+          name: "Reasoning/Chain-of-Thought Agents"
+          capability_type: "Advanced reasoning and complex task execution"
+          characteristics:
+            - "Capable of multi-step reasoning and chain-of-thought processes"
+            - "Can handle complex, ambiguous tasks requiring deep analysis"
+            - "Performs sophisticated problem-solving and strategic thinking"
+            - "Executes complex algorithms and multi-phase implementations"
+            - "Can coordinate multiple sub-tasks within a single execution"
+            - "Capable of iterative refinement and optimization"
+
+          operational_scope:
+            - "Complex algorithm implementation"
+            - "Multi-step code generation and optimization"
+            - "Architectural design and pattern implementation"
+            - "Strategic code refactoring and restructuring"
+            - "Complex debugging and root cause analysis"
+            - "Performance optimization requiring deep analysis"
+            - "Integration of multiple systems or components"
+
+          execution_model: "Direct execution with reasoning - may coordinate sub-tasks internally"
+          task_complexity: "High complexity, multi-phase tasks"
+          mcp_tool_usage: "Progressive memory expansion, MANDATORY sequential-thinking, MANDATORY context7/grep"
+
+        tier_2b_non_reasoning_agents:
+          name: "Non-Reasoning/Single-Action Agents"
+          capability_type: "Fast, single-action task execution"
+          characteristics:
+            - "Optimized for speed and efficiency"
+            - "Executes one task or action at a time"
+            - "Minimal reasoning overhead - direct execution"
+            - "Fast pattern recognition and simple transformations"
+            - "Rapid code generation for straightforward tasks"
+            - "Quick data analysis and lightweight automation"
+
+          operational_scope:
+            - "Simple code generation and CRUD operations"
+            - "Fast data analysis and pattern recognition"
+            - "Quick code review and simple transformations"
+            - "Rapid prototyping and lightweight automation"
+            - "Simple refactoring and code cleanup"
+            - "Quick metric extraction and reporting"
+            - "Fast log analysis and simple debugging"
+
+          execution_model: "Direct execution - single action focus"
+          task_complexity: "Low to moderate complexity, single-action tasks"
+          mcp_tool_usage: "Narrow memory scope, OPTIONAL sequential-thinking, CONDITIONAL context7/grep"
+
+        tier_2c_coordination_agents:
+          name: "Task Coordination Agents"
+          capability_type: "Task coordination through delegation"
+          characteristics:
+            - "Coordinates ONE discrete task by delegating to specialized sub-agents"
+            - "Does NOT execute work directly - coordinates specialists"
+            - "Monitors sub-agent execution and aggregates results"
+
+          operational_scope:
+            - "Tasks requiring multiple specialized sub-agents"
+            - "Complex workflows requiring coordination"
+            - "Quality validation and remediation workflows"
+            - "Testing and deployment coordination"
+
+          execution_model: "Coordinate through delegation - delegate to specialized sub-agents"
+          task_complexity: "Moderate complexity requiring sub-agent coordination"
+          mcp_tool_usage: "Task-specific memory queries, MANDATORY sequential-thinking, MANDATORY context7/grep if coding"
+
+universal_spawn_template:
+  template_location: ".claude/skills/swarm-orchestrator/prompt-template.yaml"
+  purpose: "Ensure consistent agent spawning across all 7 orchestrators"
+  used_by: "All swarm orchestrators in .claude/agents/"
+
+  template_provides:
+    - "RFC 2119 compliance enforcement"
+    - "GOLDEN RULE workflow (8-step mandatory process)"
+    - "SOLID/DRY/KISS principles (7 design standards)"
+    - "Standardized reporting format"
+    - "Model-specific CLI commands"
+    - "Variable replacement guide"
+    - "Error handling protocols"
+    - "Execution checklist"
+
+  template_variables:
+    identity:
+      description: "Agent unique ID"
+      example: "codex-agent-001, gemini-agent-002, etc."
+      required: true
+
+    model_name:
+      description: "Human-readable model name"
+      example: "GPT-5.1/GPT-5-codex, Gemini 2.5 Pro, Qwen3-Coder, etc."
+      required: true
+
+    model_identifier:
+      description: "Technical identifier"
+      example: "openai/GPT-5.1, google/gemini-2.5-pro, qwen/qwen-3-coder, etc."
+      required: true
+
+    cli_command:
+      description: "CLI command to spawn agent"
+      example: "codex exec, qwen --openai-base-url http://localhost:47821/v1, etc."
+      required: true
+
+    skill_reference:
+      description: "Path to agent SKILL.md"
+      example: ".claude/skills/codex-agent/SKILL.md, etc."
+      required: true
+
+    agent_type:
+      description: "Agent specialization"
+      example: "Simple Code Generation, Strategic Analysis, etc."
+      required: true
+
+    task:
+      description: "Specific task from PRIME"
+      required: true
+
+    router_info:
+      description: "Routing information"
+      example: "Direct CLI OR qwen CLI → LiteLLM:47821 → OpenRouter"
+      required: true
+
+    release_date:
+      description: "Model release date"
+      example: "October 2024, June 2025, etc."
+      required: true
+
+    orchestrator_name:
+      description: "Which orchestrator spawned this agent"
+      example: "codex-swarm-orchestrator, gemini-swarm-orchestrator, etc."
+      required: true
+
+  critical_requirements:
+    orchestrators_must:
+      - "Replace EVERY {variable} with actual values"
+      - "Use correct CLI command for model type"
+      - "Include RFC 2119 compliance in spawn prompt"
+      - "Include GOLDEN RULE workflow in spawn prompt"
+      - "Include SOLID/DRY/KISS principles in spawn prompt"
+      - "Set run_in_background=True for parallel execution"
+      - "Monitor via BashOutput(bash_id)"
+      - "Aggregate results before reporting to PRIME"
+
+    orchestrators_must_not:
+      - "Create custom spawn prompts (use this template)"
+      - "Leave {variables} unreplaced"
+      - "Skip mandatory frameworks (RFC 2119, GOLDEN RULE, SOLID/DRY/KISS)"
+      - "Make strategic decisions (only spawn as instructed)"
+      - "Decompose tasks (PRIME does this)"
+
+prerequisites_and_infrastructure_validation:
+  requirement: "MANDATORY - Before spawning ANY agents, orchestrators MUST verify infrastructure"
+  critical: "ABORT spawning and report infrastructure error to PRIME if any prerequisite missing"
+
+  validation_checklist:
+    cli_installation:
+      requirement: "CLI must be installed and accessible"
+      check_pattern: |
+        if command -v {cli_name} > /dev/null 2>&1; then
+            CLI_VERSION=$({cli_name} --version 2>&1 | head -n1)
+            echo "✅ {CLI_NAME} CLI installed: ${CLI_VERSION}"
+            echo "✅ {CLI_NAME} CLI available for spawning"
+        else
+            echo "❌ {CLI_NAME} CLI NOT found - install required"
+            echo "   Install: {install_command}"
+            echo "❌ CANNOT spawn agents without {CLI_NAME} CLI"
+            exit 1
+        fi
+
+      cli_commands:
+        codex: "npm install -g @openai/codex-cli"
+        claude: "npm install -g @anthropic/claude-cli"
+        gemini: "npm install -g @google/gemini-cli"
+        grok: "npm install -g grok-cli"
+        kimi: "npm install -g kimi-cli"
+        qwen: "npm install -g @qwen/cli"
+
+    configuration_directories:
+      requirement: "Configuration directories must exist with proper files"
+      directories:
+        codex:
+          path: ".codex/"
+          required_files:
+            - "config.toml (Model settings, MCP servers, profiles, sandbox mode)"
+            - "config.json (MCP server configurations with bin paths)"
+          validation: "Check for mcp_servers in config.toml and mcpServers in config.json"
+
+        gemini:
+          path: ".gemini/"
+          required_files:
+            - "settings.json (MCP server configuration with mcpServers)"
+          validation: "Check for mcpServers configuration"
+
+        grok:
+          path: ".grok/"
+          required_files:
+            - "config.toml (Model settings, MCP server definitions)"
+            - "settings.json (MCP server transport configuration)"
+          validation: "Check for MCP server configuration"
+
+      check_pattern: |
+        if [ -d "{config_dir}" ]; then
+            echo "✅ {config_dir}/ directory exists"
+            # Check for required files
+            if [ -f "{config_dir}/{required_file}" ]; then
+                echo "✅ {config_dir}/{required_file} exists"
+                # Validate configuration content
+                if grep -q "{validation_pattern}" "{config_dir}/{required_file}" 2>/dev/null; then
+                    echo "✅ {config_dir}/{required_file} has proper configuration"
+                else
+                    echo "⚠️  {config_dir}/{required_file} missing required configuration"
+                fi
+            else
+                echo "⚠️  {config_dir}/{required_file} MISSING"
+            fi
+        else
+            echo "❌ {config_dir}/ directory MISSING"
+            exit 1
+        fi
+
+    litellm_proxy:
+      requirement: "For routed models (gemini, grok, kimi, qwen), LiteLLM proxy must be running"
+      check_pattern: |
+        if curl -s http://localhost:47821/health > /dev/null 2>&1; then
+            echo "✅ LiteLLM proxy running on port 47821"
+        else
+            echo "⚠️  LiteLLM proxy not running - will use PRIMARY routing"
+            echo "   Start: python .claude/hooks/src/ghost_agent/start_litellm_with_env.py"
+        fi
+
+  spawn_strategy:
+    all_prerequisites_met: "Spawn agents via CLI"
+    any_prerequisite_missing: "ABORT spawning and report infrastructure error to PRIME"
+
+  infrastructure_status_summary:
+    before_spawning_verify:
+      - "CLI installed (MANDATORY)"
+      - "Configuration directory exists with proper files"
+      - "Configuration files have required settings"
+      - "LiteLLM proxy running (for routed models)"
+
+orchestrator_spawning_process:
+  step_0_validate_infrastructure:
+    action: "Validate infrastructure BEFORE spawning"
+    requirement: "MANDATORY - Do NOT spawn agents without infrastructure validation"
+    checklist:
+      - "CLI installation verified"
+      - "Configuration directories exist"
+      - "Configuration files validated"
+      - "LiteLLM proxy status checked (for routed models)"
+    if_validation_fails: "ABORT spawning and report infrastructure error to PRIME"
+
+  step_1_reference_template:
+    action: "Reference the template"
+    location: ".claude/skills/swarm-orchestrator/prompt-template.yaml"
+    purpose: "Ensure consistent agent spawning across all orchestrators"
+
+  step_2_replace_variables:
+    action: "Replace ALL template variables"
+    requirement: "MANDATORY - Do NOT leave ANY {variables} unreplaced"
+    variables_to_replace:
+      - "{identity}"
+      - "{model_name}"
+      - "{model_identifier}"
+      - "{cli_command}"
+      - "{skill_reference}"
+      - "{agent_type}"
+      - "{task}"
+      - "{router_info}"
+      - "{release_date}"
+      - "{orchestrator_name}"
+
+  step_3_construct_bash_command:
+    action: "Construct Bash command with template"
+    pattern: |
+      spawned = []
+      for req in spawn_requests:
+          # Use template with variables replaced
+          agent_prompt = f"""[PASTE TEMPLATE WITH VARIABLES REPLACED]"""
+
+          result = Bash(run_in_background=True,
+                        command=f"""{cli_command} "{agent_prompt}" > /tmp/{model}_agent_{req['identity']}.txt 2>&1""")
+
+          spawned.append({
+              "identity": req['identity'],
+              "shell_id": result.bash_id,
+              "status": "spawned",
+              "task": req['task']
+          })
+
+    example_haiku:
+      cli_command: "claude --model haiku --print"
+      pattern: |
+        result = Bash(run_in_background=True,
+                      command=f"""claude --model haiku --print '{agent_prompt}' > /tmp/haiku_agent_{req['identity']}.txt 2>&1""")
+
+    example_codex:
+      cli_command: "codex exec -s danger-full-access --skip-git-repo-check"
+      pattern: |
+        result = Bash(run_in_background=True,
+                      command=f"""codex exec -s danger-full-access --skip-git-repo-check "{agent_prompt}" > /tmp/codex_agent_{req['identity']}.txt 2>&1""")
+
+  step_4_monitor_agents:
+    action: "Monitor agents via BashOutput"
+    method: "BashOutput(bash_id)"
+    purpose: "Track agent execution and collect results"
+    monitoring_pattern: |
+      for agent in spawned_agents:
+          output = BashOutput(bash_id=agent['shell_id'])
+          if output.status == "completed":
+              # Process completed agent
+          elif output.status == "failed":
+              # Handle failed agent
+          elif output.status == "running":
+              # Continue monitoring
+
+  step_5_aggregate_results:
+    action: "Aggregate results from all agents"
+    method: "Parse stdout output from each agent"
+    format: "Standardized report format (see agent_report_format)"
+    aggregation_pattern: |
+      agent_results = []
+      for agent in spawned_agents:
+          output = BashOutput(bash_id=agent['shell_id'])
+          if output.status == "completed":
+              agent_results.append({
+                  "agent_id": agent['identity'],
+                  "task": agent['task'],
+                  "status": "COMPLETE",
+                  "code_generated": parse_code(output.stdout),
+                  "tests_passing": check_tests(output.stdout),
+                  "documentation": extract_docs(output.stdout),
+                  "rfc_2119_compliant": check_rfc_compliance(output.stdout),
+                  "golden_rule_completed": check_golden_rule(output.stdout),
+                  "solid_dry_kiss_applied": check_principles(output.stdout)
+              })
+
+      summary = {
+          "model": "{model_name}",
+          "spawned_count": len(spawned_agents),
+          "completed_count": len([r for r in agent_results if r['status'] == 'COMPLETE']),
+          "failed_count": len([r for r in agent_results if r['status'] == 'FAILED']),
+          "agent_results": agent_results,
+          "aggregated_summary": f"{len(agent_results)} tasks complete"
+      }
+
+  step_6_report_to_prime:
+    action: "Report aggregated results to PRIME"
+    format: "Orchestrator report format"
+    includes:
+      - "Model type"
+      - "Status (COMPLETE|IN_PROGRESS|BLOCKED|FAILED)"
+      - "Summary (1-2 sentence outcome)"
+      - "Metrics (agents spawned, completed, failed)"
+      - "Agent results (individual agent outcomes)"
+      - "Aggregated results (combined outcomes)"
+      - "Issues (any problems encountered)"
+      - "Framework compliance status (RFC 2119, GOLDEN RULE, SOLID/DRY/KISS)"
+
+cli_command_reference:
+  direct_cli_models:
+    codex:
+      cli: "codex exec -s danger-full-access --skip-git-repo-check"
+      model: "GPT-5.1/GPT-5-codex (defaults to GPT-5-codex)"
+      routing: "Direct CLI (no proxy)"
+
+    haiku:
+      cli: "claude --model haiku --print"
+      model: "Claude 4.5 Haiku"
+      routing: "Direct CLI (no proxy)"
+
+    sonnet:
+      cli: "claude --model sonnet --print"
+      model: "Claude 4.5 Sonnet"
+      routing: "Direct CLI (no proxy)"
+
+  routed_via_litellm_proxy:
+    gemini:
+      cli: "qwen --openai-base-url http://localhost:47821/v1 --openai-api-key sk-1234 -m google/gemini-2.5-pro --yolo -p"
+      model: "Gemini 2.5 Pro"
+      routing: "qwen CLI → LiteLLM:47821 → OpenRouter"
+
+    grok:
+      cli: "qwen --openai-base-url http://localhost:47821/v1 --openai-api-key sk-1234 -m x-ai/grok-code-fast-1 --yolo -p"
+      model: "Grok 1/Code Fast 1 OR Grok 4 Fast"
+      routing: "qwen CLI → LiteLLM:47821 → OpenRouter"
+
+    kimi:
+      cli: "qwen --openai-base-url http://localhost:47821/v1 --openai-api-key sk-1234 -m moonshotai/kimi-k2 --yolo -p"
+      model: "Kimi K2 OR Kimi K2 Thinking"
+      routing: "qwen CLI → LiteLLM:47821 → OpenRouter"
+
+    qwen:
+      cli: "qwen --openai-base-url http://localhost:47821/v1 --openai-api-key sk-1234 -m qwen/qwen-3-coder --yolo -p"
+      model: "Qwen3-Coder"
+      routing: "qwen CLI → LiteLLM:47821 (no OpenRouter)"
+
+frameworks_enforced_universally:
+  rfc_2119_compliance:
+    requirement: "MANDATORY - All spawned agents MUST comply with RFC 2119"
+    enforcement:
+      - "MUST/SHALL/REQUIRED/ALWAYS = mandatory requirement (absolute, no exceptions)"
+      - "MUST NOT/SHALL NOT/NEVER = absolute prohibition (forbidden, no exceptions)"
+      - "FORBIDDEN = hard MUST NOT requiring immediate remediation"
+      - "SHOULD/RECOMMENDED = strong recommendation (rare exceptions must be justified)"
+      - "SHOULD NOT/NOT RECOMMENDED = strongly discouraged"
+      - "MAY/OPTIONAL = truly optional"
+    compliance: "MANDATORY and NON-NEGOTIABLE"
+
+  the_golden_rule:
+    requirement: "MANDATORY - 8-Step Workflow before ANY coding"
+    workflow:
+      step_1: "Load patterns from neo4j-memory (progressive: 5min → 30min → 1hr → 4-48hrs)"
+      step_2: "RTFM (Read The F***ing Manual - project documentation)"
+      step_3: "Get library docs via context7"
+      step_4: "Find examples via grep (GitHub search)"
+      step_5: "Plan with sequential-thinking"
+      step_6: "Implement with SOLID/DRY/KISS principles"
+      step_7: "Delegate to specialized sub-agents"
+      step_8: "Save pattern to neo4j-memory"
+    enforcement: "MANDATORY for all coding tasks - ZERO EXCEPTIONS"
+    reference: ".claude/skills/golden-rule/SKILL.md"
+
+  solid_dry_kiss_principles:
+    requirement: "MANDATORY - 7 Design Principles for ALL code"
+    principles:
+      srp: "Single Responsibility Principle - One responsibility per class/function"
+      ocp: "Open/Closed Principle - Open for extension, closed for modification"
+      lsp: "Liskov Substitution Principle - Subtypes must be substitutable for base types"
+      isp: "Interface Segregation Principle - Focused, specific interfaces"
+      dip: "Dependency Inversion Principle - Depend on abstractions, not concretions"
+      dry: "Don't Repeat Yourself - Extract common patterns"
+      kiss: "Keep It Simple, Stupid - Prefer simplicity over cleverness"
+    enforcement: "MANDATORY for ALL code - ZERO EXCEPTIONS"
+    reference: ".claude/skills/solid-dry-kiss-principles/SKILL.md"
+
+agent_report_format:
+  mandatory_format: "All reports MUST follow this format for orchestrator parsing"
+  format: |
+    [{MODEL_PREFIX}-{identity}]  COMPLETE |  FAILED | ⏸ BLOCKED
+
+    TASK: {task_description}
+    MODEL: {model_name} ({model_identifier})
+    CLI: {cli_command}
+    ROUTER: {router_info}
+    RELEASE: {release_date}
+
+    EXECUTION:
+    - Golden Rule completed: yes/no
+    - SOLID/DRY/KISS applied: yes/no
+    - RFC 2119 compliant: yes/no
+    - Context loaded: yes/no
+    - Documentation retrieved: yes/no
+    - Examples found: yes/no
+    - Sequential thinking used: yes/no
+    - Pattern saved: yes/no
+
+    RESULT:
+    {detailed_result_description}
+
+    VALIDATION:
+    - Success criteria met: yes/no
+    - Quality checks passed: [list]
+    - Tests passing: yes/no
+    - Issues found: [list or "none"]
+
+    STATUS: COMPLETE | FAILED | BLOCKED
+
+  examples:
+    - "[CODEX-agent-001]  COMPLETE"
+    - "[GEMINI-agent-002]  COMPLETE"
+    - "[GROK-agent-003]  COMPLETE"
+    - "[HAIKU-agent-004]  COMPLETE"
+    - "[QWEN3-CODER-agent-005]  COMPLETE"
+    - "[SONNET-agent-006]  COMPLETE"
+    - "[KIMI-agent-007]  COMPLETE"
+
+error_handling:
+  if_task_fails:
+    step_1: "Document error clearly"
+    includes:
+      - "Error message"
+      - "Stack trace (if applicable)"
+      - "Diagnostic information"
+
+    step_2: "Mark status appropriately"
+    status_options:
+      failed: "Unable to complete"
+      blocked: "Need guidance/resources"
+
+    step_3: "Report via stdout"
+    format: |
+      [{MODEL_PREFIX}-{identity}]  FAILED
+
+      TASK: {task_description}
+      ERROR: {error_message}
+      DIAGNOSTICS: {diagnostic_info}
+
+      STATUS: FAILED
+
+execution_checklist:
+  before_reporting_complete:
+    checklist:
+      - "Task objective achieved"
+      - "Golden Rule workflow completed (8 steps)"
+      - "SOLID/DRY/KISS principles applied (7 principles)"
+      - "RFC 2119 compliant"
+      - "Success criteria met (100%)"
+      - "Quality checks passed"
+      - "Tests passing"
+      - "Pattern saved to memory"
+      - "Report formatted correctly"
+      - "Ready for stdout output"
+    requirement: "If ANY fail → Fix → Re-check → Report COMPLETE only when 100%"
+
+orchestrator_usage_pattern:
+  prime_delegation:
+    pattern: |
+      # PRIME calls orchestrator
+      Task(subagent_type='codex-swarm-orchestrator',
+           prompt='Spawn 5 Codex agents for simple code generation...')
+
+    flow: |
+      PRIME (Level 1 - Claude 4.5 Sonnet)
+        │
+        Task tool calls orchestrator
+        │
+      ORCHESTRATOR (Spawning Service - uses THIS TEMPLATE)
+        │
+        Bash(run_in_background=True) with template
+        │
+      AGENT (Level 2 - Execution Unit)
+        │
+        Reports via stdout → Orchestrator aggregates → PRIME validates
+
+  orchestrator_implementation:
+    step_1: "Read template structure (reference only - inline spawn for simplicity)"
+    step_2: "Replace variables with actual values"
+    step_3: "Construct spawn command with frameworks enforced"
+    example: |
+      agent_prompt = f"""You are {identity} from {skill_reference}.
+
+      MODEL: {model_name}
+      CLI: {cli_command}
+      HIERARCHY: Level 2
+      REPORTS_TO: PRIME
+
+      RFC 2119 COMPLIANCE: MANDATORY
+      GOLDEN RULE: 8-step workflow
+      SOLID/DRY/KISS: 7 principles
+
+      TASK: {task}
+      """
+
+      Bash(run_in_background=True, command=f"{cli_command} '{agent_prompt}' ...")
+
+  integration_examples:
+    example_1_haiku_orchestrator:
+      scenario: "PRIME delegates 15 fast code generation tasks"
+      prime_request: |
+        PRIME:
+          "I have decomposed user request into 20 tasks:
+           - 15 FAST CODE tasks (Haiku - ⭐ PREFERRED)
+           - 5 COMPLEX REASONING tasks (Sonnet)
+
+           Task(subagent_type='haiku-swarm-orchestrator',
+                prompt='Spawn 15 Claude 4.5 Haiku agents for fast code generation...')
+
+           Task(subagent_type='sonnet-swarm-orchestrator',
+                prompt='Spawn 5 Sonnet agents for complex reasoning...')"
+
+      orchestrator_response: |
+        YOU (haiku-swarm-orchestrator):
+          1. Parse spawning request from PRIME
+          2. Extract 15 Haiku agent tasks
+          3. Check capacity (15 ≤ 15, OK)
+          4. Validate infrastructure (CLI installed, config exists)
+          5. Spawn all 15 Claude 4.5 Haiku agents IN PARALLEL via claude CLI
+          6. Include RFC 2119 compliance in each agent's instructions
+          7. Monitor all 15 via BashOutput
+          8. Aggregate results from all agents
+          9. Report comprehensive summary to PRIME
+
+      result: |
+        Agents execute at Level 2, complete in ~10-30 seconds each
+        YOU aggregate and report to PRIME
+        PRIME validates and responds to user
+
+    example_2_codex_orchestrator:
+      scenario: "PRIME delegates 7 simple code generation tasks"
+      prime_request: |
+        PRIME:
+          "I have decomposed user request into 12 tasks:
+           - 7 SIMPLE CODE tasks (Codex - ⭐ PREFERRED)
+           - 5 COMPLEX ANALYSIS tasks (Sonnet)
+
+           Task(subagent_type='codex-swarm-orchestrator',
+                prompt='Spawn 7 Codex agents (GPT-5.1/GPT-5-codex) for simple code generation...')
+
+           Task(subagent_type='sonnet-swarm-orchestrator',
+                prompt='Spawn 5 Sonnet agents for complex analysis...')"
+
+      orchestrator_response: |
+        YOU (codex-swarm-orchestrator):
+          1. Parse spawning request from PRIME
+          2. Extract 7 Codex (GPT-5.1/GPT-5-codex) agent tasks
+          3. Check capacity (7 ≤ 10, OK)
+          4. Validate infrastructure (codex CLI installed, .codex/ directory exists, config files validated)
+          5. Spawn all 7 Codex agents IN PARALLEL using YOLO mode
+          6. Include RFC 2119 compliance in each agent's instructions
+          7. Monitor all 7 via BashOutput
+          8. Aggregate results from all agents
+          9. Report comprehensive summary to PRIME
+
+      result: |
+        Agents execute at Level 2, report back via stdout
+        YOU aggregate and report to PRIME
+        PRIME validates and responds to user
+
+    example_3_parallel_orchestrators:
+      scenario: "PRIME engages multiple orchestrators in parallel"
+      prime_request: |
+        PRIME:
+          "I have decomposed user request into 30 tasks:
+           - 10 SIMPLE CODE tasks (Codex - ⭐ PREFERRED)
+           - 10 FAST CODE tasks (Haiku - ⭐ PREFERRED)
+           - 10 STRATEGIC ANALYSIS tasks (Gemini - ⭐ PREFERRED)
+
+           Task(subagent_type='codex-swarm-orchestrator',
+                prompt='Spawn 10 Codex agents...')
+
+           Task(subagent_type='haiku-swarm-orchestrator',
+                prompt='Spawn 10 Haiku agents...')
+
+           Task(subagent_type='gemini-swarm-orchestrator',
+                prompt='Spawn 10 Gemini agents...')"
+
+      orchestrator_response: |
+        All three orchestrators spawn agents IN PARALLEL:
+        - codex-swarm-orchestrator: 10 Codex agents
+        - haiku-swarm-orchestrator: 10 Haiku agents
+        - gemini-swarm-orchestrator: 10 Gemini agents
+
+        Total: 30 agents executing simultaneously
+        Each orchestrator monitors, aggregates, and reports to PRIME
+
+      result: |
+        All 30 agents execute in parallel
+        Each orchestrator aggregates its results
+        PRIME receives 3 orchestrator reports
+        PRIME validates all results and responds to user
+
+benefits_of_consolidation:
+  dry_dont_repeat_yourself:
+    before: "3 separate directories with overlapping purposes"
+    after: "1 unified directory with clear dual purpose"
+    eliminated: "~1,500 lines of redundant/deprecated content"
+
+  kiss_keep_it_simple:
+    structure: "Single directory for all orchestrator-related functionality"
+    naming: "Clear naming: 'swarm-orchestrator' - exactly what it does"
+    files: "Two files: SKILL.md (docs) + prompt-template.yaml (template)"
+    purpose: "One purpose: Orchestration entry point + spawn template"
+
+  portability:
+    description: "Entire .claude/skills/swarm-orchestrator/ moves as one unit"
+    references: "All references use consistent path"
+    completeness: "Self-contained and complete"
+
+  maintainability:
+    update_once: "Update once, affects entire system"
+    single_source: "Single source of truth for orchestration"
+    versioning: "Clear versioning (v4.0.0)"
+    ease: "Easy to understand and modify"
+
+directory_structure:
+  location: ".claude/skills/swarm-orchestrator/"
+  files:
+    skill_md:
+      path: "SKILL.md"
+      contents:
+        - "Part 1: PRIME protocol activation"
+        - "Part 2: Universal agent spawn template docs"
+        - "RFC 2119 + GOLDEN RULE + SOLID/DRY/KISS"
+
+    prompt_template_yaml:
+      path: "prompt-template.yaml"
+      contents:
+        - "Variable replacement guide"
+        - "CLI commands for all 7 models"
+        - "Complete agent prompt structure"
+        - "RFC 2119 + GOLDEN RULE + SOLID/DRY/KISS enforcement"
+
+  portable: "This entire directory is copied/moved with .claude/skills/ for deployment consistency"
+
+replaces_deprecated:
+  consolidated:
+    orchestrator:
+      location: ".claude/skills/orchestrator/"
+      purpose: "PRIME protocol entry point"
+      status: "Consolidated into this skill (Part 1)"
+
+    swarm_orchestrator_spawn_template:
+      location: ".claude/skills/swarm-orchestrator-spawn-template/"
+      purpose: "Universal agent spawn template"
+      status: "Consolidated into this skill (Part 2)"
+
+  deprecated:
+    swarm_leader:
+      location: ".claude/skills/swarm-leader/"
+      purpose: "3-tier SWARM-LEADER (deprecated architecture)"
+      status: "DEPRECATED (replaced by 2-tier PRIME → AGENTS)"
+
+resource_management:
+  capacity_limits:
+    sonnet: "5 concurrent agents per orchestrator"
+    haiku: "15 concurrent agents per orchestrator"
+    codex: "10 concurrent agents per orchestrator"
+    gemini: "10 concurrent agents per orchestrator"
+    grok: "15 concurrent agents per orchestrator"
+    kimi: "15 concurrent agents per orchestrator"
+    qwen: "10 concurrent agents per orchestrator"
+    total: "200+ concurrent agents across all orchestrators"
+
+  resource_overhead:
+    sonnet: "~1GB RAM per instance"
+    haiku: "~200MB RAM per instance"
+    codex: "~500MB RAM per instance"
+    gemini: "~300MB RAM per instance"
+    grok: "~250MB RAM per instance"
+    kimi: "~250MB RAM per instance"
+    qwen: "~300MB RAM per instance"
+
+  performance_characteristics:
+    haiku:
+      fast_code_generation: "10-20 seconds"
+      simple_tasks: "5-15 seconds"
+      rapid_execution: "10-30 seconds"
+      quick_transformations: "10-25 seconds"
+      parallel_speedup: "~15x faster than sequential (15 parallel Haiku)"
+      preferred_for: "Fast code generation, rapid execution, cost-effective parallel processing"
+
+    codex:
+      simple_algorithm_implementation: "Fast (GPT-5-codex)"
+      crud_code_generation: "Fast (GPT-5.1/GPT-5-codex)"
+      utility_functions: "Very fast (GPT-5-codex)"
+      rapid_prototyping: "Fast (GPT-5.1/GPT-5-codex default)"
+      parallel_speedup: "~10x faster than sequential (10 parallel Codex)"
+      preferred_for: "Simple code generation, CRUD operations, rapid prototyping"
+
+  cost_considerations:
+    haiku:
+      cost_effective: "Cost-effective for fast code work"
+      preferred: "⭐ PREFERRED for ALL fast code generation and rapid execution tasks"
+      use_cases: "Simple transformations, quick analysis, parallel processing"
+      comparison: "More cost-effective than Sonnet for fast work"
+      reserve_sonnet_for: "Deep strategic reasoning only"
+
+    codex:
+      cost_effective: "More cost-effective than Sonnet"
+      preferred: "⭐ PREFERRED for ALL simple code generation tasks"
+      use_cases: "CRUD operations, utilities, boilerplate"
+      comparison: "GPT-5-codex more cost-effective than Sonnet for pure coding workloads"
+      reserve_sonnet_for: "Complex strategic reasoning only"
+
+  typical_usage:
+    haiku: "10-15 for fast code generation"
+    codex: "5-7 for simple code generation tasks"
+    sonnet: "3-5 for complex reasoning"
+    gemini: "5-10 for strategic analysis"
+    grok: "10-15 for fast/complex analysis"
+    kimi: "10-15 for fast/reasoning analysis"
+    qwen: "5-10 for agentic coding"
+
+forbidden_practices:
+  orchestrators_must_not:
+    - "Create custom spawn prompts (use universal template)"
+    - "Leave {variables} unreplaced in template"
+    - "Skip mandatory frameworks (RFC 2119, GOLDEN RULE, SOLID/DRY/KISS)"
+    - "Make strategic decisions (only spawn as instructed by PRIME)"
+    - "Decompose tasks (PRIME does this)"
+    - "Spawn agents without using the template"
+    - "Modify template structure without updating protocol"
+    - "Skip variable replacement validation"
+    - "Skip infrastructure validation before spawning"
+    - "Exceed capacity limits (e.g., spawn 20 Haiku via single orchestrator)"
+    - "Omit RFC 2119 compliance from agent instructions"
+    - "Spawn SWARM-LEADER instances (3-tier deprecated)"
+    - "Make strategic decisions (e.g., 'This task seems too complex, I'll escalate')"
+    - "Decompose tasks (e.g., 'PRIME said implement API, I'll break it into sub-tasks')"
+    - "Use untested spawn patterns or heredoc syntax"
+    - "Skip YOLO validation for Codex"
+
+  anti_patterns:
+    do_not_make_strategic_decisions:
+      wrong: "This task seems too complex for Haiku. I'll escalate to Sonnet."
+      right: "Spawn instruction received for Claude 4.5 Haiku. Executing as requested."
+
+    do_not_decompose_tasks:
+      wrong: "PRIME said 'fix all errors' but I'll break it down into tasks."
+      right: "PRIME provided 15 discrete tasks. Spawning 15 agents as instructed."
+
+    do_not_exceed_capacity_limits:
+      wrong: "Spawning 20 Haiku agents via single orchestrator (exceeds 15 limit)"
+      right: "Spawning up to 15 Haiku agents, or using multiple orchestrators for larger workloads"
+
+    do_not_omit_rfc_compliance:
+      wrong: "Spawning agents without RFC 2119 compliance instructions"
+      right: "Including RFC 2119 compliance requirements in every spawned agent's prompt"
+
+    do_not_spawn_leaders:
+      wrong: "Spawning haiku-swarm-leader instances (3-tier - deprecated)"
+      right: "Spawning haiku-agent instances (Claude 4.5 Haiku) that report to PRIME (2-tier)"
+
+    do_not_skip_infrastructure_validation:
+      wrong: "Spawning agents without checking CLI installation or configuration"
+      right: "Validating infrastructure (CLI, config directories, files) before spawning"
+
+    do_not_use_untested_patterns:
+      wrong: "Using untested spawn patterns or heredoc syntax"
+      right: "Using validated patterns: codex exec -s danger-full-access --skip-git-repo-check or claude --model haiku --print"
+
+instruction: |
+  =========================
+  SWARM ORCHESTRATOR PROTOCOL
+  =========================
+
+  This protocol defines the dual-purpose protocol for PRIME protocol activation
+  and universal agent spawn template. It provides single-word activation for
+  THE SWARM hierarchy and standardized spawn template for all 7 swarm orchestrators.
+
+  DUAL PURPOSE:
+  1. PRIME Protocol Activation (Entry Point)
+     - Activation phrases: "orchestrator", "swarm-orchestrator", "act as orchestrator", "/prime"
+     - Routes to: PRIME protocol (.claude/commands/prime.md)
+     - Provides access to: 7 specialized swarm orchestrators
+
+  2. Universal Agent Spawn Template Provider
+     - Template location: .claude/skills/swarm-orchestrator/prompt-template.yaml
+     - Used by: All 7 swarm orchestrators
+     - Ensures: RFC 2119 compliance, GOLDEN RULE workflow, SOLID/DRY/KISS principles
+
+  Reference: `dual_purpose`
+
+  AVAILABLE ORCHESTRATORS:
+  7 specialized swarm orchestrators (November 2025):
+  - sonnet-swarm-orchestrator: Claude 4.5 Sonnet (5 agents) - Complex reasoning
+  - haiku-swarm-orchestrator: Claude 4.5 Haiku (15 agents) - Fast execution
+  - codex-swarm-orchestrator: GPT-5.1/GPT-5-codex (10 agents) - Simple code (⭐ PREFERRED)
+  - gemini-swarm-orchestrator: Gemini 2.5 Pro (10 agents) - Strategic analysis (⭐ PREFERRED)
+  - grok-swarm-orchestrator: Grok 1/4 Fast (15 agents) - Fast/complex analysis
+  - kimi-swarm-orchestrator: Kimi K2/Thinking (15 agents) - Fast/reasoning analysis
+  - qwen-swarm-orchestrator: Qwen3-Coder (10 agents) - Agentic coding
+
+  Total capacity: 200+ concurrent agents
+  Universal enforcement: ALL orchestrators enforce RFC 2119 + GOLDEN RULE + SOLID/DRY/KISS
+
+  Reference: `available_orchestrators`
+
+  THE SWARM HIERARCHY:
+  Architecture: 2-TIER (PRIME → ORCHESTRATORS → AGENTS)
+  - Tier 1: PRIME (Strategic Orchestrator)
+  - Tier 2: ORCHESTRATORS (Spawning Services - use universal template)
+  - Tier 3: AGENTS (Level 2 - Execution Units)
+
+  Reference: `the_swarm_hierarchy`
+
+  UNIVERSAL SPAWN TEMPLATE:
+  Template location: .claude/skills/swarm-orchestrator/prompt-template.yaml
+  Purpose: Ensure consistent agent spawning across all 7 orchestrators
+
+  Template provides:
+  - RFC 2119 compliance enforcement
+  - GOLDEN RULE workflow (8-step mandatory process)
+  - SOLID/DRY/KISS principles (7 design standards)
+  - Standardized reporting format
+  - Model-specific CLI commands
+  - Variable replacement guide
+
+  Template variables (MUST be replaced):
+  - {identity}: Agent unique ID
+  - {model_name}: Human-readable model name
+  - {model_identifier}: Technical identifier
+  - {cli_command}: CLI command to spawn agent
+  - {skill_reference}: Path to agent SKILL.md
+  - {agent_type}: Agent specialization
+  - {task}: Specific task from PRIME
+  - {router_info}: Routing information
+  - {release_date}: Model release date
+  - {orchestrator_name}: Which orchestrator spawned agent
+
+  Reference: `universal_spawn_template`
+
+  PREREQUISITES & INFRASTRUCTURE VALIDATION:
+  MANDATORY - Before spawning ANY agents, orchestrators MUST verify infrastructure:
+  - CLI installation verified
+  - Configuration directories exist with proper files
+  - Configuration files validated
+  - LiteLLM proxy status checked (for routed models)
+
+  If validation fails: ABORT spawning and report infrastructure error to PRIME
+
+  Reference: `prerequisites_and_infrastructure_validation`
+
+  ORCHESTRATOR SPAWNING PROCESS:
+  0. Validate infrastructure BEFORE spawning (MANDATORY)
+  1. Reference template: .claude/skills/swarm-orchestrator/prompt-template.yaml
+  2. Replace ALL template variables (MANDATORY - no unreplaced variables)
+  3. Construct Bash command with template
+  4. Monitor agents via BashOutput
+  5. Aggregate results from all agents (with framework compliance checks)
+  6. Report aggregated results to PRIME (including framework compliance status)
+
+  Reference: `orchestrator_spawning_process`
+
+  CLI COMMAND REFERENCE:
+  Direct CLI models: codex, haiku, sonnet
+  Routed via LiteLLM proxy: gemini, grok, kimi, qwen
+
+  Reference: `cli_command_reference`
+
+  FRAMEWORKS ENFORCED UNIVERSALLY:
+  Every spawned agent receives:
+  1. RFC 2119 Compliance (MANDATORY)
+  2. THE GOLDEN RULE (8-Step Workflow - MANDATORY before coding)
+  3. SOLID/DRY/KISS Principles (7 Principles - MANDATORY for ALL code)
+
+  Reference: `frameworks_enforced_universally`
+
+  AGENT REPORT FORMAT:
+  All reports MUST follow standardized format for orchestrator parsing.
+  Format includes: Model prefix, identity, status, task, execution checklist, result, validation, status.
+
+  Reference: `agent_report_format`
+
+  ERROR HANDLING:
+  If task fails: Document error clearly, mark status appropriately (FAILED/BLOCKED), report via stdout.
+
+  Reference: `error_handling`
+
+  EXECUTION CHECKLIST:
+  Before reporting COMPLETE, verify: Task objective achieved, Golden Rule completed, SOLID/DRY/KISS applied, RFC 2119 compliant, Success criteria met (100%), Quality checks passed, Tests passing, Pattern saved, Report formatted correctly.
+
+  Reference: `execution_checklist`
+
+  RESOURCE MANAGEMENT:
+  Capacity limits: Sonnet (5), Haiku (15), Codex (10), Gemini (10), Grok (15), Kimi (15), Qwen (10)
+  Total capacity: 200+ concurrent agents across all orchestrators
+  Resource overhead: Varies by model (200MB-1GB RAM per instance)
+  Performance characteristics: Haiku (10-30s), Codex (Fast), etc.
+  Cost considerations: Haiku and Codex are ⭐ PREFERRED for cost-effective fast work
+
+  Reference: `resource_management`
+
+  INTEGRATION EXAMPLES:
+  Example 1: Haiku orchestrator spawning 15 fast code generation agents
+  Example 2: Codex orchestrator spawning 7 simple code generation agents
+  Example 3: Multiple orchestrators spawning agents in parallel (30 total)
+
+  Reference: `orchestrator_usage_pattern.integration_examples`
+
+  FORBIDDEN PRACTICES:
+  Orchestrators MUST NOT:
+  - Create custom spawn prompts (use universal template)
+  - Leave {variables} unreplaced
+  - Skip mandatory frameworks
+  - Make strategic decisions (only spawn as instructed)
+  - Decompose tasks (PRIME does this)
+  - Skip infrastructure validation before spawning
+  - Exceed capacity limits
+  - Omit RFC 2119 compliance from agent instructions
+  - Spawn SWARM-LEADER instances (3-tier deprecated)
+
+  Reference: `forbidden_practices`
+
+  This protocol ensures consistent, high-quality agent spawning across all 7 orchestrators with universal framework enforcement, proper infrastructure validation, and comprehensive resource management.

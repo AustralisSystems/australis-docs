@@ -1,0 +1,134 @@
+{
+  "version": "1.0.0",
+  "description": "Machine‑readable registry of all primary and secondary component tokens used by the Universal Component Mapping Protocol (UCMP).",
+
+  "components": {
+    "text_field": {
+      "primary": "text_field_primary",
+      "secondary": "text_field_secondary",
+      "props": {
+        "required": false,
+        "maxLength": null,
+        "minLength": null,
+        "pattern": null
+      }
+    },
+
+    "number_field": {
+      "primary": "number_primary",
+      "secondary": "number_secondary",
+      "props": {
+        "min": null,
+        "max": null,
+        "step": null
+      }
+    },
+
+    "boolean": {
+      "primary": "toggle_primary",
+      "secondary": "checkbox_secondary",
+      "props": {}
+    },
+
+    "select": {
+      "primary": "select_primary",
+      "secondary": "select_secondary",
+      "props": {
+        "options": [],
+        "searchable": false
+      }
+    },
+
+    "textarea": {
+      "primary": "textarea_primary",
+      "secondary": "textarea_secondary",
+      "props": {
+        "maxLength": null
+      }
+    },
+
+    "email": {
+      "primary": "email_primary",
+      "secondary": "email_secondary",
+      "props": {}
+    },
+
+    "password": {
+      "primary": "password_primary",
+      "secondary": "password_secondary",
+      "props": {
+        "revealable": true
+      }
+    },
+
+    "badge": {
+      "primary": "badge_primary",
+      "secondary": "badge_secondary",
+      "props": {
+        "variant": "neutral"
+      }
+    },
+
+    "image_upload": {
+      "primary": "image_upload_primary",
+      "secondary": "image_upload_secondary",
+      "props": {
+        "preview": true,
+        "accept": ["image/*"]
+      }
+    },
+
+    "taglist": {
+      "primary": "taglist_primary",
+      "secondary": "taglist_secondary",
+      "props": {
+        "allowCustom": false
+      }
+    },
+
+    "object_group": {
+      "primary": "object_group_primary",
+      "secondary": "object_group_secondary",
+      "props": {
+        "collapsible": false
+      }
+    },
+
+    "table": {
+      "primary": "table_primary",
+      "secondary": "table_secondary",
+      "props": {
+        "sortable": true,
+        "paginate": true
+      }
+    },
+
+    "cardlist": {
+      "primary": "cardlist_primary",
+      "secondary": "cardlist_secondary",
+      "props": {
+        "elevated": true
+      }
+    },
+
+    "accordion": {
+      "primary": "accordion_primary",
+      "secondary": "accordion_secondary",
+      "props": {
+        "multiple": false
+      }
+    },
+
+    "link": {
+      "primary": "link_primary",
+      "secondary": "link_secondary",
+      "props": {}
+    }
+  },
+
+  "responsiveBehaviour": {
+    "mobile": "secondary",
+    "tablet": "primary",
+    "desktop": "primary"
+  }
+}

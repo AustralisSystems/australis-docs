@@ -1,0 +1,783 @@
+mcp:
+  name: production-code-quality-protocol
+  version: "1.1.0"
+  type: quality_validation_protocol
+  language: en-AU
+  description: >
+    Production Code Quality Protocol. Defines comprehensive validation and quality
+    standards to ensure 100% production-ready code. Provides validation commands,
+    quality metrics, and remediation strategies using standard tools only.
+
+references:
+  - docs/implementation/instructions/v2/000-DOCTRINE-Enterprise_Canonical_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/001-PROTOCOL-The_GoldenRule_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml
+  - docs/implementation/instructions/v2/007-PROTOCOL-MCP_Tools_Workflow-v1.0.0.yaml
+
+---
+context:
+  role: Production code quality validator
+  intent: Ensure 100% production-ready code through comprehensive validation
+  workflow: Validate → Remediate → Re-validate → Persist
+  execution_mode: MANDATORY before committing production code
+
+production_ready_definition:
+  rule: "PRODUCTION READY = ABSOLUTE PERFECTION ACROSS ALL METRICS"
+  requirement: "Anything less than 100% = UNACCEPTABLE FAILURE"
+  critical_importance: "100% production ready is the ONLY acceptable state - NO EXCEPTIONS"
+
+  fourteen_mandatory_metrics:
+    metric_1_ast_compilation:
+      tool: "py_compile"
+      pass_criteria: "0 errors"
+      fail_criteria: "≥1 error"
+      validates: "Python syntax correctness, valid Abstract Syntax Tree"
+      when_to_run: "BEFORE any other validation"
+
+    metric_1b_ast_analysis:
+      tool: "ast.parse(), mypy, pyright, or pylance"
+      pass_criteria: "0 unresolved imports, 0 undefined references, 0 syntax errors"
+      fail_criteria: "≥1 unresolved import OR ≥1 undefined reference OR ≥1 syntax error"
+      validates: "Import resolution, undefined references, symbol accessibility, structural correctness"
+      scope: "ALL files modified, created, or referenced in current session + ALL entry points"
+      language_specific:
+        python: "Use ast.parse(), mypy, pyright, or pylance to verify imports and references"
+        javascript_typescript: "Use TypeScript compiler (tsc), ESLint with import plugins, or AST parsers"
+        java: "Use javac, Checkstyle, or PMD for import and reference verification"
+        csharp: "Use Roslyn analyzers, dotnet build, or Code Analysis"
+        other: "Use language-specific AST parsers and static analysis tools"
+      when_to_run: "AFTER AST compilation, BEFORE type checking"
+      evidence_required:
+        - "AST parsing results for all files in scope"
+        - "Import resolution verification results"
+        - "Undefined reference detection results"
+        - "Syntax error detection results"
+        - "List of all failures with file locations and line numbers"
+
+    metric_1c_sast_analysis:
+      tool: "bandit, safety, semgrep, CodeQL, SonarQube"
+      pass_criteria: "0 high/critical severity security issues, 0 medium severity (unless waived), 0 code quality issues blocking execution, 0 potential runtime errors"
+      fail_criteria: "≥1 high/critical security issue OR ≥1 medium severity (unless waived) OR ≥1 code quality issue blocking execution OR ≥1 potential runtime error"
+      validates: "Security vulnerabilities, code quality issues, potential runtime errors, insecure coding patterns, compliance with security frameworks (OWASP, CWE)"
+      scope: "ALL files modified, created, or referenced in current session + ALL entry points"
+      language_specific:
+        python: "Use bandit, safety, semgrep, or CodeQL for security scanning"
+        javascript_typescript: "Use ESLint security plugins, npm audit, Snyk, or CodeQL"
+        java: "Use SpotBugs, FindSecBugs, SonarQube, or CodeQL"
+        csharp: "Use Security Code Scan, SonarQube, or CodeQL"
+        other: "Use language-specific SAST tools (SonarQube, CodeQL, Checkmarx, etc.)"
+      when_to_run: "AFTER AST analysis, BEFORE dependency security check"
+      evidence_required:
+        - "SAST scan results for all files in scope"
+        - "Security vulnerability report with severity levels"
+        - "Code quality issue report"
+        - "List of all failures with file locations, line numbers, and remediation guidance"
+
+    metric_2_type_safety:
+      tool: "mypy"
+      pass_criteria: "0 errors, 0 warnings"
+      fail_criteria: "≥1 error OR ≥1 warning"
+      validates: "Type safety, no Any types, complete type annotations"
+      requirement: "100% type coverage on all functions"
+      common_issues:
+        - "Missing type hints → Add proper type annotations"
+        - "Any types → Replace with specific types"
+        - "# type: ignore → Fix the root cause, don't suppress"
+
+    metric_3_linting:
+      tool: "flake8"
+      pass_criteria: "0 errors, 0 warnings"
+      fail_criteria: "≥1 error OR ≥1 warning"
+      validates: "PEP 8 compliance, code style, cyclomatic complexity"
+      critical_settings:
+        - "--max-line-length=120 (NOT 79 or 88)"
+        - "--max-complexity=15 (functions must be ≤15)"
+      common_violations:
+        - "E501: Line too long → Refactor or use Black"
+        - "C901: Function too complex → Refactor to reduce complexity"
+        - "F401: Imported but unused → Remove or use autoflake"
+
+    metric_4_security:
+      tool: "bandit"
+      pass_criteria: "0 high severity, 0 medium severity"
+      fail_criteria: "≥1 high OR ≥1 medium severity issue"
+      validates: "SQL injection, hardcoded passwords, insecure functions, shell injection"
+      skipped_checks:
+        - "B101: assert statements (allowed in tests)"
+        - "B601: shell injection (only if parameterized)"
+      never_skip:
+        - "SQL injection checks"
+        - "Hardcoded password checks"
+        - "Insecure hash function checks"
+      remediation:
+        - "Fix at source (don't suppress with # nosec)"
+        - "Use parameterized queries for SQL"
+        - "Use environment variables for secrets"
+        - "Use secure hash functions (SHA256+, bcrypt, argon2)"
+
+    metric_5_dependencies:
+      tool: "safety"
+      pass_criteria: "0 known vulnerabilities"
+      fail_criteria: "≥1 CVE vulnerability in dependencies"
+      validates: "CVE vulnerabilities, outdated packages with security issues"
+      remediation:
+        - "Update affected package: pip install --upgrade package_name"
+        - "Check if breaking changes exist"
+        - "Run all tests after update"
+        - "Re-run safety check to verify fix"
+
+    metric_6_formatting:
+      tool: "black"
+      pass_criteria: "0 files needing reformatting"
+      fail_criteria: "≥1 file needs formatting"
+      validates: "Consistent code formatting across codebase"
+      settings:
+        - "--line-length=120 (MANDATORY, not default 88)"
+
+    metric_7_import_order:
+      tool: "isort"
+      pass_criteria: "0 files with incorrect import sorting"
+      fail_criteria: "≥1 file has incorrect imports"
+      validates: "Alphabetical imports, proper grouping (stdlib, third-party, local)"
+      import_order:
+        - "Standard library imports"
+        - "Third-party imports"
+        - "Local application imports"
+
+    metric_8_complexity:
+      tool: "radon cc"
+      pass_criteria: "ALL functions ≤15 complexity (Grade A or B)"
+      fail_criteria: "≥1 function >15 complexity"
+      validates: "Code maintainability, function complexity"
+      complexity_grades:
+        - "A: 1-5 (simple)"
+        - "B: 6-10 (well-structured)"
+        - "C: 11-15 (complex, acceptable limit)"
+        - "D: 16-20 (too complex, FAIL)"
+        - "E: 21-30 (very complex, FAIL)"
+        - "F: 31+ (extremely complex, FAIL)"
+      remediation:
+        - "Extract helper functions"
+        - "Simplify conditional logic"
+        - "Use early returns"
+        - "Apply SOLID principles (especially SRP)"
+        - "Use sub-agents for refactoring if needed"
+      forbidden:
+        - "Use # noqa: C901 to suppress"
+        - "Accept complexity >15 'just this once'"
+        - "Create workarounds"
+
+    metric_9_maintainability:
+      tool: "radon mi"
+      pass_criteria: "ALL files Grade A (MI ≥20)"
+      fail_criteria: "≥1 file <Grade A"
+      validates: "Overall code maintainability"
+      maintainability_grades:
+        - "A: 20-100 (highly maintainable)"
+        - "B: 10-19 (moderately maintainable)"
+        - "C: 0-9 (difficult to maintain)"
+      remediation:
+        - "Reduce complexity (see radon cc)"
+        - "Add documentation"
+        - "Improve code structure"
+        - "Reduce code duplication"
+
+    metric_10_violations:
+      tool: "xenon"
+      pass_criteria: "0 violations (all code Grade A/B)"
+      fail_criteria: "≥1 violation"
+      validates: "No functions exceed complexity threshold"
+      settings:
+        - "--max-absolute B: Individual functions ≤15 (Grade B)"
+        - "--max-modules A: Module average ≤10 (Grade A)"
+        - "--max-average A: Overall average ≤10 (Grade A)"
+
+    metric_11_line_length:
+      tools: "flake8, black"
+      pass_criteria: "ALL ≤120"
+      fail_criteria: "≥1 line >120"
+      validates: "Line length compliance"
+
+    metric_12_deduplication:
+      tool: "pylint"
+      pass_criteria: "≤10% duplicate"
+      fail_criteria: ">10% duplicate"
+      validates: "Code duplication percentage"
+
+  absolute_requirement: "ALL 14 METRICS MUST ACHIEVE 100% PASS STATUS"
+  failure_rule: "EVEN ONE FAIL = ENTIRE CODEBASE FAILS"
+
+configuration_standards:
+  python_configuration_files:
+    pyproject_toml:
+      required: true
+      path: "pyproject.toml"
+      sections:
+        tool_black:
+          line_length: 120
+          target_version: ["py310", "py311", "py312", "py313"]
+        tool_isort:
+          profile: "black"
+          line_length: 120
+        tool_mypy:
+          python_version: "3.10"
+          warn_return_any: true
+          warn_unused_configs: true
+          disallow_untyped_defs: true
+        tool_ruff:
+          line_length: 120
+          target_version: "py310"
+        tool_pytest_ini_options:
+          testpaths: ["tests"]
+        tool_coverage_run:
+          source: ["."]
+          omit: ["tests/*", ".venv/*"]
+        tool_bandit:
+          exclude_dirs: [".venv", "tests"]
+
+    flake8:
+      required: true
+      path: ".flake8"
+      settings:
+        max_line_length: 120
+        max_complexity: 15
+        exclude: [".git", "__pycache__", ".venv", "venv", "build", "dist", "*.egg-info", "submodules"]
+        count: true
+        statistics: true
+
+    mypy_ini:
+      required: true
+      path: "mypy.ini"
+      settings:
+        python_version: "3.10"
+        warn_return_any: true
+        warn_unused_configs: true
+        disallow_untyped_defs: true
+        exclude: "(?x)(\\.venv/|node_modules/|__pycache__/|\\.git/|submodules/)"
+
+  nodejs_configuration_files:
+    tsconfig_json:
+      required: true
+      path: "tsconfig.json"
+      compiler_options:
+        strict: true
+        noImplicitAny: true
+        strictNullChecks: true
+        strictFunctionTypes: true
+        strictPropertyInitialization: true
+        noUnusedLocals: true
+        noUnusedParameters: true
+        noImplicitReturns: true
+        noFallthroughCasesInSwitch: true
+
+    eslintrc:
+      required: true
+      path: ".eslintrc"
+      rules:
+        max_len: ["error", {"code": 120}]
+        complexity: ["error", 15]
+        "@typescript-eslint/no-explicit-any": "error"
+
+    prettierrc:
+      required: true
+      path: ".prettierrc"
+      settings:
+        printWidth: 120
+        semi: true
+        singleQuote: true
+        trailingComma: "es5"
+
+  before_starting_work:
+    - "Verify these files exist"
+    - "Verify configurations are correct (line-length=120, max-complexity=15)"
+    - "If missing or incorrect, CREATE/FIX them immediately"
+
+python_validation_commands:
+  command_1_ast_compilation:
+    command: "python -m py_compile $(find . -name \"*.py\" -not -path \"*/test*\" -not -path \"*/.venv/*\")"
+    pass: "0 errors"
+    fail: "≥1 compilation error"
+    validates: "Python syntax correctness, valid Abstract Syntax Tree"
+    when_to_run: "BEFORE any other validation"
+
+  command_1b_ast_analysis:
+    command: "python -c \"import ast; import sys; [ast.parse(open(f).read(), f) for f in sys.argv[1:]]\" $(find . -name \"*.py\" -not -path \"*/test*\" -not -path \"*/.venv/*\" -not -path \"*/node_modules/*\" -not -path \"*/submodules/*\") && python -m mypy . --exclude '(\\.venv|node_modules|__pycache__|\\.git|submodules)' --no-error-summary 2>&1 | grep -E '(error|Cannot find module|Name.*not defined)' || echo 'AST analysis passed'"
+    alternative_commands:
+      - "python -m mypy . --exclude '(\\.venv|node_modules|__pycache__|\\.git|submodules)' (verifies imports and references)"
+      - "python -c \"import ast, sys; [ast.parse(open(f).read(), f) for f in sys.argv[1:]]\" file1.py file2.py (verifies syntax)"
+    pass: "0 unresolved imports, 0 undefined references, 0 syntax errors"
+    fail: "≥1 unresolved import OR ≥1 undefined reference OR ≥1 syntax error"
+    validates: "Import resolution, undefined references, symbol accessibility, structural correctness"
+    scope: "ALL files modified, created, or referenced in current session + ALL entry points (CLI commands, main modules, API endpoints)"
+    when_to_run: "AFTER AST compilation, BEFORE type checking"
+    evidence_required:
+      - "AST parsing results for all files in scope"
+      - "Import resolution verification results"
+      - "Undefined reference detection results"
+      - "Syntax error detection results"
+      - "List of all failures with file locations and line numbers"
+
+  command_1c_sast_analysis:
+    command: "python -m bandit -r . -x ./.venv,./node_modules,./submodules --skip B101,B601 -f json && python -m safety check --json"
+    alternative_commands:
+      - "semgrep --config=auto . (comprehensive SAST)"
+      - "CodeQL analysis (if available)"
+      - "SonarQube scan (if configured)"
+    pass: "0 high/critical severity security issues, 0 medium severity (unless explicitly waived), 0 code quality issues blocking execution, 0 potential runtime errors"
+    fail: "≥1 high/critical security issue OR ≥1 medium severity (unless waived) OR ≥1 code quality issue blocking execution OR ≥1 potential runtime error"
+    validates: "Security vulnerabilities (injection, XSS, insecure deserialization), code quality issues (complexity, maintainability, best practices), potential runtime errors (null pointer dereferences, type mismatches), insecure coding patterns (hardcoded secrets, weak cryptography), compliance with security frameworks (OWASP, CWE)"
+    scope: "ALL files modified, created, or referenced in current session + ALL entry points (CLI commands, main modules, API endpoints)"
+    when_to_run: "AFTER AST analysis, BEFORE dependency security check"
+    evidence_required:
+      - "SAST scan results for all files in scope"
+      - "Security vulnerability report with severity levels"
+      - "Code quality issue report"
+      - "List of all failures with file locations, line numbers, and remediation guidance"
+
+  command_2_type_checking:
+    command: "python -m mypy . --exclude '(\\.venv|node_modules|__pycache__|\\.git|submodules)'"
+    pass: "0 errors, 0 warnings"
+    fail: "≥1 error OR ≥1 warning"
+    validates: "Type safety, no Any types, complete type annotations"
+    configuration: "mypy.ini with strict mode"
+    requirement: "100% type coverage on all functions"
+
+  command_3_linting:
+    command: "python -m flake8 . --max-line-length=120 --max-complexity=15 --exclude=.git,__pycache__,.venv,venv,build,dist,*.egg-info,submodules --count --statistics"
+    pass: "0 errors, 0 warnings"
+    fail: "≥1 error OR ≥1 warning"
+    validates: "PEP 8 compliance, code style, cyclomatic complexity"
+    critical_settings:
+      - "--max-line-length=120 (NOT 79 or 88)"
+      - "--max-complexity=15 (functions must be ≤15)"
+
+  command_4_security_analysis:
+    command: "python -m bandit -r . -x ./.venv,./node_modules,./submodules --skip B101,B601 -f json"
+    pass: "0 high severity, 0 medium severity"
+    fail: "≥1 high OR ≥1 medium severity issue"
+    validates: "SQL injection, hardcoded passwords, insecure functions, shell injection"
+
+  command_5_dependency_security:
+    command: "python -m safety check --json"
+    pass: "0 known vulnerabilities"
+    fail: "≥1 CVE vulnerability in dependencies"
+    validates: "CVE vulnerabilities, outdated packages with security issues"
+
+  command_6_code_formatting:
+    command: "python -m black --check . --line-length=120 --exclude='(\\.venv|node_modules|__pycache__|\\.git|submodules)'"
+    pass: "0 files needing reformatting"
+    fail: "≥1 file needs formatting"
+    validates: "Consistent code formatting across codebase"
+    fix_command: "python -m black . --line-length=120 --exclude='(\\.venv|node_modules|__pycache__|\\.git|submodules)'"
+
+  command_7_import_organization:
+    command: "python -m isort --check-only . --line-length=120 --profile=black --skip .venv --skip node_modules --skip submodules"
+    pass: "0 files with incorrect import sorting"
+    fail: "≥1 file has incorrect imports"
+    validates: "Alphabetical imports, proper grouping (stdlib, third-party, local)"
+    fix_command: "python -m isort . --line-length=120 --profile=black --skip .venv --skip node_modules --skip submodules"
+
+  command_8_cyclomatic_complexity:
+    command: "python -m radon cc . -a --min=C --exclude=\"*.venv/*,*node_modules/*,*submodules/*\""
+    pass: "ALL functions ≤15 complexity (Grade A or B)"
+    fail: "≥1 function >15 complexity"
+    validates: "Code maintainability, function complexity"
+
+  command_9_maintainability_index:
+    command: "python -m radon mi . -a --exclude=\"*.venv/*,*node_modules/*,*submodules/*\""
+    pass: "ALL files Grade A (MI ≥20)"
+    fail: "≥1 file <Grade A"
+    validates: "Overall code maintainability"
+
+  command_10_complexity_violations:
+    command: "python -m xenon . --max-absolute B --max-modules A --max-average A --exclude \".venv\" --exclude \"node_modules\" --exclude \"submodules\""
+    pass: "0 violations (all code Grade A/B)"
+    fail: "≥1 violation"
+    validates: "No functions exceed complexity threshold"
+
+nodejs_validation_commands:
+  command_1_ast_analysis:
+    command: "npx tsc --noEmit --strict"
+    pass: "0 unresolved imports, 0 undefined references, 0 syntax errors"
+    fail: "≥1 unresolved import OR ≥1 undefined reference OR ≥1 syntax error"
+    validates: "Import resolution, undefined references, symbol accessibility, structural correctness"
+    scope: "ALL files modified, created, or referenced in current session + ALL entry points"
+    when_to_run: "BEFORE type checking"
+    evidence_required:
+      - "AST parsing results for all files in scope"
+      - "Import resolution verification results"
+      - "Undefined reference detection results"
+      - "Syntax error detection results"
+      - "List of all failures with file locations and line numbers"
+
+  command_1b_sast_analysis:
+    command: "npm audit && npx eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0"
+    alternative_commands:
+      - "npx snyk test (comprehensive SAST)"
+      - "CodeQL analysis (if available)"
+      - "SonarQube scan (if configured)"
+    pass: "0 high/critical severity security issues, 0 medium severity (unless explicitly waived), 0 code quality issues blocking execution, 0 potential runtime errors"
+    fail: "≥1 high/critical security issue OR ≥1 medium severity (unless waived) OR ≥1 code quality issue blocking execution OR ≥1 potential runtime error"
+    validates: "Security vulnerabilities, code quality issues, potential runtime errors, insecure coding patterns, compliance with security frameworks"
+    scope: "ALL files modified, created, or referenced in current session + ALL entry points"
+    when_to_run: "AFTER AST analysis, BEFORE type checking"
+    evidence_required:
+      - "SAST scan results for all files in scope"
+      - "Security vulnerability report with severity levels"
+      - "Code quality issue report"
+      - "List of all failures with file locations, line numbers, and remediation guidance"
+
+  command_2_type_checking:
+    command: "npm run type-check"
+    alternative: "npx tsc --noEmit --strict"
+    pass: "0 type errors"
+    fail: "≥1 type error"
+    validates: "Complete type coverage, no any types"
+
+  command_2_linting:
+    command: "npm run lint"
+    alternative: "npx eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0"
+    pass: "0 errors, 0 warnings"
+    fail: "≥1 error OR ≥1 warning"
+    validates: "Code quality, complexity ≤15"
+
+  command_3_quality_checks:
+    command: "npm run quality:check"
+    pass: "ALL checks pass"
+    fail: "≥1 check fails"
+    validates: "Combined linting, type checking, complexity"
+
+  command_4_development_server:
+    command: "npm run dev"
+    pass: "Starts without errors"
+    fail: "Runtime exceptions or startup errors"
+    validates: "Development environment, dependencies"
+
+  command_5_production_build:
+    command: "npm run build"
+    pass: "Completes with 0 errors, 0 warnings"
+    fail: "≥1 error OR ≥1 warning"
+    validates: "Production bundle, tree shaking, optimization"
+
+  command_6_production_server:
+    command: "npm run start"
+    pass: "Starts and serves correctly"
+    fail: "Startup errors or runtime issues"
+    validates: "Production deployment readiness"
+
+validation_workflow:
+  phase_1_pre_implementation:
+    name: "Pre-Implementation Validation"
+    when: "BEFORE writing ANY code"
+    purpose: "Establish baseline - ensure starting point is clean"
+    python_commands:
+      - "python -m py_compile $(find . -name \"*.py\" -not -path \"*/test*\" -not -path \"*/.venv/*\")"
+      - "AST analysis: python -m mypy . --exclude '(\\.venv|node_modules|__pycache__|\\.git|submodules)' (verifies imports and references)"
+      - "SAST analysis: python -m bandit -r . -x ./.venv,./node_modules,./submodules --skip B101,B601 && python -m safety check"
+      - "python -m mypy . --exclude '(\\.venv|node_modules|__pycache__|\\.git|submodules)'"
+      - "python -m flake8 . --max-line-length=120 --max-complexity=15"
+    nodejs_commands:
+      - "AST analysis: npx tsc --noEmit --strict (verifies imports and references)"
+      - "SAST analysis: npm audit && npx eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0"
+      - "npm run type-check"
+      - "npm run lint"
+    requirement: "ALL commands pass with 0 errors, 0 warnings"
+
+  phase_2_during_implementation:
+    name: "During Implementation Validation"
+    when: "AFTER every file save"
+    purpose: "Catch issues early, prevent accumulation"
+    python_commands:
+      - "python -m flake8 modified_file.py --max-line-length=120 --max-complexity=15"
+      - "python -m mypy modified_file.py"
+      - "python -m black --check modified_file.py --line-length=120"
+    requirement: "Immediate fixes if ANY issues detected"
+    recommendation: "SHOULD validate after each file save"
+
+  phase_3_pre_commit:
+    name: "Pre-Commit Validation"
+    when: "BEFORE every commit"
+    purpose: "Ensure production ready before committing"
+    python_commands:
+      - "python -m py_compile $(find . -name \"*.py\" -not -path \"*/test*\" -not -path \"*/.venv/*\")"
+      - "AST analysis: python -m mypy . --exclude '(\\.venv|node_modules|__pycache__|\\.git|submodules)' (verifies imports and references)"
+      - "SAST analysis: python -m bandit -r . -x ./.venv,./node_modules,./submodules --skip B101,B601 -f json && python -m safety check --json"
+      - "python -m mypy . --exclude '(\\.venv|node_modules|__pycache__|\\.git|submodules)'"
+      - "python -m flake8 . --max-line-length=120 --max-complexity=15 --count --statistics"
+      - "python -m bandit -r . -x ./.venv,./node_modules,./submodules --skip B101,B601 -f json"
+      - "python -m safety check --json"
+      - "python -m black --check . --line-length=120"
+      - "python -m isort --check-only . --line-length=120 --profile=black"
+      - "python -m radon cc . -a --min=C"
+      - "python -m radon mi . -a"
+      - "python -m xenon . --max-absolute B --max-modules A --max-average A"
+    nodejs_commands:
+      - "AST analysis: npx tsc --noEmit --strict (verifies imports and references)"
+      - "SAST analysis: npm audit && npx eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0"
+      - "npm run type-check"
+      - "npm run lint"
+      - "npm run quality:check"
+      - "npm run dev"
+      - "npm run build"
+      - "npm run start"
+    requirement: "100% PASS on ALL commands. Fix ALL issues before committing."
+    mandatory: true
+
+  phase_4_continuous:
+    name: "Continuous Validation"
+    when: "AFTER pushing to remote"
+    purpose: "Continuous monitoring, immediate remediation"
+    actions:
+      - "Verify CI/CD pipeline shows all green"
+      - "Check deployment status"
+      - "Monitor for any issues"
+    recommendation: "SHOULD monitor continuously"
+
+remediation_strategies:
+  standard_tools_only:
+    rule: "MUST use standard industry tools ONLY - NO custom fix scripts"
+    allowed_tools:
+      formatting:
+        tool: "black"
+        command: "python -m black . --line-length=120"
+        recommendation: "SHOULD be used for all formatting issues"
+      import_order:
+        tool: "isort"
+        command: "python -m isort . --line-length=120 --profile=black"
+        recommendation: "SHOULD be used for import organization"
+      unused_imports:
+        tool: "autoflake"
+        command: "python -m autoflake --remove-all-unused-imports --in-place --recursive ."
+        recommendation: "SHOULD be used for unused code removal"
+      complexity_reduction:
+        approach_1: "Use sub-agents for refactoring complex functions"
+        approach_2: "Manual refactoring following SOLID/DRY/KISS principles"
+        techniques:
+          - "Extract helper functions (SRP)"
+          - "Simplify conditional logic (KISS)"
+          - "Use early returns"
+          - "Apply design patterns"
+      type_coverage:
+        - "Add proper type hints manually"
+        - "Use specific types (NOT Any)"
+        - "Follow mypy suggestions"
+
+  custom_fix_scripts:
+    rule: "FORBIDDEN: Creating custom fix scripts to remediate code"
+    forbidden_examples:
+      - "fix_all_issues.py"
+      - "auto_remediate.py"
+      - "quick_fix.sh"
+      - "format_and_fix.py"
+    why_forbidden:
+      - "Custom scripts have corrupted the codebase repeatedly"
+      - "You are INCAPABLE of writing reliable fix scripts"
+      - "Standard tools are TESTED and SAFE"
+      - "Custom scripts introduce MORE problems"
+    violation_response:
+      - "STOP immediately"
+      - "DELETE the custom script"
+      - "Use standard tools instead"
+      - "Apologize and re-run validation"
+
+production_ready_scope:
+  included:
+    - "All Python source code (*.py)"
+    - "All TypeScript/JavaScript source code (*.ts, *.tsx, *.js, *.jsx)"
+    - "All configuration files (pyproject.toml, .flake8, mypy.ini, tsconfig.json, etc.)"
+    - "All production routes, services, utilities, helpers"
+    - "All database models, schemas, migrations"
+    - "All API endpoints and handlers"
+    - "All templates and frontend code"
+    - "All documentation (*.md files)"
+
+  excluded:
+    - "Git submodules (./submodules/*)"
+    - "Virtual environments (.venv/, venv/)"
+    - "Node modules (node_modules/)"
+    - "Build artifacts (dist/, build/, *.egg-info/)"
+    - "Cache directories (__pycache__/, .pytest_cache/)"
+    - "Test files (test_*.py, *_test.py) - BUT they still should be high quality"
+
+  note: "Even excluded files should maintain reasonable quality, but don't block production ready status"
+
+mcp_workflow_integration:
+  rule: "ALL validation work SHOULD follow the MCP workflow"
+  golden_rule: "context7 (docs) → grep (examples) → neo4j-memory (record) → code (SOLID/DRY/KISS) → neo4j-memory (persist)"
+
+  six_phase_sequence:
+    phase_1_context_load:
+      tool: "neo4j-memory"
+      action: "Load previous validation decisions for project"
+      recommendation: "SHOULD load context at validation start"
+
+    phase_2_mandatory_research:
+      tools: ["context7", "grep"]
+      actions:
+        - "context7: 'Python code quality tools best practices 2025'"
+        - "context7: 'flake8 mypy configuration standards'"
+        - "grep: 'pyproject.toml configuration examples github'"
+      recommendation: "SHOULD research before validating, MUST research for unfamiliar tools"
+
+    phase_3_planning:
+      tool: "sequential-thinking"
+      action: "Plan validation sequence and remediation strategy"
+      recommendation: "SHOULD plan validation approach for complex codebases"
+
+    phase_4_validation:
+      action: "Run all 12 (Python) or 8 (Node.js) commands"
+      requirement: "MUST run all applicable validation commands including AST analysis and SAST analysis"
+
+    phase_5_fix:
+      rule: "Use ONLY standard tools (black, isort, autoflake, sub-agents)"
+      forbidden: "Creating custom fix scripts"
+
+    phase_6_progress_tracking:
+      tool: "neo4j-memory"
+      action: "Record: All validation commands passed"
+      recommendation: "SHOULD track validation results"
+
+    phase_7_context_save:
+      tool: "neo4j-memory"
+      action: "Persist: 100% production ready achieved"
+      recommendation: "SHOULD persist significant validation outcomes"
+
+  absolutely_forbidden:
+    - "Validating without context7 + grep research (for unfamiliar tools)"
+    - "Skipping neo4j-memory context load (for complex validations)"
+    - "Completing without saving results to neo4j-memory (for significant outcomes)"
+    - "Creating custom fix scripts to remediate code (USE STANDARD TOOLS ONLY)"
+    - "Accepting partial success (99% = FAILURE)"
+    - "Using workarounds (# type: ignore, # noqa) to suppress issues"
+
+quick_reference_checklists:
+  before_claiming_100_percent:
+    code_quality:
+      - "py_compile: 0 errors"
+      - "AST analysis: 0 unresolved imports, 0 undefined references, 0 syntax errors"
+      - "SAST analysis: 0 high/critical security issues, 0 medium (unless waived), 0 code quality issues blocking execution, 0 potential runtime errors"
+      - "mypy: 0 errors, 0 warnings, 100% type coverage"
+      - "flake8: 0 errors, 0 warnings"
+      - "bandit: 0 high, 0 medium severity"
+      - "safety: 0 vulnerabilities"
+      - "black: 0 files need formatting"
+      - "isort: 0 files incorrect"
+      - "radon cc: ALL ≤15 complexity"
+      - "radon mi: ALL Grade A"
+      - "xenon: 0 violations"
+
+    code_structure:
+      - "0 functions with complexity >15"
+      - "0 lines >120 characters"
+      - "≤10% code deduplication"
+      - "100% type hints"
+      - "0 Any types (except unavoidable)"
+      - "0 # type: ignore"
+      - "0 # noqa (except documented exceptions)"
+
+    functionality:
+      - "0 TODO comments"
+      - "0 FIXME comments"
+      - "0 mock implementations in production"
+      - "0 stub functions in production"
+      - "0 placeholder code"
+      - "0 workarounds or hacks"
+      - "0 commented-out code"
+      - "100% fully implemented functionality"
+
+    configuration:
+      - "pyproject.toml exists (line-length=120, max-complexity=15)"
+      - ".flake8 exists (max-line-length=120, max-complexity=15)"
+      - "mypy.ini exists (strict configuration)"
+      - "All tools installed and accessible"
+
+acceptable_outcome:
+  summary: "100% PRODUCTION READY = ABSOLUTE PERFECTION"
+  requirements:
+    - "0 errors across ALL tools"
+    - "0 warnings across ALL tools"
+    - "0 security issues"
+    - "0 vulnerabilities"
+    - "ALL complexity ≤15"
+    - "ALL maintainability Grade A"
+    - "≤10% deduplication"
+    - "100% type coverage"
+    - "0 TODOs/FIXMEs/workarounds"
+    - "Line length ≤120"
+    - "Perfect formatting"
+    - "Perfect import order"
+  rule: "ANYTHING LESS THAN 100% = UNACCEPTABLE FAILURE"
+  exceptions: "NO EXCEPTIONS. NO COMPROMISES. NO EXCUSES."
+  forbidden: "NEVER CREATE CUSTOM FIX SCRIPTS - USE STANDARD TOOLS ONLY"
+
+instruction: |
+  =========================
+  PRODUCTION CODE QUALITY PROTOCOL
+  =========================
+
+  This protocol defines comprehensive validation and quality standards to ensure
+  100% production-ready code. It provides validation commands, quality metrics,
+  and remediation strategies using standard tools only.
+
+  PRODUCTION READY DEFINITION:
+  PRODUCTION READY = ABSOLUTE PERFECTION ACROSS ALL METRICS
+  Anything less than 100% = UNACCEPTABLE FAILURE
+  100% production ready is the ONLY acceptable state - NO EXCEPTIONS
+
+  Reference: `production_ready_definition`
+
+  FOURTEEN MANDATORY METRICS:
+  All 14 metrics MUST achieve 100% pass status. Even one fail = entire codebase fails.
+  1. AST Compilation (py_compile) - 0 errors
+  1b. AST Analysis (ast.parse(), mypy, pyright, pylance) - 0 unresolved imports, 0 undefined references, 0 syntax errors
+  1c. SAST Analysis (bandit, safety, semgrep, CodeQL, SonarQube) - 0 high/critical security issues, 0 medium (unless waived), 0 code quality issues blocking execution, 0 potential runtime errors
+  2. Type Safety (mypy) - 0 errors, 0 warnings
+  3. Linting (flake8) - 0 errors, 0 warnings
+  4. Security (bandit) - 0 high, 0 medium severity
+  5. Dependencies (safety) - 0 CVE issues
+  6. Formatting (black) - 0 files to format
+  7. Import Order (isort) - 0 files incorrect
+  8. Complexity (radon cc) - ALL ≤15
+  9. Maintainability (radon mi) - ALL MI ≥20 (Grade A)
+  10. Violations (xenon) - 0 violations
+  11. Line Length (flake8, black) - ALL ≤120
+  12. Deduplication (pylint) - ≤10% duplicate
+
+  Reference: `production_ready_definition.twelve_mandatory_metrics`
+
+  VALIDATION COMMANDS:
+  Python: 12 mandatory commands (py_compile, AST analysis, SAST analysis, mypy, flake8, bandit, safety, black,
+  isort, radon cc, radon mi, xenon)
+  Node.js: 8 mandatory commands (AST analysis, SAST analysis, type-check, lint, quality:check, dev, build, start)
+
+  Reference: `python_validation_commands`, `nodejs_validation_commands`
+
+  VALIDATION WORKFLOW:
+  1. Pre-Implementation: SHOULD validate baseline before writing code
+  2. During Implementation: SHOULD validate after each file save
+  3. Pre-Commit: MUST validate all commands before committing (100% pass required)
+  4. Continuous: SHOULD monitor after pushing to remote
+
+  Reference: `validation_workflow`
+
+  REMEDIATION STRATEGIES:
+  MUST use standard tools ONLY: black, isort, autoflake, sub-agents
+  FORBIDDEN: Creating custom fix scripts to remediate code
+  Custom scripts have corrupted the codebase repeatedly - USE STANDARD TOOLS ONLY
+
+  Reference: `remediation_strategies`
+
+  MCP WORKFLOW INTEGRATION:
+  ALL validation work SHOULD follow THE GOLDEN RULE workflow:
+  context7 (docs) → grep (examples) → neo4j-memory (record) → code → neo4j-memory (persist)
+
+  Reference: `mcp_workflow_integration`
+
+  CONFIGURATION STANDARDS:
+  Python: pyproject.toml, .flake8, mypy.ini (all REQUIRED)
+  Node.js: tsconfig.json, .eslintrc, .prettierrc (all REQUIRED)
+  Before starting work: Verify files exist and configurations are correct
+
+  Reference: `configuration_standards`
+
+  See `quick_reference_checklists` for complete validation checklist.

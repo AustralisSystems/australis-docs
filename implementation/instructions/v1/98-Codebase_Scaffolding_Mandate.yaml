@@ -1,0 +1,561 @@
+# Codebase Scaffolding & Dependency Mandate
+# This section defines the MANDATORY protocol for sourcing code from existing public repos
+# BEFORE writing any custom code. NO EXCEPTIONS.
+
+codebase_scaffolding_mandate:
+  priority: "MANDATORY - NO EXCEPTIONS"
+  description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+  priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+
+
+# GitHub Scaffolding Mandate
+github_scaffolding_mandate:
+  description: "MANDATORY: Search, clone, scaffold from public GitHub repos BEFORE writing custom code"
+
+  priority_hierarchy:
+    description: "Strict order of preference (HIGHEST to LOWEST priority)"
+    levels:
+      1_github_repos:
+        priority: "CRITICAL - HIGHEST"
+        description: "Production-ready or demo repositories on GitHub"
+        sources:
+          - "Public GitHub repositories with production code"
+          - "Official example/demo repositories"
+          - "Starter templates and boilerplates"
+          - "Production-grade reference implementations"
+        quality_criteria:
+          - "Stars: > 100 (preferred > 1000)"
+          - "Active maintenance: commits within last 6 months"
+          - "Complete implementation (not fragments)"
+          - "Documentation present (README, examples)"
+          - "License: permissive (MIT, Apache 2.0, BSD)"
+        search_tools:
+          - "mcp_grep_searchGitHub (literal code patterns)"
+          - "vscode-websearchforcopilot_webSearch (GitHub repo discovery)"
+          - "github_repo (search specific repositories)"
+        rule: "ALWAYS search GitHub FIRST before considering any other option"
+
+      2_official_sdks:
+        priority: "CRITICAL - VERY HIGH"
+        description: "Vendor-provided official SDKs and client libraries"
+        sources:
+          - "AWS SDK (boto3, aws-sdk-js, @aws-sdk/*)"
+          - "Azure SDK (@azure/*, azure-*)"
+          - "Google Cloud SDK (google-cloud-*, @google-cloud/*)"
+          - "OpenAI SDK (openai, @openai/*)"
+          - "Anthropic SDK (anthropic, @anthropic-ai/*)"
+          - "Stripe SDK (stripe, @stripe/*)"
+          - "Twilio SDK (twilio, @twilio/*)"
+          - "SendGrid SDK (sendgrid, @sendgrid/*)"
+          - "Any official vendor SDK from PyPI, npm, NuGet"
+        verification:
+          - "Check official documentation for SDK existence"
+          - "Verify SDK is maintained by vendor (not community)"
+          - "Confirm SDK version supports required features"
+          - "Document SDK name, version, package manager"
+        rule: "Use official SDKs over custom API clients ALWAYS"
+
+      3_cncf_projects:
+        priority: "HIGH"
+        description: "Cloud Native Computing Foundation projects"
+        sources:
+          - "Kubernetes (kubernetes, @kubernetes/*)"
+          - "Prometheus (prometheus, prom-client)"
+          - "Envoy Proxy (envoy, envoy-control-plane)"
+          - "Jaeger (jaeger-client, jaeger-client-node)"
+          - "Fluentd (fluentd, fluent-logger)"
+          - "OpenTelemetry (opentelemetry-api, @opentelemetry/*)"
+          - "Helm (helm, @helm/*)"
+          - "etcd (python-etcd3, etcd3)"
+          - "CoreDNS, Linkerd, Cilium, etc."
+        verification:
+          - "Confirm project is CNCF graduated or incubating"
+          - "Check https://www.cncf.io/projects/"
+          - "Verify active maintenance and LTS support"
+        rule: "Prefer CNCF projects for cloud-native infrastructure"
+
+      4_open_source_libraries:
+        priority: "MEDIUM-HIGH"
+        description: "Well-maintained open source libraries"
+        sources:
+          - "FastAPI, Flask, Django (Python web frameworks)"
+          - "Express, NestJS, Fastify (Node.js frameworks)"
+          - "React, Vue, Svelte (frontend frameworks)"
+          - "Pydantic, Zod (validation libraries)"
+          - "SQLAlchemy, Prisma, TypeORM (ORMs)"
+          - "Celery, Bull (task queues)"
+          - "Redis-py, ioredis (Redis clients)"
+        quality_criteria:
+          - "GitHub stars > 5000 (preferred > 10000)"
+          - "Active maintenance: weekly/monthly commits"
+          - "Strong community: issues/PRs actively managed"
+          - "Good documentation and examples"
+          - "Stable release history (not abandoned)"
+        rule: "Use established open source libraries over custom implementations"
+
+      5_public_packages:
+        priority: "MEDIUM"
+        description: "Public packages from package managers"
+        sources:
+          - "PyPI (pip install <package>)"
+          - "npm (npm install <package>)"
+          - "NuGet (dotnet add package <package>)"
+          - "Maven Central (Java)"
+          - "crates.io (Rust)"
+          - "RubyGems (Ruby)"
+        verification:
+          - "Check package download counts (PyPI/npm stats)"
+          - "Verify recent release (within last year)"
+          - "Check security advisories (npm audit, safety check)"
+          - "Review license compatibility"
+        rule: "Use public packages over writing utilities from scratch"
+
+      6_custom_code:
+        priority: "LOWEST - LAST RESORT"
+        description: "Write custom code ONLY when all above options exhausted"
+        justification_required:
+          - "Document why NO GitHub repos found (search queries used)"
+          - "Document why NO official SDK exists (vendor documentation checked)"
+          - "Document why NO CNCF project fits (projects reviewed)"
+          - "Document why NO open source library works (libraries evaluated)"
+          - "Document why NO public package exists (package managers searched)"
+          - "Provide detailed rationale for custom implementation"
+        approval_required: true
+        constraints:
+          - "Keep custom code minimal (<200 lines per module)"
+          - "Follow SOLID, DRY, KISS principles strictly"
+          - "Add comprehensive documentation and tests"
+          - "Plan for future replacement with public solution"
+        rule: "Custom code is LAST RESORT after exhausting all other options"
+
+  workflow:
+    description: "Step-by-step process for GitHub repo scaffolding"
+    steps:
+      - step: 1
+        name: "Search GitHub for Existing Repos"
+        actions:
+          - "Use mcp_grep_searchGitHub to find production code patterns:"
+          - "  - Example: query='FastAPI + HTMX', language=['Python']"
+          - "  - Example: query='Alpine.js modal', language=['JavaScript']"
+          - "  - Example: query='DaisyUI components', language=['TypeScript', 'TSX']"
+          - "Use vscode-websearchforcopilot_webSearch to discover repos:"
+          - "  - Example: 'GitHub FastAPI HTMX starter template'"
+          - "  - Example: 'GitHub DaisyUI Alpine.js examples'"
+          - "  - Example: 'GitHub production-ready [technology] implementation'"
+          - "Filter results by quality criteria (stars, maintenance, documentation)"
+          - "Select top 3-5 repos that best match requirements"
+        outputs:
+          - "repo_list: List[Dict[str, str]]  # [{url, stars, description, last_commit}]"
+          - "search_queries_used: List[str]"
+        validation:
+          - "[ ] At least 3 relevant repos found"
+          - "[ ] Repos meet quality criteria (stars, maintenance)"
+          - "[ ] Repos have permissive licenses (MIT, Apache, BSD)"
+        gates:
+          - "If zero repos found, proceed to SDK search"
+          - "If repos found, continue to Step 2"
+
+      - step: 2
+        name: "Document Source Repos in SPEC"
+        actions:
+          - "CRITICAL: Update SPEC file with GitHub Sources section:"
+          - "  - Repository name and URL"
+          - "  - Stars, last commit date, license"
+          - "  - Purpose: what will be scaffolded from this repo"
+          - "  - Relevant files/directories to extract"
+          - "Create table in SPEC:"
+          - "  | Repo | Stars | License | Purpose | Files |"
+          - "  |------|-------|---------|---------|-------|"
+          - "  | user/repo | 5.2k | MIT | FastAPI structure | app/, routers/ |"
+        outputs:
+          - "spec_updated: Boolean"
+          - "documented_repos: List[str]"
+        validation:
+          - "[ ] All selected repos documented in SPEC"
+          - "[ ] Purpose and target files clearly stated"
+        gates:
+          - "SPEC must be updated before cloning repos"
+
+      - step: 3
+        name: "Clone Repos to Temporary Directory"
+        actions:
+          - "Create temporary clone directory: tmp/github_clones/"
+          - "Use run_in_terminal to clone repos:"
+          - "  cd tmp && mkdir -p github_clones"
+          - "  cd github_clones"
+          - "  git clone <repo_url_1> --depth 1"
+          - "  git clone <repo_url_2> --depth 1"
+          - "  git clone <repo_url_3> --depth 1"
+          - "Use --depth 1 for shallow clone (faster, less disk space)"
+          - "Do NOT clone to project directory (use tmp/)"
+        outputs:
+          - "cloned_repos: List[str]  # [tmp/github_clones/repo1, ...]"
+        validation:
+          - "[ ] All repos cloned successfully"
+          - "[ ] Repos in tmp/ directory (not project root)"
+        gates:
+          - "All repos cloned before proceeding to scaffolding"
+
+      - step: 4
+        name: "Scaffold Components from Cloned Repos"
+        actions:
+          - "Identify relevant files from cloned repos:"
+          - "  - Use list_dir to explore repo structure"
+          - "  - Use read_file to inspect implementation"
+          - "  - Use grep_search to find specific patterns"
+          - "Copy/adapt relevant code to project:"
+          - "  - Preserve directory structure where logical"
+          - "  - Adapt imports and dependencies"
+          - "  - Remove unnecessary code (keep only what's needed)"
+          - "  - Add attribution comments:"
+          - "    # Scaffolded from: <repo_url>"
+          - "    # License: <license_type>"
+          - "    # Adapted for: <project_name>"
+        outputs:
+          - "scaffolded_files: List[str]"
+          - "adaptations_made: List[str]"
+        validation:
+          - "[ ] Attribution comments added to all scaffolded code"
+          - "[ ] Code adapted to project structure"
+          - "[ ] Imports updated to match project dependencies"
+          - "[ ] Unnecessary code removed"
+        gates:
+          - "All scaffolded code properly attributed and adapted"
+
+      - step: 5
+        name: "Delete Cloned Repos"
+        actions:
+          - "After scaffolding complete, delete cloned repos:"
+          - "  rm -rf tmp/github_clones/"
+          - "Only source code remains in project (not full repos)"
+          - "SPEC retains documentation of sources"
+        outputs:
+          - "cleanup_complete: Boolean"
+        validation:
+          - "[ ] tmp/github_clones/ directory removed"
+          - "[ ] Scaffolded code remains in project"
+          - "[ ] SPEC documentation preserved"
+        gates:
+          - "Cleanup complete before marking phase done"
+
+      - step: 6
+        name: "Update Dependencies"
+        actions:
+          - "Update requirements.txt / package.json with new dependencies:"
+          - "  - Extract from cloned repos (requirements.txt, package.json)"
+          - "  - Add to project dependencies (version pinning)"
+          - "  - Document why each dependency is needed"
+          - "Run install:"
+          - "  pip install -r requirements.txt"
+          - "  npm install"
+        outputs:
+          - "dependencies_added: List[str]"
+        validation:
+          - "[ ] All required dependencies documented"
+          - "[ ] Dependencies installed successfully"
+          - "[ ] Version pinning applied"
+        gates:
+          - "Dependencies installed before proceeding"
+
+      - step: 7
+        name: "Write Memory Entities"
+        actions:
+          - "Write to neo4j-memory:"
+          - "  - Session entity with Date property"
+          - "  - GitHub repos used (name, URL, purpose)"
+          - "  - Scaffolded files created"
+          - "  - Dependencies added"
+          - "  - Relationships: session → scaffolds_from → github_repo"
+          - "  - Relationships: session → creates → file"
+        outputs:
+          - "memory_entities_created: List[str]"
+        gates:
+          - "Memory entities created with Date properties"
+
+  sdk_search_protocol:
+    description: "If no GitHub repos found, search for official SDKs"
+    steps:
+      - "Check vendor documentation for official SDK"
+      - "Use Context7 to get SDK documentation:"
+      - "  resolve-library-id(libraryName='boto3')"
+      - "  get-library-docs(context7CompatibleLibraryID='/aws/boto3')"
+      - "Verify SDK on package manager (PyPI, npm)"
+      - "Install SDK and use vendor patterns (not custom API clients)"
+      - "Document SDK in SPEC under 'Official SDKs Used' section"
+
+  cncf_verification_protocol:
+    description: "Verify CNCF project membership and status"
+    steps:
+      - "Check https://www.cncf.io/projects/"
+      - "Verify project status: Graduated > Incubating > Sandbox"
+      - "Prefer Graduated projects for production use"
+      - "Document CNCF project usage in SPEC"
+
+  enforcement_rules:
+    - "RULE 1: ALWAYS search GitHub FIRST before writing custom code"
+    - "RULE 2: Document ALL source repos in SPEC before cloning"
+    - "RULE 3: Clone to tmp/ directory ONLY (never project root)"
+    - "RULE 4: Add attribution comments to ALL scaffolded code"
+    - "RULE 5: Delete cloned repos after scaffolding complete"
+    - "RULE 6: Document all sources in the SPEC"
+    - "RULE 7: If no GitHub repos, search for official SDKs"
+    - "RULE 8: Prefer CNCF projects for cloud-native infrastructure"
+    - "RULE 9: Use open source libraries over custom utilities"
+    - "RULE 10: Custom code ONLY as LAST RESORT with full justification"
+
+  forbidden:
+    - "Writing custom code without exhausting GitHub/SDK/CNCF/open source options"
+    - "Cloning repos to project root (must use tmp/)"
+    - "Keeping cloned repos after scaffolding (must delete)"
+    - "Scaffolding code without attribution comments"
+    - "Missing documentation of source repos in SPEC"
+    - "Using unmaintained or abandoned repos (>1 year no commits)"
+    - "Using repos with restrictive licenses (GPL in proprietary code)"
+    - "Building custom API clients when official SDKs exist"
+    - "Reinventing wheels covered by CNCF projects"
+    - "Implementing utilities covered by popular open source libraries"
+    - "Creating custom packages when public packages exist"
+    - "Neglecting to follow the defined workflow steps"
+    - "Failing to document all sources in the SPEC"
+
+  custom_code_justification_template: |
+    # Custom Code Justification
+
+    **Module:** <module_name>
+
+    **Functionality Required:** <description>
+
+    **GitHub Search Results:**
+    - Query 1: "<query>" - 0 relevant results
+    - Query 2: "<query>" - 0 relevant results
+    - Query 3: "<query>" - 0 relevant results
+    - Conclusion: No suitable GitHub repos found
+
+    **Official SDK Check:**
+    - Vendor: <vendor_name>
+    - SDK documentation: <url>
+    - Result: No official SDK exists for this functionality
+
+    **CNCF Project Check:**
+    - Relevant CNCF projects reviewed: <list>
+    - Result: No CNCF project provides this functionality
+
+    **Open Source Library Check:**
+    - Libraries evaluated: <list>
+    - Result: No open source library fits requirements because <reason>
+
+    **Public Package Check:**
+    - PyPI/npm search: <query>
+    - Result: No suitable packages found
+
+    **Justification for Custom Code:**
+    <detailed rationale explaining why custom implementation is necessary>
+
+    **Custom Code Scope:**
+    - Lines of code: <number>
+    - Modules: <list>
+    - Test coverage: <percentage>
+
+    **Future Replacement Plan:**
+    <strategy for replacing with public solution when available>
+
+    **Approval:** Required from tech lead before proceeding
+
+continuation_instruction: |
+  You are executing Codebase Scaffolding Mandate per Enterprise Canonical Execution Protocol v1.0.0.
+
+  CRITICAL PRIORITY HIERARCHY (MANDATORY - NO EXCEPTIONS)
+  - Tier 0 (ABSOLUTE HIGHEST): C:\github_development\projects\fastapi-enterprise-core-template - check FIRST
+  - Tier 1 (HIGHEST): C:\github_development\projects\*, C:\github_development\templates\*
+  - Tier 2 (VERY HIGH): tristanaburns GitHub account (public/private repos)
+  - Tier 3 (HIGH): Public GitHub repositories
+  - Tier 4 (MEDIUM-HIGH): Official vendor SDKs and APIs
+  - Tier 5 (MEDIUM): CNCF projects and cloud-native tools
+  - Tier 6 (MEDIUM-LOW): Open source libraries
+  - Tier 7 (LOW): Public packages, wheels, and dependencies
+  - Tier 8 (LAST RESORT): Custom code - requires full justification
+
+  MANDATORY WORKFLOW (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)
+  Step 2: Document ALL discovered repos/files in SPEC files BEFORE cloning (repo_url/local_path, license, commit_hash, components_extracted, extraction_date)
+  Step 3: Clone ALL relevant repos to temporary directory (tmp/github_clones/ - NEVER project root)
+  Step 4: Extract needed code/configs/assets from cloned repos (add attribution comments)
+  Step 5: Remove ALL cloned repos after extraction (keep only scaffolded code)
+  Step 6: Run validation tools
+  Step 7: Update SPEC with final integration details
+  Step 8: Write memory entities to neo4j-memory with Date properties
+
+  GITHUB SEARCH PROTOCOL (MANDATORY)
+  - ALWAYS search GitHub FIRST before writing custom code
+  - Use mcp_grep_searchGitHub for literal code patterns (query='FastAPI', language=['Python'])
+  - Use vscode-websearchforcopilot_webSearch for repo discovery
+  - Filter by quality criteria: stars > 100 (preferred > 1000), active maintenance (commits within 6 months), complete implementation, documentation present, permissive license (MIT, Apache 2.0, BSD)
+  - Select top 3-5 repos that best match requirements
+  - HALT searching when suitable code found in higher priority tier
+
+  OFFICIAL SDK PROTOCOL (IF NO GITHUB REPOS FOUND)
+  - Check vendor documentation for official SDK
+  - Use Context7 to get SDK documentation (resolve-library-id, get-library-docs)
+  - Verify SDK on package manager (PyPI, npm, NuGet)
+  - Install SDK and use vendor patterns (not custom API clients)
+  - Document SDK in SPEC under 'Official SDKs Used' section
+
+  CNCF VERIFICATION PROTOCOL
+  - Check https://www.cncf.io/projects/
+  - Verify project status: Graduated > Incubating > Sandbox
+  - Prefer Graduated projects for production use
+  - Document CNCF project usage in SPEC
+
+  ENFORCEMENT RULES (ABSOLUTE - NO EXCEPTIONS)
+  - RULE 1: ALWAYS search GitHub FIRST before writing custom code
+  - RULE 2: Document ALL source repos in SPEC before cloning
+  - RULE 3: Clone to tmp/ directory ONLY (never project root)
+  - RULE 4: Add attribution comments to ALL scaffolded code (# Scaffolded from: <repo_url>, License: <license_type>, Adapted for: <project_name>)
+  - RULE 5: Delete cloned repos after scaffolding complete
+  - RULE 6: Document all sources in the SPEC
+  - RULE 7: If no GitHub repos, search for official SDKs
+  - RULE 8: Prefer CNCF projects for cloud-native infrastructure
+  - RULE 9: Use open source libraries over custom utilities
+  - RULE 10: Custom code ONLY as LAST RESORT with full justification
+
+  FORBIDDEN ACTIONS (ABSOLUTE - NO EXCEPTIONS)
+  - Writing custom code without exhausting GitHub/SDK/CNCF/open source options
+  - Cloning repos to project root (must use tmp/)
+  - Keeping cloned repos after scaffolding (must delete)
+  - Scaffolding code without attribution comments
+  - Missing documentation of source repos in SPEC
+  - Using unmaintained or abandoned repos (>1 year no commits)
+  - Using repos with restrictive licenses (GPL in proprietary code)
+  - Building custom API clients when official SDKs exist
+  - Reinventing wheels covered by CNCF projects
+  - Implementing utilities covered by popular open source libraries
+  - Creating custom packages when public packages exist
+  - Neglecting to follow the defined workflow steps
+  - Failing to document all sources in the SPEC
+
+  CUSTOM CODE JUSTIFICATION (REQUIRED WHEN NO SUITABLE SOURCES FOUND)
+  Must document: All search queries attempted, repos evaluated, technical gaps, effort comparison
+  Must provide: GitHub search results (queries and results), official SDK check (vendor, documentation, result), CNCF project check (projects reviewed, result), open source library check (libraries evaluated, result), public package check (PyPI/npm search, result), detailed rationale for custom implementation, custom code scope (lines, modules, test coverage), future replacement plan
+  Approval required: Tech lead approval before proceeding
+  Constraints: Keep custom code minimal (<200 lines per module), follow SOLID/DRY/KISS principles strictly, add comprehensive documentation and tests, plan for future replacement with public solution
+
+  QUALITY CRITERIA FOR GITHUB REPOS
+  - Stars: > 100 (preferred > 1000)
+  - Active maintenance: commits within last 6 months
+  - Complete implementation (not fragments)
+  - Documentation present (README, examples)
+  - License: permissive (MIT, Apache 2.0, BSD)
+
+  QUALITY CRITERIA FOR OPEN SOURCE LIBRARIES
+  - GitHub stars > 5000 (preferred > 10000)
+  - Active maintenance: weekly/monthly commits
+  - Strong community: issues/PRs actively managed
+  - Good documentation and examples
+  - Stable release history (not abandoned)
+
+  OUTPUT REQUIREMENTS
+  - repo_list: List[Dict[str, str]] with url, stars, description, last_commit
+  - search_queries_used: List[str]
+  - spec_updated: Boolean with documented repos
+  - cloned_repos: List[str] in tmp/github_clones/
+  - scaffolded_files: List[str] with attribution comments
+  - adaptations_made: List[str]
+  - dependencies_added: List[str]
+  - memory_entities_created: List[str] with Date properties
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL)
+  - [ ] At least 3 relevant repos found (or SDK/CNCF alternative documented)
+  - [ ] Repos meet quality criteria (stars, maintenance, license)
+  - [ ] All selected repos documented in SPEC before cloning
+  - [ ] Purpose and target files clearly stated in SPEC
+  - [ ] All repos cloned successfully to tmp/ directory
+  - [ ] Attribution comments added to all scaffolded code
+  - [ ] Code adapted to project structure and imports updated
+  - [ ] tmp/github_clones/ directory removed after scaffolding
+  - [ ] All required dependencies documented and installed
+  - [ ] Memory entities created with Date properties
+
+  CURRENT SESSION CONTEXT
+  - Focus: Source code from existing repos/SDKs BEFORE writing custom code
+  - Priority: Search golden template FIRST, then local repos, then GitHub, then SDKs
+  - Mode: Scaffold and adapt existing code, not create from scratch
+  - Remember: Custom code is LAST RESORT - must exhaust all sourcing options first

@@ -1,0 +1,167 @@
+prompt_name: "Process_Session_Outcome_and_Documentation_and_Specs"
+version: "1.0.0"
+type: "session_outcome_and_docs_and_specs_processing"
+context:
+  role: "AI session outcome and documentation and specs compliance agent"
+  governance:
+    canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  doc_references:
+    - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+    - "docs/implementation/README_TEMPLATE.md"
+    - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+    - "docs/implementation/SPEC_README.md"
+    - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+  critical_rule: >
+    **CRITICAL DIRECTORY RULE**: The directories backlog/, in_progress/, and done/ MUST ONLY
+    contain SPEC documents (files matching pattern *_SPEC_v*.md). ALL other documents
+    (temporal documents, status reports, completion reports, session summaries, etc.) MUST
+    be moved to temporal/ AFTER important information has been extracted and used to update
+    the implementation plan and other documentation. This rule is NON-NEGOTIABLE.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    status reports, progress reports, completion reports, session summaries, and findings
+    MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the relevant SPEC(s) and
+    IMPLEMENTATION_PLAN with all progress, findings, and status information. This rule is
+    NON-NEGOTIABLE and must be enforced strictly.
+  review_docs:
+    - "{{review_docs_filename}}"
+    - "{{review_docs_filename}}"
+    - "{{review_docs_filename}}"
+    - "{{review_docs_filename}}"
+    - "{{review_docs_filename}}"
+instructions:
+  objective: "Convert relevant session outcome and documentation and specs content into structured implementation updates"
+  steps:
+    - step: 1
+      name: "Review Canonical Standards"
+      actions:
+        - "Parse all referenced session outcome and documentation and specs"
+        - "Extract protocols, naming conventions, SPEC lifecycle definitions, and workflow instructions"
+        - "Extract applicable rules for naming, spec formatting, testing"
+    - step: 2
+      name: "Analyse Implementation Plan"
+      actions:
+        - "Determine how current tasks and phases are defined"
+        - "Identify where enhancements and blockers should be slotted"
+    - step: 3
+      name: "Extract Enhancement Data"
+      actions:
+        - "Read review_docs list"
+        - "Identify and classify each line as: BLOCKER, ISSUE, WARNING, RECOMMENDATION, OBSERVATION, INFO"
+    - step: 4
+      name: "Convert into SPEC/PLAN Updates"
+      actions:
+        - "For each session outcome item, define and take one or more actions:"
+        - "Create/update SPECs in backlog/ (if queued) or in_progress/ (if active)"
+        - "CRITICAL: Only SPEC documents go in backlog/in_progress/done/"
+        - "Update IMPLEMENTATION_PLAN to reflect new entries"
+        - "Convert test info into 'SPEC_TEST_*' docs if applicable (place in backlog/in_progress/done/ as appropriate)"
+    - step: 5
+      name: "Convert session outcome into SPEC/PLAN Updates"
+      actions:
+        - "For each documentation item, define and take one or more actions:"
+        - "Create/update SPECs in backlog/ (if queued) or in_progress/ (if active)"
+        - "CRITICAL: Only SPEC documents go in backlog/in_progress/done/"
+        - "Update IMPLEMENTATION_PLAN to reflect new entries"
+        - "Convert test info into 'SPEC_TEST_*' docs if applicable (place in backlog/in_progress/done/ as appropriate)"
+    - step: 6
+      name: "Convert documentation into SPEC/PLAN Updates"
+      actions:
+        - "For each SPECs item, define and take one or more actions:"
+        - "Create/update documentation (enduring docs in root, temporal docs in temporal/)"
+        - "CRITICAL: Do NOT create documentation in backlog/, in_progress/, or done/ (these directories are for SPECs ONLY)"
+        - "Update IMPLEMENTATION_PLAN to reflect new entries"
+    - step: 7
+      name: "Convert SPEC into documentation"
+      actions:
+        - "For each SPEC item, define and take one or more actions:"
+        - "Create/update documentation (enduring docs in root, temporal docs in temporal/)"
+        - "CRITICAL: Do NOT create documentation in backlog/, in_progress/, or done/ (these directories are for SPECs ONLY)"
+    - step: 8
+      name: "Review and Log and Finalise"
+      actions:
+        - "List all processed items, converted assets, or deferred actions"
+        - "CRITICAL: Document all findings, progress, and outcomes in SPECs and IMPLEMENTATION_PLAN only"
+        - "CRITICAL: DO NOT create temporal documents - all information goes into SPECs and IMPLEMENTATION_PLAN"
+        - "Update the relevant SPEC(s) with all session outcomes, findings, and progress"
+        - "Update IMPLEMENTATION_PLAN with all session outcomes, findings, and progress"
+        - "Confirm naming conformity, doc structure, and traceability"
+        - "Review the IMPLEMENTATION_PLAN to ensure it is up to date"
+        - "Review the SPECs to ensure they are up to date"
+        - "CRITICAL: Verify backlog/, in_progress/, and done/ contain ONLY SPEC documents"
+        - "CRITICAL: For any non-SPEC files found in backlog/, in_progress/, or done/:"
+          - "Extract any remaining important information"
+          - "Update IMPLEMENTATION_PLAN and SPEC documents with extracted information"
+          - "Move ALL non-SPEC files to docs/implementation/temporal/"
+        - "CRITICAL: Ensure all temporal documents, status reports, completion reports, and session summaries are in temporal/"
+        - "Run scripts/Audit-WorkflowCompliance.ps1 to verify compliance"
+        - "If violations found, run scripts/Move-NonSpecFilesFromSpecDirectories.ps1 to move non-SPEC files to temporal/"
+constraints:
+  - "Do not fabricate missing data"
+  - "All names must follow DOCUMENTATION_NAMING_CONVENTION"
+  - "Reject incomplete test documents unless converted to TESTING SPECs"
+  - "Ensure every new SPEC aligns with SPEC_CREATION_GUIDE and TEMPLATE"
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: ALL non-SPEC files MUST be moved to temporal/ AFTER information extraction and plan/documentation updates"
+  - "CRITICAL: Never leave temporal documents, status reports, or completion reports in backlog/, in_progress/, or done/"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all updates go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Session outcomes, findings, progress MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+examples:
+  - session_outcome_intake: "[BLOCKER] Retry mechanism fails under high load"
+    action: "Create SPEC_RETRY_HANDLER_v1.0.0.md, Phase 2 Task 4"
+  - testing_conversion: "legacy_test_plan.txt  SPEC_TEST_API_GATEWAY_v1.0.0.md"
+output_format:
+  section_1: "Summary of extracted items by category"
+  section_2: "New SPECs created or updated"
+  section_3: "Implementation plan modifications"
+  section_4: "Validation summary: naming, format, traceability"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-11-08"
+  version: "1.0.0"
+  classification: "Enterprise Canonical Session Outcome Processing Governance Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, and Enterprise Canonical Session Outcome Processing Governance Protocol"
+  language: "en-AU"
+
+
+[END OF INSTRUCTIONS]
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/03-Process_Session_Outcome_and_Documentation_and_Specs.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/03-Process_Session_Outcome_and_Documentation_and_Specs.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/03-Process_Session_Outcome_and_Documentation_and_Specs.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/03-Process_Session_Outcome_and_Documentation_and_Specs.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/03-Process_Session_Outcome_and_Documentation_and_Specs.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/03-Process_Session_Outcome_and_Documentation_and_Specs.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/03-Process_Session_Outcome_and_Documentation_and_Specs.yaml --enforce"

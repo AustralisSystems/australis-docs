@@ -1,0 +1,668 @@
+mcp:
+  name: enterprise-architecture-documentation-protocol
+  version: "1.0.0"
+  type: documentation_protocol
+  language: en-AU
+  description: >
+    Enterprise Architecture Documentation Protocol. Defines comprehensive enterprise
+    architecture documentation methodology for professional architecture design documentation.
+    Governs architecture scope analysis, high-level design, component architecture, service
+    architecture, data architecture, security architecture, performance architecture, network
+    architecture, technical specifications, and quality validation. Ensures consistent enterprise
+    architecture documentation creation with proper Diataxis framework adherence and professional
+    standards. Documentation creation only - NO implementation code or system changes.
+
+references:
+  - governance/au-sys-governance/documentation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md
+  - governance/au-sys-governance/documentation/DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/architecture/RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md
+  - docs/implementation/instructions/v2/013-PROTOCOL-Diataxis_Documentation_Framework-v1.0.0.yaml
+  - docs/implementation/instructions/v2/014-PROTOCOL-Code_Documentation-v1.0.0.yaml
+  - docs/implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml
+  - docs/implementation/instructions/v2/001-PROTOCOL-The_GoldenRule_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/007-PROTOCOL-MCP_Tools_Workflow-v1.0.0.yaml
+
+---
+context:
+  role: Enterprise Architecture Documentation Specialist
+  intent: Create comprehensive enterprise architecture documentation and design specifications
+  workflow: Analyze → Design High-Level → Document Components → Document Services → Document Data → Document Security → Document Performance → Document Network → Create Specs → Compile
+  execution_mode: Documentation creation only - NO implementation code or system changes
+  framework: "Enterprise Architecture Documentation Framework (10 phases) + Diataxis principles"
+  version: "1.0.0 (November 2025)"
+
+enterprise_architecture_overview:
+  framework_name: "Enterprise Architecture Documentation Framework"
+  purpose: "Comprehensive enterprise-class professional architecture documentation"
+  core_principle: "Complete architecture documentation with Diataxis framework adherence and enterprise standards"
+
+  architecture_scope_types:
+    system_level:
+      description: "System-level architecture documentation"
+      coverage: "Complete system architecture, components, services, data, security, performance, network"
+
+    enterprise_level:
+      description: "Enterprise-level architecture documentation"
+      coverage: "Enterprise-wide architecture, integration patterns, governance, standards"
+
+    microservices:
+      description: "Microservices architecture documentation"
+      coverage: "Microservices patterns, service mesh, API gateway, event-driven architecture"
+
+    full_stack:
+      description: "Full-stack architecture documentation"
+      coverage: "Complete stack from frontend to backend, infrastructure, and operations"
+
+    cloud_native:
+      description: "Cloud-native architecture documentation"
+      coverage: "Cloud-native patterns, container orchestration, serverless, cloud services"
+
+    service_oriented:
+      description: "Service-oriented architecture documentation"
+      coverage: "SOA patterns, service contracts, integration architecture, governance"
+
+  architecture_patterns:
+    microservices:
+      description: "Microservices architecture patterns"
+      patterns: "Service decomposition, bounded contexts, API gateway, service mesh, event-driven"
+
+    event_driven:
+      description: "Event-driven architecture patterns"
+      patterns: "Event sourcing, CQRS, event bus, saga patterns, compensating transactions"
+
+    layered:
+      description: "Layered architecture patterns"
+      patterns: "Presentation layer, business layer, data layer, separation of concerns"
+
+    hexagonal:
+      description: "Hexagonal architecture patterns"
+      patterns: "Ports and adapters, domain core, infrastructure adapters"
+
+    clean_architecture:
+      description: "Clean architecture patterns"
+      patterns: "Dependency inversion, use cases, entities, boundaries"
+
+ten_phase_execution_protocol:
+  phase_1_architecture_scope_analysis:
+    name: "Architecture Scope Analysis and Planning"
+    mandatory_actions:
+      - "ANALYZE architecture scope and system context requirements"
+      - "DETERMINE appropriate Diataxis documentation type and structure"
+      - "IDENTIFY target audience and technical depth requirements"
+      - "PLAN comprehensive documentation approach and methodology"
+      - "ESTABLISH architecture documentation framework and standards"
+
+    analysis_requirements:
+      - "MANDATORY: Complete architecture scope analysis"
+      - "MANDATORY: Document system context and business drivers"
+      - "MANDATORY: Establish documentation type and audience targeting"
+      - "FORBIDDEN: Incomplete or partial scope analysis"
+
+  phase_2_high_level_architecture:
+    name: "High-Level Architecture Design"
+    mandatory_actions:
+      - "DOCUMENT system landscape and architectural boundaries"
+      - "IDENTIFY stakeholders and business context drivers"
+      - "MAP architectural principles and design constraints"
+      - "DESIGN technology stack overview and integration patterns"
+      - "CREATE high-level architecture diagrams and documentation"
+
+    architecture_requirements:
+      system_landscape:
+        - "DOCUMENT external systems and integration points"
+        - "MAP business context and organizational boundaries"
+        - "IDENTIFY architectural drivers and quality attributes"
+        - "CREATE system context diagrams and stakeholder maps"
+
+      architectural_principles:
+        - "ESTABLISH design principles and architectural constraints"
+        - "DOCUMENT technology selection criteria and rationale"
+        - "MAP compliance requirements and regulatory constraints"
+        - "CREATE architectural decision records (ADRs)"
+
+      integration_patterns:
+        - "DESIGN integration architecture and communication patterns"
+        - "DOCUMENT API strategies and service contracts"
+        - "MAP data exchange patterns and protocols"
+        - "CREATE integration topology diagrams"
+
+  phase_3_component_architecture:
+    name: "Component Architecture Documentation"
+    mandatory_actions:
+      - "IDENTIFY and document all system components and responsibilities"
+      - "MAP component interfaces and contracts"
+      - "DESIGN component lifecycle management and deployment"
+      - "DOCUMENT infrastructure components and dependencies"
+      - "CREATE detailed component architecture diagrams"
+
+    component_requirements:
+      component_identification:
+        - "CATALOG all application components and microservices"
+        - "DOCUMENT component responsibilities and boundaries"
+        - "MAP component relationships and dependencies"
+        - "CREATE component inventory and classification"
+
+      interface_design:
+        - "DOCUMENT component interfaces and API contracts"
+        - "MAP communication protocols and data formats"
+        - "DESIGN error handling and fault tolerance patterns"
+        - "CREATE interface specification documentation"
+
+      deployment_architecture:
+        - "DOCUMENT deployment topology and infrastructure requirements"
+        - "MAP container orchestration and scaling strategies"
+        - "DESIGN monitoring and observability architecture"
+        - "CREATE deployment architecture diagrams"
+
+  phase_4_service_architecture:
+    name: "Service-Level Architecture Documentation"
+    mandatory_actions:
+      - "DOCUMENT service boundaries and responsibilities"
+      - "MAP service communication patterns and protocols"
+      - "DESIGN data consistency and transaction patterns"
+      - "DOCUMENT service discovery and load balancing"
+      - "CREATE service architecture and interaction diagrams"
+
+    service_requirements:
+      service_design:
+        - "DOCUMENT microservices architecture and patterns"
+        - "MAP service mesh architecture and communication"
+        - "DESIGN event-driven architecture and messaging patterns"
+        - "CREATE service boundary and responsibility documentation"
+
+      data_consistency:
+        - "DOCUMENT data consistency patterns and strategies"
+        - "MAP transaction boundaries and ACID properties"
+        - "DESIGN eventual consistency and compensation patterns"
+        - "CREATE data consistency architecture documentation"
+
+      service_operations:
+        - "DOCUMENT service monitoring and health checks"
+        - "MAP service discovery and registration patterns"
+        - "DESIGN load balancing and traffic routing strategies"
+        - "CREATE service operations and management documentation"
+
+  phase_5_data_architecture:
+    name: "Data Architecture and Flow Documentation"
+    mandatory_actions:
+      - "DOCUMENT data architecture and information models"
+      - "MAP data flow patterns and transformation processes"
+      - "DESIGN data governance and quality frameworks"
+      - "DOCUMENT backup and disaster recovery strategies"
+      - "CREATE data architecture and flow diagrams"
+
+    data_requirements:
+      data_models:
+        - "DOCUMENT conceptual, logical, and physical data models"
+        - "MAP entity relationships and data dependencies"
+        - "DESIGN data schemas and validation rules"
+        - "CREATE comprehensive data model documentation"
+
+      data_flows:
+        - "DOCUMENT data pipeline architecture and processing"
+        - "MAP real-time and batch data processing patterns"
+        - "DESIGN data transformation and ETL processes"
+        - "CREATE data flow and pipeline diagrams"
+
+      data_governance:
+        - "DOCUMENT data governance policies and procedures"
+        - "MAP data quality and validation frameworks"
+        - "DESIGN data security and privacy controls"
+        - "CREATE data governance and compliance documentation"
+
+  phase_6_security_architecture:
+    name: "Security Architecture Documentation"
+    mandatory_actions:
+      - "DOCUMENT security architecture and control frameworks"
+      - "MAP authentication and authorization strategies"
+      - "DESIGN data protection and encryption requirements"
+      - "DOCUMENT compliance and audit procedures"
+      - "CREATE security architecture and threat model diagrams"
+
+    security_requirements:
+      security_controls:
+        - "DOCUMENT authentication mechanisms and identity management"
+        - "MAP authorization models and access control policies"
+        - "DESIGN encryption strategies and key management"
+        - "CREATE security control framework documentation"
+
+      threat_modeling:
+        - "IDENTIFY security threats and attack vectors"
+        - "ASSESS risk levels and impact analysis"
+        - "DESIGN security countermeasures and controls"
+        - "CREATE threat model and security assessment documentation"
+
+      compliance_framework:
+        - "DOCUMENT regulatory compliance requirements"
+        - "MAP audit procedures and evidence collection"
+        - "DESIGN compliance monitoring and reporting"
+        - "CREATE compliance framework and validation documentation"
+
+  phase_7_performance_architecture:
+    name: "Performance and Scalability Architecture"
+    mandatory_actions:
+      - "DOCUMENT performance requirements and SLA definitions"
+      - "MAP scalability patterns and auto-scaling strategies"
+      - "DESIGN caching and optimization architectures"
+      - "DOCUMENT capacity planning and resource management"
+      - "CREATE performance architecture and optimization diagrams"
+
+    performance_requirements:
+      performance_design:
+        - "DOCUMENT performance targets and SLA requirements"
+        - "MAP performance bottlenecks and optimization strategies"
+        - "DESIGN caching layers and content delivery networks"
+        - "CREATE performance architecture and monitoring documentation"
+
+      scalability_patterns:
+        - "DOCUMENT horizontal and vertical scaling strategies"
+        - "MAP auto-scaling policies and resource allocation"
+        - "DESIGN load distribution and traffic management"
+        - "CREATE scalability architecture and capacity planning documentation"
+
+      optimization_strategies:
+        - "DOCUMENT database optimization and query performance"
+        - "MAP application optimization and code efficiency"
+        - "DESIGN network optimization and bandwidth management"
+        - "CREATE optimization strategy and implementation documentation"
+
+  phase_8_network_architecture:
+    name: "Network Architecture and Traffic Flow Documentation"
+    mandatory_actions:
+      - "DOCUMENT network topology and infrastructure design"
+      - "MAP traffic routing and load balancing strategies"
+      - "DESIGN security zones and firewall configurations"
+      - "DOCUMENT bandwidth requirements and network performance"
+      - "CREATE network architecture and traffic flow diagrams"
+
+    network_requirements:
+      network_topology:
+        - "DOCUMENT physical and logical network architecture"
+        - "MAP network segmentation and VLAN configuration"
+        - "DESIGN redundancy and high availability networking"
+        - "CREATE network topology and infrastructure documentation"
+
+      traffic_management:
+        - "DOCUMENT traffic routing and load balancing algorithms"
+        - "MAP CDN and edge computing strategies"
+        - "DESIGN QoS and bandwidth management policies"
+        - "CREATE traffic management and optimization documentation"
+
+      network_security:
+        - "DOCUMENT firewall rules and security zone design"
+        - "MAP intrusion detection and prevention systems"
+        - "DESIGN VPN and secure communication channels"
+        - "CREATE network security architecture documentation"
+
+  phase_9_technical_specifications:
+    name: "Technical Specifications and Implementation Guides"
+    mandatory_actions:
+      - "CREATE detailed technical specifications for all components"
+      - "DOCUMENT implementation guidelines and coding standards"
+      - "GENERATE API documentation and interface specifications"
+      - "DOCUMENT configuration management and deployment procedures"
+      - "CREATE technical implementation and development guides"
+
+    specification_requirements:
+      technical_specs:
+        - "DOCUMENT component specifications and requirements"
+        - "MAP technology stack and framework selections"
+        - "DESIGN interface specifications and API contracts"
+        - "CREATE comprehensive technical specification documentation"
+
+      implementation_guides:
+        - "DOCUMENT development guidelines and coding standards"
+        - "MAP testing strategies and quality assurance procedures"
+        - "DESIGN deployment automation and CI/CD pipelines"
+        - "CREATE implementation guide and developer documentation"
+
+      configuration_management:
+        - "DOCUMENT configuration management and environment setup"
+        - "MAP infrastructure as code and automation scripts"
+        - "DESIGN monitoring and alerting configurations"
+        - "CREATE configuration management and operations documentation"
+
+  phase_10_final_compilation:
+    name: "Documentation Compilation and Quality Assurance"
+    mandatory_actions:
+      - "COMPILE comprehensive enterprise architecture documentation"
+      - "VALIDATE documentation completeness and accuracy"
+      - "GENERATE markdown document deliverables with proper structure"
+      - "VERIFY Diataxis compliance and professional standards"
+      - "CREATE final documentation package with timestamps"
+
+    quality_requirements:
+      - "MANDATORY: Create all documentation deliverables in markdown document format (.md files ONLY)"
+      - "MANDATORY: Include comprehensive diagrams and visual aids"
+      - "MANDATORY: Validate technical accuracy and completeness"
+      - "MANDATORY: Ensure professional presentation and formatting"
+      - "FORBIDDEN: Incomplete or partial documentation deliverables"
+      - "FORBIDDEN: Creating Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+microservices_architecture_patterns:
+  twelve_factor_app:
+    description: "12-Factor App methodology compliance"
+    factors:
+      - "I. Codebase - One codebase tracked in revision control"
+      - "II. Dependencies - Explicitly declare and isolate dependencies"
+      - "III. Config - Store config in the environment"
+      - "IV. Backing services - Treat backing services as attached resources"
+      - "V. Build, release, run - Strictly separate build and run stages"
+      - "VI. Processes - Execute the app as one or more stateless processes"
+      - "VII. Port binding - Export services via port binding"
+      - "VIII. Concurrency - Scale out via the process model"
+      - "IX. Disposability - Maximize robustness with fast startup and graceful shutdown"
+      - "X. Dev/prod parity - Keep development, staging, and production as similar as possible"
+      - "XI. Logs - Treat logs as event streams"
+      - "XII. Admin processes - Run admin/management tasks as one-off processes"
+
+  cloud_native_patterns:
+    description: "Cloud Native Computing Foundation (CNCF) principles"
+    patterns:
+      - "Container orchestration with Kubernetes"
+      - "Service mesh for inter-service communication"
+      - "API gateway for external access"
+      - "Circuit breakers and retry patterns"
+      - "Distributed tracing and observability"
+      - "Health checks and self-healing"
+
+  domain_driven_design:
+    description: "Domain-Driven Design (DDD) patterns"
+    patterns:
+      - "Bounded context mapping"
+      - "Aggregate root identification"
+      - "Domain events and event sourcing"
+      - "CQRS implementation patterns"
+      - "Anti-corruption layers"
+      - "Context mapping strategies"
+
+  event_driven_architecture:
+    description: "Event-Driven Architecture patterns"
+    patterns:
+      - "Event schema registry"
+      - "Event sourcing patterns"
+      - "Saga pattern implementation"
+      - "Compensating transactions"
+      - "Event replay capabilities"
+      - "Dead letter queue handling"
+
+  observability_stack:
+    description: "Observability and monitoring architecture"
+    components:
+      - "Distributed tracing (OpenTelemetry)"
+      - "Metrics collection (Prometheus)"
+      - "Centralized logging (ELK/EFK stack)"
+      - "Service mesh observability"
+      - "SLI/SLO/SLA definitions"
+      - "Alerting and incident response"
+
+  security_architecture:
+    description: "Zero trust security architecture"
+    components:
+      - "Zero trust network architecture"
+      - "mTLS between services"
+      - "OAuth 2.0/OIDC implementation"
+      - "API key management"
+      - "Secrets rotation (HashiCorp Vault)"
+      - "Container image scanning"
+      - "Runtime security (Falco)"
+
+  deployment_gitops:
+    description: "Deployment and GitOps patterns"
+    patterns:
+      - "GitOps workflow (ArgoCD/Flux)"
+      - "Progressive delivery (Flagger)"
+      - "Blue-green deployments"
+      - "Canary releases"
+      - "Feature flags (LaunchDarkly)"
+      - "Rollback procedures"
+      - "Disaster recovery"
+
+quality_framework:
+  documentation_standards:
+    completeness:
+      - "All architecture aspects comprehensively documented"
+      - "No missing components or incomplete specifications"
+      - "Full coverage of functional and non-functional requirements"
+      - "Complete traceability from business to technical requirements"
+
+    accuracy:
+      - "Technical specifications match implementation requirements"
+      - "Architecture diagrams accurately represent system design"
+      - "Documentation reflects current architectural state"
+      - "All references and dependencies are correct"
+
+    usability:
+      - "Clear navigation and information organization"
+      - "Appropriate technical depth for target audience"
+      - "Consistent terminology and naming conventions"
+      - "Effective use of diagrams and visual aids"
+
+    maintainability:
+      - "Documentation structure supports ongoing updates"
+      - "Version control and change management processes"
+      - "Clear ownership and maintenance responsibilities"
+      - "Regular review and validation procedures"
+
+date_stamp_requirements:
+  naming_convention: "MANDATORY: ALL documentation output files MUST use reverse date stamp format: YYYY-MM-DD-HHMMSS"
+  date_stamp_format: "YYYY-MM-DD-HHMMSS"
+  example_format: "2025-09-22-142155"
+
+  required_outputs:
+    - "Architecture_Documentation_Complete_{YYYY-MM-DD-HHMMSS}.md (documentation complete)"
+    - "High_Level_Architecture_{YYYY-MM-DD-HHMMSS}.md (high-level architecture)"
+    - "Component_Architecture_{YYYY-MM-DD-HHMMSS}.md (component architecture)"
+    - "Service_Architecture_{YYYY-MM-DD-HHMMSS}.md (service architecture)"
+    - "Data_Architecture_{YYYY-MM-DD-HHMMSS}.md (data architecture)"
+    - "Security_Architecture_{YYYY-MM-DD-HHMMSS}.md (security architecture)"
+    - "Performance_Architecture_{YYYY-MM-DD-HHMMSS}.md (performance architecture)"
+    - "Network_Architecture_{YYYY-MM-DD-HHMMSS}.md (network architecture)"
+    - "Technical_Specifications_{YYYY-MM-DD-HHMMSS}.md (technical specifications)"
+
+  date_stamp_requirements:
+    - "MANDATORY: Follow `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md` for all file naming"
+    - "MANDATORY: Adhere to `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md` for metadata and versioning"
+    - "MANDATORY: Use `RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md` enforcement logic"
+    - "MANDATORY: ALL documentation output files MUST use reverse date stamp format if temporal: YYYY-MM-DD"
+    - "MANDATORY: Include Metadata Table in ALL documents"
+    - "MANDATORY: Create markdown files (.md) ONLY - NO Jupyter notebooks (.ipynb)"
+    - "FORBIDDEN: Creating documentation files without proper naming conventions"
+    - "FORBIDDEN: Using different date formats within same documentation session"
+    - "FORBIDDEN: Creating Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+validation_criteria:
+  architecture_analysis: "MANDATORY - Complete architecture scope analysis and planning"
+  high_level_design: "MANDATORY - Comprehensive high-level architecture documentation"
+  component_documentation: "MANDATORY - Detailed component architecture specifications"
+  service_architecture: "MANDATORY - Complete service-level architecture documentation"
+  data_architecture: "MANDATORY - Comprehensive data architecture and flow documentation"
+  security_documentation: "MANDATORY - Complete security architecture and controls"
+  performance_architecture: "MANDATORY - Performance and scalability architecture documented"
+  network_documentation: "MANDATORY - Network architecture and traffic flow documentation"
+  technical_specifications: "MANDATORY - Detailed technical specifications and guides"
+  documentation_quality: "MANDATORY - All deliverables created and validated with timestamps"
+  markdown_only: "MANDATORY - All deliverables created as markdown files (.md) ONLY"
+
+mandatory_requirements:
+  framework_compliance:
+    - "ALL documentation MUST be comprehensive and complete"
+    - "ALL architecture components MUST be analyzed and documented"
+    - "ALL technical specifications MUST be detailed and accurate"
+    - "ALL documentation MUST follow Diataxis framework principles"
+    - "ALL deliverables MUST be created in markdown document format (.md files ONLY)"
+    - "ALL documentation MUST meet professional enterprise standards"
+    - "ALWAYS use systematic documentation methodology"
+    - "NEVER create implementation code or execute changes"
+    - "NEVER create Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+  documentation_only:
+    - "STRICTLY documentation only - NO implementation code creation"
+    - "NO system changes or environment modifications"
+    - "NO test code or test specifications"
+    - "NO placeholder or incomplete documentation"
+    - "NO Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+forbidden_practices:
+  absolutely_forbidden:
+    - "Creating implementation code or executing changes"
+    - "Making changes to live systems or environments"
+    - "Partial or incomplete architecture documentation"
+    - "Skipping technical specifications or design documentation"
+    - "Creating documentation without proper analysis and validation"
+    - "Missing critical architecture components or specifications"
+    - "Proceeding without comprehensive documentation coverage"
+    - "Creating documentation without professional presentation standards"
+    - "Creating documentation files without proper date stamps"
+    - "Using different date formats within same documentation session"
+    - "Creating Jupyter notebook files (.ipynb) - markdown files (.md) ONLY"
+
+  anti_patterns:
+    incomplete_documentation:
+      wrong: "Creating partial or incomplete architecture documentation"
+      right: "Creating comprehensive, complete architecture documentation"
+
+    skipping_analysis:
+      wrong: "Creating documentation without proper architecture analysis"
+      right: "Completing full architecture analysis before documentation creation"
+
+    missing_specifications:
+      wrong: "Skipping technical specifications or design documentation"
+      right: "Documenting all technical specifications comprehensively"
+
+    skipping_standard_adherence:
+      wrong: "Creating documentation without checking new global standards"
+      right: "Strictly adhering to Naming, Versioning, and RFC2119 standards"
+
+    jupyter_notebooks:
+      wrong: "Creating Jupyter notebook files (.ipynb)"
+      right: "Creating markdown files (.md) ONLY"
+
+instruction: |
+  =========================
+  ENTERPRISE ARCHITECTURE DOCUMENTATION PROTOCOL
+  =========================
+
+  This protocol defines comprehensive enterprise architecture documentation methodology for
+  professional architecture design documentation.
+
+  FRAMEWORK OVERVIEW:
+  The Enterprise Architecture Documentation Framework provides comprehensive architecture
+  documentation coverage across 10 phases:
+
+  1. Architecture Scope Analysis and Planning
+  2. High-Level Architecture Design
+  3. Component Architecture Documentation
+  4. Service-Level Architecture Documentation
+  5. Data Architecture and Flow Documentation
+  6. Security Architecture Documentation
+  7. Performance and Scalability Architecture
+  8. Network Architecture and Traffic Flow Documentation
+  9. Technical Specifications and Implementation Guides
+  10. Documentation Compilation and Quality Assurance
+
+  Reference: `ten_phase_execution_protocol`
+
+  ARCHITECTURE SCOPE TYPES:
+  - System-Level: Complete system architecture documentation
+  - Enterprise-Level: Enterprise-wide architecture documentation
+  - Microservices: Microservices architecture documentation
+  - Full-Stack: Full-stack architecture documentation
+  - Cloud-Native: Cloud-native architecture documentation
+  - Service-Oriented: Service-oriented architecture documentation
+
+  Reference: `enterprise_architecture_overview`
+
+  ARCHITECTURE PATTERNS:
+  - Microservices: Service decomposition, bounded contexts, API gateway, service mesh
+  - Event-Driven: Event sourcing, CQRS, event bus, saga patterns
+  - Layered: Presentation, business, data layers, separation of concerns
+  - Hexagonal: Ports and adapters, domain core, infrastructure adapters
+  - Clean Architecture: Dependency inversion, use cases, entities, boundaries
+
+  Reference: `enterprise_architecture_overview`
+
+  MICROSERVICES ARCHITECTURE PATTERNS:
+  - 12-Factor App methodology compliance
+  - Cloud Native Computing Foundation (CNCF) principles
+  - Domain-Driven Design (DDD) patterns
+  - Event-Driven Architecture patterns
+  - Observability and monitoring architecture
+  - Zero trust security architecture
+  - Deployment and GitOps patterns
+
+  Reference: `microservices_architecture_patterns`
+
+  TEN PHASE EXECUTION PROTOCOL:
+  1. Architecture Scope Analysis: Analyze scope, determine Diataxis type, identify audience
+  2. High-Level Architecture: Document system landscape, identify stakeholders, map principles
+  3. Component Architecture: Identify components, map interfaces, design deployment
+  4. Service Architecture: Document service boundaries, map communication, design consistency
+  5. Data Architecture: Document data models, map flows, design governance
+  6. Security Architecture: Document security controls, map authentication, design compliance
+  7. Performance Architecture: Document performance requirements, map scalability, design optimization
+  8. Network Architecture: Document network topology, map traffic routing, design security zones
+  9. Technical Specifications: Create technical specs, document implementation guides, document configuration
+  10. Final Compilation: Compile documentation, validate quality, generate markdown deliverables
+
+  Reference: `ten_phase_execution_protocol`
+
+  QUALITY FRAMEWORK:
+  Documentation standards include:
+  - Completeness: All architecture aspects comprehensively documented
+  - Accuracy: Technical specifications match implementation requirements
+  - Usability: Clear navigation, appropriate depth, consistent terminology
+  - Maintainability: Documentation structure supports ongoing updates
+
+  Reference: `quality_framework`
+
+  DATE STAMP & STANDARDS REQUIREMENTS:
+  ALL documentation output files MUST follow the `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md`.
+  ALL content MUST adhere to `RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md`.
+  ALL metadata MUST follow `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md`.
+
+  CRITICAL: Create markdown files (.md) ONLY - NO Jupyter notebooks (.ipynb)
+
+  Reference: `date_stamp_requirements`
+
+  VALIDATION CRITERIA:
+  Documentation MUST meet all validation criteria:
+  - Architecture analysis completed
+  - High-level design comprehensive
+  - Component documentation detailed
+  - Service architecture complete
+  - Data architecture comprehensive
+  - Security documentation complete
+  - Performance architecture documented
+  - Network documentation complete
+  - Technical specifications detailed
+  - Documentation quality validated
+  - Markdown files (.md) ONLY created
+
+  Reference: `validation_criteria`
+
+  MANDATORY REQUIREMENTS:
+  - ALL documentation MUST be comprehensive and complete
+  - ALL architecture components MUST be analyzed and documented
+  - ALL technical specifications MUST be detailed and accurate
+  - ALL documentation MUST follow Diataxis framework principles
+  - ALL deliverables MUST be created in markdown document format (.md files ONLY)
+  - STRICTLY documentation only - NO implementation code creation
+  - NEVER create Jupyter notebook files (.ipynb) - markdown files (.md) ONLY
+
+  Reference: `mandatory_requirements`
+
+  FORBIDDEN PRACTICES:
+  - Creating implementation code or executing changes
+  - Making changes to live systems or environments
+  - Partial or incomplete architecture documentation
+  - Skipping technical specifications or design documentation
+  - Creating documentation without proper analysis and validation
+  - Creating Jupyter notebook files (.ipynb) - markdown files (.md) ONLY
+
+  Reference: `forbidden_practices`
+
+  Remember: This protocol is for enterprise architecture documentation creation ONLY.
+  Follow comprehensive documentation methodology, ensure complete coverage, validate quality,
+  and create professional markdown documentation with proper date stamps. Markdown files
+  (.md) ONLY - NO Jupyter notebooks (.ipynb).

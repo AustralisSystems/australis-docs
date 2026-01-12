@@ -1,0 +1,673 @@
+prompt_name: "Debug_And_Troubleshoot_Codebase"
+version: "1.2.0"
+type: "controlled_debugging_protocol"
+context:
+  role: "MCP agent executing canonical debugging and troubleshooting under validated governance"
+  governance:
+    canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    golden_rule_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  description: >
+    This protocol defines the controlled debugging and troubleshooting process for resolving runtime errors,
+    failures, and unexpected behavior within the defined canonical standards. It ensures all debugging follows
+    the Golden Rule sequence (context7  grep  neo4j-memory  code  neo4j-memory) and remains
+    fully auditable and traceable. All issues must be reproduced, root-caused, fixed, and validated.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    debugging findings, troubleshooting results, issue resolutions, and outcomes MUST be documented
+    directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/) - specifically DEBUG_TROUBLESHOOTING_SPEC
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the DEBUG_TROUBLESHOOTING_SPEC and
+    IMPLEMENTATION_PLAN with all debugging findings, root causes, fixes, and outcomes. This rule is
+    NON-NEGOTIABLE and must be enforced strictly.
+
+  doc_references:
+    - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+    - "docs/implementation/README_TEMPLATE.md"
+    - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+    - "docs/implementation/SPEC_README.md"
+    - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+  best_practices_references:
+    core_fastapi:
+      - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+      - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+    async_performance:
+      - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+    reliability_resilience:
+      - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+    architecture_patterns:
+      - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+    security_compliance:
+      - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+      - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+    observability_monitoring:
+      - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+      - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+    data_persistence:
+      - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+      - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+      - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+      - "docs/implementation/best-practices/redis-caching-best-practices.md"
+      - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+      - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+    configuration_deployment:
+      - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+      - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+    background_tasks:
+      - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+      - "docs/implementation/best-practices/celery-production-best-practices.md"
+      - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+    integration_patterns:
+      - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+      - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+    ui_integration:
+      - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+      - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+      - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+    code_quality_testing:
+      - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+      - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+    templating_scaffolding:
+      - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+
+codebase_scaffolding_mandate:
+  priority: "MANDATORY - NO EXCEPTIONS"
+  description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+  priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+instructions:
+  objective: >
+    Identify, reproduce, analyse, and resolve runtime errors, failures, and unexpected behavior.
+    Perform systematic debugging using official MCP tools and canonical debugging patterns.
+    Create comprehensive DEBUG_TROUBLESHOOTING_SPEC documenting all findings and treatments.
+    Record all troubleshooting actions, findings, and resolutions into Neo4j-Memory for traceability.
+  best_practices_requirement: "MUST review and implement relevant best practices documents during debugging - NO exceptions"
+
+  steps:
+    - step: 1
+      name: "Issue Identification and Context Gathering"
+      actions:
+        - "Load Enterprise Canonical Execution Protocol and Golden Rule Execution Protocol"
+        - "Identify the reported issue: error message, failure symptom, or unexpected behavior"
+        - "Gather context: environment, inputs, expected vs actual output, reproduction steps"
+        - "Review logs, error messages, stack traces, and telemetry data"
+        - "Query Neo4j-Memory for similar past issues, known patterns, or previous resolutions"
+        - "Query Context7 for relevant library documentation and error handling patterns"
+      expected_outcome: "Complete issue context, error details, and historical patterns loaded for analysis."
+
+    - step: 2
+      name: "Issue Reproduction"
+      actions:
+        - "Create minimal reproducible test case or script"
+        - "Confirm issue reproduces consistently with specific inputs/conditions"
+        - "Document exact reproduction steps with commands, parameters, and environment"
+        - "Capture reproduction output (error messages, logs, stack traces)"
+        - "If issue is intermittent, document conditions under which it occurs"
+        - "Log reproduction details to Neo4j-Memory"
+      expected_outcome: "Issue reliably reproduced with documented steps and captured output."
+
+    - step: 3
+      name: "Root Cause Analysis"
+      best_practices_review:
+        mandatory: true
+        requirement: "MUST review relevant best practices documents BEFORE root cause analysis based on issue type"
+        issue_specific_reviews:
+          error_handling:
+            documents:
+              - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+              - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+            requirement: "MUST review error handling best practices before analyzing error handling issues"
+          performance:
+            documents:
+              - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+              - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+            requirement: "MUST review performance best practices before analyzing performance issues"
+          security:
+            documents:
+              - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+              - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+            requirement: "MUST review security best practices before analyzing security issues"
+          observability:
+            documents:
+              - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+              - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+            requirement: "MUST review observability best practices before analyzing observability issues"
+      actions:
+        - "Trace execution path leading to failure using logs and debugging output"
+        - "Review relevant best practices documents based on issue type BEFORE proceeding"
+        - "Use grep to search codebase for relevant functions, error messages, and patterns"
+        - "Identify the exact line/function where failure occurs"
+        - "Analyse variable states, data flow, and conditional logic at failure point"
+        - "Categorise root cause: logic error, type mismatch, null/undefined, integration failure, race condition, resource exhaustion"
+        - "Use Context7 to validate understanding of library behavior and error semantics"
+        - "Log root cause analysis and references to Neo4j-Memory before any changes"
+      expected_outcome: "Root cause identified with precise location, category, and validated understanding."
+
+    - step: 4
+      name: "Create DEBUG_TROUBLESHOOTING_SPEC"
+      actions:
+        - "Read and follow canonical documentation standards:"
+          - "REQUIRED: Read docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md for SPEC structure requirements"
+          - "REQUIRED: Read docs/implementation/SPEC_TEMPLATE_v1.0.0.md for exact template to follow"
+          - "REQUIRED: Read docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md for naming rules"
+          - "REQUIRED: Read docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md for lifecycle management"
+        - "CRITICAL: Create SPEC document: DEBUG_TROUBLESHOOTING_{COMPONENT}_SPEC_v1.0.0.md in docs/implementation/in_progress/"
+        - "CRITICAL: Apply naming per DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md: ENDURING format (_vX.Y.Z.md), NOT temporal format"
+        - "CRITICAL: This is a SPEC document (enduring), NOT a temporal document - it follows SPEC naming convention"
+        - "Follow SPEC_TEMPLATE_v1.0.0.md structure exactly with 4-level hierarchy (PhaseActionTaskStep)"
+        - "Implement SPEC_CREATION_GUIDE_v1.0.0.md requirements: all phases with checkboxes, success criteria, validation"
+        - "Document all identified issues with severity classification (CRITICAL/HIGH/MEDIUM/LOW)"
+        - "Include reproduction steps, error messages, and stack traces for each issue"
+        - "Document root cause analysis with exact file/line locations"
+        - "Design treatment plan with phases, actions, tasks, and steps (all with checkboxes per SPEC_CREATION_GUIDE)"
+        - "Include before/after code examples for each fix"
+        - "Define validation strategy and success criteria (0 unresolved issues)"
+        - "Add regression prevention test requirements"
+        - "Include estimated effort and priority for each issue"
+        - "Follow IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md for SPEC lifecycle (in_progress/  done/)"
+      spec_structure:
+        - "STATUS & QUALITY METRICS: Current issue count, severity breakdown"
+        - "DESIGN BRIEF: Purpose (resolve identified issues), scope (in/out)"
+        - "ARCHITECTURE & DESIGN: Debugging patterns, fix strategies"
+        - "IMPLEMENTATION PLAN: Phase-based treatment with full 4-level hierarchy (per SPEC_CREATION_GUIDE)"
+        - "SUCCESS CRITERIA: All issues resolved, all tests pass, no regressions"
+      enforcement:
+        - "SPEC MUST follow SPEC_TEMPLATE_v1.0.0.md structure exactly"
+        - "Naming MUST comply with DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+        - "4-level hierarchy MUST be implemented per SPEC_CREATION_GUIDE_v1.0.0.md"
+        - "Lifecycle MUST follow IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md (in_progress/  done/)"
+      expected_outcome: "Comprehensive SPEC created per canonical documentation standards, documenting all findings and treatment plan."
+
+    - step: 5
+      name: "Solution Design"
+      best_practices_review:
+        mandatory: true
+        requirement: "MUST apply best practices patterns when designing solution"
+        design_guidance:
+          - "Apply error handling patterns from error-handling-resilience-patterns-best-practices-2025.md when designing error handling fixes"
+          - "Apply performance patterns from object-pooling-resource-management-best-practices-2025.md when designing performance fixes"
+          - "Apply security patterns from security-input-validation-encryption-owasp-best-practices-2025.md when designing security fixes"
+          - "Apply observability patterns from observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md when designing logging/monitoring fixes"
+          - "Document which best practices patterns will be applied in solution design"
+      actions:
+        - "Design fix based on root cause category and canonical patterns"
+        - "Apply best practices patterns from reviewed best practices documents"
+        - "Consider multiple approaches: defensive checks, error handling, logic correction, data validation"
+        - "Validate solution approach against Context7 documentation and grep examples"
+        - "Assess impact: blast radius, dependencies, side effects, regression risk"
+        - "Plan validation strategy: unit tests, integration tests, edge cases"
+        - "Document solution design rationale and best practices patterns to be applied in Neo4j-Memory"
+      expected_outcome: "Solution designed with validated approach, impact assessment, and best practices patterns."
+
+    - step: 6
+      name: "Controlled Fix Implementation"
+      best_practices_review:
+        mandatory: true
+        requirement: "MUST implement best practices patterns during fix implementation"
+        implementation_guidance:
+          - "Apply error handling patterns when implementing error handling fixes"
+          - "Apply performance patterns when implementing performance fixes"
+          - "Apply security patterns when implementing security fixes"
+          - "Apply observability patterns when implementing logging/monitoring fixes"
+          - "Document which best practices patterns were applied in Neo4j-Memory"
+      actions:
+        - "Use MCP filesystem edit tools to apply code changes"
+        - "Implement fix strictly aligned with verified patterns and documentation"
+        - "Apply best practices patterns from reviewed best practices documents"
+        - "Add defensive checks, error handling, or validation as needed"
+        - "Update comments and docstrings to document fix and reasoning"
+        - "Implement logging/telemetry to aid future troubleshooting using observability best practices"
+        - "Log each change (file, line range, description, rationale, best practices applied) into Neo4j-Memory"
+      enforcement:
+        - "Custom scripts or auto-fix utilities are FORBIDDEN"
+        - "All changes must be atomic and reversible"
+        - "Each modification must be justified with root cause reference"
+        - "Fixes must not introduce new issues or regressions"
+        - "Best practices patterns must be applied during implementation"
+      expected_outcome: "Fix implemented in controlled fashion with proper error handling, logging, and best practices patterns."
+
+    - step: 7
+      name: "Fix Validation and Testing"
+      actions:
+        - "Re-run reproduction case to confirm issue is resolved"
+        - "Test edge cases and boundary conditions"
+        - "Run existing test suites to check for regressions"
+        - "Test integration with dependent systems/modules"
+        - "Validate error messages and logging output are clear and actionable"
+        - "Confirm no new issues introduced by fix"
+      success_criteria:
+        - "Original issue no longer reproduces"
+        - "All test cases pass (existing + new)"
+        - "No regressions detected"
+        - "Error handling and logging functional"
+
+    - step: 8
+      name: "Regression Prevention"
+      actions:
+        - "Create or update test case covering the fixed issue"
+        - "Document issue in test comments or test description"
+        - "Add defensive checks or validation to prevent recurrence"
+        - "Update documentation with troubleshooting guidance"
+        - "Log prevention measures to Neo4j-Memory"
+      expected_outcome: "Automated test prevents regression; documentation aids future troubleshooting."
+
+    - step: 9
+      name: "Post-Resolution Documentation"
+      actions:
+        - "CRITICAL: Update DEBUG_TROUBLESHOOTING_SPEC with resolution outcomes and validation results"
+        - "Mark all SPEC tasks as completed with checkboxes"
+        - "CRITICAL: Update Implementation Plan with resolved issue, root cause, solution, and prevention"
+        - "CRITICAL: DO NOT create temporal documents (e.g., RESOLUTION_REPORT_YYYY-MM-DD.md, TROUBLESHOOTING_SUMMARY_YYYY-MM-DD.md)"
+        - "CRITICAL: All resolution outcomes MUST be documented in DEBUG_TROUBLESHOOTING_SPEC and IMPLEMENTATION_PLAN only"
+        - "Create or update troubleshooting guide in docs/ (enduring documentation, not temporal)"
+        - "Document issue, root cause, solution, and prevention in README if applicable (enduring documentation)"
+        - "Create knowledge base entry in Neo4j-Memory for future reference"
+        - "Update error handling patterns documentation if applicable (enduring documentation)"
+        - "Move completed DEBUG_TROUBLESHOOTING_SPEC from in_progress/ to done/"
+      expected_outcome: "Issue resolution fully documented in DEBUG_TROUBLESHOOTING_SPEC and IMPLEMENTATION_PLAN only. SPEC complete and moved to done/."
+
+    - step: 10
+      name: "Persistence and Audit Logging"
+      actions:
+        - "Create entities in Neo4j-Memory for issue, root cause, solution, and validation"
+        - "Add relationships: session  debugs  file, session  resolves  issue, session  prevents  regression"
+        - "Include timestamps, error messages, reproduction steps, fix details, and test results"
+        - "Store troubleshooting pattern as canonical pattern for future retrieval"
+      expected_outcome: "All debugging and troubleshooting operations permanently logged in Neo4j-Memory for future recall."
+
+    - step: 11
+      name: "Completion and Verification"
+      actions:
+        - "Confirm issue fully resolved with no regressions"
+        - "Mark debugging entities as verified and archived"
+        - "Emit signal that system is operational and stable"
+      expected_outcome: "Issue resolved, tests pass, system stable, ready for continued operation."
+
+constraints:
+  - "All debugging operations must be based on verified issues; speculative fixes are forbidden"
+  - "All actions must follow the canonical directory structure and naming conventions"
+  - "No unlogged edits or changes outside Neo4j-Memory tracking are permitted"
+  - "Fixes must retain readability, maintainability, and functional equivalence"
+  - "Issues must be reproducible before fixes are attempted"
+  - "All fixes must be validated with automated tests"
+  - "Regression prevention is mandatory"
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all debugging results go into DEBUG_TROUBLESHOOTING_SPEC and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: DEBUG_TROUBLESHOOTING_SPEC is a SPEC document (enduring, _vX.Y.Z.md), NOT a temporal document"
+  - "CRITICAL: Troubleshooting reports, resolution summaries MUST be documented in DEBUG_TROUBLESHOOTING_SPEC and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+
+examples:
+  debugging_example_1:
+    issue_detected:
+      symptom: "Function crashes with NullReferenceException"
+      file: "Modules/Common.Configuration/Common.Configuration.psm1"
+      function: "Get-ConfigValue"
+      error: "You cannot call a method on a null-valued expression"
+    reproduction:
+      steps:
+        - "Import-Module Common.Configuration"
+        - "Get-ConfigValue -Path 'nonexistent.json' -Key 'setting'"
+      result: "NullReferenceException thrown"
+    root_cause:
+      category: "Null/undefined check missing"
+      location: "Line 42: $config.Settings.GetProperty($Key)"
+      analysis: "$config is null when file doesn't exist, no defensive check"
+    solution:
+      approach: "Add null check before property access"
+      implementation: "if ($null -eq $config) { throw 'Config file not found' }"
+      validation: "Test with missing file, test with valid file"
+    record_logged:
+      memory_entities:
+        - "session  debugs  Common.Configuration.psm1"
+        - "session  resolves  NullReferenceException"
+        - "session  prevents  regression via test"
+
+  debugging_example_2:
+    issue_detected:
+      symptom: "Remote command fails with timeout"
+      file: "Scripts/Remote-Command.ps1"
+      function: "Invoke-RemoteScript"
+      error: "Timeout expired. The timeout period elapsed prior to completion"
+    reproduction:
+      steps:
+        - "Invoke-RemoteScript -ComputerName 'SERVER01' -ScriptBlock { Start-Sleep 300 }"
+      result: "Timeout after 30 seconds"
+    root_cause:
+      category: "Configuration error"
+      location: "Line 15: Invoke-Command -ComputerName $ComputerName -ScriptBlock $ScriptBlock"
+      analysis: "Default timeout is 30 seconds, no -SessionOption parameter to extend"
+    solution:
+      approach: "Add configurable timeout with reasonable default"
+      implementation: "Add -Timeout parameter (default 300s), create SessionOption"
+      validation: "Test with long-running script, test with custom timeout"
+    record_logged:
+      memory_entities:
+        - "session  debugs  Remote-Command.ps1"
+        - "session  resolves  timeout_issue"
+        - "session  improves  configurability"
+
+  debugging_example_3:
+    issue_detected:
+      symptom: "Test fails intermittently"
+      file: "Tests/Test-ConcurrentOperations.ps1"
+      function: "Test-ParallelExecution"
+      error: "Expected 10 results, got 7-10 (non-deterministic)"
+    reproduction:
+      steps:
+        - "Run test 10 times"
+      result: "Fails 30% of the time with incomplete results"
+    root_cause:
+      category: "Race condition"
+      location: "Line 55: $results += Start-Job {...} | Receive-Job"
+      analysis: "Receive-Job called before jobs complete, no Wait-Job"
+    solution:
+      approach: "Add proper job synchronization"
+      implementation: "Insert Wait-Job -Job $jobs before Receive-Job"
+      validation: "Run test 100 times, all must pass"
+    record_logged:
+      memory_entities:
+        - "session  debugs  Test-ConcurrentOperations.ps1"
+        - "session  resolves  race_condition"
+        - "session  prevents  flaky_test"
+
+output_format:
+  section_1: "Issue identification and context"
+  section_2: "Reproduction steps and captured output"
+  section_3: "Root cause analysis and categorization"
+  section_4: "DEBUG_TROUBLESHOOTING_SPEC creation (comprehensive findings and treatment plan)"
+  section_5: "Solution design and impact assessment"
+  section_6: "Fix implementation records (per file and change)"
+  section_7: "Validation and test results"
+  section_8: "Regression prevention measures"
+  section_9: "Documentation updates and SPEC completion"
+  section_10: "Neo4j-Memory entities and relationships created"
+  section_11: "Final resolution confirmation"
+
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/08-Debug_And_Troubleshoot_Codebase.yaml --enforce"
+  system_instruction: >
+    System: Load and obey the Enterprise Canonical and Golden Rule Execution Protocols.
+    Identify and reproduce the reported issue. Perform systematic root cause analysis.
+    Create comprehensive DEBUG_TROUBLESHOOTING_SPEC documenting all findings and treatments.
+    Implement controlled fix with proper validation. Prevent regression with automated tests.
+    Persist all outcomes and reasoning to Neo4j-Memory. Halt if issue remains unresolved.
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-11-10"
+  updated: "2025-11-10"
+  version: "1.2.0"
+  changes:
+    - "v1.1.0: Added Step 4: Create DEBUG_TROUBLESHOOTING_SPEC to document all findings and treatment plans"
+    - "v1.2.0: Enhanced Step 4 with explicit REQUIRED reading of canonical documentation (SPEC_CREATION_GUIDE, SPEC_TEMPLATE, DOCUMENTATION_NAMING_CONVENTION, IMPLEMENTATION_WORKFLOW_GUIDE)"
+  classification: "Canonical Debugging and Troubleshooting Protocol"
+  compliance: "Fully aligned with Enterprise and Golden Rule Execution Protocols"
+  language: "en-AU"
+
+[END OF INSTRUCTIONS]
+
+continuation_instruction: |
+  You are executing Debug and Troubleshoot Codebase per Enterprise Canonical Execution Protocol v1.0.0.
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REVIEW)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability/Resilience: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture Patterns: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-best-practices-2025.md
+  Security: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md, secrets-management-best-practices-2025.md
+  Observability: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, redis-caching-best-practices.md
+  Configuration: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+  - MANDATORY: Review relevant best practices documents BEFORE root cause analysis based on issue type
+  - MUST apply best practices patterns when designing solution
+  - MUST implement best practices patterns during fix implementation
+  - MUST document which best practices patterns were applied in Neo4j-Memory
+
+  CRITICAL DOCUMENTATION RULE (ABSOLUTE - NO EXCEPTIONS)
+  - TEMPORAL DOCUMENTS MUST NOT BE CREATED
+  - ALL updates, debugging findings, troubleshooting results, issue resolutions, and outcomes MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/) - specifically DEBUG_TROUBLESHOOTING_SPEC
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+  - DO NOT create standalone temporal documents
+  - Update DEBUG_TROUBLESHOOTING_SPEC and IMPLEMENTATION_PLAN with all debugging findings, root causes, fixes, and outcomes
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  CODEBASE SCAFFOLDING MANDATE (MANDATORY - NO EXCEPTIONS)
+  - ALWAYS search for existing code repositories FIRST before writing any custom code
+  - Priority hierarchy: Golden Template → Local Repos → tristanaburns GitHub → Public GitHub → Official SDKs → CNCF Projects → Open Source Libraries → Public Packages → Custom Code (LAST RESORT)
+  - Document ALL discovered repos/files in SPEC files BEFORE cloning
+  - Clone to tmp/ directory ONLY (never project root)
+  - Add attribution comments to ALL scaffolded code
+  - Delete cloned repos after extraction
+  - Custom code requires full justification
+
+  MANDATORY WORKFLOW (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Issue Identification and Context Gathering
+  - Load Enterprise Canonical Execution Protocol and Golden Rule Execution Protocol
+  - Identify the reported issue: error message, failure symptom, or unexpected behavior
+  - Gather context: environment, inputs, expected vs actual output, reproduction steps
+  - Review logs, error messages, stack traces, and telemetry data
+  - Query Neo4j-Memory for similar past issues, known patterns, or previous resolutions
+  - Query Context7 for relevant library documentation and error handling patterns
+
+  Step 2: Issue Reproduction
+  - Create minimal reproducible test case or script
+  - Confirm issue reproduces consistently with specific inputs/conditions
+  - Document exact reproduction steps with commands, parameters, and environment
+  - Capture reproduction output (error messages, logs, stack traces)
+  - Log reproduction details to Neo4j-Memory
+
+  Step 3: Root Cause Analysis
+  - Trace execution path leading to failure using logs and debugging output
+  - Review relevant best practices documents based on issue type BEFORE proceeding:
+    - Error handling issues: error-handling-resilience-patterns-best-practices-2025.md, middleware-patterns-best-practices-2025.md
+    - Performance issues: object-pooling-resource-management-best-practices-2025.md, caching-strategies-best-practices-2025.md
+    - Security issues: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md
+    - Observability issues: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  - Use grep to search codebase for relevant functions, error messages, and patterns
+  - Identify the exact line/function where failure occurs
+  - Categorise root cause: logic error, type mismatch, null/undefined, integration failure, race condition, resource exhaustion
+  - Use Context7 to validate understanding of library behavior and error semantics
+  - Log root cause analysis and references to Neo4j-Memory before any changes
+
+  Step 4: Create DEBUG_TROUBLESHOOTING_SPEC
+  - Read and follow canonical documentation standards (SPEC_CREATION_GUIDE, SPEC_TEMPLATE, DOCUMENTATION_NAMING_CONVENTION, IMPLEMENTATION_WORKFLOW_GUIDE)
+  - CRITICAL: Create SPEC document: DEBUG_TROUBLESHOOTING_{COMPONENT}_SPEC_v1.0.0.md in docs/implementation/in_progress/
+  - Follow SPEC_TEMPLATE structure exactly with 4-level hierarchy
+  - Document all identified issues with severity classification
+  - Include reproduction steps, error messages, and stack traces
+  - Document root cause analysis with exact file/line locations
+  - Design treatment plan with phases, actions, tasks, and steps
+  - Include before/after code examples for each fix
+  - Define validation strategy and success criteria
+
+  Step 5: Solution Design
+  - Design fix based on root cause category and canonical patterns
+  - Apply best practices patterns from reviewed best practices documents
+  - Consider multiple approaches: defensive checks, error handling, logic correction, data validation
+  - Validate solution approach against Context7 documentation and grep examples
+  - Assess impact: blast radius, dependencies, side effects, regression risk
+  - Plan validation strategy: unit tests, integration tests, edge cases
+  - Document solution design rationale and best practices patterns to be applied in Neo4j-Memory
+
+  Step 6: Controlled Fix Implementation
+  - Use MCP filesystem edit tools to apply code changes
+  - Implement fix strictly aligned with verified patterns and documentation
+  - Apply best practices patterns from reviewed best practices documents
+  - Add defensive checks, error handling, or validation as needed
+  - Update comments and docstrings to document fix and reasoning
+  - Implement logging/telemetry to aid future troubleshooting using observability best practices
+  - Log each change (file, line range, description, rationale, best practices applied) into Neo4j-Memory
+
+  Step 7: Fix Validation and Testing
+  - Re-run reproduction case to confirm issue is resolved
+  - Test edge cases and boundary conditions
+  - Run existing test suites to check for regressions
+  - Test integration with dependent systems/modules
+  - Validate error messages and logging output are clear and actionable
+  - Confirm no new issues introduced by fix
+
+  Step 8: Regression Prevention
+  - Create or update test case covering the fixed issue
+  - Document issue in test comments or test description
+  - Add defensive checks or validation to prevent recurrence
+  - Update documentation with troubleshooting guidance
+  - Log prevention measures to Neo4j-Memory
+
+  Step 9: Post-Resolution Documentation
+  - CRITICAL: Update DEBUG_TROUBLESHOOTING_SPEC with resolution outcomes and validation results
+  - Mark all SPEC tasks as completed with checkboxes
+  - CRITICAL: Update Implementation Plan with resolved issue, root cause, solution, and prevention
+  - CRITICAL: DO NOT create temporal documents
+  - CRITICAL: All resolution outcomes MUST be documented in DEBUG_TROUBLESHOOTING_SPEC and IMPLEMENTATION_PLAN only
+  - Move completed DEBUG_TROUBLESHOOTING_SPEC from in_progress/ to done/
+
+  Step 10: Persistence and Audit Logging
+  - Create entities in Neo4j-Memory for issue, root cause, solution, and validation
+  - Add relationships: session → debugs → file, session → resolves → issue, session → prevents → regression
+  - Include timestamps, error messages, reproduction steps, fix details, test results, best practices applied
+  - Store troubleshooting pattern as canonical pattern for future retrieval
+
+  Step 11: Completion and Verification
+  - Confirm issue fully resolved with no regressions
+  - Mark debugging entities as verified and archived
+  - Emit signal that system is operational and stable
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL)
+  - [ ] Relevant best practices documents reviewed BEFORE root cause analysis based on issue type
+  - [ ] Best practices patterns applied when designing solution
+  - [ ] Best practices patterns implemented during fix implementation
+  - [ ] Best practices patterns applied documented in Neo4j-Memory
+  - [ ] Issue reliably reproduced with documented steps
+  - [ ] Root cause identified with precise location and category
+  - [ ] DEBUG_TROUBLESHOOTING_SPEC created per canonical documentation standards
+  - [ ] Solution designed with validated approach and best practices patterns
+  - [ ] Fix implemented in controlled fashion with proper error handling and logging
+  - [ ] Original issue no longer reproduces, all tests pass, no regressions
+  - [ ] Regression prevention measures implemented
+  - [ ] DEBUG_TROUBLESHOOTING_SPEC updated with resolution outcomes
+  - [ ] IMPLEMENTATION_PLAN updated with resolved issue details
+  - [ ] All resolution outcomes documented in DEBUG_TROUBLESHOOTING_SPEC and IMPLEMENTATION_PLAN only (NO temporal documents)
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/08-Debug_And_Troubleshoot_Codebase.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/08-Debug_And_Troubleshoot_Codebase.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/08-Debug_And_Troubleshoot_Codebase.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/08-Debug_And_Troubleshoot_Codebase.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/08-Debug_And_Troubleshoot_Codebase.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/08-Debug_And_Troubleshoot_Codebase.yaml under those enforced rules.

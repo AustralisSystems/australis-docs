@@ -1,0 +1,849 @@
+---
+prompt_name: "FastAPI_Design_Implementation_Refactor"
+version: "1.0.0"
+type: "design_implementation_refactor"
+language: "en-AU"
+references:
+  - "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+  - "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  - "docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml"
+  - "docs/implementation/instructions/101-Zero_Tolerance_Remediation_Instruction.yaml"
+  - "docs/implementation/instructions/102-TEST_SCRIPT_EXECUTION_PROHIBITION.yaml"
+  - "docs/implementation/instructions/103-FastAPI_Design_Implementation_Refactor.yaml"
+
+best_practices_references:
+  core_fastapi:
+    - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+    - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+    - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+
+  async_performance:
+    - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+    - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+    - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+
+  reliability_resilience:
+    - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+    - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+    - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+
+  architecture_patterns:
+    - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+    - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+    - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+    - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+    - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+
+  security_compliance:
+    - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+    - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+    - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+    - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+
+  observability_monitoring:
+    - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+    - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+
+  data_persistence:
+    - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+    - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+    - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+    - "docs/implementation/best-practices/redis-caching-best-practices.md"
+    - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+    - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+
+  configuration_deployment:
+    - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+    - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+    - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+
+  background_tasks:
+    - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+    - "docs/implementation/best-practices/celery-production-best-practices.md"
+    - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+
+  integration_patterns:
+    - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+    - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+    - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+
+  ui_integration:
+    - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+    - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+    - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+
+  code_quality_testing:
+    - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+    - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+    - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+
+  templating_scaffolding:
+    - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+
+---
+
+context:
+  role: "Execute FastAPI design optimization and refactoring under enterprise canonical protocols"
+  intent: "Optimize FastAPI code to be streamlined, efficient, and enforce best practices for asynchronous operations, performance, and reliability"
+  workflow: "Follow FastAPI best practices protocol for code optimization and refactoring"
+  execution_mode: "STRICT - NO exceptions, NO interpretations, NO wiggle room"
+
+initialization_mode:
+  rule: "ACTIVE MODE - This instruction is ALWAYS ENFORCED during FastAPI code work"
+  behavior: "MUST check FastAPI compliance before creating or modifying endpoints"
+  required_on_load:
+    - "Acknowledge instruction loaded and understood"
+    - "Confirm readiness to enforce FastAPI best practices when working with endpoints"
+    - "Verify understanding of asynchronous patterns, performance enhancements, and reliability features"
+  response_template: |
+    "FastAPI Design Implementation Refactor (v1.0.0) loaded and acknowledged.
+    Ready to enforce FastAPI best practices when creating or modifying endpoints.
+    All FastAPI code will be validated against asynchronous compliance, performance, and reliability standards."
+
+documentation_policy:
+  code_only: true
+  rule: "This is a CODE-ONLY instruction - NO documentation shall be written unless explicitly requested"
+  explicit_request_definition: "User must explicitly state 'create documentation' or 'write documentation' - implicit requests DO NOT count"
+  exceptions:
+    - "SPEC protocols must ALWAYS be followed (SPEC creation, updates, lifecycle management) - MANDATORY, NO EXCEPTIONS"
+    - "Documentation explicitly requested by user with explicit wording"
+  forbidden:
+    - "Creating README files unless explicitly requested with explicit wording"
+    - "Creating markdown documentation files unless explicitly requested with explicit wording"
+    - "Creating temporal documentation reports unless explicitly requested with explicit wording"
+    - "Writing documentation comments beyond code docstrings (docstrings are REQUIRED, not optional)"
+  required:
+    - "Code docstrings and type hints (standard Python practice - REQUIRED, not optional)"
+    - "SPEC lifecycle management (in_progress → done/) - MANDATORY"
+  enforcement: "Violation of documentation policy = BLOCKING ISSUE - execution MUST STOP immediately"
+
+quick_reference:
+  protocols:
+    - "00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "01-The_GoldenRule_Execution_Protocol.yaml"
+    - "04-Execute_Implementation_Phase_Tasks.yaml"
+    - "101-Zero_Tolerance_Remediation_Instruction.yaml"
+
+  fastapi_best_practices_summary:
+    - "All endpoints must be asynchronous (non-blocking)"
+    - "Use asyncio.to_thread() for blocking I/O"
+    - "Implement connection pooling (HTTP and database)"
+    - "Enable keep-alive connections"
+    - "Comprehensive error handling"
+    - "Retry mechanisms with exponential backoff"
+    - "Circuit breakers for critical components"
+    - "Connection health monitoring"
+
+architectural_principles:
+  fastapi_asynchronous_compliance:
+    mandatory: true
+    rule: "ALL endpoints MUST operate using non-blocking methods exclusively"
+    requirements:
+      - "Every endpoint must be async def (not def)"
+      - "All asynchronous endpoints must correctly implement the await keyword"
+      - "Blocking operations are STRICTLY FORBIDDEN within asynchronous environments"
+      - "No blocking calls within asynchronous or non-blocking functions"
+    enforcement: "Endpoint without async def = VIOLATION - MUST convert to async immediately"
+    validation: "MUST verify all endpoints use async def and await correctly"
+
+  microservices_architecture:
+    mandatory: true
+    rule: "Microservices MUST implement connection pooling and asynchronous I/O"
+    requirements:
+      - "Connection pooling for HTTP clients"
+      - "Connection pooling for database connections"
+      - "Asynchronous I/O for all operations"
+      - "Non-blocking service communication"
+    enforcement: "Service without connection pooling = VIOLATION - MUST implement immediately"
+
+  performance_optimization:
+    mandatory: true
+    rule: "MUST implement performance enhancements to minimize overhead and latency"
+    requirements:
+      - "Connection pooling to reduce connection establishment overhead"
+      - "Keep-alive connections in HTTP clients"
+      - "Database connection pooling with appropriate sizing"
+      - "Asynchronous I/O for all file operations"
+    enforcement: "Missing performance enhancement = VIOLATION - MUST implement immediately"
+
+  reliability_requirements:
+    mandatory: true
+    rule: "MUST implement reliability features to maintain system stability"
+    requirements:
+      - "Comprehensive error handling within asynchronous contexts"
+      - "Retry mechanisms with exponential backoff"
+      - "Circuit breakers in critical components"
+      - "Connection health monitoring"
+    enforcement: "Missing reliability feature = VIOLATION - MUST implement immediately"
+
+asynchronous_patterns:
+  asyncio_to_thread:
+    mandatory: true
+    rule: "MUST use asyncio.to_thread() for ALL blocking file I/O operations"
+    purpose: "Maintain non-blocking execution while performing blocking I/O"
+    usage:
+      - "File read operations: await asyncio.to_thread(read_file, path)"
+      - "File write operations: await asyncio.to_thread(write_file, path, content)"
+      - "File system operations: await asyncio.to_thread(os.path.exists, path)"
+      - "Any blocking I/O that would block the event loop"
+    forbidden:
+      - "Direct file I/O without asyncio.to_thread() wrapper"
+      - "Blocking file operations in async functions"
+    enforcement: "Blocking file I/O in async function = VIOLATION - MUST wrap with asyncio.to_thread()"
+
+  asyncio_get_running_loop:
+    mandatory: true
+    rule: "MUST use asyncio.get_running_loop() with create_task() for fire-and-forget operations"
+    purpose: "Schedule background tasks without blocking or awaiting completion"
+    usage:
+      - "Background logging: loop.create_task(log_async(message))"
+      - "Background notifications: loop.create_task(send_notification_async(data))"
+      - "Fire-and-forget operations that don't need to block"
+    forbidden:
+      - "Using asyncio.get_event_loop() (deprecated)"
+      - "Blocking while waiting for background tasks"
+    enforcement: "Using deprecated get_event_loop() = VIOLATION - MUST use get_running_loop()"
+
+  thread_pool_executor:
+    mandatory: true
+    rule: "MUST use ThreadPoolExecutor for asynchronous operations from synchronous contexts"
+    purpose: "Run async operations from sync code without blocking event loop"
+    usage:
+      - "Synchronous code calling async functions"
+      - "Legacy sync code integration"
+      - "Blocking operations that can't be made async"
+    forbidden:
+      - "Blocking synchronous code in async contexts"
+      - "Direct sync calls from async functions"
+    enforcement: "Sync blocking call in async context = VIOLATION - MUST use ThreadPoolExecutor"
+
+performance_enhancements:
+  connection_pooling:
+    mandatory: true
+    rule: "MUST implement connection pooling for HTTP clients and database connections"
+    http_clients:
+      requirement: "HTTP clients MUST use connection pooling"
+      implementation: "httpx.AsyncClient(limits=httpx.Limits(max_connections=100, max_keepalive_connections=20))"
+      benefits:
+        - "Reduces overhead from establishing new connections"
+        - "Reuses existing TCP connections"
+        - "Improves throughput and reduces latency"
+      enforcement: "HTTP client without connection pooling = VIOLATION - MUST add limits parameter"
+
+    database_connections:
+      requirement: "Database connections MUST use connection pooling"
+      implementation: "SQLAlchemy with pool_size, max_overflow, pool_pre_ping=True"
+      benefits:
+        - "Prevents depletion of available connections"
+        - "Optimizes resource usage"
+        - "Enables connection health monitoring"
+      enforcement: "Database without connection pooling = VIOLATION - MUST configure pool settings"
+
+    validation: "MUST verify connection pooling is configured for all HTTP clients and database connections"
+
+  keep_alive_connections:
+    mandatory: true
+    rule: "MUST enable keep-alive connections in HTTP clients"
+    purpose: "Reuse existing connections to improve efficiency"
+    implementation: "httpx.AsyncClient with limits.max_keepalive_connections > 0"
+    benefits:
+      - "Reduces connection establishment overhead"
+      - "Improves response times"
+      - "Reduces server load"
+    enforcement: "HTTP client without keep-alive = VIOLATION - MUST enable keep-alive"
+
+  asynchronous_file_operations:
+    mandatory: true
+    rule: "ALL file operations MUST use asyncio.to_thread() to avoid blocking event loop"
+    purpose: "Maintain non-blocking behavior for all I/O operations"
+    implementation: "await asyncio.to_thread(blocking_file_operation, args)"
+    forbidden:
+      - "Direct file I/O in async functions"
+      - "Blocking file operations"
+    enforcement: "Blocking file operation in async function = VIOLATION - MUST wrap with asyncio.to_thread()"
+
+reliability_features:
+  error_handling:
+    mandatory: true
+    rule: "MUST implement comprehensive error handling within asynchronous contexts"
+    requirements:
+      - "Try/except blocks around all async operations"
+      - "Proper exception propagation"
+      - "Graceful error recovery"
+      - "Error logging with context"
+    patterns:
+      - "try: result = await async_operation() except Exception as e: handle_error(e)"
+      - "Use specific exception types, not bare except"
+      - "Log errors with full context"
+    enforcement: "Async operation without error handling = VIOLATION - MUST add try/except"
+
+  retry_mechanisms:
+    mandatory: true
+    rule: "MUST implement retry mechanisms with exponential backoff in HTTP clients"
+    purpose: "Handle transient failures automatically"
+    implementation: "httpx with retry middleware or tenacity library"
+    requirements:
+      - "Exponential backoff between retries"
+      - "Maximum retry attempts (typically 3)"
+      - "Retry only on transient errors (5xx, network errors)"
+      - "Do not retry on 4xx errors (client errors)"
+    enforcement: "HTTP client without retry mechanism = VIOLATION - MUST add retry logic"
+
+  circuit_breakers:
+    mandatory: true
+    rule: "MUST deploy circuit breakers in critical components to prevent cascading failures"
+    purpose: "Isolate failures and maintain system stability"
+    implementation: "Circuit breaker pattern in tool registry and critical services"
+    requirements:
+      - "Open circuit after failure threshold"
+      - "Half-open state for recovery attempts"
+      - "Close circuit after successful recovery"
+      - "Monitor circuit state"
+    enforcement: "Critical component without circuit breaker = VIOLATION - MUST implement circuit breaker"
+
+  connection_health_monitoring:
+    mandatory: true
+    rule: "MUST enable connection health monitoring for database connections"
+    purpose: "Detect and refresh stale or invalid connections"
+    implementation: "pool_pre_ping=True in SQLAlchemy connection pool"
+    requirements:
+      - "Verify connection validity before use"
+      - "Automatically refresh invalid connections"
+      - "Monitor connection pool health"
+    enforcement: "Database pool without health monitoring = VIOLATION - MUST enable pool_pre_ping=True"
+
+design_implementation_steps:
+  execution_order: "MANDATORY - MUST follow steps sequentially - CANNOT skip steps"
+  blocking_rule: "If ANY step fails, MUST fix before proceeding - NO exceptions"
+  best_practices_requirement: "MUST review and implement relevant best practices documents at each step - NO exceptions"
+
+  step_1:
+    name: "Identify and Eliminate Blocking Operations"
+    mandatory: true
+    order: 1
+    best_practices_review:
+      mandatory: true
+      documents:
+        - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+        - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+        - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      requirement: "MUST review these best practices documents BEFORE identifying blocking operations"
+      implementation: "MUST implement patterns from best practices when converting blocking operations"
+    actions:
+      - "Review FastAPI best practices documents (fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md)"
+      - "Review error handling and resilience patterns (error-handling-resilience-patterns-best-practices-2025.md)"
+      - "Scan codebase for blocking operations in async functions"
+      - "Identify synchronous file I/O operations"
+      - "Identify blocking database operations"
+      - "Identify blocking HTTP calls"
+      - "Convert all blocking operations to non-blocking, asynchronous tasks using best practice patterns"
+    validation: "MUST verify all blocking operations eliminated - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 2 until Step 1 is 100% complete and validated"
+
+  step_2:
+    name: "Ensure FastAPI Asynchronous Compliance"
+    mandatory: true
+    order: 2
+    prerequisite: "Step 1 MUST be 100% complete and validated"
+    best_practices_review:
+      mandatory: true
+      documents:
+        - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+        - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+        - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      requirement: "MUST review FastAPI directory structure and dependency injection best practices"
+      implementation: "MUST follow FastAPI directory structure and dependency injection patterns"
+    actions:
+      - "Review FastAPI directory structure best practices (FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md)"
+      - "Review dependency injection best practices (dependency-injection-best-practices-2025.md)"
+      - "Verify all endpoints use async def (not def)"
+      - "Verify all async endpoints correctly use await keyword"
+      - "Verify no blocking operations in async functions"
+      - "Convert any synchronous endpoints to async using FastAPI best practice patterns"
+      - "Ensure endpoint structure follows FastAPI directory structure best practices"
+    validation: "MUST verify all endpoints are async and use await correctly - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 3 until Step 2 is 100% complete and validated"
+
+  step_3:
+    name: "Implement Asynchronous Patterns"
+    mandatory: true
+    order: 3
+    prerequisite: "Step 2 MUST be 100% complete and validated"
+    best_practices_review:
+      mandatory: true
+      documents:
+        - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+        - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+        - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      requirement: "MUST review object pooling and WebSocket/SSE best practices for async patterns"
+      implementation: "MUST implement resource management and async communication patterns from best practices"
+    actions:
+      - "Review object pooling and resource management best practices (object-pooling-resource-management-best-practices-2025.md)"
+      - "Review WebSocket/SSE best practices if applicable (websockets-server-sent-events-best-practices-2025.md)"
+      - "Wrap all blocking file I/O with asyncio.to_thread()"
+      - "Use asyncio.get_running_loop() with create_task() for fire-and-forget tasks"
+      - "Configure ThreadPoolExecutor for sync-to-async operations"
+      - "Remove deprecated asyncio.get_event_loop() usage"
+      - "Implement resource pooling patterns from best practices"
+    validation: "MUST verify all async patterns implemented correctly - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 4 until Step 3 is 100% complete and validated"
+
+  step_4:
+    name: "Implement Performance Enhancements"
+    mandatory: true
+    order: 4
+    prerequisite: "Step 3 MUST be 100% complete and validated"
+    best_practices_review:
+      mandatory: true
+      documents:
+        - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+        - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+        - "docs/implementation/best-practices/redis-caching-best-practices.md"
+        - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+      requirement: "MUST review caching strategies and resource pooling best practices"
+      implementation: "MUST implement connection pooling, caching, and streaming patterns from best practices"
+    actions:
+      - "Review object pooling and resource management best practices (object-pooling-resource-management-best-practices-2025.md)"
+      - "Review caching strategies best practices (caching-strategies-best-practices-2025.md, redis-caching-best-practices.md)"
+      - "Review streaming best practices if applicable (streaming-real-time-data-best-practices-2025.md)"
+      - "Configure connection pooling for HTTP clients (httpx.AsyncClient with limits)"
+      - "Configure connection pooling for database connections (SQLAlchemy pool settings)"
+      - "Enable keep-alive connections in HTTP clients"
+      - "Implement caching strategies from best practices where applicable"
+      - "Verify all file operations use asyncio.to_thread()"
+    validation: "MUST verify connection pooling and keep-alive enabled - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 5 until Step 4 is 100% complete and validated"
+
+  step_5:
+    name: "Implement Reliability Features"
+    mandatory: true
+    order: 5
+    prerequisite: "Step 4 MUST be 100% complete and validated"
+    best_practices_review:
+      mandatory: true
+      documents:
+        - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+        - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+        - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      requirement: "MUST review error handling, resilience patterns, rate limiting, and middleware best practices"
+      implementation: "MUST implement error handling, retry strategies, circuit breakers, rate limiting, and middleware from best practices"
+    actions:
+      - "Review error handling and resilience patterns best practices (error-handling-resilience-patterns-best-practices-2025.md)"
+      - "Review rate limiting best practices (rate-limiting-best-practices-2025.md)"
+      - "Review middleware patterns best practices (middleware-patterns-best-practices-2025.md)"
+      - "Add comprehensive error handling to all async operations using best practice patterns"
+      - "Implement retry mechanisms with exponential backoff in HTTP clients"
+      - "Deploy circuit breakers in critical components (tool registry, services)"
+      - "Enable connection health monitoring (pool_pre_ping=True for databases)"
+      - "Implement rate limiting middleware from best practices"
+      - "Implement error recovery and graceful degradation patterns"
+    validation: "MUST verify all reliability features implemented - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 6 until Step 5 is 100% complete and validated"
+
+  step_6:
+    name: "Validate FastAPI Asynchronous Compliance"
+    mandatory: true
+    order: 6
+    prerequisite: "Step 5 MUST be 100% complete and validated"
+    actions:
+      - "Verify all endpoints operate asynchronously with non-blocking methods"
+      - "Verify all async endpoints use await correctly"
+      - "Verify no blocking operations in async functions"
+      - "Run validation tools to check compliance"
+    validation: "MUST verify FastAPI compliance complete - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 7 until Step 6 is 100% complete and validated"
+
+  step_7:
+    name: "Validate Connection Pooling Implementation"
+    mandatory: true
+    order: 7
+    prerequisite: "Step 6 MUST be 100% complete and validated"
+    actions:
+      - "Verify connection pooling configured for all HTTP clients"
+      - "Verify connection pooling configured for all database connections"
+      - "Verify keep-alive connections enabled"
+      - "Test connection reuse and performance"
+    validation: "MUST verify connection pooling fully implemented - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 8 until Step 7 is 100% complete and validated"
+
+  step_8:
+    name: "Validate Microservices Architecture Best Practices"
+    mandatory: true
+    order: 8
+    prerequisite: "Step 7 MUST be 100% complete and validated"
+    best_practices_review:
+      mandatory: true
+      documents:
+        - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+        - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+        - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+        - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+      requirement: "MUST review API gateway, middleware, and plugin architecture best practices"
+      implementation: "MUST validate against microservices architecture patterns from best practices"
+    actions:
+      - "Review API gateway patterns best practices (api-gateway-patterns-best-practices-2025.md)"
+      - "Review plugin architecture best practices (plugin-architecture-auto-discovery-integration-best-practices-2025.md, python-fastapi-plugin-architecture-best-practices-2025.md)"
+      - "Verify asynchronous I/O throughout microservices"
+      - "Verify connection pooling in all services"
+      - "Verify comprehensive error management"
+      - "Verify no blocking operations in service communication"
+      - "Verify API gateway patterns implemented correctly"
+      - "Verify plugin architecture follows best practices"
+    validation: "MUST verify microservices follow best practices - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 9 until Step 8 is 100% complete and validated"
+
+  step_9:
+    name: "Validate Performance Optimization"
+    mandatory: true
+    order: 9
+    prerequisite: "Step 8 MUST be 100% complete and validated"
+    actions:
+      - "Verify connection reuse reduces overhead"
+      - "Verify latency improvements from connection pooling"
+      - "Verify asynchronous operations minimize resource consumption"
+      - "Run performance tests"
+    validation: "MUST verify performance optimized - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 10 until Step 9 is 100% complete and validated"
+
+  step_10:
+    name: "Validate Reliability Enhancements"
+    mandatory: true
+    order: 10
+    prerequisite: "Step 9 MUST be 100% complete and validated"
+    actions:
+      - "Verify comprehensive exception management"
+      - "Verify retry logic handles transient failures"
+      - "Verify circuit breakers prevent cascading failures"
+      - "Verify connection health monitoring detects stale connections"
+    validation: "MUST verify reliability enhanced - VERIFICATION REQUIRED before proceeding"
+    blocking: "Cannot proceed to Step 11 until Step 10 is 100% complete and validated"
+
+  step_11:
+    name: "Final Compliance Verification"
+    mandatory: true
+    order: 11
+    prerequisite: "Step 10 MUST be 100% complete and validated"
+    best_practices_review:
+      mandatory: true
+      documents:
+        - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+        - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+        - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+        - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      requirement: "MUST review security, observability, logging, and configuration best practices for final verification"
+      implementation: "MUST verify security, observability, logging, and configuration follow best practices"
+    actions:
+      - "Review security best practices (security-input-validation-encryption-owasp-best-practices-2025.md)"
+      - "Review observability and monitoring best practices (observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md)"
+      - "Review structured logging best practices (structured-logging-best-practices-2025.md)"
+      - "Review configuration management best practices (configuration-management-best-practices-2025.md)"
+      - "Verify no blocking calls exist within async functions"
+      - "Verify FastAPI core principles upheld"
+      - "Verify microservices architecture principles followed"
+      - "Verify security best practices implemented"
+      - "Verify observability and logging follow best practices"
+      - "Verify configuration management follows best practices"
+      - "Run comprehensive validation suite"
+    validation: "MUST verify 100% compliance - VERIFICATION REQUIRED for completion"
+    blocking: "Cannot mark complete until Step 11 is 100% complete and ALL validations pass"
+
+validation_checkpoint:
+  mandatory: true
+  rule: "MUST verify ALL checkpoints before marking complete - NO exceptions, NO partial completions"
+  blocking: "If ANY checkpoint fails, completion is BLOCKED - MUST fix and re-verify ALL checkpoints"
+
+  before_completion:
+    fastapi_asynchronous_compliance:
+      mandatory: true
+      checks:
+        - "All endpoints use async def (not def) - MUST scan all endpoints, VERIFY 100% async"
+        - "All async endpoints use await correctly - MUST verify await usage, VERIFY 100% correct"
+        - "No blocking operations in async functions - MUST scan codebase, VERIFY zero blocking calls"
+        - "All file I/O wrapped with asyncio.to_thread() - MUST verify all file operations, VERIFY 100% wrapped"
+      enforcement: "ANY FastAPI compliance violation = BLOCKING - cannot proceed until fixed"
+      verification_method: "MUST scan codebase + run validation tools - NO assumptions"
+
+    asynchronous_patterns:
+      mandatory: true
+      checks:
+        - "asyncio.to_thread() used for all blocking file I/O - MUST verify all file operations, VERIFY 100% usage"
+        - "asyncio.get_running_loop() used (not get_event_loop()) - MUST scan codebase, VERIFY zero deprecated usage"
+        - "ThreadPoolExecutor used for sync-to-async operations - MUST verify sync contexts, VERIFY 100% usage"
+        - "create_task() used for fire-and-forget operations - MUST verify background tasks, VERIFY 100% usage"
+      enforcement: "ANY async pattern violation = BLOCKING - cannot proceed until fixed"
+      verification_method: "MUST scan codebase + test async patterns - NO assumptions"
+
+    performance_enhancements:
+      mandatory: true
+      checks:
+        - "Connection pooling configured for HTTP clients - MUST verify all httpx.AsyncClient instances, VERIFY 100% configured"
+        - "Connection pooling configured for database connections - MUST verify all database pools, VERIFY 100% configured"
+        - "Keep-alive connections enabled - MUST verify HTTP clients, VERIFY 100% enabled"
+        - "All file operations use asyncio.to_thread() - MUST verify all file I/O, VERIFY 100% async"
+      enforcement: "ANY performance enhancement missing = BLOCKING - cannot proceed until fixed"
+      verification_method: "MUST scan codebase + test connection reuse - NO assumptions"
+
+    reliability_features:
+      mandatory: true
+      checks:
+        - "Comprehensive error handling in all async operations - MUST verify all async functions, VERIFY 100% coverage"
+        - "Retry mechanisms with exponential backoff in HTTP clients - MUST verify HTTP clients, VERIFY 100% configured"
+        - "Circuit breakers in critical components - MUST verify tool registry and services, VERIFY 100% deployed"
+        - "Connection health monitoring enabled (pool_pre_ping=True) - MUST verify database pools, VERIFY 100% enabled"
+      enforcement: "ANY reliability feature missing = BLOCKING - cannot proceed until fixed"
+      verification_method: "MUST scan codebase + test reliability features - NO assumptions"
+
+    code_quality:
+      mandatory: true
+      checks:
+        - "All Python validators pass (0 errors, 0 warnings) - MUST run ALL validators, VERIFY 0/0"
+        - "mypy: 0 errors, 0 warnings - MUST run mypy, VERIFY 0/0"
+        - "flake8: 0 errors, 0 warnings - MUST run flake8, VERIFY 0/0"
+        - "No blocking calls in async functions - MUST scan codebase, VERIFY zero blocking calls"
+      enforcement: "ANY validator failure = BLOCKING - cannot proceed until ALL pass"
+      verification_method: "MUST run ALL validators and capture results - NO skipping validators"
+
+    production_readiness:
+      mandatory: true
+      checks:
+        - "All endpoints are async and non-blocking - MUST verify all endpoints, VERIFY 100% async"
+        - "Connection pooling fully implemented - MUST verify HTTP and database, VERIFY 100% implemented"
+        - "Reliability features fully implemented - MUST verify error handling, retries, circuit breakers, VERIFY 100% implemented"
+        - "Performance optimized - MUST verify connection reuse and latency, VERIFY optimized"
+      enforcement: "ANY production readiness issue = BLOCKING - cannot proceed until fixed"
+      verification_method: "MUST verify each item systematically - NO assumptions"
+
+  completion_gate: "ALL checkpoints MUST pass with 100% compliance - NO exceptions, NO partial passes, NO 'good enough' - ONLY 100% compliance allows completion"
+
+workflow:
+  protocol: "docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml"
+  focus: "Optimize FastAPI code for streamlined, efficient operation with best practices enforcement"
+  mode: "CODE-ONLY - focus on code optimization and refactoring, not documentation"
+  execution_rule: "MUST follow steps sequentially - NO skipping steps, NO parallel execution of steps, NO shortcuts"
+  blocking_rule: "If ANY step fails, MUST stop and fix before proceeding - NO workarounds"
+
+  activation:
+    rule: "Workflow is activated when working with FastAPI endpoints or services"
+    trigger: "Creating or modifying FastAPI endpoints, services, or async operations"
+    examples:
+      - "Creating new FastAPI endpoint - WORKFLOW ACTIVATED"
+      - "Modifying existing endpoint - WORKFLOW ACTIVATED"
+      - "Refactoring service code - WORKFLOW ACTIVATED"
+      - "Just reading code - WORKFLOW NOT ACTIVATED"
+    always_active: "Prohibition is always enforced - check before EVERY endpoint/service modification"
+
+  steps:
+    step_1:
+      name: "Identify Blocking Operations"
+      mandatory: true
+      rule: "MUST identify all blocking operations before proceeding - NO assumptions"
+      blocking: "Cannot proceed to step 2 until step 1 is complete"
+
+    step_2:
+      name: "Convert to Asynchronous"
+      mandatory: true
+      rule: "MUST convert all blocking operations to async - NO partial conversions"
+      blocking: "Cannot proceed to step 3 until step 2 is complete"
+
+    step_3:
+      name: "Implement Async Patterns"
+      mandatory: true
+      rule: "MUST implement asyncio.to_thread(), get_running_loop(), ThreadPoolExecutor correctly"
+      blocking: "Cannot proceed to step 4 until step 3 is complete"
+
+    step_4:
+      name: "Add Performance Enhancements"
+      mandatory: true
+      rule: "MUST add connection pooling and keep-alive - NO missing enhancements"
+      blocking: "Cannot proceed to step 5 until step 4 is complete"
+
+    step_5:
+      name: "Add Reliability Features"
+      mandatory: true
+      rule: "MUST add error handling, retries, circuit breakers, health monitoring"
+      blocking: "Cannot proceed to step 6 until step 5 is complete"
+
+    step_6:
+      name: "Validate Compliance"
+      mandatory: true
+      rule: "MUST validate FastAPI compliance - NO proceeding without validation"
+      blocking: "Cannot proceed to step 7 until step 6 is complete and validated"
+
+    step_7:
+      name: "Validate Performance"
+      mandatory: true
+      rule: "MUST validate performance enhancements - NO proceeding without validation"
+      blocking: "Cannot proceed to step 8 until step 7 is complete and validated"
+
+    step_8:
+      name: "Validate Reliability"
+      mandatory: true
+      rule: "MUST validate reliability features - NO proceeding without validation"
+      blocking: "Cannot proceed to step 9 until step 8 is complete and validated"
+
+    step_9:
+      name: "Final Verification"
+      mandatory: true
+      rule: "MUST verify ALL checkpoints pass - NO exceptions"
+      blocking: "Cannot mark complete until step 9 is complete and ALL checkpoints pass"
+
+enforcement:
+  strict_mode: true
+  interpretation_policy: "NO interpretations allowed - requirements are LITERAL and ABSOLUTE"
+  wiggle_room: "ZERO wiggle room - requirements are IRON CLAD"
+
+  blocking_rules:
+    - "Non-compliance with FastAPI asynchronous standards = IMMEDIATE STOP - execution BLOCKED until fixed"
+    - "Missing performance enhancements = IMMEDIATE STOP - execution BLOCKED until fixed"
+    - "Missing reliability features = IMMEDIATE STOP - execution BLOCKED until fixed"
+    - "Blocking operations in async functions = IMMEDIATE STOP - execution BLOCKED until fixed"
+    - "All validators MUST pass with 0 errors, 0 warnings - NO exceptions, NO 'close enough', ONLY 0/0"
+    - "Violation of ANY requirement = BLOCKING ISSUE - execution MUST STOP immediately"
+    - "Partial compliance = NON-COMPLIANCE - ONLY 100% compliance is acceptable"
+    - "Cannot proceed to next step until current is 100% complete - NO exceptions"
+
+  violation_response:
+    action: "STOP immediately"
+    required_steps:
+      - "Identify violation"
+      - "Fix violation"
+      - "Verify fix"
+      - "Re-run validation"
+      - "Confirm 100% compliance"
+    then: "ONLY then can execution continue"
+
+  no_exceptions:
+    rule: "NO exceptions allowed - requirements are ABSOLUTE"
+    examples:
+      - "Cannot say 'this endpoint is simple, blocking is OK' - MUST convert to async"
+      - "Cannot say 'connection pooling can wait' - MUST implement immediately"
+      - "Cannot say 'this is good enough' - MUST achieve 100% compliance"
+      - "Cannot interpret requirements - MUST follow LITERALLY"
+
+output_format:
+  on_endpoint_creation:
+    mode: "VALIDATION MODE - Check FastAPI compliance before creation"
+    required_output: |
+      "Checking FastAPI endpoint against best practices..."
+      "Endpoint: <endpoint_path>"
+      "Async compliance: <PASS/FAIL>"
+      "Performance enhancements: <PASS/FAIL>"
+      "Reliability features: <PASS/FAIL>"
+      "If ANY FAIL: Endpoint is NON-COMPLIANT - MUST fix before proceeding"
+      "If ALL PASS: Endpoint is compliant - proceed with creation"
+    forbidden_output:
+      - "DO NOT create endpoint without FastAPI compliance check"
+      - "DO NOT proceed if compliance check fails"
+      - "DO NOT create blocking endpoints"
+
+  on_code_modification:
+    mode: "VALIDATION MODE - Check FastAPI compliance after modification"
+    required_output: |
+      "Validating FastAPI code modifications..."
+      "Files modified: <list>"
+      "Async compliance: <PASS/FAIL>"
+      "Performance enhancements: <PASS/FAIL>"
+      "Reliability features: <PASS/FAIL>"
+      "If ANY FAIL: Code is NON-COMPLIANT - MUST fix immediately"
+      "If ALL PASS: Code is compliant - modifications complete"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-15"
+  version: "1.0.0"
+  classification: "FastAPI Design Optimization and Best Practices Enforcement"
+  enforcement_level: "IRON CLAD - NO WIGGLE ROOM - NO INTERPRETATIONS - ABSOLUTE REQUIREMENTS"
+
+continuation_instruction: |
+  You are enforcing FastAPI Design Implementation Refactor per Enterprise Canonical Execution Protocol v1.0.0.
+
+  CRITICAL OBJECTIVE
+  - Optimize FastAPI code to be streamlined, efficient, and enforce best practices
+  - Ensure all endpoints operate asynchronously with non-blocking methods
+  - Implement performance enhancements (connection pooling, keep-alive)
+  - Implement reliability features (error handling, retries, circuit breakers)
+  - MANDATORY: Review and implement best practices documents at each step - NO exceptions
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REVIEW)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-best-practices-2025.md
+  Security: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md
+  Observability: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, redis-caching-best-practices.md
+  Configuration: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+
+  FASTAPI ASYNCHRONOUS COMPLIANCE (ABSOLUTE - NO EXCEPTIONS)
+  - ALL endpoints MUST use async def (not def)
+  - All async endpoints MUST correctly implement the await keyword
+  - Blocking operations are STRICTLY FORBIDDEN within asynchronous environments
+  - No blocking calls within asynchronous or non-blocking functions
+  - Endpoint without async def = VIOLATION - MUST convert to async immediately
+
+  ASYNCHRONOUS PATTERNS (MANDATORY)
+  - asyncio.to_thread(): MUST use for ALL blocking file I/O operations
+  - asyncio.get_running_loop(): MUST use with create_task() for fire-and-forget operations (NOT get_event_loop())
+  - ThreadPoolExecutor: MUST use for async operations from synchronous contexts
+  - Blocking file I/O in async function = VIOLATION - MUST wrap with asyncio.to_thread()
+
+  PERFORMANCE ENHANCEMENTS (MANDATORY)
+  - Connection pooling: MUST implement for HTTP clients (httpx.AsyncClient with limits)
+  - Connection pooling: MUST implement for database connections (SQLAlchemy pool settings)
+  - Keep-alive connections: MUST enable in HTTP clients (limits.max_keepalive_connections > 0)
+  - Asynchronous file operations: ALL file operations MUST use asyncio.to_thread()
+  - HTTP client without connection pooling = VIOLATION - MUST add limits parameter
+  - Database without connection pooling = VIOLATION - MUST configure pool settings
+
+  RELIABILITY FEATURES (MANDATORY)
+  - Error handling: MUST implement comprehensive error handling in all async operations
+  - Retry mechanisms: MUST implement with exponential backoff in HTTP clients
+  - Circuit breakers: MUST deploy in critical components (tool registry, services)
+  - Connection health monitoring: MUST enable (pool_pre_ping=True for databases)
+  - Async operation without error handling = VIOLATION - MUST add try/except
+  - HTTP client without retry mechanism = VIOLATION - MUST add retry logic
+
+  DESIGN IMPLEMENTATION STEPS (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Identify and eliminate all blocking operations (convert to non-blocking, async)
+  Step 2: Ensure FastAPI asynchronous compliance (all endpoints async def, await correctly)
+  Step 3: Implement asynchronous patterns (asyncio.to_thread(), get_running_loop(), ThreadPoolExecutor)
+  Step 4: Implement performance enhancements (connection pooling, keep-alive, async file I/O)
+  Step 5: Implement reliability features (error handling, retries, circuit breakers, health monitoring)
+  Step 6: Validate FastAPI asynchronous compliance (all endpoints async, no blocking)
+  Step 7: Validate connection pooling implementation (HTTP and database)
+  Step 8: Validate microservices architecture best practices (async I/O, connection pooling, error management)
+  Step 9: Validate performance optimization (connection reuse, latency improvements)
+  Step 10: Validate reliability enhancements (exception management, retries, circuit breakers, health monitoring)
+  Step 11: Final compliance verification (no blocking calls, FastAPI principles upheld)
+  - MUST follow steps sequentially - NO skipping, NO parallel execution, NO shortcuts
+  - If ANY step fails, MUST stop and fix before proceeding - NO workarounds
+  - Cannot proceed to next step until current is 100% complete and validated
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL - NO EXCEPTIONS)
+  Before completion, MUST verify:
+  - FastAPI asynchronous compliance: All endpoints async def, await correctly, no blocking operations
+  - Asynchronous patterns: asyncio.to_thread() for file I/O, get_running_loop() (not get_event_loop()), ThreadPoolExecutor for sync-to-async
+  - Performance enhancements: Connection pooling for HTTP and database, keep-alive enabled, all file operations async
+  - Reliability features: Error handling in all async operations, retry mechanisms in HTTP clients, circuit breakers in critical components, connection health monitoring enabled
+  - Code quality: All validators pass (mypy 0/0, flake8 0/0, no blocking calls in async functions)
+  - Production readiness: All endpoints async and non-blocking, connection pooling fully implemented, reliability features fully implemented, performance optimized
+  - ANY checkpoint failure = BLOCKING - cannot proceed until ALL pass
+  - ONLY 100% compliance allows completion - NO partial passes
+
+  ENFORCEMENT (STRICT MODE - IRON CLAD)
+  - NO interpretations allowed - requirements are LITERAL and ABSOLUTE
+  - ZERO wiggle room - requirements are IRON CLAD
+  - Non-compliance with FastAPI asynchronous standards = IMMEDIATE STOP - execution BLOCKED until fixed
+  - Missing performance enhancements = IMMEDIATE STOP - execution BLOCKED until fixed
+  - Missing reliability features = IMMEDIATE STOP - execution BLOCKED until fixed
+  - Blocking operations in async functions = IMMEDIATE STOP - execution BLOCKED until fixed
+  - Partial compliance = NON-COMPLIANCE - ONLY 100% compliance acceptable
+  - Cannot proceed to next step until current is 100% complete
+  - Violation response: STOP → Identify → Fix → Verify → Re-run validation → Confirm 100% compliance → THEN continue
+
+  CURRENT SESSION CONTEXT
+  - Focus: Optimize FastAPI code for streamlined, efficient operation with best practices enforcement
+  - Priority: Ensure all endpoints async, implement connection pooling, add reliability features
+  - Mode: CODE-ONLY - optimize and refactor FastAPI code, enforce best practices
+  - Remember: FastAPI code MUST be async, performant, and reliable - NO exceptions

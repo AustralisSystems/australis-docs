@@ -1,0 +1,497 @@
+prompt_name: "WebUI_Component_Mapping_Phase"
+version: "1.0.0"
+type: "webui_component_mapping"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor mapping OpenAPI schemas to UI components"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute component mapping phase by analyzing OpenAPI specification schemas and applying
+    Universal Component Mapping Protocol rules to determine optimal UI components (tables, cards,
+    lists, accordions) based on field count, data density, and responsive requirements. Generate
+    component descriptors with dual tokens (primary/secondary) for each entity.
+
+  reference_docs:
+    primary:
+      - "universal_component_mapping_protocol.md"
+      - "openapi_ui_model_conversion_rules.md"
+      - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+      - "design_system_foundations.md"
+    supporting:
+      - "component_tokens.json"
+      - "layout_tokens.json"
+      - "renderer_mapping_spec.md"
+
+  codebase_scaffolding_mandate:
+  priority: "MANDATORY - NO EXCEPTIONS"
+  description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+  priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+  color_scheme_mandate:
+    reference: "COLOR_SCHEME_DIRECTIVE.md"
+    rule: "ALL component mappings MUST specify DaisyUI semantic classes ONLY"
+    validation: "Component descriptors must not contain hardcoded colors (bg-white, text-gray-600, etc.)"
+    replacement_required: "Replace all hardcoded colors with semantic equivalents before proceeding"
+
+  prerequisite_validation:
+    - "[ ] OpenAPI specification file exists and is valid JSON/YAML"
+    - "[ ] Design phase (Step 20) completed with UI Model JSON generated"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+    - "[ ] universal_component_mapping_protocol.md reviewed and understood"
+    - "[ ] Target rendering framework identified (HTMX/Jinja2 or React/TypeScript)"
+
+instructions:
+  objective: >
+    Transform OpenAPI schema definitions into UI component mappings following deterministic,
+    rule-based component selection. Apply semantic overrides based on field names and generate
+    component descriptors with dual tokens for responsive behavior. All mappings must be
+    auditable and reproducible.
+
+  steps:
+    - step: 1
+      name: "Load and Validate OpenAPI Specification"
+      actions:
+        - "Locate OpenAPI specification file (openapi_spec.json or openapi.yaml)"
+        - "Validate JSON/YAML syntax and OpenAPI schema compliance"
+        - "Extract all endpoint definitions (GET, POST, PUT, DELETE, PATCH)"
+        - "Extract all schema definitions (request bodies, response bodies, parameters)"
+        - "Identify CRUD operations and entity relationships"
+        - "Document API surface area: total endpoints, entities, operations"
+      outputs:
+        - "openapi_spec: Dict[str, Any]"
+        - "endpoints: List[EndpointDefinition]"
+        - "schemas: Dict[str, SchemaDefinition]"
+        - "crud_operations: Dict[str, List[Operation]]"
+      gates:
+        - "OpenAPI spec must be valid and parseable"
+        - "All schemas must have defined properties"
+        - "Do not proceed if spec is malformed or incomplete"
+
+    - step: 2
+      name: "Apply Universal Component Mapping Protocol"
+      reference: "universal_component_mapping_protocol.md"
+      actions:
+        - "CRITICAL: Follow 6-step workflow from universal_component_mapping_protocol.md:"
+        - "  Step 1: Extract raw metadata (name, type, format, constraints, description)"
+        - "  Step 2: Identify structural context (form field, display field, navigation)"
+        - "  Step 3: Apply base type mapping (string→text_field, array→multi_select, etc.)"
+        - "  Step 4: Apply semantic overrides (email→email_primary, status→badge_primary)"
+        - "  Step 5: Apply secondary token logic (mobile/narrow contexts)"
+        - "  Step 6: Apply behavior from constraints (maxLength→character counter, etc.)"
+        - "Generate component descriptor for each field with:"
+        - "  - component_type: text_field, email_field, date_picker, number_field, etc."
+        - "  - primary_token: Desktop/full-featured variant"
+        - "  - secondary_token: Mobile/compact variant"
+        - "  - constraints: maxLength, pattern, minimum, maximum, required"
+        - "  - validation_rules: Derived from OpenAPI constraints"
+      implementation_pattern: |
+        # Component Mapping Example (from universal_component_mapping_protocol.md)
+
+        # Input: OpenAPI Schema Field
+        {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 255,
+            "description": "User email address"
+          }
+        }
+
+        # Step 1: Extract Metadata
+        - name: "email"
+        - type: "string"
+        - format: "email"
+        - maxLength: 255
+        - required: true (from parent schema)
+
+        # Step 2: Structural Context
+        - Context: Form field (in POST /api/users request body)
+
+        # Step 3: Base Type Mapping
+        - string + format:email → email_field
+
+        # Step 4: Semantic Override
+        - Field name contains "email" → Confirm email_primary component
+
+        # Step 5: Secondary Token
+        - Mobile/narrow → email_secondary (compact variant)
+
+        # Step 6: Constraints → Behavior
+        - maxLength: 255 → Add character counter prop
+        - format: email → Add email validation pattern
+
+        # Output: Component Descriptor
+        {
+          "field": "email",
+          "component_type": "email_field",
+          "primary_token": "email_primary",
+          "secondary_token": "email_secondary",
+          "constraints": {
+            "maxLength": 255,
+            "pattern": "^[^@]+@[^@]+\\.[^@]+$",
+            "required": true
+          },
+          "props": {
+            "type": "email",
+            "maxLength": 255,
+            "placeholder": "user@example.com",
+            "showCharacterCounter": true,
+            "validationMessage": "Please enter a valid email address"
+          }
+        }
+      validation:
+        - "[ ] All schema fields mapped to components using 6-step workflow"
+        - "[ ] Base type mappings applied per universal_component_mapping_protocol.md Table"
+        - "[ ] Semantic overrides applied (email, password, url, status, avatar, etc.)"
+        - "[ ] Dual tokens generated (primary + secondary) for all components"
+        - "[ ] Constraints translated to component props and validation rules"
+        - "[ ] Component descriptors are deterministic (same input = same output)"
+      gates:
+        - "All validation checkboxes marked as complete"
+        - "Component mappings are reproducible and auditable"
+
+    - step: 3
+      name: "Determine Layout Types Based on Data Density"
+      reference: "openapi_ui_model_conversion_rules.md"
+      actions:
+        - "For each entity/schema, count total fields (including nested objects)"
+        - "Apply layout selection rules based on field count:"
+        - "  - 1-3 fields: CARD layout (compact, visual emphasis)"
+        - "  - 4-8 fields: TABLE layout (structured, scannable rows)"
+        - "  - 9-15 fields: GRID layout (balanced, grouped sections)"
+        - "  - 16+ fields: ACCORDION layout (collapsible sections, progressive disclosure)"
+        - "Determine responsive transformation rules:"
+        - "  - TABLE → CARDS (mobile <480px)"
+        - "  - GRID → LIST (tablet 480-767px)"
+        - "  - ACCORDION remains ACCORDION (all breakpoints)"
+        - "Classify fields into three-tier visibility:"
+        - "  - Must Show: Core fields always visible (ID, name, status)"
+        - "  - Should Show: Important but hide on mobile (description, dates)"
+        - "  - Nice to Show: Optional, hide on tablet and mobile (metadata, tags)"
+      implementation_pattern: |
+        # Layout Selection Example
+
+        # Entity: User (8 fields)
+        {
+          "id": "string",
+          "name": "string",
+          "email": "string",
+          "avatar_url": "string",
+          "status": "enum",
+          "role": "enum",
+          "created_at": "date-time",
+          "last_login": "date-time"
+        }
+
+        # Field Count: 8
+        # Layout: TABLE (4-8 fields)
+
+        # Responsive Transformation:
+        # - Desktop (≥768px): TABLE with all 8 columns
+        # - Tablet (480-767px): TABLE with 5 columns (hide created_at, last_login)
+        # - Mobile (<480px): CARDS (avatar + name + status + actions)
+
+        # Three-Tier Visibility:
+        visibility: {
+          must_show: ["avatar_url", "name", "status"],      # Always visible
+          should_show: ["email", "role"],                    # Hide on mobile
+          nice_to_show: ["created_at", "last_login"]        # Hide on tablet+mobile
+        }
+
+        # Layout Descriptor:
+        {
+          "entity": "User",
+          "field_count": 8,
+          "layout_type": "TABLE",
+          "primary_layout": "table_primary",
+          "secondary_layout": "card_secondary",
+          "responsive_transformations": [
+            {"breakpoint": ">=768px", "layout": "table", "columns": 8},
+            {"breakpoint": "480-767px", "layout": "table", "columns": 5},
+            {"breakpoint": "<480px", "layout": "cards", "fields": ["avatar_url", "name", "status"]}
+          ],
+          "visibility_tiers": {
+            "must_show": ["avatar_url", "name", "status"],
+            "should_show": ["email", "role"],
+            "nice_to_show": ["created_at", "last_login"]
+          }
+        }
+      validation:
+        - "[ ] All entities assigned layout type (TABLE/CARD/GRID/ACCORDION)"
+        - "[ ] Field count ranges followed (1-3→CARD, 4-8→TABLE, 9-15→GRID, 16+→ACCORDION)"
+        - "[ ] Responsive transformations defined for each layout"
+        - "[ ] Three-tier visibility hierarchy applied (Must/Should/Nice)"
+        - "[ ] Layout descriptors include primary and secondary tokens"
+      gates:
+        - "All entities have deterministic layout assignments"
+        - "Responsive behavior documented for all layouts"
+
+    - step: 4
+      name: "Map CRUD Operations to Component Interactions"
+      actions:
+        - "For each endpoint, determine UI interaction pattern:"
+        - "  - GET /api/users → LIST view (table/cards)"
+        - "  - GET /api/users/{id} → DETAIL view (form/modal)"
+        - "  - POST /api/users → CREATE form (modal/page)"
+        - "  - PUT/PATCH /api/users/{id} → EDIT form (modal/page)"
+        - "  - DELETE /api/users/{id} → DELETE confirmation (modal/alert)"
+        - "Map HTTP methods to HTMX attributes (if using HTMX/Jinja2):"
+        - "  - GET → hx-get"
+        - "  - POST → hx-post"
+        - "  - PUT → hx-put"
+        - "  - PATCH → hx-patch"
+        - "  - DELETE → hx-delete (with hx-confirm)"
+        - "Define component interactions:"
+        - "  - List view: Click row → load detail view"
+        - "  - Create button → open create form modal"
+        - "  - Edit button → open edit form modal"
+        - "  - Delete button → show confirmation, then delete"
+        - "  - Form submit → POST/PUT, show success/error feedback"
+      outputs:
+        - "crud_mappings: Dict[str, ComponentInteraction]"
+        - "htmx_patterns: Dict[str, HTMXAttributes]"
+      gates:
+        - "All CRUD operations mapped to UI interactions"
+        - "HTMX patterns defined for all server interactions (if HTMX stack)"
+
+    - step: 5
+      name: "Generate UI Model JSON"
+      actions:
+        - "Compile all component descriptors, layout descriptors, and CRUD mappings"
+        - "Generate ui-model.json with structure:"
+        - "  - metadata: API name, version, generation timestamp"
+        - "  - entities: List of all schemas with component mappings"
+        - "  - pages: List of pages derived from endpoints (list, detail, create, edit)"
+        - "  - components: Component library references (from SCAFFOLDING_LIBRARIES_OVERVIEW.md)"
+        - "  - tokens: Design token references (component_tokens.json, layout_tokens.json)"
+        - "Write ui-model.json to project root or docs/ui/ directory"
+        - "Validate JSON syntax and schema compliance"
+      implementation_pattern: |
+        # ui-model.json structure
+        {
+          "metadata": {
+            "api_name": "User Management API",
+            "api_version": "1.0.0",
+            "generated_at": "2025-12-01T10:30:00Z",
+            "generator": "WebUI_Component_Mapping_Phase v1.0.0"
+          },
+          "entities": [
+            {
+              "name": "User",
+              "schema_ref": "#/components/schemas/User",
+              "field_count": 8,
+              "layout_type": "TABLE",
+              "layout_descriptor": { /* ... */ },
+              "fields": [
+                {
+                  "name": "email",
+                  "component_descriptor": { /* ... */ }
+                }
+              ]
+            }
+          ],
+          "pages": [
+            {
+              "path": "/users",
+              "name": "User List",
+              "type": "list",
+              "entity": "User",
+              "layout": "table_primary",
+              "endpoint": "GET /api/users"
+            },
+            {
+              "path": "/users/create",
+              "name": "Create User",
+              "type": "create",
+              "entity": "User",
+              "layout": "form_modal",
+              "endpoint": "POST /api/users"
+            }
+          ],
+          "component_library": {
+            "htmx_templates": "src_templates/",
+            "react_components": "react_component_libs/heroui/"
+          },
+          "tokens": {
+            "component_tokens": "component_tokens.json",
+            "layout_tokens": "layout_tokens.json"
+          }
+        }
+      validation:
+        - "[ ] ui-model.json generated with all required sections"
+        - "[ ] All entities included with component mappings"
+        - "[ ] All pages derived from endpoints"
+        - "[ ] Component library references valid"
+        - "[ ] JSON syntax valid"
+      gates:
+        - "ui-model.json exists and passes JSON schema validation"
+
+    - step: 6
+      name: "Document Component Mapping Decisions"
+      actions:
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - OpenAPI specification analysis summary"
+        - "  - Component mapping decisions with rationale"
+        - "  - Layout type assignments per entity"
+        - "  - Responsive transformation rules"
+        - "  - CRUD operation mappings"
+        - "  - ui-model.json file path and validation status"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN with Phase 2 Component Mapping completion"
+        - "CRITICAL: DO NOT create temporal documents - all updates in SPEC and IMPLEMENTATION_PLAN"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property"
+        - "  - Component mapping decisions and rationale"
+        - "  - Relationships: session → implements → component_mapping"
+      outputs:
+        - "spec_updated: Boolean"
+        - "plan_updated: Boolean"
+        - "memory_entities_created: List[str]"
+      gates:
+        - "SPEC document updated with all mapping decisions"
+        - "IMPLEMENTATION_PLAN Phase 2 checklist updated"
+        - "Memory entities created with Date properties"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: All component mappings MUST follow universal_component_mapping_protocol.md 6-step workflow"
+  - "CRITICAL: Layout assignments MUST be deterministic (same schema = same layout)"
+  - "CRITICAL: Dual tokens (primary/secondary) MUST be generated for all components"
+  - "CRITICAL: Responsive transformations MUST be defined for all layouts"
+  - "CRITICAL: Three-tier visibility MUST be applied (Must/Should/Nice)"
+  - "All mappings must reference design_system_foundations.md principles"
+  - "All component selections must reference SCAFFOLDING_LIBRARIES_OVERVIEW.md templates"
+  - "WCAG AA compliance considerations for all component choices"
+
+forbidden:
+  - "Arbitrary component selection (must follow protocol rules)"
+  - "Hardcoded layout decisions (must be based on field count)"
+  - "Skipping semantic overrides (email, password, url, status, etc.)"
+  - "Omitting secondary tokens (mobile/compact variants required)"
+  - "Creating temporal documents (all updates in SPEC and IMPLEMENTATION_PLAN)"
+  - "Viewport media queries (use container queries only)"
+  - "Single-token components (dual tokens required for responsive behavior)"
+
+output_format:
+  require_sections:
+    - "Section 1: OpenAPI Specification Analysis (endpoints, schemas, CRUD operations)"
+    - "Section 2: Component Mapping Results (all fields mapped per 6-step workflow)"
+    - "Section 3: Layout Type Assignments (per entity with field count rationale)"
+    - "Section 4: Responsive Transformation Rules (per layout type)"
+    - "Section 5: CRUD Operation Mappings (endpoints to UI interactions)"
+    - "Section 6: ui-model.json Generation (file path and validation status)"
+    - "Section 7: Memory Writes (session entity, mapping decisions, relationships)"
+    - "Section 8: Next Steps (proceed to Layout Token Generation Phase 22)"
+  language: "Australian English"
+
+success_criteria:
+  - "OpenAPI spec parsed and all schemas extracted"
+  - "All fields mapped using universal_component_mapping_protocol.md 6-step workflow"
+  - "All entities assigned deterministic layout types based on field count"
+  - "Responsive transformations defined for all layouts"
+  - "Three-tier visibility hierarchy applied"
+  - "CRUD operations mapped to UI interactions"
+  - "ui-model.json generated and validated"
+  - "SPEC and IMPLEMENTATION_PLAN updated (no temporal documents)"
+  - "Memory entities created with Date properties"
+
+halt_condition: "After successful component mapping completion and memory persistence, halt and await instruction to proceed to Phase 22 (Layout Token Generation)."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Component Mapping Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol"
+  language: "en-AU"
+  references:
+    - "universal_component_mapping_protocol.md"
+    - "openapi_ui_model_conversion_rules.md"
+    - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+    - "design_system_foundations.md"
+    - "component_tokens.json"
+    - "layout_tokens.json"
+
+# EXECUTION PROTOCOL
+# System: Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/21-WebUI_Component_Mapping_Phase.yaml under those enforced rules.

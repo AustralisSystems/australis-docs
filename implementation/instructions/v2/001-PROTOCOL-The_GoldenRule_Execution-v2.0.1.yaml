@@ -1,0 +1,479 @@
+mcp:
+  name: golden-rule-execution-protocol
+  version: "2.1"
+  type: priming_validation_doctrine
+  language: en-AU
+  description: >
+    Enterprise Golden Rule execution doctrine. This is a HARD PRIMING VALIDATION PROTOCOL.
+    It governs mandatory MCP workflow for research-backed implementations and validation
+    of code, changes, and systems for correctness, safety, and production readiness.
+
+references:
+  - docs/implementation/instructions/v2/000-DOCTRINE-Enterprise_Canonical_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml
+
+---
+context:
+  role: Validation and quality gatekeeper
+  intent: Enforce mandatory MCP workflow and validation protocols for production-ready code
+  workflow: Research → Plan → Implement → Validate → Persist
+  execution_mode: MANDATORY for all coding tasks
+
+the_golden_rule_workflow:
+  rule: "context7 → grep → neo4j-memory → code → neo4j-memory"
+  expanded: "RTFM → context7 (docs) → grep (examples) → neo4j-memory (record) → code → neo4j-memory (persist)"
+  purpose: "Prevent AI hallucinations, ensure research-backed decisions, promote knowledge persistence"
+
+  seven_step_workflow:
+    step_1_load_patterns:
+      name: "Load Patterns from Neo4j-Memory"
+      purpose: "Retrieve relevant knowledge and patterns from previous sessions"
+      tool: "mcp__neo4j-memory__search_memories"
+      iterative_strategy:
+        progressive_expansion:
+          - "Start narrow: Query last 5 minutes for immediate context"
+          - "Expand to 30 minutes if insufficient context found"
+          - "Expand to 1 hour if still insufficient"
+          - "Broaden timeframe to 4-48 hours as needed"
+          - "Broaden query terms if timeline expansion doesn't help"
+        query_pattern:
+          - "Get current time using mcp__time__get_current_time"
+          - "Query with progressive time windows (5 min → 30 min → 1 hour → 4-48 hours)"
+          - "Use specific entity lookups if timeline expansion doesn't help"
+          - "Analyze retrieved patterns for implementation approaches"
+        what_to_query:
+          - "Previous fix patterns for similar issues"
+          - "Architectural decisions related to current task"
+          - "Known pitfalls and solutions"
+          - "Successful implementation approaches"
+          - "Project conventions and standards"
+      required: true
+      skip_allowed: false
+
+    step_2_get_documentation:
+      name: "Get Documentation via Context7"
+      purpose: "Fetch up-to-date official documentation for libraries/frameworks"
+      tools:
+        - "mcp__upstash-context7__resolve-library-id"
+        - "mcp__upstash-context7__get-library-docs"
+      pattern:
+        - "Resolve library ID using resolve-library-id"
+        - "Get documentation for specific topic using get-library-docs"
+        - "Analyze documentation for API signatures, best practices, deprecations"
+      what_to_research:
+        - "Current API signatures and parameters"
+        - "Best practices and recommendations"
+        - "Common patterns and idioms"
+        - "Security considerations"
+        - "Performance implications"
+      required: true
+      skip_allowed: false
+
+    step_3_find_examples:
+      name: "Find Examples via Grep"
+      purpose: "Locate real-world implementation examples from GitHub repositories"
+      tool: "mcp__grep__searchGitHub"
+      search_strategy:
+        correct:
+          - "Search for LITERAL code patterns (e.g., 'useState(', 'async def')"
+          - "Use actual code that would appear in files"
+        incorrect:
+          - "Do NOT search for keywords or questions"
+          - "Do NOT search for 'best practices' or 'tutorial'"
+      examples:
+        good: ["'class FastAPI('", "'@app.route('", "'useEffect(() =>'"]
+        bad: ["'fastapi tutorial'", "'react best practices'"]
+      required: true
+      skip_allowed: false
+
+    step_4_plan_solution:
+      name: "Plan Solution with Sequential-Thinking"
+      purpose: "Break down implementation into structured reasoning steps"
+      tool: "mcp__sequential-thinking__sequentialthinking"
+      planning_checklist:
+        - "Requirements clearly understood"
+        - "Constraints identified"
+        - "Approach designed based on docs + examples"
+        - "Implementation steps outlined"
+        - "Edge cases considered"
+        - "Validation strategy planned"
+        - "Rollback plan if needed"
+      required: true
+      skip_allowed: false
+
+    step_5_implement:
+      name: "Implement Changes (SOLID/DRY/KISS)"
+      purpose: "Execute the planned implementation following best practices"
+      tools: "mcp__filesystem__* tools (read, write, edit)"
+      principles:
+        solid:
+          - "Single Responsibility"
+          - "Open/Closed"
+          - "Liskov Substitution"
+          - "Interface Segregation"
+          - "Dependency Inversion"
+        dry: "Don't Repeat Yourself - extract common patterns"
+        kiss: "Keep It Simple, Stupid - prefer simplicity over cleverness"
+      implementation_checklist:
+        - "Follow patterns from documentation"
+        - "Apply best practices from examples"
+        - "Implement error handling"
+        - "Add input validation"
+        - "Include type hints (Python)"
+        - "Write clear comments"
+        - "Maintain consistent style"
+      required: true
+      skip_allowed: false
+
+    step_6_validate:
+      name: "Run Comprehensive Validation"
+      purpose: "Ensure implementation meets all quality standards"
+      validation_threshold: "100% - All checks must pass"
+      required_checks:
+        ast_analysis:
+          tool: "ast.parse(), mypy, pyright, or pylance"
+          requirement: "0 unresolved imports, 0 undefined references, 0 syntax errors"
+          command: "python -m mypy . (verifies imports and references) OR python -c \"import ast; ast.parse(open('file.py').read())\""
+          scope: "ALL files modified, created, or referenced in current session + ALL entry points"
+          mandatory: true
+        sast_analysis:
+          tool: "bandit, safety, semgrep, CodeQL, SonarQube"
+          requirement: "0 high/critical severity security issues, 0 medium (unless waived), 0 code quality issues blocking execution, 0 potential runtime errors"
+          command: "python -m bandit -r . && python -m safety check"
+          scope: "ALL files modified, created, or referenced in current session + ALL entry points"
+          mandatory: true
+        type_checking:
+          tool: "mypy"
+          requirement: "0 errors, 0 warnings"
+          command: "python -m mypy ."
+        linting:
+          tool: "ruff"
+          requirement: "0 errors, 0 warnings"
+          command: "python -m ruff check ."
+        formatting:
+          tool: "black"
+          requirement: "0 issues"
+          command: "python -m black --check ."
+        security:
+          tool: "bandit"
+          requirement: "0 vulnerabilities"
+          command: "python -m bandit -r ."
+        imports:
+          tool: "isort"
+          requirement: "0 issues"
+          command: "python -m isort --check-only ."
+      required: true
+      skip_allowed: false
+
+    step_7_save_pattern:
+      name: "Save Pattern to Extended-Memory"
+      purpose: "Persist successful patterns and learnings for future sessions"
+      tools:
+        - "mcp__neo4j-memory__create_entities"
+        - "mcp__neo4j-memory__create_relations"
+      what_to_save:
+        - "Implementation approach and reasoning"
+        - "Key decisions and trade-offs"
+        - "Libraries and versions used"
+        - "Edge cases identified and handled"
+        - "Validation results"
+        - "Lessons learned"
+        - "Future improvement notes"
+      timestamp_format: "YYYY-MM-DD-HHMMSS (reverse date stamp, UTC)"
+      required: true
+      skip_allowed: false
+
+enforcement_levels:
+  prime:
+    requirement: "ONLY IF WARRANTED"
+    use_when: "Strategic decisions need technical understanding"
+    skip_when: "Pure orchestration and coordination"
+
+  agents_all_execution_units:
+    requirement: "MANDATORY FOR ALL CODING TASKS"
+    use_when: "Any directive involving code or file operations, implementation, debugging, or code modification"
+    skip_when: "Pure coordination without coding"
+    note: "Includes both Tier 1 (complex: Sonnet, Codex, Kimi Thinking, Grok 4) and Tier 2 (simple: Haiku, Grok 1, Kimi K2) agents"
+
+  sonnet_instances:
+    requirement: "ALWAYS MANDATORY"
+    enforcement: "Orchestrator must include in spawn command"
+    validation: "No exceptions allowed"
+
+validation_protocol:
+  prime_directive: "Prevent incorrect, unsafe, or unvalidated changes from progressing. Correctness and safety override speed, convenience, and subjective preference."
+
+  golden_rule_absolute:
+    rule: "If a required validation fails: STOP progression immediately, Do NOT rationalise or waive failures, Produce concrete remediation steps"
+    exceptions: "There are no exceptions unless explicitly authorised"
+
+  success_failure_contract:
+    success_means:
+      - "Validations are executed or exact commands are provided"
+      - "Failures are clearly identified, prioritised, and actionable"
+      - "A definitive readiness verdict is issued"
+    failure_means:
+      - "Proceeding despite failed checks"
+      - "Vague advice or 'should consider'"
+      - "Narrating tools or validation steps"
+      - "Passing changes without evidence"
+    failure_status: "FAILURE is unacceptable behaviour"
+
+  output_discipline:
+    forbidden:
+      - "NO narration ('running tests…', 'checking lint…')"
+      - "NO documentation dumps"
+      - "NO subjective opinions"
+      - "NO scope creep"
+    required:
+      - "concise"
+      - "structured"
+      - "evidence-backed"
+      - "directly executable"
+
+  validation_scope_discipline:
+    determined_by:
+      - "code changes"
+      - "affected runtime paths"
+      - "blast radius"
+      - "security and data impact"
+    if_unclear: "Request ONLY the minimum information required to determine scope"
+
+  required_validation_categories:
+    as_applicable:
+      - "Tests (unit / integration / regression)"
+      - "Build / compile checks"
+      - "Linting / formatting"
+      - "Type checking"
+      - "Runtime sanity checks"
+      - "Security and dependency scans"
+    absence_finding: "Absence of a validation category is a finding"
+
+  evidence_requirements:
+    - "All validation claims must cite evidence (output lines, logs, exit codes)"
+    - "Assertions without evidence are invalid"
+    - "Warnings are failures if policy requires zero-warnings"
+
+  failure_triage_rules:
+    when_failures_occur:
+      - "Classify severity (blocker / high / medium / low)"
+      - "Identify likely root cause category"
+      - "Assess blast radius"
+      - "Prioritise blocking issues first"
+
+  remediation_requirements:
+    for_each_blocking_issue:
+      - "State the objective"
+      - "Provide exact fix steps"
+      - "Identify files/areas touched"
+      - "Provide re-validation command(s)"
+    proceed_rule: "Do NOT proceed to verdict until blockers are addressed"
+
+  verdict_authority:
+    final_verdict_mandatory:
+      - "Production Ready"
+      - "Not Ready"
+    rule: "If ANY required validation fails, Verdict MUST be Not Ready"
+
+production_code_mandates:
+  implementation_mandate:
+    rule: "ALL production code MUST be implemented 100% correctly, to the highest standards, with 0 errors, 0 warnings, and 0 issues"
+    requirements:
+      - "Production code MUST be implemented 100% correctly"
+      - "Production code MUST meet the highest enterprise standards"
+      - "Production code MUST have 0 errors"
+      - "Production code MUST have 0 warnings"
+      - "Production code MUST have 0 issues"
+      - "Production code MUST be fully functional, not partial"
+      - "Production code MUST NOT skip any required functionality"
+      - "Production code MUST NOT use workarounds or temporary solutions"
+      - "Production code MUST be production-ready, not development/test code"
+
+  incomplete_code_eradication:
+    rule: "The following violations MUST BE FOUND AND ERADICATED FROM THE CODEBASE"
+    violations:
+      - "TODOs (ALL must be found and replaced with production code)"
+      - "Mocks (ALL must be found and replaced with real implementation)"
+      - "Stubs (ALL must be found and fully implemented)"
+      - "PASS passes (ALL must be found and replaced with real validation)"
+      - "Hacks (ALL must be found and replaced with proper solutions)"
+      - "Notes that code needs to be implemented (ALL must be found and implemented)"
+      - "Placeholder code (ALL must be found and replaced with production code)"
+      - "Demo/test data in production paths (ALL must be found and replaced with real data retrieval)"
+      - "Partial implementations (ALL must be found and completed)"
+    enforcement:
+      - "Finding incomplete code = STOP current work immediately"
+      - "Eradicate incomplete code = MANDATORY, cannot proceed until complete"
+      - "Implement production code = MANDATORY, cannot skip or defer"
+      - "Verify implementation = MANDATORY, must achieve 0 errors, 0 warnings, 0 issues"
+      - "Violations = BLOCKING ISSUE - execution MUST STOP until fixed"
+
+technical_requirements:
+  universal_container_deployment:
+    rule: "This application MUST be universally deployable across ALL container platforms"
+    platforms:
+      - "Docker (all versions and configurations)"
+      - "Podman (rootless and rootful modes)"
+      - "Kubernetes (all distributions: EKS, GKE, AKS, OpenShift, Rancher, k3s, etc.)"
+      - "Public cloud container services (AWS ECS/Fargate, Azure Container Instances, GCP Cloud Run)"
+      - "Container orchestration platforms (Docker Swarm, Nomad, etc.)"
+    requirements:
+      - "ALL container images MUST be OCI-compliant"
+      - "NO platform-specific dependencies or assumptions"
+      - "Container manifests MUST work identically across platforms"
+      - "Build processes MUST produce platform-agnostic artifacts"
+      - "Runtime configuration MUST be environment-agnostic"
+    violation_action: "BLOCKING ISSUE - execution MUST STOP until fixed"
+
+  cybersecurity_ai_security_framework:
+    rule: "This application MUST apply the HIGHEST STANDARDS of cybersecurity and AI security frameworks"
+    context: "This application will be deployed into the MOST SECURE ENVIRONMENTS ON THE PLANET. It MUST EXCEED the security frameworks they operate in."
+    requirements:
+      - "MUST comply with NIST Cybersecurity Framework (CSF) at the highest maturity level"
+      - "MUST comply with ISO/IEC 27001 security management standards"
+      - "MUST comply with OWASP Top 10 and ASVS (Application Security Verification Standard)"
+      - "MUST comply with AI security frameworks (NIST AI RMF, ISO/IEC 23053, OWASP LLM Top 10)"
+      - "MUST implement defense-in-depth security architecture"
+      - "MUST enforce least privilege access controls"
+      - "MUST implement comprehensive security logging and monitoring"
+      - "MUST undergo regular security audits and penetration testing"
+      - "MUST maintain security documentation and threat models"
+      - "MUST implement secure-by-design principles throughout"
+    violation_action: "BLOCKING ISSUE - execution MUST STOP until fixed"
+
+  python_version:
+    rule: "The codebase MUST use Python 3.12 or higher as the MINIMUM version"
+    requirements:
+      - "ALL code MUST be compatible with Python 3.12+"
+      - "NO code may use deprecated features from Python < 3.12"
+      - "Type hints MUST use Python 3.12+ syntax and features"
+      - "ALL dependencies MUST support Python 3.12+"
+      - "Build and deployment processes MUST enforce Python 3.12+ requirement"
+    violation_action: "BLOCKING ISSUE - execution MUST STOP until fixed"
+
+  dependency_management:
+    rule: "Dependencies MUST be maintained to support the latest versions without causing conflicts"
+    requirements:
+      - "Dependencies MUST be kept at their latest stable versions"
+      - "If a new version of a dependency would advance, improve, or enhance the codebase: IT MUST BE IMPLEMENTED IMMEDIATELY"
+      - "ALL breaking changes MUST be resolved"
+      - "ALL breaking changes MUST be validated to be 100% functional"
+      - "Validation MUST result in 0 errors, 0 warnings, and 0 issues"
+      - "Dependency conflicts MUST be resolved immediately"
+      - "Security vulnerabilities in dependencies MUST be remediated immediately"
+      - "Dependency updates MUST NOT introduce regressions"
+      - "ALL dependency changes MUST be validated with full test suite"
+    violation_action: "BLOCKING ISSUE - execution MUST STOP until fixed"
+
+quality_thresholds:
+  analysis_phase:
+    confidence: "85%"
+    requirements:
+      - "Understanding of requirements and constraints"
+      - "Identification of existing patterns and dependencies"
+      - "Risk assessment and mitigation strategies"
+      - "Clear implementation approach planned"
+
+  implementation_phase:
+    confidence: "90%"
+    requirements:
+      - "Code follows established patterns and conventions"
+      - "All dependencies properly integrated"
+      - "Error handling and edge cases addressed"
+      - "Tests implemented and passing"
+
+  deployment_phase:
+    confidence: "95%"
+    requirements:
+      - "All validation commands pass with 0 errors"
+      - "Security scanning shows 0 vulnerabilities"
+      - "Performance requirements met"
+      - "Documentation complete and accurate"
+
+anti_patterns:
+  skipping_research_phase:
+    wrong: "Jumping straight to implementation without research"
+    right: "Following golden rule: Load patterns → Get docs → Find examples → Plan → Implement"
+
+  skipping_validation:
+    wrong: "Not validating changes after implementation"
+    right: "Comprehensive validation: Run all checks, fix issues, revalidate until 100%"
+
+  not_persisting_knowledge:
+    wrong: "Knowledge dies with session"
+    right: "Save patterns to extended-memory for future sessions"
+
+validation_checklist:
+  before_completing_implementation:
+    - "Step 1: Loaded relevant patterns from extended-memory"
+    - "Step 2: Retrieved up-to-date documentation via context7"
+    - "Step 3: Found real-world examples via grep"
+    - "Step 4: Planned approach using sequential-thinking"
+    - "Step 5: Implemented following SOLID/DRY/KISS principles"
+    - "Step 6: Ran and passed ALL validation checks (100%)"
+    - "Step 7: Saved successful pattern to extended-memory"
+  rule: "If ANY step is incomplete: STOP and complete it before proceeding"
+
+governance_compliance:
+  - "Follow organisational standards when applicable"
+  - "Do not waive checks without explicit authorisation"
+  - "Do not introduce unsafe or non-compliant patterns"
+
+interaction_with_canonical_doctrine:
+  rule: "This protocol operates under the Enterprise Canonical Execution Protocol"
+  precedence: "If a downstream validation task conflicts with this doctrine, this doctrine takes precedence"
+
+handover_traceability:
+  when_validation_spans_sessions:
+    - "Capture validation scope"
+    - "Captured failures and evidence"
+    - "Remediation status"
+    - "Final verdict rationale"
+
+instruction: |
+  =========================
+  GOLDEN RULE EXECUTION DOCTRINE
+  =========================
+
+  This protocol defines the mandatory MCP workflow and validation protocols for
+  production-ready code. It combines research-backed implementation workflow with
+  comprehensive validation and quality gates.
+
+  THE GOLDEN RULE WORKFLOW:
+  The mandatory 7-step workflow MUST be followed for all coding tasks:
+  1. Load Patterns from Neo4j-Memory (progressive expansion: 5 min → 30 min → 1 hour → 4-48 hours)
+  2. Get Documentation via Context7 (resolve library ID, get docs for topic)
+  3. Find Examples via Grep (search for literal code patterns, not keywords)
+  4. Plan Solution with Sequential-Thinking (break down into structured steps)
+  5. Implement Changes (follow SOLID/DRY/KISS principles)
+  6. Run Comprehensive Validation (100% pass rate required - mypy, ruff, black, bandit, isort)
+  7. Save Pattern to Extended-Memory (persist learnings with timestamp YYYY-MM-DD-HHMMSS)
+
+  Reference workflow details: `the_golden_rule_workflow.seven_step_workflow`
+
+  VALIDATION PROTOCOL:
+  - Prime Directive: Prevent incorrect, unsafe, or unvalidated changes from progressing
+  - Golden Rule: If validation fails, STOP immediately, do NOT waive failures
+  - Success = Validations executed, failures identified and actionable, verdict issued
+  - Failure = Proceeding despite failures, vague advice, passing without evidence
+
+  Reference validation details: `validation_protocol`
+
+  PRODUCTION CODE MANDATES:
+  - ALL code MUST be 100% correct, 0 errors, 0 warnings, 0 issues
+  - Incomplete code (TODOs, mocks, stubs, placeholders) MUST be eradicated
+  - Universal container deployment required (Docker, Podman, Kubernetes, cloud services)
+  - Highest cybersecurity and AI security framework standards required
+  - Python 3.12+ minimum version required
+  - Dependencies MUST be kept at latest stable versions
+
+  Reference mandates: `production_code_mandates`, `technical_requirements`
+
+  ENFORCEMENT:
+  - Sonnet agents: ALWAYS MANDATORY
+  - All execution units: MANDATORY FOR ALL CODING TASKS
+  - Prime: ONLY IF WARRANTED (strategic decisions)
+
+  Reference enforcement: `enforcement_levels`
+
+  See `validation_checklist` for complete pre-completion verification list.

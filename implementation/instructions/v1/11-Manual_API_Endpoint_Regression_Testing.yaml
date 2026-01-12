@@ -1,0 +1,731 @@
+prompt_name: "Manual_API_Endpoint_Regression_Testing"
+version: "1.0.0"
+type: "manual_api_endpoint_regression_testing"
+context:
+  role: "Standards-governed implementation executor with manual API endpoint regression testing duties"
+  governance:
+      canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+      golden_rule_execution_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute manual regression testing of all REST API endpoints using an INCREMENTAL, STEP-BY-STEP methodology.
+    Work ONE STEP AT A TIME, ONE ENDPOINT GROUP AT A TIME. Get the latest OpenAPI spec, create/update SPEC,
+    authenticate, select ONE untested endpoint group, test it completely with remediation, then move to the next group.
+    For each endpoint test, observe results, identify issues, and systematically remediate ALL issues until
+    the test completes successfully before proceeding. By default, ALL API endpoints MUST be tested unless
+    additional instructions explicitly constrain or focus the test scope. CRITICAL: NO scripted tests or
+    automated test frameworks - all testing MUST be manual, interactive, and human-simulated. CRITICAL:
+    When code changes are made, rebuild containers with "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+    before retesting.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    status reports, progress reports, completion reports, test results, regression findings, and
+    remediation actions MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the relevant SPEC(s) and
+    IMPLEMENTATION_PLAN with all progress, findings, and status information. This rule is
+    NON-NEGOTIABLE and must be enforced strictly.
+  critical_testing_rule: >
+    **CRITICAL TESTING RULE**: MANUAL TESTING ONLY - NO SCRIPTED TESTS.
+
+    - ALL testing MUST be performed manually using interactive tools (curl, Postman, MCP fetch, browser)
+    - NO automated test scripts, test frameworks, or batch test execution
+    - NO pytest, unittest, Postman collections with auto-run, or any automated test runners
+    - Each endpoint MUST be tested individually, one at a time, with manual observation
+    - Each test MUST be executed manually, results observed manually, issues identified manually
+    - Remediation MUST occur immediately after each failed test before proceeding
+    - This rule is NON-NEGOTIABLE and must be enforced strictly.
+  doc_references:
+    canonical:
+      - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+      - "docs/implementation/README_TEMPLATE.md"
+      - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+      - "docs/implementation/SPEC_README.md"
+      - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    plan:
+      - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+  best_practices_references:
+    core_fastapi:
+      - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+      - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+    async_performance:
+      - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+    reliability_resilience:
+      - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+    architecture_patterns:
+      - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+    security_compliance:
+      - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+      - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+    observability_monitoring:
+      - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+      - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+    data_persistence:
+      - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+      - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+      - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+      - "docs/implementation/best-practices/redis-caching-best-practices.md"
+      - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+      - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+    configuration_deployment:
+      - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+      - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+    background_tasks:
+      - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+      - "docs/implementation/best-practices/celery-production-best-practices.md"
+      - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+    integration_patterns:
+      - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+      - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+    ui_integration:
+      - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+      - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+      - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+    code_quality_testing:
+      - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+      - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+    templating_scaffolding:
+      - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+
+  environment_assumptions:
+    - "API server is running and accessible (Docker container, local server, or remote endpoint)."
+    - "Authentication credentials are available if required (JWT tokens, API keys, etc.)."
+    - "Manual testing tools are available (curl, Postman, MCP fetch tools, browser)."
+    - "Docker logs are accessible for monitoring during testing (if applicable)."
+    - "Baseline test results or specifications are available for regression comparison (if applicable)."
+prerequisites:
+  validations:
+    - "All canonical docs are present and readable."
+    - "IMPLEMENTATION_PLAN_v#.#.#.md exists and defines the current phase and task(s)."
+    - "SPECs related to the current task(s) exist in docs/implementation/in_progress (or are created before execution)."
+    - "API server is running and healthy."
+    - "Authentication mechanism is understood and credentials are available (if required)."
+instructions:
+  objective: >
+    Execute manual regression testing using an INCREMENTAL, STEP-BY-STEP methodology. Work ONE STEP AT A TIME,
+    ONE ENDPOINT GROUP AT A TIME. Get the latest OpenAPI spec from apps and container services, create/update
+    SPEC with endpoint list grouped by function, authenticate to the app, select ONE untested endpoint group,
+    test it completely with remediation, document results as you progress, resolve all issues found during testing,
+    rebuild containers when code changes are made, then select the next untested endpoint group and continue.
+    For each endpoint test, observe the response, identify any issues (errors, warnings, incorrect status codes,
+    schema mismatches, performance issues), and systematically remediate ALL issues until the test completes
+    successfully before proceeding. By default, ALL endpoints MUST be tested unless additional instructions
+    explicitly constrain the scope. CRITICAL: All testing MUST be manual - NO scripted tests or automated
+    test frameworks. CRITICAL: When code changes are made, rebuild containers with "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+    before retesting to ensure 0 errors, 0 warnings, and 0 issues.
+  best_practices_requirement: "MUST review and implement relevant best practices documents during endpoint enumeration and testing - NO exceptions"
+
+  incremental_execution_methodology:
+    rule: "MANDATORY - MUST follow this incremental methodology - ONE STEP AT A TIME, ONE GROUP AT A TIME"
+    description: >
+      This instruction MUST be executed incrementally, breaking down the work into manageable steps.
+      Do NOT attempt to execute all steps at once. Work ONE STEP AT A TIME, ONE ENDPOINT GROUP AT A TIME.
+      Complete each step fully before proceeding to the next step. Complete each endpoint group fully before
+      selecting the next untested endpoint group.
+    steps:
+      - step: "Get the latest OpenAPI spec JSON from apps and container services"
+      - step: "Update existing or Create a SPEC for regression testing and list endpoints, group them by function"
+      - step: "Authenticate to the app and have authentication available for all REST API commands"
+      - step: "Select ONE of the untested endpoint groups"
+      - step: "Begin the regression testing for the selected endpoint group"
+      - step: "Document test results as you progress"
+      - step: "Resolve all issues that you find during the testing"
+      - step: "Complete the regression testing for the endpoint group (ensure 0 errors, 0 warnings, 0 issues)"
+      - step: "When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+      - step: "Retest to ensure 0 errors, 0 warnings, and 0 issues"
+      - step: "Select the next untested endpoint group and continue testing using the same methodology"
+    continuation_instruction: >
+      When instructed to CONTINUE:
+      - Continue with the next steps
+      - Ensure there are 0 errors, 0 warnings, and 0 issues
+      - Check the docker container logs to ensure the app and all containers have 0 errors, 0 warnings, and 0 issues
+      - Resolve all known issues, remediate and apply all fixes
+      - REMEMBER: When you make changes to the codebase, run "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+        to rebuild the container to pick up the changes, then retest to ensure there are 0 errors, 0 warnings, and 0 issues
+      - Select one of the untested endpoint groups and continue testing using the same instructions and methodology
+
+  steps:
+    - step: 1
+      name: "Review Canonical Documentation"
+      actions:
+        - "Read all canonical docs listed in context.doc_references.canonical."
+        - "Extract required standards for naming, SPEC structure, workflow order, and documentation updates."
+        - "Understand the critical testing rule: MANUAL TESTING ONLY - NO SCRIPTED TESTS."
+      gates:
+        - "Do not proceed unless all required docs are present and readable."
+
+    - step: 2
+      name: "Read Implementation Plan & Determine CURRENT Work"
+      actions:
+        - "Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md."
+        - "Identify CURRENT phase and the specific task(s), action(s), and step(s) to execute now."
+        - "Confirm an active SPEC in docs/implementation/in_progress exists for this regression cycle; if one does not exist, create it using the canonical SPEC template before proceeding."
+        - "Populate the SPEC with a checklist enumerating every endpoint/route to be tested so evidence can be captured as the run progresses."
+        - "Check for any additional instructions that constrain or focus the test scope."
+        - "If scope constraints exist, note them; otherwise, default to testing ALL endpoints."
+      outputs:
+        - "current_phase: <string>"
+        - "current_tasks: [<task_id_or_name>]"
+        - "associated_specs: [<spec_filenames>]"
+        - "test_scope: <all_endpoints|constrained_list>"
+        - "scope_constraints: [<endpoint_patterns_or_categories>]"
+      gates:
+        - "Do not proceed if CURRENT tasks are ambiguous or missing."
+
+    - step: 3
+      name: "Verify API Server Status"
+      actions:
+        - "Verify API server is running and accessible."
+        - "Check container health (if Docker) or service status."
+        - "Test basic connectivity (e.g., health endpoint, root endpoint)."
+        - "Verify authentication mechanism and obtain credentials/tokens if required."
+      suggested_commands:
+        - "docker ps | grep <api_container_name>"
+        - "docker logs <api_container_name> --tail 50"
+        - "curl -i http://localhost:<port>/health"
+        - "curl -i http://localhost:<port>/api/v1/auth/login -X POST -H 'Content-Type: application/json' -d '{\"username\":\"...\",\"password\":\"...\"}'"
+      gates:
+        - "Do not proceed if API server is not running or unhealthy."
+        - "Do not proceed if authentication fails and is required for testing."
+
+    - step: 4
+      name: "Get Latest OpenAPI Spec and Enumerate All API Endpoints - Group by Function"
+      incremental_execution: true
+      description: >
+        CRITICAL: Execute this step incrementally. First get the latest OpenAPI spec, then enumerate endpoints,
+        then group them by function. Do NOT attempt to do everything at once.
+      sub_steps:
+        - sub_step: "4.1: Get Latest OpenAPI Spec JSON"
+          actions:
+            - "CRITICAL: Get the latest OpenAPI spec JSON from apps and container services"
+            - "Retrieve OpenAPI spec from running containers/services (e.g., http://localhost:<port>/openapi.json)"
+            - "If multiple services exist, retrieve OpenAPI spec from each service"
+            - "Save the latest OpenAPI spec(s) for reference"
+            - "Verify OpenAPI spec is valid JSON and contains paths"
+          suggested_commands:
+            - "curl -s http://localhost:<port>/openapi.json > openapi_latest.json"
+            - "curl -s http://localhost:<port>/docs/openapi.json > openapi_latest.json"
+            - "docker exec <container_name> cat /app/openapi.json > openapi_latest.json"
+            - "cat openapi_latest.json | jq '.paths | keys'"
+          gates:
+            - "Do not proceed if OpenAPI spec cannot be retrieved"
+            - "Do not proceed if OpenAPI spec is invalid or empty"
+        - sub_step: "4.2: Enumerate Endpoints from OpenAPI Spec and Codebase"
+          actions:
+            - "Use the OpenAPI specification as the authoritative inventory"
+            - "Identify all REST API endpoints from source code (route definitions, decorators, controllers)"
+            - "Reconcile any gaps found in code vs spec"
+            - "Review FastAPI route decorators, Express.js routes, NestJS controllers, or equivalent"
+            - "List all endpoints with: HTTP method, path, description, authentication requirements"
+          suggested_commands:
+            - "grep -r '@app\\.(get|post|put|delete|patch)' --include='*.py'"
+            - "grep -r 'router\\.(get|post|put|delete|patch)' --include='*.py'"
+            - "grep -r '@Get|@Post|@Put|@Delete|@Patch' --include='*.ts'"
+            - "cat openapi_latest.json | jq '.paths | keys'"
+          gates:
+            - "Do not proceed if no endpoints can be identified"
+        - sub_step: "4.3: Group Endpoints by Function and Update SPEC"
+          actions:
+            - "CRITICAL: Group all endpoints by logical function/category (e.g., Auth, Storage, Workflows, External API, etc.)"
+            - "Create endpoint groups: { group_name: <string>, endpoints: [<endpoint_list>], tested: <false>, test_status: <pending|in_progress|passed|failed> }"
+            - "Update existing SPEC or create new SPEC for regression testing"
+            - "Add each endpoint group to the SPEC checklist with test status tracking"
+            - "Mark all endpoint groups as 'tested: false' initially"
+            - "Apply scope constraints if specified in step 2; otherwise all endpoints MUST be included"
+          outputs:
+            - "endpoint_groups: [ { group_name: <string>, endpoints: [ { method: <GET|POST|PUT|DELETE|PATCH>, path: <string>, description: <string>, requires_auth: <true|false> } ], tested: <false>, test_status: <pending> } ]"
+            - "total_endpoints: <integer>"
+            - "total_groups: <integer>"
+            - "untested_groups: [<group_names>]"
+          gates:
+            - "Do not proceed if endpoints cannot be grouped by function"
+            - "Do not proceed if SPEC cannot be updated/created"
+      actions:
+        - "CRITICAL: Execute sub-steps 4.1, 4.2, 4.3 sequentially - ONE AT A TIME"
+        - "Do NOT attempt to execute all sub-steps simultaneously"
+      outputs:
+        - "openapi_spec_file: <path_to_latest_openapi_spec>"
+        - "api_endpoints: [ { method: <GET|POST|PUT|DELETE|PATCH>, path: <string>, description: <string>, requires_auth: <true|false>, category: <string> } ]"
+        - "endpoint_groups: [ { group_name: <string>, endpoints: [<endpoint_list>], tested: <false>, test_status: <pending> } ]"
+        - "total_endpoints: <integer>"
+        - "total_groups: <integer>"
+        - "untested_groups: [<group_names>]"
+      gates:
+        - "Do not proceed if latest OpenAPI spec cannot be retrieved"
+        - "Do not proceed if endpoints cannot be enumerated"
+        - "Do not proceed if endpoints cannot be grouped by function"
+        - "Do not proceed if SPEC cannot be updated/created"
+
+    - step: 5
+      name: "Prepare Authentication (If Required)"
+      actions:
+        - "If authentication is required, obtain JWT token or API key via login endpoint."
+        - "Store authentication token for use in subsequent endpoint tests."
+        - "Verify token is valid and has appropriate permissions."
+        - "Document authentication method and token lifetime."
+      suggested_commands:
+        - "curl -X POST http://localhost:<port>/api/v1/auth/login -H 'Content-Type: application/json' -d '{\"username\":\"admin\",\"password\":\"admin123!\"}'"
+        - "export JWT_TOKEN=$(curl -s -X POST ... | jq -r '.token')"
+      outputs:
+        - "auth_method: <jwt|apikey|basic|none>"
+        - "auth_token: <string> (if applicable)"
+        - "token_lifetime: <integer> (if applicable)"
+      gates:
+        - "If authentication is required, do not proceed without valid token."
+        - "If authentication fails, remediate before proceeding."
+
+    - step: 6
+      name: "Manual Endpoint Testing - ONE GROUP AT A TIME with Systematic Remediation"
+      incremental_execution: true
+      description: >
+        CRITICAL: Execute this step incrementally - ONE ENDPOINT GROUP AT A TIME. Select ONE untested endpoint group,
+        test all endpoints in that group completely, resolve all issues, then move to the next group.
+        Do NOT attempt to test multiple groups simultaneously.
+      actions:
+        - "CRITICAL: Select ONE untested endpoint group from the list"
+        - "CRITICAL: Test endpoints in the selected group ONE AT A TIME - never in parallel or batch"
+        - "CRITICAL: Use MANUAL testing methods only (curl, Postman, MCP fetch, browser) - NO scripted tests"
+        - "CRITICAL: Complete testing for the selected group before selecting the next group"
+        - "For the selected endpoint group:"
+        - "  STEP 6.1: Execute manual test sequence"
+        - "    - Manually construct HTTP request (curl command, Postman request, or MCP fetch)"
+        - "    - Manually execute the request"
+        - "    - Manually observe HTTP status code"
+        - "    - Manually observe response body"
+        - "    - Manually measure response time (if applicable)"
+        - "    - Manually check Docker logs (if applicable)"
+        - "    - Simulate real-world flows: (i) list resources, (ii) fetch an individual resource, (iii) create one or more new resources of varying complexity, (iv) read the created resources to confirm persistence, (v) update all newly created resources, (vi) delete them and verify removal."
+        - "  STEP 6.2: Validate response"
+        - "    - Compare HTTP status code with expected value"
+        - "    - Validate response body schema/structure"
+        - "    - Check response time against baseline/tolerance (if applicable)"
+        - "    - Review Docker logs for errors/warnings"
+        - "    - Verify response data matches expected format"
+        - "  STEP 6.3: Identify issues"
+        - "    - Document any errors, warnings, or unexpected behaviour"
+        - "    - Categorise issues (functional, performance, schema, etc.)"
+        - "    - Note severity (critical, high, medium, low)"
+        - "  STEP 6.4: Remediate issues (if any found)"
+        - "    - CRITICAL: STOP testing and remediate issues ONE AT A TIME"
+        - "    - Analyse root cause of each issue"
+        - "    - Fix code, configuration, or infrastructure issues"
+        - "    - CRITICAL: When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+        - "    - CRITICAL: Wait for containers to be fully up and healthy before retesting"
+        - "    - Check docker container logs: docker logs <container_name> --tail 50"
+        - "    - Verify containers have 0 errors, 0 warnings, 0 issues"
+        - "    - Re-execute the SAME endpoint test manually"
+        - "    - Verify fix resolves the issue"
+        - "    - Continue remediation cycle until test passes"
+        - "    - CRITICAL: Ensure 0 errors, 0 warnings, and 0 issues before marking test as passed"
+        - "  STEP 6.5: Mark test as passed"
+        - "    - Only mark test as PASSED when:"
+        - "      * HTTP status code matches expected"
+        - "      * Response body validates correctly"
+        - "      * Response time within tolerance (if applicable)"
+        - "      * Docker logs show 0 errors, 0 warnings"
+        - "      * All issues remediated and verified"
+        - "  STEP 6.6: Document results"
+        - "    - Record test result (PASSED/FAILED)"
+        - "    - Document issues found and remediated"
+        - "    - Record response time and performance metrics"
+        - "    - Update SPEC file with test result"
+        - "  STEP 6.7: Complete endpoint group testing"
+        - "    - Only proceed to next endpoint after current test is PASSED"
+        - "    - If test fails after remediation attempts, escalate but do not skip"
+        - "    - Continue testing all endpoints in the selected group until all are PASSED"
+        - "    - Mark endpoint group as 'tested: true' and 'test_status: passed' when all endpoints pass"
+        - "    - Document all test results for the endpoint group in SPEC"
+        - "  STEP 6.8: Select next untested endpoint group"
+        - "    - CRITICAL: Only after completing current endpoint group, select ONE untested endpoint group"
+        - "    - Mark selected group as 'test_status: in_progress'"
+        - "    - Repeat steps 6.1-6.7 for the new endpoint group"
+        - "    - Continue until all endpoint groups are tested"
+      suggested_manual_testing_tools:
+        - "curl - Manual HTTP requests from command line"
+        - "Postman - Manual GUI-based API testing"
+        - "mcp_fetch_fetch - MCP tool for manual HTTP requests"
+        - "Browser - Manual GET requests and form submissions"
+        - "docker logs - Manual log inspection"
+      forbidden_testing_methods:
+        - " pytest, unittest, or any Python test framework"
+        - " Postman collections with auto-run or Newman"
+        - " Automated test scripts or batch test execution"
+        - " Test runners or CI/CD test pipelines"
+        - " Parallel or concurrent test execution"
+        - " Any form of automated test execution"
+      outputs:
+        - "current_endpoint_group: <group_name>"
+        - "endpoint_test_results: [ { endpoint: <path>, method: <verb>, status: <PASSED|FAILED>, http_code: <integer>, response_time_ms: <float>, issues_found: [<description>], issues_remediated: [<description>], verified: <true|false> } ]"
+        - "group_test_status: <in_progress|passed|failed>"
+        - "total_tests_executed: <integer>"
+        - "total_tests_passed: <integer>"
+        - "total_tests_failed: <integer>"
+        - "total_issues_found: <integer>"
+        - "total_issues_remediated: <integer>"
+        - "untested_groups_remaining: [<group_names>]"
+        - "testing_status: <complete|in_progress>"
+      gates:
+        - "CRITICAL: Do not proceed to next endpoint until current endpoint test is PASSED."
+        - "CRITICAL: Do not proceed to next endpoint group until current endpoint group is COMPLETE (all endpoints PASSED)."
+        - "CRITICAL: All issues MUST be remediated before marking test as PASSED."
+        - "CRITICAL: When code changes are made, containers MUST be rebuilt before retesting."
+        - "CRITICAL: Containers MUST have 0 errors, 0 warnings, 0 issues before marking test as PASSED."
+        - "CRITICAL: Testing MUST be manual - NO scripted tests allowed."
+        - "If endpoint test fails after remediation attempts, document and escalate - do not skip."
+
+    - step: 7
+      name: "Performance Validation (If Baseline Available)"
+      actions:
+        - "If baseline performance data is available, compare response times."
+        - "Identify any performance regressions (>20% degradation from baseline)."
+        - "If performance regression detected, investigate and remediate."
+        - "Document performance comparison results."
+      outputs:
+        - "performance_comparison: [ { endpoint: <path>, baseline_time_ms: <float>, current_time_ms: <float>, delta_percent: <float>, regression: <true|false> } ]"
+        - "performance_regressions: [<endpoint_paths>]"
+      gates:
+        - "If performance regression detected, remediate before marking test suite complete."
+
+    - step: 8
+      name: "Issue Collation & Documentation Update"
+      actions:
+        - "Collate all observed issues, errors, warnings, and findings from endpoint testing."
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Endpoint enumeration results"
+        - "  - Test execution results (endpoint-by-endpoint)"
+        - "  - Issues found and remediation actions"
+        - "  - Performance metrics and comparisons"
+        - "  - Docker log analysis summaries"
+        - "  - All findings, progress, and status information"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN checklists for phases/tasks/steps to reflect progress."
+        - "CRITICAL: DO NOT create temporal documents (e.g., API_TEST_RESULTS_YYYY-MM-DD.md, REGRESSION_REPORT_YYYY-MM-DD.md)"
+        - "CRITICAL: All test results, findings, and remediation actions MUST be documented in SPECs and IMPLEMENTATION_PLAN only"
+      gates:
+        - "Do not move a SPEC to 'done' unless acceptance criteria are met per SPEC and plan definitions."
+
+    - step: 9
+      name: "Audit Readiness & Halt"
+      actions:
+        - "Verify checklists across IMPLEMENTATION_PLAN are up to date for all phases/tasks/steps touched."
+        - "Confirm SPECs reflect current status (in_progress or done) and are located in the correct directories."
+        - "Verify all endpoint tests are documented with results."
+        - "Halt and await next instruction after producing the output artefacts."
+      outputs:
+        - "audit_readiness: <true|false>"
+        - "next_instruction_state: 'awaiting_orders'"
+        - "final_test_status: <all_passed|some_failed|in_progress>"
+        - "test_completion_percentage: <integer>"
+
+constraints:
+  - "Australian English for all documentation updates."
+  - "CRITICAL: Execute incrementally - ONE STEP AT A TIME, ONE ENDPOINT GROUP AT A TIME."
+  - "CRITICAL: NO scripted tests - ALL testing MUST be manual and interactive."
+  - "CRITICAL: Test endpoints ONE AT A TIME - never in parallel or batch."
+  - "CRITICAL: Test endpoint groups ONE AT A TIME - complete one group before selecting the next."
+  - "CRITICAL: Remediate issues ONE AT A TIME before proceeding to next endpoint."
+  - "CRITICAL: Do not proceed to next endpoint until current endpoint test is PASSED."
+  - "CRITICAL: Do not proceed to next endpoint group until current endpoint group is COMPLETE (all endpoints PASSED)."
+  - "CRITICAL: When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+  - "CRITICAL: After rebuilding containers, verify 0 errors, 0 warnings, 0 issues in docker logs before retesting."
+  - "CRITICAL: Check docker container logs to ensure app and all containers have 0 errors, 0 warnings, 0 issues."
+  - "Authentication headers/tokens MUST be supplied for any endpoint that requires authorization."
+  - "Unless a scope override is explicitly documented, 100% of endpoints/routers (as per OpenAPI + code) must be covered."
+  - "All tests and remediations must maintain the Canonical + Golden Rule standards: zero TODOs/mocks/stubs, zero warnings/errors, iterative fixes until clean."
+  - "No advancement to subsequent steps while unresolved errors persist in endpoint tests."
+  - "Do not fabricate endpoints; only test those evidenced by code/config/spec."
+  - "All new/updated SPECs must conform to SPEC_CREATION_GUIDE and SPEC_TEMPLATE."
+  - "All file moves must respect DOCUMENTATION_NAMING_CONVENTION and directory policy (backlog/in_progress/done)."
+  - "If security or auth is required for testing, request or load sanctioned credentials/secrets only."
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all updates go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Test results, regression findings, remediation actions MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+  - "By default, ALL endpoints MUST be tested unless additional instructions explicitly constrain scope."
+  - "Performance regressions (>20% degradation) MUST be remediated before marking test suite complete."
+
+examples:
+  - endpoint_enumeration_example:
+      api_endpoints:
+        - method: "POST"
+          path: "/api/v1/auth/login"
+          description: "User login with JWT token generation"
+          requires_auth: false
+          category: "Authentication"
+        - method: "GET"
+          path: "/api/v1/storage/items/{id}"
+          description: "Retrieve storage item by ID"
+          requires_auth: true
+          category: "Storage"
+        - method: "POST"
+          path: "/api/v1/operations/request"
+          description: "Execute external API request"
+          requires_auth: true
+          category: "External API"
+      total_endpoints: 30
+      test_plan: ["/api/v1/auth/login", "/api/v1/storage/items/{id}", "/api/v1/operations/request", "..."]
+  - manual_testing_example: |
+      # Example: Manual testing with curl (ONE endpoint at a time)
+
+      # Test 1: Login endpoint
+      curl -i -X POST http://localhost:8101/api/v1/auth/login \
+        -H "Content-Type: application/json" \
+        -d '{"username":"admin","password":"admin123!"}'
+
+      # Observe: HTTP 200 OK, response contains JWT token
+      # Extract token: export JWT_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+      # Test 2: Get storage item (requires auth)
+      curl -i -X GET http://localhost:8101/api/v1/storage/items/123 \
+        -H "Authorization: Bearer $JWT_TOKEN"
+
+      # Observe: HTTP 200 OK, response contains item data
+      # Check Docker logs: docker logs rest-orchestrator-dev-api --tail 20
+      # Verify: 0 errors, 0 warnings in logs
+
+      # If issue found: STOP, fix, retest SAME endpoint before proceeding
+  - remediation_example:
+      endpoint_test_results:
+        - endpoint: "/api/v1/storage/items/123"
+          method: "GET"
+          status: "PASSED"
+          http_code: 200
+          response_time_ms: 145.23
+          issues_found: ["Initial test returned 500 Internal Server Error", "Docker logs showed MongoDB connection timeout"]
+          issues_remediated: ["Fixed MongoDB connection string in config", "Increased connection timeout to 10s", "Restarted API container"]
+          verified: true
+        - endpoint: "/api/v1/operations/request"
+          method: "POST"
+          status: "FAILED"
+          http_code: 500
+          response_time_ms: 0
+          issues_found: ["500 Internal Server Error", "Missing 'url' field in request body"]
+          issues_remediated: ["Issue identified but not yet fixed - awaiting remediation"]
+          verified: false
+  - scope_constraint_example:
+      test_scope: "constrained_list"
+      scope_constraints: ["/api/v1/auth/*", "/api/v1/storage/*"]
+      note: "Only test authentication and storage endpoints, skip external API and workflow endpoints"
+  - forbidden_testing_example: |
+      #  FORBIDDEN: Automated test script
+      #!/bin/bash
+      # for endpoint in "${endpoints[@]}"; do
+      #   curl -X GET "$endpoint"
+      # done
+
+      #  FORBIDDEN: pytest test
+      # def test_all_endpoints():
+      #     for endpoint in endpoints:
+      #         assert client.get(endpoint).status_code == 200
+
+      #  ALLOWED: Manual curl commands executed one at a time
+      curl -i -X GET http://localhost:8101/api/v1/auth/login
+      # Observe results manually, then proceed to next command
+
+output_format:
+  section_1: "Current phase, tasks, and associated SPECs"
+  section_2: "API server status and authentication setup"
+  section_3: "Endpoint enumeration (all endpoints identified, test plan created)"
+  section_4: "Manual endpoint testing results (endpoint-by-endpoint, one at a time)"
+  section_5: "Issues found and remediation log (per endpoint)"
+  section_6: "Performance comparison (if baseline available)"
+  section_7: "Test summary (total tests, passed, failed, completion percentage)"
+  section_8: "Documentation updates (SPECs changed; IMPLEMENTATION_PLAN checklist diffs)"
+  section_9: "Final audit readiness and next-instruction state"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-01-27"
+  version: "1.0.0"
+  classification: "Enterprise Canonical Manual API Endpoint Regression Testing Governance Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, and Enterprise Canonical Manual API Endpoint Regression Testing Governance Protocol"
+  language: "en-AU"
+
+[END OF INSTRUCTIONS]
+
+continuation_instruction: |
+  You are executing Manual API Endpoint Regression Testing per Enterprise Canonical Execution Protocol v1.0.0.
+
+  INCREMENTAL EXECUTION METHODOLOGY (MANDATORY - ABSOLUTE)
+  - MUST follow incremental methodology - ONE STEP AT A TIME, ONE ENDPOINT GROUP AT A TIME
+  - Do NOT attempt to execute all steps at once
+  - Complete each step fully before proceeding to the next step
+  - Complete each endpoint group fully before selecting the next untested endpoint group
+  - When instructed to CONTINUE:
+    * Continue with the next steps
+    * Ensure there are 0 errors, 0 warnings, and 0 issues
+    * Check the docker container logs to ensure the app and all containers have 0 errors, 0 warnings, and 0 issues
+    * Resolve all known issues, remediate and apply all fixes
+    * REMEMBER: When you make changes to the codebase, run "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+      to rebuild the container to pick up the changes, then retest to ensure there are 0 errors, 0 warnings, and 0 issues
+    * Select one of the untested endpoint groups and continue testing using the same instructions and methodology
+
+  METHODOLOGY STEPS (SEQUENTIAL - EXECUTE ONE AT A TIME)
+  1. Get the latest OpenAPI spec JSON from apps and container services
+  2. Update existing or Create a SPEC for regression testing and list endpoints, group them by function
+  3. Authenticate to the app and have authentication available for all REST API commands
+  4. Select ONE of the untested endpoint groups
+  5. Begin the regression testing for the selected endpoint group
+  6. Document test results as you progress
+  7. Resolve all issues that you find during the testing
+  8. Complete the regression testing for the endpoint group (ensure 0 errors, 0 warnings, 0 issues)
+  9. When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date
+  10. Retest to ensure 0 errors, 0 warnings, and 0 issues
+  11. Select the next untested endpoint group and continue testing using the same methodology
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REVIEW)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability/Resilience: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture Patterns: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-best-practices-2025.md
+  Security: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md, secrets-management-best-practices-2025.md
+  Observability: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, redis-caching-best-practices.md
+  Configuration: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+  - MANDATORY: Review FastAPI and API gateway best practices BEFORE enumerating endpoints
+  - MANDATORY: Review testing, error handling, and security best practices BEFORE testing endpoints
+  - MUST validate endpoints against best practices standards during enumeration and testing
+  - MUST apply best practices patterns during testing
+
+  CRITICAL DOCUMENTATION RULE (ABSOLUTE - NO EXCEPTIONS)
+  - TEMPORAL DOCUMENTS MUST NOT BE CREATED
+  - ALL updates, status reports, progress reports, completion reports, test results, regression findings, and remediation actions MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+  - DO NOT create standalone temporal documents
+  - Update relevant SPEC(s) and IMPLEMENTATION_PLAN with all progress, findings, and status information
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  CRITICAL TESTING RULE (ABSOLUTE - NO EXCEPTIONS)
+  - MANUAL TESTING ONLY - NO SCRIPTED TESTS
+  - ALL testing MUST be performed manually using interactive tools (curl, Postman, MCP fetch, browser)
+  - NO automated test scripts, test frameworks, or batch test execution
+  - NO pytest, unittest, Postman collections with auto-run, or any automated test runners
+  - Each endpoint MUST be tested individually, one at a time, with manual observation
+  - Each test MUST be executed manually, results observed manually, issues identified manually
+  - Remediation MUST occur immediately after each failed test before proceeding
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  MANDATORY WORKFLOW (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Review Canonical Documentation
+  - Read all canonical docs listed in context.doc_references.canonical
+  - Extract required standards for naming, SPEC structure, workflow order, and documentation updates
+  - Understand the critical testing rule: MANUAL TESTING ONLY - NO SCRIPTED TESTS
+
+  Step 2: Read Implementation Plan & Determine CURRENT Work
+  - Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md
+  - Identify CURRENT phase and the specific task(s), action(s), and step(s) to execute now
+  - Confirm an active SPEC in docs/implementation/in_progress exists for this regression cycle
+  - Populate the SPEC with a checklist enumerating every endpoint/route to be tested
+  - Check for any additional instructions that constrain or focus the test scope
+  - If scope constraints exist, note them; otherwise, default to testing ALL endpoints
+
+  Step 3: Verify API Server Status
+  - Verify API server is running and accessible
+  - Check container health (if Docker) or service status
+  - Test basic connectivity (e.g., health endpoint, root endpoint)
+  - Verify authentication mechanism and obtain credentials/tokens if required
+
+  Step 4: Get Latest OpenAPI Spec and Enumerate All API Endpoints - Group by Function
+  - CRITICAL: Execute incrementally - sub-steps 4.1, 4.2, 4.3 sequentially
+  - Sub-step 4.1: Get the latest OpenAPI spec JSON from apps and container services
+  - Sub-step 4.2: Enumerate endpoints from OpenAPI spec and codebase
+  - Sub-step 4.3: Group endpoints by function and update SPEC
+  - Review FastAPI and API gateway best practices documents BEFORE proceeding
+  - Use the OpenAPI specification as the authoritative inventory
+  - Group all endpoints by logical function/category (e.g., Auth, Storage, Workflows, External API)
+  - Update existing SPEC or create new SPEC for regression testing
+  - Mark all endpoint groups as 'tested: false' initially
+  - Apply scope constraints if specified; otherwise all endpoints MUST be included
+
+  Step 5: Prepare Authentication (If Required)
+  - If authentication is required, obtain JWT token or API key via login endpoint
+  - Store authentication token for use in subsequent endpoint tests
+  - Verify token is valid and has appropriate permissions
+  - Document authentication method and token lifetime
+
+  Step 6: Manual Endpoint Testing - ONE GROUP AT A TIME with Systematic Remediation
+  - CRITICAL: Execute incrementally - ONE ENDPOINT GROUP AT A TIME
+  - CRITICAL: Select ONE untested endpoint group from the list
+  - Review testing, error handling, and security best practices documents BEFORE proceeding
+  - CRITICAL: Test endpoints in selected group ONE AT A TIME - never in parallel or batch
+  - CRITICAL: Use MANUAL testing methods only (curl, Postman, MCP fetch, browser) - NO scripted tests
+  - Validate endpoints against best practices standards during testing
+  - For each endpoint in selected group: Execute manual test sequence → Validate response → Identify issues → Remediate issues (if any) → Mark test as passed → Document results → Proceed to next endpoint
+  - CRITICAL: When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date
+  - CRITICAL: Check docker container logs to ensure 0 errors, 0 warnings, 0 issues before retesting
+  - CRITICAL: Do not proceed to next endpoint until current endpoint test is PASSED
+  - CRITICAL: Do not proceed to next endpoint group until current endpoint group is COMPLETE (all endpoints PASSED)
+  - CRITICAL: All issues MUST be remediated before marking test as PASSED
+  - CRITICAL: Ensure 0 errors, 0 warnings, and 0 issues before marking test as passed
+  - CRITICAL: Testing MUST be manual - NO scripted tests allowed
+  - After completing current endpoint group, select next untested endpoint group and repeat
+
+  Step 7: Performance Validation (If Baseline Available)
+  - If baseline performance data is available, compare response times
+  - Identify any performance regressions (>20% degradation from baseline)
+  - If performance regression detected, investigate and remediate
+  - Document performance comparison results
+
+  Step 8: Issue Collation & Documentation Update
+  - Collate all observed issues, errors, warnings, and findings from endpoint testing
+  - CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with endpoint enumeration results, test execution results, issues found and remediation actions, performance metrics, Docker log analysis summaries, and all findings
+  - CRITICAL: Update IMPLEMENTATION_PLAN checklists for phases/tasks/steps to reflect progress
+  - CRITICAL: DO NOT create temporal documents
+  - CRITICAL: All test results, findings, and remediation actions MUST be documented in SPECs and IMPLEMENTATION_PLAN only
+
+  Step 9: Audit Readiness & Halt
+  - Verify checklists across IMPLEMENTATION_PLAN are up to date for all phases/tasks/steps touched
+  - Confirm SPECs reflect current status (in_progress or done) and are located in the correct directories
+  - Verify all endpoint tests are documented with results
+  - Halt and await next instruction after producing the output artefacts
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL)
+  - [ ] FastAPI and API gateway best practices reviewed BEFORE enumerating endpoints
+  - [ ] Endpoints validated against best practices standards
+  - [ ] Testing, error handling, and security best practices reviewed BEFORE testing endpoints
+  - [ ] All endpoints tested manually ONE AT A TIME
+  - [ ] All endpoint tests PASSED (issues remediated before marking as passed)
+  - [ ] Performance regressions (>20% degradation) remediated (if baseline available)
+  - [ ] SPEC(s) updated with test results, issues, and remediation actions
+  - [ ] IMPLEMENTATION_PLAN updated with progress
+  - [ ] All test results, findings, and remediation actions documented in SPECs and IMPLEMENTATION_PLAN only (NO temporal documents)
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/11-Manual_API_Endpoint_Regression_Testing.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/11-Manual_API_Endpoint_Regression_Testing.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/11-Manual_API_Endpoint_Regression_Testing.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/11-Manual_API_Endpoint_Regression_Testing.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/11-Manual_API_Endpoint_Regression_Testing.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/11-Manual_API_Endpoint_Regression_Testing.yaml under those enforced rules.

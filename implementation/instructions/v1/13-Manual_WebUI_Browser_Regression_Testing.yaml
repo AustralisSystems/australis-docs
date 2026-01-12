@@ -1,0 +1,863 @@
+prompt_name: "Manual_UI_Browser_Regression_Testing"
+version: "1.0.0"
+type: "manual_ui_regression_testing"
+context:
+  role: "Standards-governed implementation executor with manual web UI regression testing duties"
+  governance:
+      canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+      golden_rule_execution_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute manual regression testing of all frontend web UI routes/pages using an INCREMENTAL, STEP-BY-STEP
+    methodology. Work ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME. Get route definitions from navigation
+    configs and OpenAPI spec, create/update SPEC, authenticate, select ONE untested route group, test it
+    completely with remediation, then move to the next group. For each route test, observe page rendering,
+    functionality, user interactions, and systematically remediate ALL issues until the test completes
+    successfully before proceeding to the next route. By default, ALL web UI routes MUST be tested unless
+    additional instructions explicitly constrain or focus the test scope. CRITICAL: Testing MUST simulate
+    real human user interactions - navigate, click, type, submit forms, verify content, check console errors,
+    and validate visual rendering. CRITICAL: When code changes are made, rebuild containers with
+    "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date" before retesting.
+    This instruction can be executed as a standalone browser regression or immediately after Instruction 12
+    (Manual WebUI CLI Regression Testing) to provide a layered validation approach.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    status reports, progress reports, completion reports, test results, regression findings, and
+    remediation actions MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the relevant SPEC(s) and
+    IMPLEMENTATION_PLAN with all progress, findings, and status information. This rule is
+    NON-NEGOTIABLE and must be enforced strictly.
+  critical_testing_rule: >
+    **CRITICAL TESTING RULE**: MANUAL TESTING WITH BROWSER AUTOMATION TOOLS - NO SCRIPTED TEST FRAMEWORKS.
+
+    - ALL testing MUST be performed manually using MCP browser automation tools (playwright, fetch, browser extension)
+    - Testing MUST simulate real human user interactions (navigate, click, type, scroll, wait, observe)
+    - NO automated test scripts, test frameworks, or batch test execution
+    - NO Playwright test scripts, Cypress, Selenium scripts, Jest/Vitest browser tests, or any automated test runners
+    - Each route/page MUST be tested individually, one at a time, with manual observation
+    - Each test MUST be executed manually via MCP tools, results observed manually, issues identified manually
+    - Remediation MUST occur immediately after each failed test before proceeding
+    - Browser automation tools are used for INTERACTION, not for automated test execution
+    - **CRITICAL: Browser MUST run in NON-HEADLESS mode (visible browser window) so developers can observe tests in real-time**
+    - **CRITICAL: Headless mode is FORBIDDEN - browser window MUST be visible during all testing**
+    - This rule is NON-NEGOTIABLE and must be enforced strictly.
+  doc_references:
+    canonical:
+      - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+      - "docs/implementation/README_TEMPLATE.md"
+      - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+      - "docs/implementation/SPEC_README.md"
+      - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    plan:
+      - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+  best_practices_references:
+    core_fastapi:
+      - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+      - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+    async_performance:
+      - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+    reliability_resilience:
+      - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+    architecture_patterns:
+      - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+    security_compliance:
+      - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+      - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+    observability_monitoring:
+      - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+      - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+    data_persistence:
+      - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+      - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+      - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+      - "docs/implementation/best-practices/redis-caching-best-practices.md"
+      - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+      - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+    configuration_deployment:
+      - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+      - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+    background_tasks:
+      - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+      - "docs/implementation/best-practices/celery-production-best-practices.md"
+      - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+    integration_patterns:
+      - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+      - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+    ui_integration:
+      - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+      - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+      - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+    code_quality_testing:
+      - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+      - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+    templating_scaffolding:
+      - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+
+  environment_assumptions:
+    - "Web application is running and accessible (local development server, Docker container, or remote URL)."
+    - "MCP browser automation tools are available (playwright, fetch, browser extension tools)."
+    - "Browser automation MUST be configured to run in NON-HEADLESS mode (visible browser window)."
+    - "Display/graphical environment is available for visible browser window (X11, Windows display, macOS display)."
+    - "Authentication credentials are available if required (login credentials, session tokens, etc.)."
+    - "Browser console is accessible for monitoring JavaScript errors and warnings."
+    - "Network requests can be monitored (via browser DevTools or MCP tools)."
+    - "Baseline test results or specifications are available for regression comparison (if applicable)."
+prerequisites:
+  validations:
+    - "All canonical docs are present and readable."
+    - "IMPLEMENTATION_PLAN_v#.#.#.md exists and defines the current phase and task(s)."
+    - "SPECs related to the current task(s) exist in docs/implementation/in_progress (or are created before execution)."
+    - "Web application is running and accessible."
+    - "MCP browser automation tools are configured and operational."
+instructions:
+  objective: >
+    Execute manual browser-based regression testing using an INCREMENTAL, STEP-BY-STEP methodology. Work
+    ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME. Get route definitions from navigation configs and
+    OpenAPI spec, create/update SPEC with route list grouped by function, authenticate to the app, select
+    ONE untested route group, test it completely with remediation, document results as you progress,
+    resolve all issues found during testing, rebuild containers when code changes are made, then select
+    the next untested route group and continue. For each route test, simulate real-world user interactions
+    (navigate, click buttons, fill forms, submit data, verify content), observe page rendering, functionality,
+    console errors, network requests, and systematically remediate ALL issues until the test completes
+    successfully before proceeding to the next route. By default, ALL routes MUST be tested unless additional
+    instructions explicitly constrain the scope. CRITICAL: Testing MUST simulate real human user interactions
+    - NO scripted test frameworks or automated test execution. CRITICAL: When code changes are made, rebuild
+    containers with "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+    before retesting to ensure 0 errors, 0 warnings, and 0 issues.
+  best_practices_requirement: "MUST review and implement relevant best practices documents during route enumeration and browser testing - NO exceptions"
+
+  incremental_execution_methodology:
+    rule: "MANDATORY - MUST follow this incremental methodology - ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME"
+    description: >
+      This instruction MUST be executed incrementally, breaking down the work into manageable steps.
+      Do NOT attempt to execute all steps at once. Work ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME.
+      Complete each step fully before proceeding to the next step. Complete each route group fully before
+      selecting the next untested route group.
+    steps:
+      - step: "Get route definitions from navigation configs, route definitions, page files, and OpenAPI spec"
+      - step: "Update existing or Create a SPEC for regression testing and list routes, group them by function"
+      - step: "Authenticate to the app and have authentication available for all browser testing"
+      - step: "Select ONE of the untested route groups"
+      - step: "Begin the regression testing for the selected route group"
+      - step: "Document test results as you progress"
+      - step: "Resolve all issues that you find during the testing"
+      - step: "Complete the regression testing for the route group (ensure 0 errors, 0 warnings, 0 issues)"
+      - step: "When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+      - step: "Retest to ensure 0 errors, 0 warnings, and 0 issues"
+      - step: "Select the next untested route group and continue testing using the same methodology"
+    continuation_instruction: >
+      When instructed to CONTINUE:
+      - Continue with the next steps
+      - Ensure there are 0 errors, 0 warnings, and 0 issues
+      - Check the docker container logs to ensure the app and all containers have 0 errors, 0 warnings, and 0 issues
+      - Resolve all known issues, remediate and apply all fixes
+      - REMEMBER: When you make changes to the codebase, run "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+        to rebuild the container to pick up the changes, then retest to ensure there are 0 errors, 0 warnings, and 0 issues
+      - Select one of the untested route groups and continue testing using the same instructions and methodology
+
+  steps:
+    - step: 1
+      name: "Review Canonical Documentation"
+      actions:
+        - "Read all canonical docs listed in context.doc_references.canonical."
+        - "Extract required standards for naming, SPEC structure, workflow order, and documentation updates."
+        - "Understand the critical testing rule: MANUAL TESTING WITH BROWSER AUTOMATION - NO SCRIPTED TEST FRAMEWORKS."
+      gates:
+        - "Do not proceed unless all required docs are present and readable."
+
+    - step: 2
+      name: "Read Implementation Plan & Determine CURRENT Work"
+      actions:
+        - "Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md."
+        - "Identify CURRENT phase and the specific task(s), action(s), and step(s) to execute now."
+        - "Confirm associated SPEC document(s) are located in docs/implementation/in_progress; if none are available for this regression run, create one via the canonical SPEC template before proceeding."
+        - "Ensure the SPEC already contains a checklist enumerating the routes/partials/components that will be exercised during the browser phase so evidence can be tracked as each route passes."
+        - "Check for any additional instructions that constrain or focus the test scope."
+        - "If scope constraints exist, note them; otherwise, default to testing ALL routes/partials/components defined in navigation, templates, and openapi_spec.json."
+      outputs:
+        - "current_phase: <string>"
+        - "current_tasks: [<task_id_or_name>]"
+        - "associated_specs: [<spec_filenames>]"
+        - "test_scope: <all_routes|constrained_list>"
+        - "scope_constraints: [<route_patterns_or_categories>]"
+      gates:
+        - "Do not proceed if CURRENT tasks are ambiguous or missing."
+
+    - step: 3
+      name: "Verify Web Application Status"
+      actions:
+        - "Verify web application is running and accessible."
+        - "Check container health (if Docker) or service status."
+        - "Test basic connectivity (navigate to root URL, verify page loads)."
+        - "Verify authentication mechanism and obtain credentials/session if required."
+        - "Initialize MCP browser automation tools (playwright, browser extension)."
+        - "CRITICAL: Verify browser is running in NON-HEADLESS mode (visible browser window)."
+        - "CRITICAL: Confirm browser window is visible and can be observed by developers."
+        - "If browser is in headless mode, reconfigure to non-headless mode before proceeding."
+      suggested_commands:
+        - "docker ps | grep <web_container_name>"
+        - "docker logs <web_container_name> --tail 50"
+        - "mcp_cursor-browser-extension_browser_navigate - Navigate to root URL"
+        - "mcp_cursor-browser-extension_browser_snapshot - Capture initial page state"
+        - "mcp_fetch_fetch - Fetch root URL to verify accessibility"
+        - "Verify browser window is visible (not headless) - browser should open visible window"
+      gates:
+        - "Do not proceed if web application is not running or inaccessible."
+        - "Do not proceed if MCP browser automation tools are not available."
+        - "CRITICAL: Do not proceed if browser is running in headless mode - MUST be visible."
+        - "Do not proceed if authentication fails and is required for testing."
+
+    - step: 4
+      name: "Get Route Definitions and Enumerate All Web UI Routes - Group by Function"
+      incremental_execution: true
+      description: >
+        CRITICAL: Execute this step incrementally. First get route definitions, then enumerate routes,
+        then group them by function. Do NOT attempt to do everything at once.
+      sub_steps:
+        - sub_step: "4.1: Get Route Definitions from Navigation Configs and OpenAPI Spec"
+          actions:
+            - "CRITICAL: Get route definitions from navigation configs, route definitions, page files, and the OpenAPI specification (openapi_spec.json)"
+            - "Retrieve route definitions from running containers/services if available"
+            - "For React/Next.js: Check pages/ directory, app/ directory (App Router), route.ts/route.js files, routing configs"
+            - "For Vue/Nuxt: Check pages/ directory, router config, route definitions"
+            - "For Angular: Check routing modules, route definitions"
+            - "For SPA frameworks: Check router configs, route arrays, navigation menus"
+            - "Reconcile routes with OpenAPI specification so coverage mirrors published contract"
+            - "Save route definitions for reference"
+            - "Verify route definitions are complete and valid"
+          suggested_commands:
+            - "grep -r 'router\\.(get|post|path|route)' --include='*.js' --include='*.ts' --include='*.jsx' --include='*.tsx'"
+            - "grep -r '<Route' --include='*.jsx' --include='*.tsx'"
+            - "grep -r 'useRouter|useNavigate|Link to=' --include='*.jsx' --include='*.tsx'"
+            - "find . -path '*/pages/*' -name '*.jsx' -o -name '*.tsx' -o -name '*.js' -o -name '*.ts'"
+            - "find . -path '*/app/*' -name 'page.tsx' -o -name 'page.jsx'"
+            - "curl -s http://localhost:<port>/openapi.json | jq '.paths | keys'"
+          gates:
+            - "Do not proceed if route definitions cannot be retrieved"
+            - "Do not proceed if route definitions are incomplete or invalid"
+        - sub_step: "4.2: Enumerate Routes from Definitions"
+          actions:
+            - "Use route definitions as the authoritative inventory"
+            - "Identify all frontend web UI routes from source code (route definitions, page files, navigation configs)"
+            - "Reconcile any gaps found in definitions vs OpenAPI spec"
+            - "List all routes with: path, description, authentication requirements (plan to authenticate whenever required), expected content"
+            - "Apply scope constraints if specified in step 2, otherwise include ALL routes"
+          suggested_commands:
+            - "grep -r 'router\\.(get|post|path|route)' --include='*.js' --include='*.ts' --include='*.jsx' --include='*.tsx'"
+            - "find . -path '*/pages/*' -name '*.jsx' -o -name '*.tsx'"
+            - "cat package.json | jq '.routes' (if routes defined in package.json)"
+          gates:
+            - "Do not proceed if no routes can be enumerated"
+        - sub_step: "4.3: Group Routes by Function and Update SPEC"
+          actions:
+            - "CRITICAL: Group all routes by logical function/category (e.g., Dashboard, Storage, Workflows, Settings, Public, etc.)"
+            - "Create route groups: { group_name: <string>, routes: [<route_list>], tested: <false>, test_status: <pending|in_progress|passed|failed> }"
+            - "Update existing SPEC or create new SPEC for regression testing"
+            - "Add each route group to the SPEC checklist with test status tracking"
+            - "Mark all route groups as 'tested: false' initially"
+            - "Record route metadata: path, description, authentication requirements, expected content, logical grouping"
+            - "Order routes for deterministic testing (e.g., public → authenticated)"
+            - "Apply scope constraints if specified; otherwise all routes MUST be included"
+          outputs:
+            - "route_groups: [ { group_name: <string>, routes: [ { path: <string>, description: <string>, requires_auth: <true|false>, category: <string>, expected_content: <string> } ], tested: <false>, test_status: <pending> } ]"
+            - "total_routes: <integer>"
+            - "total_groups: <integer>"
+            - "untested_groups: [<group_names>]"
+          gates:
+            - "Do not proceed if routes cannot be grouped by function"
+            - "Do not proceed if SPEC cannot be updated/created"
+      actions:
+        - "CRITICAL: Execute sub-steps 4.1, 4.2, 4.3 sequentially - ONE AT A TIME"
+        - "Do NOT attempt to execute all sub-steps simultaneously"
+      outputs:
+        - "route_definitions_source: <path_to_definitions>"
+        - "ui_routes: [ { path: <string>, description: <string>, requires_auth: <true|false>, category: <string>, expected_content: <string> } ]"
+        - "route_groups: [ { group_name: <string>, routes: [<route_list>], tested: <false>, test_status: <pending> } ]"
+        - "total_routes: <integer>"
+        - "total_groups: <integer>"
+        - "untested_groups: [<group_names>]"
+        - "test_plan: [<ordered_list_of_routes>]"
+      gates:
+        - "Do not proceed if route definitions cannot be retrieved"
+        - "Do not proceed if routes cannot be enumerated"
+        - "Do not proceed if routes cannot be grouped by function"
+        - "Do not proceed if SPEC cannot be updated/created"
+        - "Do not proceed if test plan cannot be created."
+
+    - step: 5
+      name: "Prepare Authentication (If Required)"
+      actions:
+        - "If authentication is required, navigate to login page using MCP browser tools."
+        - "Manually fill login form using browser automation tools (type username, password)."
+        - "Manually submit login form and observe response."
+        - "Verify authentication success (check for session token, redirect, user state)."
+        - "Document authentication method and session validity."
+      suggested_mcp_tools:
+        - "mcp_cursor-browser-extension_browser_navigate - Navigate to login page"
+        - "mcp_cursor-browser-extension_browser_snapshot - Capture login page state"
+        - "mcp_cursor-browser-extension_browser_type - Type credentials into form fields"
+        - "mcp_cursor-browser-extension_browser_click - Click login button"
+        - "mcp_cursor-browser-extension_browser_wait_for - Wait for redirect or success message"
+      outputs:
+        - "auth_method: <session|jwt|oauth|none>"
+        - "auth_status: <authenticated|failed>"
+        - "session_valid: <true|false>"
+      gates:
+        - "If authentication is required, do not proceed without valid session."
+        - "If authentication fails, remediate before proceeding."
+
+    - step: 6
+      name: "Manual Web UI Route Testing - ONE GROUP AT A TIME with Systematic Remediation"
+      incremental_execution: true
+      description: >
+        CRITICAL: Execute this step incrementally - ONE ROUTE GROUP AT A TIME. Select ONE untested route
+        group, test all routes in that group completely, resolve all issues, then move to the next group.
+        Do NOT attempt to test multiple groups simultaneously.
+      actions:
+        - "CRITICAL: Select ONE untested route group from the list"
+        - "CRITICAL: Test routes in the selected group ONE AT A TIME - never in parallel or batch"
+        - "CRITICAL: Use MANUAL browser automation via MCP tools - NO scripted test frameworks"
+        - "CRITICAL: Complete testing for the selected group before selecting the next group"
+        - "For the selected route group:"
+        - "  STEP 6.1: Navigate to route"
+        - "    - Manually navigate to route URL using MCP browser_navigate tool"
+        - "    - Manually observe page load (wait for content to appear)"
+        - "    - Manually capture page snapshot using browser_snapshot tool"
+        - "    - Manually check browser console for errors/warnings"
+        - "    - Manually check network requests for failures"
+        - "  STEP 6.2: Verify page rendering"
+        - "    - Manually observe page structure and layout"
+        - "    - Verify expected content is present (text, images, components)"
+        - "    - Check for visual glitches, broken images, missing styles"
+        - "    - Verify responsive design (if applicable)"
+        - "    - Check accessibility (basic checks: alt text, ARIA labels)"
+        - "  STEP 6.3: Test user interactions"
+        - "    - Manually click interactive elements (buttons, links, menus)"
+        - "    - Manually fill forms (type into input fields)"
+        - "    - Manually submit forms and observe responses"
+        - "    - Manually test navigation (breadcrumbs, menus, back buttons)"
+        - "    - Manually test user flows (e.g., create  view  edit  delete)"
+        - "    - Observe page state changes and updates"
+        - "    - Simulate realistic CRUD flows wherever applicable: view collections, drill into detail modals/pages, create new records via UI forms, verify newly created entries render, edit them, and delete/rollback to confirm state updates propagate through the UI."
+        - "  STEP 6.4: Validate functionality"
+        - "    - Verify interactive elements respond correctly"
+        - "    - Verify forms submit and show appropriate feedback"
+        - "    - Verify data displays correctly"
+        - "    - Verify navigation works as expected"
+        - "    - Check for JavaScript errors in console"
+        - "    - Check for failed network requests"
+        - "  STEP 6.5: Identify issues"
+        - "    - Document any errors, warnings, or unexpected behaviour"
+        - "    - Categorise issues (rendering, functionality, performance, accessibility, etc.)"
+        - "    - Note severity (critical, high, medium, low)"
+        - "    - Capture screenshots or snapshots of issues (if applicable)"
+        - "  STEP 6.6: Remediate issues (if any found)"
+        - "    - CRITICAL: STOP testing and remediate issues ONE AT A TIME"
+        - "    - Analyse root cause of each issue"
+        - "    - Fix code, configuration, or infrastructure issues"
+        - "    - CRITICAL: When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+        - "    - CRITICAL: Wait for containers to be fully up and healthy before retesting"
+        - "    - Check docker container logs: docker logs <container_name> --tail 50"
+        - "    - Verify containers have 0 errors, 0 warnings, 0 issues"
+        - "    - Restart web application if necessary"
+        - "    - Re-navigate to the SAME route using MCP browser tools"
+        - "    - Re-test the same interactions manually"
+        - "    - Verify fix resolves the issue"
+        - "    - Continue remediation cycle until test passes"
+        - "    - CRITICAL: Ensure 0 errors, 0 warnings, and 0 issues before marking test as passed"
+        - "  STEP 6.7: Mark test as passed"
+        - "    - Only mark test as PASSED when:"
+        - "      * Page loads without errors"
+        - "      * Page renders correctly with expected content"
+        - "      * All interactive elements function correctly"
+        - "      * Forms submit successfully"
+        - "      * Navigation works as expected"
+        - "      * Browser console shows 0 errors, 0 warnings (or acceptable warnings)"
+        - "      * Network requests complete successfully"
+        - "      * All issues remediated and verified"
+        - "  STEP 6.8: Document results"
+        - "    - Record test result (PASSED/FAILED)"
+        - "    - Document issues found and remediated"
+        - "    - Record console errors/warnings (before and after remediation)"
+        - "    - Record network request failures (if any)"
+        - "    - Update SPEC file with test result"
+        - "  STEP 6.9: Complete route group testing"
+        - "    - Only proceed to next route after current route test is PASSED"
+        - "    - If test fails after remediation attempts, escalate but do not skip"
+        - "    - Continue testing all routes in the selected group until all are PASSED"
+        - "    - Mark route group as 'tested: true' and 'test_status: passed' when all routes pass"
+        - "    - Document all test results for the route group in SPEC"
+        - "  STEP 6.10: Select next untested route group"
+        - "    - CRITICAL: Only after completing current route group, select ONE untested route group"
+        - "    - Mark selected group as 'test_status: in_progress'"
+        - "    - Repeat steps 6.1-6.9 for the new route group"
+        - "    - Continue until all route groups are tested"
+      suggested_mcp_browser_tools:
+        - "mcp_cursor-browser-extension_browser_navigate - Navigate to URLs"
+        - "mcp_cursor-browser-extension_browser_snapshot - Capture page accessibility snapshot"
+        - "mcp_cursor-browser-extension_browser_click - Click elements (buttons, links, form controls)"
+        - "mcp_cursor-browser-extension_browser_type - Type text into input fields"
+        - "mcp_cursor-browser-extension_browser_wait_for - Wait for text/content to appear or disappear"
+        - "mcp_cursor-browser-extension_browser_hover - Hover over elements"
+        - "mcp_cursor-browser-extension_browser_select_option - Select dropdown options"
+        - "mcp_cursor-browser-extension_browser_drag - Drag and drop elements"
+        - "mcp_cursor-browser-extension_browser_evaluate - Evaluate JavaScript expressions"
+        - "mcp_cursor-browser-extension_browser_fill_form - Fill multiple form fields"
+        - "mcp_cursor-browser-extension_browser_console_messages - Get console messages"
+        - "mcp_cursor-browser-extension_browser_network_requests - Get network request logs"
+        - "mcp_cursor-browser-extension_browser_take_screenshot - Capture screenshots"
+        - "mcp_fetch_fetch - Fetch HTTP resources for verification"
+      forbidden_testing_methods:
+        - " Playwright test scripts (.spec.ts files with test() functions)"
+        - " Cypress test scripts or E2E test frameworks"
+        - " Selenium WebDriver scripts or test suites"
+        - " Jest/Vitest browser tests or automated test runners"
+        - " Puppeteer test scripts or batch test execution"
+        - " Any form of automated test execution or test frameworks"
+        - " Parallel or concurrent route testing"
+      outputs:
+        - "current_route_group: <group_name>"
+        - "route_test_results: [ { route: <path>, status: <PASSED|FAILED>, issues_found: [<description>], issues_remediated: [<description>], console_errors: [<string>], console_warnings: [<string>], network_failures: [<string>], verified: <true|false> } ]"
+        - "group_test_status: <in_progress|passed|failed>"
+        - "total_tests_executed: <integer>"
+        - "total_tests_passed: <integer>"
+        - "total_tests_failed: <integer>"
+        - "total_issues_found: <integer>"
+        - "total_issues_remediated: <integer>"
+        - "untested_groups_remaining: [<group_names>]"
+        - "testing_status: <complete|in_progress>"
+      gates:
+        - "CRITICAL: Do not proceed to next route until current route test is PASSED."
+        - "CRITICAL: Do not proceed to next route group until current route group is COMPLETE (all routes PASSED)."
+        - "CRITICAL: All issues MUST be remediated before marking test as PASSED."
+        - "CRITICAL: When code changes are made, containers MUST be rebuilt before retesting."
+        - "CRITICAL: Containers MUST have 0 errors, 0 warnings, 0 issues before marking test as PASSED."
+        - "CRITICAL: Testing MUST be manual via MCP browser tools - NO scripted test frameworks allowed."
+        - "If route test fails after remediation attempts, document and escalate - do not skip."
+
+    - step: 7
+      name: "Cross-Route Navigation Testing"
+      actions:
+        - "After individual route tests, test navigation between routes."
+        - "Manually navigate using in-app navigation (menus, links, breadcrumbs)."
+        - "Verify navigation transitions work smoothly."
+        - "Verify state persistence across routes (if applicable)."
+        - "Test browser back/forward buttons."
+        - "Document any navigation issues and remediate."
+      suggested_mcp_tools:
+        - "mcp_cursor-browser-extension_browser_navigate - Navigate between routes"
+        - "mcp_cursor-browser-extension_browser_navigate_back - Test browser back button"
+        - "mcp_cursor-browser-extension_browser_click - Click navigation links"
+      gates:
+        - "If navigation issues detected, remediate before marking test suite complete."
+
+    - step: 8
+      name: "Performance Validation (If Baseline Available)"
+      actions:
+        - "If baseline performance data is available, compare page load times."
+        - "Identify any performance regressions (>20% degradation from baseline)."
+        - "If performance regression detected, investigate and remediate."
+        - "Document performance comparison results."
+      outputs:
+        - "performance_comparison: [ { route: <path>, baseline_load_time_ms: <float>, current_load_time_ms: <float>, delta_percent: <float>, regression: <true|false> } ]"
+        - "performance_regressions: [<route_paths>]"
+      gates:
+        - "If performance regression detected, remediate before marking test suite complete."
+
+    - step: 9
+      name: "Issue Collation & Documentation Update"
+      actions:
+        - "Collate all observed issues, errors, warnings, and findings from route testing."
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Route enumeration results"
+        - "  - Test execution results (route-by-route)"
+        - "  - Issues found and remediation actions"
+        - "  - Console error/warning logs"
+        - "  - Network request failures"
+        - "  - Performance metrics and comparisons"
+        - "  - Screenshots or snapshots of issues (if captured)"
+        - "  - All findings, progress, and status information"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN checklists for phases/tasks/steps to reflect progress."
+        - "CRITICAL: DO NOT create temporal documents (e.g., WEBUI_TEST_RESULTS_YYYY-MM-DD.md, REGRESSION_REPORT_YYYY-MM-DD.md)"
+        - "CRITICAL: All test results, findings, and remediation actions MUST be documented in SPECs and IMPLEMENTATION_PLAN only"
+      gates:
+        - "Do not move a SPEC to 'done' unless acceptance criteria are met per SPEC and plan definitions."
+
+    - step: 10
+      name: "Audit Readiness & Halt"
+      actions:
+        - "Verify checklists across IMPLEMENTATION_PLAN are up to date for all phases/tasks/steps touched."
+        - "Confirm SPECs reflect current status (in_progress or done) and are located in the correct directories."
+        - "Verify all route tests are documented with results."
+        - "Halt and await next instruction after producing the output artefacts."
+      outputs:
+        - "audit_readiness: <true|false>"
+        - "next_instruction_state: 'awaiting_orders'"
+        - "final_test_status: <all_passed|some_failed|in_progress>"
+        - "test_completion_percentage: <integer>"
+
+constraints:
+  - "Australian English for all documentation updates."
+  - "CRITICAL: Execute incrementally - ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME."
+  - "CRITICAL: NO scripted test frameworks - ALL testing MUST be manual via MCP browser automation tools."
+  - "CRITICAL: Browser MUST run in NON-HEADLESS mode (visible browser window) - headless mode is FORBIDDEN."
+  - "CRITICAL: Browser window MUST be visible during all testing so developers can observe tests in real-time."
+  - "CRITICAL: Test routes ONE AT A TIME - never in parallel or batch."
+  - "CRITICAL: Test route groups ONE AT A TIME - complete one group before selecting the next."
+  - "CRITICAL: Remediate issues ONE AT A TIME before proceeding to next route."
+  - "CRITICAL: Do not proceed to next route until current route test is PASSED."
+  - "CRITICAL: Do not proceed to next route group until current route group is COMPLETE (all routes PASSED)."
+  - "CRITICAL: When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+  - "CRITICAL: After rebuilding containers, verify 0 errors, 0 warnings, 0 issues in docker logs before retesting."
+  - "CRITICAL: Check docker container logs to ensure app and all containers have 0 errors, 0 warnings, 0 issues."
+  - "No advancement to subsequent steps while unresolved errors persist in route tests."
+  - "Do not fabricate routes; only test those evidenced by code/config/spec."
+  - "All new/updated SPECs must conform to SPEC_CREATION_GUIDE and SPEC_TEMPLATE."
+  - "All file moves must respect DOCUMENTATION_NAMING_CONVENTION and directory policy (backlog/in_progress/done)."
+  - "If security or auth is required for testing, request or load sanctioned credentials/secrets only."
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all updates go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Test results, regression findings, remediation actions MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+  - "By default, ALL routes MUST be tested unless additional instructions explicitly constrain scope."
+  - "Performance regressions (>20% degradation) MUST be remediated before marking test suite complete."
+  - "Authentication must be performed whenever the route requires authorization; do not test protected flows anonymously."
+  - "Unless an explicit scope carve-out is documented, 100% of routes/partials/components (OpenAPI + UI navigation) must be exercised during this browser phase."
+  - "All testing must uphold Canonical + Golden Rule expectations: no TODO/mocks/stubs, zero warnings/errors in console/logs, iterative fixes until the UI is clean."
+  - "Browser console errors and warnings MUST be checked and remediated for each route."
+
+examples:
+  - route_enumeration_example:
+      ui_routes:
+        - path: "/"
+          description: "Home page"
+          requires_auth: false
+          category: "Public"
+          expected_content: "Welcome message, navigation menu"
+        - path: "/dashboard"
+          description: "User dashboard"
+          requires_auth: true
+          category: "Authenticated"
+          expected_content: "User stats, recent activity, quick actions"
+        - path: "/settings"
+          description: "User settings page"
+          requires_auth: true
+          category: "Authenticated"
+          expected_content: "Profile form, preferences, account settings"
+      total_routes: 15
+      test_plan: ["/", "/dashboard", "/settings", "..."]
+  - manual_testing_example: |
+      # Example: Manual testing with MCP browser tools (ONE route at a time)
+      # CRITICAL: Browser MUST be running in NON-HEADLESS mode (visible window)
+      # Developers MUST be able to see the browser window during testing
+
+      # Test 1: Home page route
+      # Step 1: Navigate to home page (browser window should be visible)
+      mcp_cursor-browser-extension_browser_navigate(url: "http://localhost:3000/")
+
+      # Step 2: Wait for page to load (observe visible browser window)
+      mcp_cursor-browser-extension_browser_wait_for(text: "Welcome")
+
+      # Step 3: Capture page snapshot (visible browser window should show page content)
+      mcp_cursor-browser-extension_browser_snapshot()
+
+      # Step 4: Check console for errors (browser DevTools should be visible/accessible)
+      mcp_cursor-browser-extension_browser_console_messages()
+
+      # Step 5: Check network requests
+      mcp_cursor-browser-extension_browser_network_requests()
+
+      # Step 6: Interact with page (click a button)
+      mcp_cursor-browser-extension_browser_click(element: "Get Started button", ref: "button[data-testid='get-started']")
+
+      # Step 7: Observe result, verify expected behaviour
+      # If issue found: STOP, fix, retest SAME route before proceeding
+
+      # Test 2: Dashboard route (requires auth)
+      # Step 1: Navigate to dashboard
+      mcp_cursor-browser-extension_browser_navigate(url: "http://localhost:3000/dashboard")
+
+      # Step 2: Verify authentication redirect or dashboard loads
+      # Continue with manual interaction testing...
+  - remediation_example:
+      route_test_results:
+        - route: "/dashboard"
+          status: "PASSED"
+          issues_found: ["Initial load showed blank page", "Console error: 'Cannot read property of undefined'", "Network request to /api/user failed with 401"]
+          issues_remediated: ["Fixed missing null check in user data fetch", "Fixed authentication token expiration handling", "Added proper error boundary for failed API calls"]
+          console_errors: []
+          console_warnings: []
+          network_failures: []
+          verified: true
+        - route: "/settings"
+          status: "FAILED"
+          issues_found: ["Form submission returns 500 error", "Console error: 'Validation failed'"]
+          issues_remediated: ["Issue identified but not yet fixed - awaiting remediation"]
+          console_errors: ["Validation failed: email format invalid"]
+          console_warnings: []
+          network_failures: ["POST /api/settings returned 500"]
+          verified: false
+  - scope_constraint_example:
+      test_scope: "constrained_list"
+      scope_constraints: ["/dashboard/*", "/settings"]
+      note: "Only test dashboard sub-routes and settings page, skip public pages"
+  - forbidden_testing_example: |
+      #  FORBIDDEN: Playwright test script
+      # import { test, expect } from '@playwright/test';
+      # test('test all routes', async ({ page }) => {
+      #   for (const route of routes) {
+      #     await page.goto(route);
+      #     await expect(page).toHaveTitle(/.../);
+      #   }
+      # });
+
+      #  FORBIDDEN: Cypress test
+      # describe('Route tests', () => {
+      #   it('tests all routes', () => {
+      #     routes.forEach(route => {
+      #       cy.visit(route);
+      #       cy.get('body').should('be.visible');
+      #     });
+      #   });
+      # });
+
+      #  ALLOWED: Manual MCP browser tool usage, one route at a time
+      mcp_cursor-browser-extension_browser_navigate(url: "http://localhost:3000/")
+      # Observe results manually, then proceed to next route
+
+output_format:
+  section_1: "Current phase, tasks, and associated SPECs"
+  section_2: "Web application status and authentication setup"
+  section_3: "Route enumeration (all routes identified, test plan created)"
+  section_4: "Manual route testing results (route-by-route, one at a time)"
+  section_5: "Issues found and remediation log (per route)"
+  section_6: "Console errors/warnings and network failures (per route)"
+  section_7: "Performance comparison (if baseline available)"
+  section_8: "Cross-route navigation test results"
+  section_9: "Test summary (total tests, passed, failed, completion percentage)"
+  section_10: "Documentation updates (SPECs changed; IMPLEMENTATION_PLAN checklist diffs)"
+  section_11: "Final audit readiness and next-instruction state"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-01-27"
+  version: "1.0.0"
+  classification: "Enterprise Canonical Manual Web UI Regression Testing Governance Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, and Enterprise Canonical Manual Web UI Regression Testing Governance Protocol"
+  language: "en-AU"
+
+[END OF INSTRUCTIONS]
+
+continuation_instruction: |
+  You are executing Manual Web UI Browser Regression Testing per Enterprise Canonical Execution Protocol v1.0.0.
+
+  INCREMENTAL EXECUTION METHODOLOGY (MANDATORY - ABSOLUTE)
+  - MUST follow incremental methodology - ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME
+  - Do NOT attempt to execute all steps at once
+  - Complete each step fully before proceeding to the next step
+  - Complete each route group fully before selecting the next untested route group
+  - When instructed to CONTINUE:
+    * Continue with the next steps
+    * Ensure there are 0 errors, 0 warnings, and 0 issues
+    * Check the docker container logs to ensure the app and all containers have 0 errors, 0 warnings, and 0 issues
+    * Resolve all known issues, remediate and apply all fixes
+    * REMEMBER: When you make changes to the codebase, run "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+      to rebuild the container to pick up the changes, then retest to ensure there are 0 errors, 0 warnings, and 0 issues
+    * Select one of the untested route groups and continue testing using the same instructions and methodology
+
+  METHODOLOGY STEPS (SEQUENTIAL - EXECUTE ONE AT A TIME)
+  1. Get route definitions from navigation configs, route definitions, page files, and OpenAPI spec
+  2. Update existing or Create a SPEC for regression testing and list routes, group them by function
+  3. Authenticate to the app and have authentication available for all browser testing
+  4. Select ONE of the untested route groups
+  5. Begin the regression testing for the selected route group
+  6. Document test results as you progress
+  7. Resolve all issues that you find during the testing
+  8. Complete the regression testing for the route group (ensure 0 errors, 0 warnings, 0 issues)
+  9. When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date
+  10. Retest to ensure 0 errors, 0 warnings, and 0 issues
+  11. Select the next untested route group and continue testing using the same methodology
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REVIEW)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability/Resilience: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture Patterns: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-best-practices-2025.md
+  Security: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md, secrets-management-best-practices-2025.md
+  Observability: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, redis-caching-best-practices.md
+  Configuration: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+  UI Integration: fastapi-htmx-jinja2-best-practices-2025.md, web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md, component-libraries-daisyui-tailwind-v4-best-practices-2025.md
+  - MANDATORY: Review UI integration and component best practices BEFORE enumerating routes
+  - MANDATORY: Review testing, browser automation, HTMX, and error handling best practices BEFORE testing routes
+  - MUST validate routes against best practices standards during enumeration and testing
+  - MUST apply best practices patterns during testing
+
+  CRITICAL DOCUMENTATION RULE (ABSOLUTE - NO EXCEPTIONS)
+  - TEMPORAL DOCUMENTS MUST NOT BE CREATED
+  - ALL updates, status reports, progress reports, completion reports, test results, regression findings, and remediation actions MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+  - DO NOT create standalone temporal documents
+  - Update relevant SPEC(s) and IMPLEMENTATION_PLAN with all progress, findings, and status information
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  CRITICAL TESTING RULE (ABSOLUTE - NO EXCEPTIONS)
+  - MANUAL TESTING WITH BROWSER AUTOMATION TOOLS - NO SCRIPTED TEST FRAMEWORKS
+  - ALL testing MUST be performed manually using MCP browser automation tools (playwright, fetch, browser extension)
+  - Testing MUST simulate real human user interactions (navigate, click, type, scroll, wait, observe)
+  - NO automated test scripts, test frameworks, or batch test execution
+  - NO Playwright test scripts, Cypress, Selenium scripts, Jest/Vitest browser tests, or any automated test runners
+  - Each route/page MUST be tested individually, one at a time, with manual observation
+  - Each test MUST be executed manually via MCP tools, results observed manually, issues identified manually
+  - Remediation MUST occur immediately after each failed test before proceeding
+  - Browser automation tools are used for INTERACTION, not for automated test execution
+  - **CRITICAL: Browser MUST run in NON-HEADLESS mode (visible browser window) so developers can observe tests in real-time**
+  - **CRITICAL: Headless mode is FORBIDDEN - browser window MUST be visible during all testing**
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  MANDATORY WORKFLOW (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Review Canonical Documentation
+  - Read all canonical docs listed in context.doc_references.canonical
+  - Extract required standards for naming, SPEC structure, workflow order, and documentation updates
+  - Understand the critical testing rule: MANUAL TESTING WITH BROWSER AUTOMATION - NO SCRIPTED TEST FRAMEWORKS
+
+  Step 2: Read Implementation Plan & Determine CURRENT Work
+  - Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md
+  - Identify CURRENT phase and the specific task(s), action(s), and step(s) to execute now
+  - Confirm associated SPEC document(s) are located in docs/implementation/in_progress
+  - Ensure the SPEC already contains a checklist enumerating the routes/partials/components that will be exercised
+  - Check for any additional instructions that constrain or focus the test scope
+  - If scope constraints exist, note them; otherwise, default to testing ALL routes/partials/components
+
+  Step 3: Verify Web Application Status
+  - Verify web application is running and accessible
+  - Check container health (if Docker) or service status
+  - Test basic connectivity (navigate to root URL, verify page loads)
+  - Verify authentication mechanism and obtain credentials/session if required
+  - Initialize MCP browser automation tools (playwright, browser extension)
+  - CRITICAL: Verify browser is running in NON-HEADLESS mode (visible browser window)
+  - CRITICAL: Confirm browser window is visible and can be observed by developers
+  - If browser is in headless mode, reconfigure to non-headless mode before proceeding
+
+  Step 4: Get Route Definitions and Enumerate All Web UI Routes - Group by Function
+  - CRITICAL: Execute incrementally - sub-steps 4.1, 4.2, 4.3 sequentially
+  - Sub-step 4.1: Get route definitions from navigation configs, route definitions, page files, and OpenAPI spec
+  - Sub-step 4.2: Enumerate routes from definitions
+  - Sub-step 4.3: Group routes by function and update SPEC
+  - Review UI integration and component best practices documents BEFORE proceeding
+  - Use route definitions as the authoritative inventory
+  - Group all routes by logical function/category (e.g., Dashboard, Storage, Workflows, Settings, Public)
+  - Update existing SPEC or create new SPEC for regression testing
+  - Mark all route groups as 'tested: false' initially
+  - Validate routes against best practices standards
+  - List all routes with: path, description, authentication requirements, expected content, logical grouping
+  - Apply scope constraints if specified, otherwise include ALL routes
+  - Create ordered test plan for systematic testing
+
+  Step 5: Prepare Authentication (If Required)
+  - If authentication is required, navigate to login page using MCP browser tools
+  - Manually fill login form using browser automation tools (type username, password)
+  - Manually submit login form and observe response
+  - Verify authentication success (check for session token, redirect, user state)
+  - Document authentication method and session validity
+
+  Step 6: Manual Web UI Route Testing - ONE GROUP AT A TIME with Systematic Remediation
+  - CRITICAL: Execute incrementally - ONE ROUTE GROUP AT A TIME
+  - CRITICAL: Select ONE untested route group from the list
+  - Review testing, browser automation, HTMX, and error handling best practices documents BEFORE proceeding
+  - CRITICAL: Test routes in selected group ONE AT A TIME - never in parallel or batch
+  - CRITICAL: Use MANUAL browser automation via MCP tools - NO scripted test frameworks
+  - CRITICAL: Browser MUST run in NON-HEADLESS mode (visible browser window) - headless mode is FORBIDDEN
+  - Validate routes against best practices standards during testing
+  - For each route in selected group: Navigate to route → Verify page rendering → Test user interactions → Validate functionality → Identify issues → Remediate issues (if any) → Rebuild containers if code changed → Mark test as passed → Document results → Proceed to next route
+  - CRITICAL: When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date
+  - CRITICAL: Check docker container logs to ensure 0 errors, 0 warnings, 0 issues before retesting
+  - CRITICAL: Do not proceed to next route until current route test is PASSED
+  - CRITICAL: Do not proceed to next route group until current route group is COMPLETE (all routes PASSED)
+  - CRITICAL: All issues MUST be remediated before marking test as PASSED
+  - CRITICAL: Ensure 0 errors, 0 warnings, and 0 issues before marking test as passed
+  - CRITICAL: Testing MUST be manual via MCP browser tools - NO scripted test frameworks allowed
+  - After completing current route group, select next untested route group and repeat
+
+  Step 7: Cross-Route Navigation Testing
+  - After individual route tests, test navigation between routes
+  - Manually navigate using in-app navigation (menus, links, breadcrumbs)
+  - Verify navigation transitions work smoothly
+  - Verify state persistence across routes (if applicable)
+  - Test browser back/forward buttons
+  - Document any navigation issues and remediate
+
+  Step 8: Performance Validation (If Baseline Available)
+  - If baseline performance data is available, compare page load times
+  - Identify any performance regressions (>20% degradation from baseline)
+  - If performance regression detected, investigate and remediate
+  - Document performance comparison results
+
+  Step 9: Issue Collation & Documentation Update
+  - Collate all observed issues, errors, warnings, and findings from route testing
+  - CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with route enumeration results, test execution results, issues found and remediation actions, console error/warning logs, network request failures, performance metrics, screenshots or snapshots of issues, and all findings
+  - CRITICAL: Update IMPLEMENTATION_PLAN checklists for phases/tasks/steps to reflect progress
+  - CRITICAL: DO NOT create temporal documents
+  - CRITICAL: All test results, findings, and remediation actions MUST be documented in SPECs and IMPLEMENTATION_PLAN only
+
+  Step 10: Audit Readiness & Halt
+  - Verify checklists across IMPLEMENTATION_PLAN are up to date for all phases/tasks/steps touched
+  - Confirm SPECs reflect current status (in_progress or done) and are located in the correct directories
+  - Verify all route tests are documented with results
+  - Halt and await next instruction after producing the output artefacts
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL)
+  - [ ] UI integration and component best practices reviewed BEFORE enumerating routes
+  - [ ] Routes validated against best practices standards
+  - [ ] Testing, browser automation, HTMX, and error handling best practices reviewed BEFORE testing routes
+  - [ ] Browser running in NON-HEADLESS mode (visible browser window)
+  - [ ] All routes tested manually ONE AT A TIME via MCP browser tools
+  - [ ] All route tests PASSED (issues remediated before marking as passed)
+  - [ ] Browser console shows 0 errors, 0 warnings (or acceptable warnings) for each route
+  - [ ] Network requests complete successfully for each route
+  - [ ] Performance regressions (>20% degradation) remediated (if baseline available)
+  - [ ] SPEC(s) updated with test results, issues, console errors/warnings, network failures, and remediation actions
+  - [ ] IMPLEMENTATION_PLAN updated with progress
+  - [ ] All test results, findings, and remediation actions documented in SPECs and IMPLEMENTATION_PLAN only (NO temporal documents)
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/13-Manual_WebUI_Browser_Regression_Testing.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/13-Manual_WebUI_Browser_Regression_Testing.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/13-Manual_WebUI_Browser_Regression_Testing.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/13-Manual_WebUI_Browser_Regression_Testing.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/13-Manual_WebUI_Browser_Regression_Testing.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/13-Manual_WebUI_Browser_Regression_Testing.yaml under those enforced rules.

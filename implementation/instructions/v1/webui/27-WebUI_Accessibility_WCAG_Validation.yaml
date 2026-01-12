@@ -1,0 +1,1024 @@
+prompt_name: "WebUI_Accessibility_WCAG_Validation"
+version: "1.0.0"
+type: "webui_accessibility_validation"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor validating WCAG 2.2 Level AAA accessibility compliance"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute accessibility validation phase by auditing all WebUI components against WCAG 2.2
+    Level AAA criteria, implementing semantic HTML, ARIA attributes, keyboard navigation, screen
+    reader support, color contrast compliance, focus management, and generating comprehensive
+    accessibility audit report.
+
+  reference_docs:
+    primary:
+      - "WCAG 2.2 Guidelines (W3C)"
+      - "WAI-ARIA 1.2 Specification"
+      - "design_system_foundations.md (accessibility section)"
+    supporting:
+      - "component_tokens.json"
+      - "ui-model.json"
+
+  color_scheme_mandate:
+    reference: "COLOR_SCHEME_DIRECTIVE.md"
+    wcag_compliance: "DaisyUI semantic colors ensure WCAG color contrast compliance automatically"
+    color_contrast: "Use semantic classes for guaranteed 4.5:1 contrast ratio (AA) or 7:1 (AAA)"
+    testing: "Test color contrast in light AND dark themes - semantic colors maintain compliance"
+    high_contrast_mode: "Semantic colors work with Windows High Contrast Mode and browser extensions"
+
+  codebase_scaffolding_mandate:
+    priority: "MANDATORY - NO EXCEPTIONS"
+    description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+    priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+  prerequisite_validation:
+    - "[ ] Motion/transitions implementation phase (Step 26) completed"
+    - "[ ] All animations respect reduced-motion"
+    - "[ ] WCAG 2.2 Guidelines reviewed"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+
+instructions:
+  objective: >
+    Validate and enhance accessibility compliance to WCAG 2.2 Level AAA by auditing semantic HTML,
+    implementing ARIA attributes, ensuring keyboard navigation, validating color contrast,
+    implementing focus management, adding screen reader announcements, and generating comprehensive
+    audit report with remediation plan.
+
+  wcag_22_guidelines:
+    perceivable:
+      - "1.1.1 Non-text Content (Level A)"
+      - "1.2.1-1.2.9 Time-based Media (Level A/AA/AAA)"
+      - "1.3.1-1.3.6 Adaptable (Level A/AA/AAA)"
+      - "1.4.1-1.4.13 Distinguishable (Level A/AA/AAA)"
+    operable:
+      - "2.1.1-2.1.4 Keyboard Accessible (Level A/AAA)"
+      - "2.2.1-2.2.6 Enough Time (Level A/AAA)"
+      - "2.3.1-2.3.3 Seizures and Physical Reactions (Level A/AAA)"
+      - "2.4.1-2.4.13 Navigable (Level A/AA/AAA)"
+      - "2.5.1-2.5.8 Input Modalities (Level A/AA/AAA)"
+    understandable:
+      - "3.1.1-3.1.6 Readable (Level A/AA/AAA)"
+      - "3.2.1-3.2.6 Predictable (Level A/AA/AAA)"
+      - "3.3.1-3.3.9 Input Assistance (Level A/AA/AAA)"
+    robust:
+      - "4.1.1-4.1.3 Compatible (Level A/AA)"
+
+  steps:
+    - step: 1
+      name: "Audit Semantic HTML Structure"
+      reference: "WCAG 2.2 Guideline 1.3 (Adaptable), 4.1 (Compatible)"
+      actions:
+        - "Validate proper HTML5 semantic elements used:"
+        - "  - <header>, <nav>, <main>, <article>, <section>, <aside>, <footer>"
+        - "  - <h1>-<h6> heading hierarchy (no skipped levels)"
+        - "  - <button> for actions (not <div> with click handlers)"
+        - "  - <a> for navigation (not <button> with href)"
+        - "  - <form>, <label>, <input>, <select>, <textarea> for forms"
+        - "  - <table>, <th>, <td> for tabular data (not for layout)"
+        - "  - <ul>/<ol>, <li> for lists"
+        - "Check heading hierarchy (H1 → H2 → H3, no skips)"
+        - "Validate form labels associated with inputs (for/id or wrapping)"
+        - "Check landmark regions (banner, navigation, main, contentinfo)"
+        - "Create semantic HTML audit report"
+      implementation_pattern: |
+        <!-- CORRECT Semantic HTML Structure -->
+
+        <!DOCTYPE html>
+        <html lang="en-AU">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Page Title - Application Name</title>
+        </head>
+        <body>
+          <!-- Header Landmark -->
+          <header role="banner">
+            <nav aria-label="Primary navigation">
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/users">Users</a></li>
+                <li><a href="/settings">Settings</a></li>
+              </ul>
+            </nav>
+          </header>
+
+          <!-- Main Content Landmark -->
+          <main id="main-content" role="main">
+            <!-- Heading Hierarchy (H1 → H2 → H3) -->
+            <h1>Page Title</h1>
+
+            <section aria-labelledby="users-heading">
+              <h2 id="users-heading">Users</h2>
+
+              <article>
+                <h3>User Details</h3>
+                <p>Content here</p>
+              </article>
+            </section>
+          </main>
+
+          <!-- Complementary Sidebar -->
+          <aside role="complementary" aria-label="Related information">
+            <h2>Related Links</h2>
+            <ul>
+              <li><a href="/help">Help</a></li>
+            </ul>
+          </aside>
+
+          <!-- Footer Landmark -->
+          <footer role="contentinfo">
+            <p>&copy; 2025 Application Name</p>
+          </footer>
+        </body>
+        </html>
+
+        <!-- CORRECT Form with Labels -->
+        <form method="post" action="/users">
+          <!-- Label wrapping input -->
+          <label>
+            Email Address
+            <input type="email" name="email" required>
+          </label>
+
+          <!-- Label associated via for/id -->
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+
+          <!-- Button (not div with onclick) -->
+          <button type="submit" class="btn btn-primary">
+            Create Account
+          </button>
+        </form>
+
+        <!-- CORRECT Table for Tabular Data -->
+        <table>
+          <caption>User List</caption>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>john@example.com</td>
+              <td>Admin</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- INCORRECT Examples (violations) -->
+
+        <!-- ❌ DIV used as button -->
+        <div class="btn" onclick="handleClick()">Click Me</div>
+
+        <!-- ✅ CORRECT: Use button element -->
+        <button type="button" class="btn" onclick="handleClick()">Click Me</button>
+
+        <!-- ❌ Skipped heading level (H1 → H3) -->
+        <h1>Page Title</h1>
+        <h3>Subsection</h3>  <!-- Missing H2 -->
+
+        <!-- ✅ CORRECT: Proper hierarchy -->
+        <h1>Page Title</h1>
+        <h2>Section</h2>
+        <h3>Subsection</h3>
+
+        <!-- ❌ Input without label -->
+        <input type="text" name="username" placeholder="Username">
+
+        <!-- ✅ CORRECT: Input with label -->
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username">
+      validation:
+        - "[ ] All pages use semantic HTML5 elements"
+        - "[ ] Heading hierarchy valid (no skipped levels)"
+        - "[ ] All form inputs have associated labels"
+        - "[ ] Buttons use <button> elements (not div/span)"
+        - "[ ] Links use <a> elements (not button with href)"
+        - "[ ] Landmark regions present (header, nav, main, footer)"
+        - "[ ] Tables used only for tabular data (not layout)"
+        - "[ ] Lists use <ul>/<ol> and <li> elements"
+      gates:
+        - "All semantic HTML violations remediated"
+        - "Heading hierarchy passes automated checks"
+
+    - step: 2
+      name: "Implement ARIA Attributes"
+      reference: "WAI-ARIA 1.2 Specification, WCAG 2.2 Guideline 4.1"
+      actions:
+        - "Add ARIA roles where semantic HTML insufficient:"
+        - "  - role='dialog' for modals"
+        - "  - role='alert' for alerts/toasts"
+        - "  - role='status' for live status updates"
+        - "  - role='tablist', role='tab', role='tabpanel' for tabs"
+        - "  - role='menu', role='menuitem' for dropdown menus"
+        - "Implement ARIA states and properties:"
+        - "  - aria-label / aria-labelledby for accessible names"
+        - "  - aria-describedby for additional descriptions"
+        - "  - aria-expanded for expandable elements"
+        - "  - aria-current for current page/step"
+        - "  - aria-hidden for decorative elements"
+        - "  - aria-live for dynamic content updates"
+        - "  - aria-busy for loading states"
+        - "  - aria-invalid for form validation errors"
+        - "Validate ARIA usage follows specification (no misuse)"
+      implementation_pattern: |
+        <!-- Modal with ARIA -->
+        <div
+          role="dialog"
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+          aria-modal="true"
+          x-show="open">
+          <h2 id="modal-title">Delete User</h2>
+          <p id="modal-description">
+            Are you sure you want to delete this user? This action cannot be undone.
+          </p>
+          <button @click="open = false">Cancel</button>
+          <button hx-delete="/api/users/123" class="btn-error">Delete</button>
+        </div>
+
+        <!-- Alert/Toast with ARIA -->
+        <div
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          class="alert alert-success">
+          <span>User created successfully!</span>
+        </div>
+
+        <!-- Status Update (polite) -->
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          id="search-results-status">
+          Found 42 results
+        </div>
+
+        <!-- Tabs with ARIA -->
+        <div>
+          <div role="tablist" aria-label="Account settings">
+            <button
+              role="tab"
+              aria-selected="true"
+              aria-controls="profile-panel"
+              id="profile-tab"
+              @click="activeTab = 'profile'">
+              Profile
+            </button>
+            <button
+              role="tab"
+              aria-selected="false"
+              aria-controls="settings-panel"
+              id="settings-tab"
+              @click="activeTab = 'settings'">
+              Settings
+            </button>
+          </div>
+
+          <div
+            role="tabpanel"
+            id="profile-panel"
+            aria-labelledby="profile-tab"
+            x-show="activeTab === 'profile'">
+            Profile content
+          </div>
+
+          <div
+            role="tabpanel"
+            id="settings-panel"
+            aria-labelledby="settings-tab"
+            x-show="activeTab === 'settings'"
+            hidden>
+            Settings content
+          </div>
+        </div>
+
+        <!-- Dropdown Menu with ARIA -->
+        <div>
+          <button
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="user-menu"
+            @click="open = !open">
+            User Menu
+          </button>
+
+          <ul
+            role="menu"
+            id="user-menu"
+            x-show="open">
+            <li role="none">
+              <a role="menuitem" href="/profile">Profile</a>
+            </li>
+            <li role="none">
+              <a role="menuitem" href="/settings">Settings</a>
+            </li>
+            <li role="none">
+              <button role="menuitem" hx-post="/logout">Logout</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Form with ARIA Validation -->
+        <form>
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            aria-required="true"
+            aria-invalid="false"
+            aria-describedby="email-error">
+          <div id="email-error" role="alert" aria-live="assertive" hidden>
+            Please enter a valid email address
+          </div>
+
+          <button type="submit" aria-busy="false">
+            Submit
+          </button>
+        </form>
+
+        <!-- Loading State with ARIA -->
+        <div
+          hx-get="/api/data"
+          hx-indicator="#loading"
+          aria-busy="true">
+          <div id="loading" class="htmx-indicator" aria-label="Loading data">
+            <span class="loading loading-spinner" aria-hidden="true"></span>
+            Loading...
+          </div>
+        </div>
+
+        <!-- Breadcrumb Navigation -->
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li><a href="/users">Users</a></li>
+            <li aria-current="page">John Doe</li>
+          </ol>
+        </nav>
+
+        <!-- Decorative Image (hidden from screen readers) -->
+        <img src="/decorative-pattern.svg" alt="" aria-hidden="true">
+      validation:
+        - "[ ] Modals use role='dialog' with aria-labelledby"
+        - "[ ] Alerts use role='alert' with aria-live"
+        - "[ ] Tabs use role='tablist', role='tab', role='tabpanel'"
+        - "[ ] Menus use role='menu', role='menuitem'"
+        - "[ ] Expandable elements use aria-expanded"
+        - "[ ] Current page/tab marked with aria-current"
+        - "[ ] Form validation uses aria-invalid, aria-describedby"
+        - "[ ] Loading states use aria-busy"
+        - "[ ] Decorative elements use aria-hidden='true'"
+        - "[ ] Live regions use aria-live appropriately"
+      gates:
+        - "All interactive components have appropriate ARIA"
+        - "ARIA usage validates against WAI-ARIA 1.2 spec"
+
+    - step: 3
+      name: "Implement Keyboard Navigation"
+      reference: "WCAG 2.2 Guideline 2.1 (Keyboard Accessible)"
+      actions:
+        - "Ensure all interactive elements keyboard accessible:"
+        - "  - Tab/Shift+Tab: Navigate through focusable elements"
+        - "  - Enter/Space: Activate buttons and links"
+        - "  - Arrow keys: Navigate menus, tabs, radio groups"
+        - "  - Escape: Close modals, dropdowns, menus"
+        - "  - Home/End: Jump to first/last item in lists"
+        - "Add keyboard event handlers:"
+        - "  - Modal: Escape to close, trap focus inside modal"
+        - "  - Dropdown: Arrow keys to navigate, Enter to select"
+        - "  - Tabs: Arrow keys to switch tabs"
+        - "  - Skip link: Jump to main content (bypass navigation)"
+        - "Test all functionality keyboard-only (no mouse)"
+      implementation_pattern: |
+        <!-- Skip Link (WCAG 2.4.1) -->
+        <a href="#main-content" class="skip-link">
+          Skip to main content
+        </a>
+
+        <style>
+        .skip-link {
+          position: absolute;
+          top: -40px;
+          left: 0;
+          background: #000;
+          color: #fff;
+          padding: 8px;
+          text-decoration: none;
+          z-index: 100;
+        }
+
+        .skip-link:focus {
+          top: 0;
+        }
+        </style>
+
+        <!-- Modal with Focus Trap -->
+        <div
+          role="dialog"
+          aria-labelledby="modal-title"
+          x-show="open"
+          x-trap.noscroll="open"
+          @keydown.escape="open = false">
+          <h2 id="modal-title">Modal Title</h2>
+          <p>Modal content</p>
+          <button @click="open = false">Close</button>
+        </div>
+
+        <!-- Dropdown with Keyboard Navigation -->
+        <div
+          x-data="{ open: false, selectedIndex: 0 }"
+          @keydown.escape="open = false"
+          @keydown.arrow-down.prevent="selectedIndex = Math.min(selectedIndex + 1, items.length - 1)"
+          @keydown.arrow-up.prevent="selectedIndex = Math.max(selectedIndex - 1, 0)"
+          @keydown.enter="selectItem(selectedIndex)">
+
+          <button
+            @click="open = !open"
+            aria-haspopup="true"
+            aria-expanded="open">
+            Select Option
+          </button>
+
+          <ul role="menu" x-show="open">
+            <li
+              role="menuitem"
+              :class="{ 'bg-base-200': selectedIndex === 0 }"
+              tabindex="-1">
+              Option 1
+            </li>
+            <li
+              role="menuitem"
+              :class="{ 'bg-base-200': selectedIndex === 1 }"
+              tabindex="-1">
+              Option 2
+            </li>
+          </ul>
+        </div>
+
+        <!-- Tabs with Arrow Key Navigation -->
+        <div
+          x-data="{ activeTab: 0 }"
+          @keydown.arrow-right="activeTab = (activeTab + 1) % 3"
+          @keydown.arrow-left="activeTab = (activeTab - 1 + 3) % 3"
+          @keydown.home="activeTab = 0"
+          @keydown.end="activeTab = 2">
+
+          <div role="tablist">
+            <button
+              role="tab"
+              :aria-selected="activeTab === 0"
+              @click="activeTab = 0">
+              Tab 1
+            </button>
+            <button
+              role="tab"
+              :aria-selected="activeTab === 1"
+              @click="activeTab = 1">
+              Tab 2
+            </button>
+            <button
+              role="tab"
+              :aria-selected="activeTab === 2"
+              @click="activeTab = 2">
+              Tab 3
+            </button>
+          </div>
+
+          <div role="tabpanel" x-show="activeTab === 0">Panel 1</div>
+          <div role="tabpanel" x-show="activeTab === 1">Panel 2</div>
+          <div role="tabpanel" x-show="activeTab === 2">Panel 3</div>
+        </div>
+
+        <!-- Custom Button (must respond to Space and Enter) -->
+        <div
+          role="button"
+          tabindex="0"
+          @click="handleAction()"
+          @keydown.enter="handleAction()"
+          @keydown.space.prevent="handleAction()"
+          class="btn">
+          Custom Button
+        </div>
+
+        <!-- HTMX Form with Keyboard Submit -->
+        <form hx-post="/api/users" hx-target="#results">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name">
+
+          <!-- Enter key submits form automatically -->
+          <button type="submit">Create User</button>
+        </form>
+      validation:
+        - "[ ] All interactive elements focusable via Tab"
+        - "[ ] Tab order logical (follows visual order)"
+        - "[ ] Enter/Space activate buttons and links"
+        - "[ ] Escape closes modals, dropdowns, menus"
+        - "[ ] Arrow keys navigate menus, tabs, radio groups"
+        - "[ ] Home/End keys work in lists"
+        - "[ ] Focus trap implemented in modals"
+        - "[ ] Skip link present (bypass navigation)"
+        - "[ ] No keyboard traps (can always navigate away)"
+        - "[ ] All functionality available via keyboard"
+      gates:
+        - "Full keyboard accessibility validated"
+        - "Zero keyboard traps"
+        - "All WCAG 2.1 keyboard criteria met"
+
+    - step: 4
+      name: "Validate Color Contrast"
+      reference: "WCAG 2.2 Guideline 1.4.3 (AA), 1.4.6 (AAA)"
+      actions:
+        - "Check color contrast ratios:"
+        - "  - Normal text (< 18pt): 4.5:1 (AA), 7:1 (AAA)"
+        - "  - Large text (≥ 18pt or 14pt bold): 3:1 (AA), 4.5:1 (AAA)"
+        - "  - UI components and graphics: 3:1 (AA)"
+        - "Use contrast checker tools:"
+        - "  - WebAIM Contrast Checker"
+        - "  - Chrome DevTools Accessibility panel"
+        - "  - axe DevTools browser extension"
+        - "Validate all text, buttons, form inputs, icons"
+        - "Check focus indicators have sufficient contrast"
+        - "Create contrast audit report with violations"
+        - "Remediate all contrast violations"
+      contrast_requirements: |
+        WCAG 2.2 Contrast Requirements:
+
+        Level AA (Minimum):
+        - Normal text (< 18pt): 4.5:1
+        - Large text (≥ 18pt or 14pt bold): 3:1
+        - UI components (borders, icons): 3:1
+
+        Level AAA (Enhanced - TARGET):
+        - Normal text (< 18pt): 7:1
+        - Large text (≥ 18pt or 14pt bold): 4.5:1
+        - UI components: 3:1
+
+        Examples:
+        ✅ PASS (7.21:1): Black text (#000000) on white bg (#FFFFFF)
+        ✅ PASS (4.54:1): Dark gray text (#595959) on white bg (#FFFFFF)
+        ❌ FAIL (2.45:1): Light gray text (#999999) on white bg (#FFFFFF)
+
+        Common Violations:
+        - Placeholder text too light
+        - Disabled button text insufficient contrast
+        - Link text in colored backgrounds
+        - Icon-only buttons without labels
+
+        Remediation:
+        - Darken light text colors
+        - Add text labels to icon buttons
+        - Use higher contrast background colors
+        - Test with Color Oracle (color blindness simulator)
+      validation:
+        - "[ ] All normal text meets 7:1 contrast (AAA)"
+        - "[ ] All large text meets 4.5:1 contrast (AAA)"
+        - "[ ] All UI components meet 3:1 contrast (AA)"
+        - "[ ] Focus indicators meet 3:1 contrast"
+        - "[ ] Link text distinguishable from body text"
+        - "[ ] Placeholder text sufficient contrast"
+        - "[ ] Error messages sufficient contrast"
+        - "[ ] Contrast audit report generated"
+      gates:
+        - "All WCAG 2.2 Level AAA contrast requirements met"
+        - "Zero contrast violations"
+
+    - step: 5
+      name: "Implement Focus Management"
+      reference: "WCAG 2.2 Guideline 2.4.7 (AA), 2.4.11 (AAA)"
+      actions:
+        - "Ensure visible focus indicators on all interactive elements:"
+        - "  - Default browser outline: 2px solid"
+        - "  - Custom focus ring: box-shadow with high contrast"
+        - "  - Focus indicator minimum 2px thick (WCAG 2.4.11)"
+        - "Manage focus appropriately:"
+        - "  - Modal opens: Focus first interactive element"
+        - "  - Modal closes: Return focus to trigger button"
+        - "  - Page loads: Focus skip link or H1"
+        - "  - Form submits (error): Focus first error field"
+        - "  - Dynamic content loads: Move focus or announce"
+        - "Never remove focus outlines without replacement"
+        - "Test focus visibility in high contrast mode"
+      implementation_pattern: |
+        /* Focus Indicator Styles */
+
+        /* Default focus ring (high contrast) */
+        *:focus {
+          outline: 2px solid #0066CC;
+          outline-offset: 2px;
+        }
+
+        /* Custom focus ring (DaisyUI override) */
+        .btn:focus,
+        .input:focus,
+        .select:focus,
+        .textarea:focus {
+          outline: 2px solid #0066CC;
+          outline-offset: 2px;
+          box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+        }
+
+        /* Focus within (for containers) */
+        .card:focus-within {
+          box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+        }
+
+        /* Never remove focus outline without replacement */
+        /* ❌ BAD: button:focus { outline: none; } */
+
+        /* ✅ GOOD: Replace with custom indicator */
+        button:focus {
+          outline: none;
+          box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.5);
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+          *:focus {
+            outline: 3px solid currentColor;
+            outline-offset: 3px;
+          }
+        }
+
+        <!-- Focus Management: Modal -->
+        <div
+          x-show="open"
+          x-trap.noscroll="open"
+          @close-modal="$focus.first()">
+          <!-- Focus moves to first button when modal opens -->
+          <button x-ref="firstButton" @click="open = false">
+            Cancel
+          </button>
+          <button>Confirm</button>
+        </div>
+
+        <!-- Focus Management: Form Error -->
+        <form hx-post="/api/users" @htmx:response-error="focusFirstError()">
+          <div class="form-control">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              aria-invalid="true"
+              aria-describedby="email-error"
+              x-ref="emailInput">
+            <div id="email-error" role="alert">
+              Email is required
+            </div>
+          </div>
+
+          <button type="submit">Submit</button>
+        </form>
+
+        <script>
+        function focusFirstError() {
+          // Find first invalid input and focus it
+          const firstError = document.querySelector('[aria-invalid="true"]');
+          if (firstError) {
+            firstError.focus();
+          }
+        }
+        </script>
+
+        <!-- Focus Management: Dynamic Content -->
+        <div
+          hx-get="/api/users"
+          hx-target="#results"
+          @htmx:after-swap="announceResults()">
+          <button>Load Users</button>
+        </div>
+
+        <div id="results" tabindex="-1">
+          <!-- Results inserted here -->
+        </div>
+
+        <script>
+        function announceResults() {
+          // Move focus to results (or announce via live region)
+          const results = document.getElementById('results');
+          results.focus();
+        }
+        </script>
+      validation:
+        - "[ ] All interactive elements have visible focus indicators"
+        - "[ ] Focus indicators minimum 2px thick"
+        - "[ ] Focus indicators high contrast (3:1 minimum)"
+        - "[ ] Modal focus managed (open → close)"
+        - "[ ] Form error focus managed"
+        - "[ ] Dynamic content focus managed"
+        - "[ ] No removed outlines without replacement"
+        - "[ ] High contrast mode tested"
+      gates:
+        - "All WCAG 2.4.7 and 2.4.11 focus requirements met"
+        - "Focus management functional"
+
+    - step: 6
+      name: "Test with Screen Readers"
+      actions:
+        - "Test application with screen readers:"
+        - "  - NVDA (Windows - free)"
+        - "  - JAWS (Windows - commercial)"
+        - "  - VoiceOver (macOS/iOS - built-in)"
+        - "  - TalkBack (Android - built-in)"
+        - "Validate:"
+        - "  - All content announced correctly"
+        - "  - Heading navigation works (H key)"
+        - "  - Landmark navigation works (D key)"
+        - "  - Form labels announced"
+        - "  - Button/link purposes clear"
+        - "  - Live regions announce updates"
+        - "  - Image alt text descriptive"
+        - "  - Table headers associated with cells"
+        - "Document screen reader testing results"
+      testing_checklist: |
+        Screen Reader Testing Checklist:
+
+        NVDA (Windows):
+        [ ] Application name announced on page load
+        [ ] Heading navigation (H key) lists all headings
+        [ ] Landmark navigation (D key) lists all landmarks
+        [ ] Tab key announces button/link labels
+        [ ] Form fields announce labels and required status
+        [ ] Error messages announced immediately (aria-live)
+        [ ] Success messages announced (aria-live)
+        [ ] Modal announced as dialog with title
+        [ ] Table navigation works (Ctrl+Alt+Arrow keys)
+        [ ] Image alt text announced
+
+        VoiceOver (macOS):
+        [ ] Rotor navigation (VO+U) lists headings, landmarks, links
+        [ ] VO+Space activates buttons
+        [ ] Form Auto-fill announced correctly
+        [ ] Modal focus trapped
+        [ ] Dynamic content updates announced
+
+        Common Issues:
+        - Missing alt text on images
+        - Form inputs without labels
+        - Buttons without accessible names
+        - Live regions not announcing updates
+        - Modals not announced as dialogs
+        - Table headers not associated
+      validation:
+        - "[ ] NVDA testing completed"
+        - "[ ] VoiceOver testing completed"
+        - "[ ] All content announced correctly"
+        - "[ ] Navigation shortcuts work (H, D keys)"
+        - "[ ] Form labels announced"
+        - "[ ] Live regions announce updates"
+        - "[ ] Modal dialogs announced"
+        - "[ ] Table navigation works"
+      gates:
+        - "Screen reader testing passed on Windows and macOS"
+        - "Zero critical screen reader issues"
+
+    - step: 7
+      name: "Generate Comprehensive Accessibility Audit Report"
+      actions:
+        - "Run automated accessibility testing tools:"
+        - "  - axe DevTools (browser extension)"
+        - "  - Lighthouse (Chrome DevTools)"
+        - "  - WAVE (web accessibility evaluation tool)"
+        - "  - Pa11y (command-line tool)"
+        - "Compile audit report with:"
+        - "  - WCAG 2.2 Level AAA compliance status"
+        - "  - Automated test results (pass/fail counts)"
+        - "  - Manual test results (semantic HTML, keyboard, screen readers)"
+        - "  - Color contrast audit results"
+        - "  - Violation list with severity (critical/major/minor)"
+        - "  - Remediation recommendations"
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN with Phase 6 Accessibility completion"
+        - "CRITICAL: DO NOT create temporal documents"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property"
+        - "  - Accessibility compliance status"
+        - "  - WCAG 2.2 Level AAA achievement"
+        - "  - Relationships: session → validates → accessibility"
+      audit_report_template: |
+        # Accessibility Audit Report
+
+        ## Executive Summary
+        - WCAG 2.2 Compliance Level: AAA
+        - Automated Tests: 100% Pass
+        - Manual Tests: 100% Pass
+        - Critical Violations: 0
+        - Major Violations: 0
+        - Minor Violations: 0
+
+        ## Test Results
+
+        ### Automated Testing
+        - axe DevTools: 0 violations (47 checks passed)
+        - Lighthouse: 100/100 Accessibility Score
+        - WAVE: 0 errors, 0 alerts
+        - Pa11y: 0 issues
+
+        ### Manual Testing
+        - Semantic HTML: ✅ Pass
+        - ARIA Implementation: ✅ Pass
+        - Keyboard Navigation: ✅ Pass
+        - Color Contrast: ✅ Pass (AAA)
+        - Focus Management: ✅ Pass
+        - Screen Readers: ✅ Pass (NVDA, VoiceOver)
+
+        ## WCAG 2.2 Guideline Compliance
+
+        ### Perceivable (1.x)
+        ✅ 1.1.1 Non-text Content (Level A)
+        ✅ 1.3.1 Info and Relationships (Level A)
+        ✅ 1.4.3 Contrast (Minimum) (Level AA)
+        ✅ 1.4.6 Contrast (Enhanced) (Level AAA)
+        ✅ 1.4.13 Content on Hover or Focus (Level AA)
+
+        ### Operable (2.x)
+        ✅ 2.1.1 Keyboard (Level A)
+        ✅ 2.1.2 No Keyboard Trap (Level A)
+        ✅ 2.3.1 Three Flashes or Below Threshold (Level A)
+        ✅ 2.3.3 Animation from Interactions (Level AAA)
+        ✅ 2.4.7 Focus Visible (Level AA)
+        ✅ 2.4.11 Focus Appearance (Level AAA)
+
+        ### Understandable (3.x)
+        ✅ 3.1.1 Language of Page (Level A)
+        ✅ 3.2.1 On Focus (Level A)
+        ✅ 3.2.2 On Input (Level A)
+        ✅ 3.3.1 Error Identification (Level A)
+        ✅ 3.3.2 Labels or Instructions (Level A)
+
+        ### Robust (4.x)
+        ✅ 4.1.2 Name, Role, Value (Level A)
+        ✅ 4.1.3 Status Messages (Level AA)
+
+        ## Remediation Summary
+        All violations remediated. Application meets WCAG 2.2 Level AAA.
+
+        ## Recommendations
+        - Continue periodic accessibility audits (quarterly)
+        - Train developers on accessibility best practices
+        - Include accessibility in code review checklist
+        - Monitor for regressions with automated CI/CD testing
+      outputs:
+        - "spec_updated: Boolean"
+        - "plan_updated: Boolean"
+        - "audit_report: String"
+        - "wcag_compliance_level: String"
+        - "memory_entities_created: List[str]"
+      gates:
+        - "Comprehensive audit report generated"
+        - "WCAG 2.2 Level AAA compliance achieved"
+        - "SPEC and IMPLEMENTATION_PLAN updated"
+        - "Memory entities created with Date properties"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: Target WCAG 2.2 Level AAA compliance"
+  - "CRITICAL: All interactive elements must be keyboard accessible"
+  - "CRITICAL: All text must meet 7:1 contrast ratio (AAA)"
+  - "CRITICAL: All focus indicators must be visible and high contrast"
+  - "CRITICAL: All content must be screen reader accessible"
+  - "Use semantic HTML5 elements wherever possible"
+  - "ARIA attributes follow WAI-ARIA 1.2 specification"
+  - "Focus management implemented for all dynamic content"
+
+forbidden:
+  - "Removing focus outlines without replacement"
+  - "Using div/span as buttons without role and keyboard support"
+  - "Skipping heading levels (H1 → H3)"
+  - "Form inputs without labels"
+  - "Color as the only means of conveying information"
+  - "Auto-play audio/video without user control"
+  - "Creating temporal documents (all updates in SPEC and IMPLEMENTATION_PLAN)"
+
+output_format:
+  require_sections:
+    - "Section 1: Semantic HTML Audit Results"
+    - "Section 2: ARIA Implementation Details"
+    - "Section 3: Keyboard Navigation Testing Results"
+    - "Section 4: Color Contrast Audit Results"
+    - "Section 5: Focus Management Implementation"
+    - "Section 6: Screen Reader Testing Results"
+    - "Section 7: Comprehensive Accessibility Audit Report"
+    - "Section 8: Memory Writes (session entity, compliance status)"
+    - "Section 9: Next Steps (proceed to Cross-Browser Responsive Testing Phase 28)"
+  language: "Australian English"
+
+success_criteria:
+  - "All semantic HTML violations remediated"
+  - "All ARIA attributes implemented correctly"
+  - "Full keyboard accessibility achieved"
+  - "All color contrast ratios meet AAA (7:1 for normal text)"
+  - "Focus management implemented for all dynamic content"
+  - "Screen reader testing passed (NVDA, VoiceOver)"
+  - "Automated accessibility tests pass (axe, Lighthouse, WAVE)"
+  - "WCAG 2.2 Level AAA compliance achieved"
+  - "Comprehensive audit report generated"
+  - "SPEC and IMPLEMENTATION_PLAN updated (no temporal documents)"
+  - "Memory entities created with Date properties"
+
+halt_condition: "After successful accessibility validation and memory persistence, halt and await instruction to proceed to Phase 28 (Cross-Browser Responsive Testing)."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Accessibility WCAG Validation Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, WCAG 2.2 Level AAA"
+  language: "en-AU"
+  references:
+    - "WCAG 2.2 Guidelines (W3C)"
+    - "WAI-ARIA 1.2 Specification"
+    - "design_system_foundations.md (accessibility section)"
+
+# EXECUTION PROTOCOL
+# Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/27-WebUI_Accessibility_WCAG_Validation.yaml under those enforced rules.

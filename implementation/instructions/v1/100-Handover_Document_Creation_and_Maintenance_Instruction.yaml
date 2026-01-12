@@ -1,0 +1,403 @@
+---
+prompt_name: "Handover_Document_Creation_and_Maintenance"
+version: "1.0.0"
+type: "documentation_maintenance"
+language: "en-AU"
+references:
+  - "docs/implementation/handovers/HANDOVER_2025-12-08.md"
+  - "docs/implementation/handovers/HANDOVER_2025-12-07.md"
+  - "docs/implementation/instructions/97-LOGGING_REQUIREMENTS_INSTRUCTION.yaml"
+  - "docs/implementation/instructions/101-Zero_Tolerance_Remediation_Instruction.yaml"
+---
+
+context:
+  role: "Create, update, and maintain handover documents for session continuity"
+  location: "docs/implementation/handovers/"
+  naming_convention: "HANDOVER_YYYY-MM-DD.md"
+  purpose: "Document session achievements, challenges, lessons learned, and next steps for future sessions"
+  critical: "Handover documents are ESSENTIAL for maintaining context across sessions and preventing duplicate work"
+
+mandatory_sections:
+  header:
+    required_fields:
+      - "Date: YYYY-MM-DD (MUST match filename date)"
+      - "Version: X.Y (semantic versioning)"
+      - "Status: Current work status with progress indicators"
+      - "For: Future Self / Next Developer"
+    critical_warning: |
+      "🚨 CRITICAL WARNING**: **Past LLM implementations have wasted THOUSANDS OF DOLLARS and BILLIONS OF TOKENS** by repeatedly failing to follow well-documented implementation plans. **READ THE "CRITICAL WARNING: PAST FAILURES & ZERO TOLERANCE POLICY" SECTION IN PREVIOUS HANDOVERS. FUTURE FAILURES WILL NOT BE TOLERATED.**"
+  
+  executive_summary:
+    required: true
+    location: "After header, before Previous Session Summary"
+    content:
+      - "Current Session Focus: Brief description of main work"
+      - "Key Achievements (This Session): Numbered list of major accomplishments"
+      - "Status: Overall completion status with checkmarks"
+      - "Vision: Long-term project vision statement"
+      - "Previous Achievements: Brief summary of past work"
+    format: "Use ✅ for complete, ⏳ for in progress, ❌ for failed"
+  
+  previous_session_summary:
+    required: true
+    location: "After Executive Summary"
+    content:
+      - "Handover YYYY-MM-DD (Session Type): Key achievements from previous sessions"
+      - "Brief context for continuity"
+      - "Reference to previous handover documents"
+    purpose: "Provide context and continuity from previous sessions"
+  
+  accomplishments:
+    required: true
+    location: "After Previous Session Summary"
+    section_title: "## ✅ What Has Been Accomplished (This Session - YYYY-MM-DD Session Type)"
+    structure:
+      - "### Major Category ✅ COMPLETE - PRODUCTION READY"
+      - "**Status**: ✅ **COMPLETE** or ⏳ **IN PROGRESS**"
+      - "**Achievement**: Brief summary"
+      - "#### 1. Specific Achievement ✅ COMPLETE"
+      - "**Achievement**: Description"
+      - "**Files Modified**: List with ✅ checkmarks"
+      - "**Key Changes**: Bulleted list"
+      - "**Reference**: Links to SPEC documents or related files"
+    required_details:
+      - "File paths with checkmarks"
+      - "Specific line numbers or code sections when relevant"
+      - "References to DEBUG_TROUBLESHOOTING_SPEC documents"
+      - "Impact statements"
+  
+  challenges:
+    required: true
+    location: "After Accomplishments"
+    section_title: "## 🚧 Challenges Encountered (This Session - YYYY-MM-DD Session Type)"
+    structure:
+      - "### 1. Challenge Name"
+      - "**Challenge**: Description"
+      - "**Impact**: What was affected"
+      - "**Resolution**: How it was resolved"
+    purpose: "Document obstacles and solutions for future reference"
+  
+  lessons_learned:
+    required: true
+    location: "After Challenges"
+    section_title: "## 💡 Lessons Learned (This Session - YYYY-MM-DD Session Type)"
+    structure:
+      - "### 1. Lesson Title"
+      - "**Learning**: What was learned"
+      - "**Application**: How it was applied"
+      - "**Impact**: What changed as a result"
+      - "**Reference**: Links to relevant documents or code"
+    purpose: "Capture knowledge for future sessions"
+  
+  remaining_work:
+    required: true
+    location: "After Lessons Learned"
+    section_title: "## 🎯 Immediate Next Steps (Priority Order)"
+    structure:
+      - "### 1. Task Name (PRIORITY LEVEL)"
+      - "**Why**: Rationale"
+      - "**Actions**: Numbered list of steps"
+      - "**Estimated Time**: If applicable"
+      - "**Reference**: Links to relevant documents"
+    format: "Use priority indicators: HIGHEST PRIORITY, HIGH PRIORITY, MEDIUM PRIORITY, LOW PRIORITY"
+  
+  essential_documents:
+    required: true
+    location: "After Remaining Work"
+    section_title: "## 📚 Essential Documents for Next Session"
+    structure:
+      - "**Category Name (STATUS)**:"
+      - "- **Document Name**: `path/to/file` - **MANDATORY** or **PRIMARY REFERENCE** - Description"
+      - "- **Document Name**: `path/to/file` - Description"
+    categories:
+      - "Logging Compliance & Critical Services"
+      - "Storage Service & Factory"
+      - "Engine Directory Refactoring"
+      - "Framework Directory Refactoring"
+      - "FastAPI Services Platform Rebranding"
+      - "Execution Protocols"
+    purpose: "Provide quick access to critical documents for next session"
+  
+  reference_documents:
+    required: true
+    location: "After Essential Documents"
+    section_title: "## 📚 Reference Documents"
+    structure:
+      - "### Category Name (This Session) - **START HERE**"
+      - "**Primary Reference**:"
+      - "- **Document Name**: `path/to/file` - Description"
+      - "**Supporting Documentation**:"
+      - "- **Document Name**: `path/to/file` - Description"
+    purpose: "Comprehensive reference list for all related documents"
+  
+  critical_notes:
+    required: true
+    location: "After Reference Documents"
+    section_title: "## 🚨 Critical Notes for Next Session"
+    content:
+      - "Critical warnings or blockers"
+      - "Important context that must not be forgotten"
+      - "Mandates or policies that must be followed"
+    format: "Use 🚨 emoji for critical items"
+  
+  footer:
+    required: true
+    location: "End of document"
+    content:
+      - "**End of Handover Document**"
+      - "**Maintained By**: Implementation Team"
+      - "**Last Updated**: YYYY-MM-DD (Session Type - Brief description)"
+
+file_creation:
+  when_to_create:
+    - "At the end of each significant work session"
+    - "When starting a new day of work"
+    - "When major milestones are reached"
+    - "When context needs to be preserved for future sessions"
+  
+  naming:
+    pattern: "HANDOVER_YYYY-MM-DD.md"
+    example: "HANDOVER_2025-12-08.md"
+    location: "docs/implementation/handovers/"
+    case_sensitive: true
+  
+  initial_setup:
+    steps:
+      - "Copy most recent handover document as template"
+      - "Update date in filename and header"
+      - "Update version number if major changes"
+      - "Clear 'This Session' accomplishments (keep Previous Session Summary)"
+      - "Update Executive Summary with new session focus"
+      - "Update Status line with current work status"
+  
+  content_requirements:
+    mandatory:
+      - "All mandatory sections must be present"
+      - "Date must match filename date"
+      - "Previous Session Summary must reference actual previous sessions"
+      - "Accomplishments must be specific with file paths"
+      - "Challenges must include resolution"
+      - "Lessons Learned must include application and impact"
+      - "Essential Documents must be current and accurate"
+    optional:
+      - "Detailed code examples (if helpful)"
+      - "Screenshots or diagrams (if relevant)"
+      - "Performance metrics (if applicable)"
+
+file_updates:
+  when_to_update:
+    - "During session: Update accomplishments as work progresses"
+    - "During session: Add challenges as they are encountered"
+    - "During session: Document lessons learned immediately"
+    - "End of session: Complete all sections"
+    - "End of session: Update 'Last Updated' date"
+    - "End of session: Verify all references are correct"
+  
+  update_frequency:
+    - "Real-time: As major accomplishments are completed"
+    - "End of session: Comprehensive update with all details"
+    - "Before closing: Final verification and completion"
+  
+  update_process:
+    steps:
+      - "Add new accomplishments to 'What Has Been Accomplished' section"
+      - "Add challenges to 'Challenges Encountered' section"
+      - "Add lessons to 'Lessons Learned' section"
+      - "Update 'Remaining Work' with completed items removed"
+      - "Update 'Essential Documents' with new references"
+      - "Update 'Last Updated' date and session type"
+      - "Verify all file paths and references are correct"
+      - "Ensure date consistency throughout document"
+  
+  date_consistency:
+    critical: "MUST maintain date consistency"
+    rules:
+      - "Filename date MUST match header Date field"
+      - "Section headers MUST use correct session date"
+      - "Last Updated MUST reflect actual update date"
+      - "Previous Session Summary MUST use correct historical dates"
+    enforcement: "Date mismatch = CRITICAL ERROR - MUST fix immediately"
+
+content_guidelines:
+  achievements:
+    specificity:
+      - "MUST include specific file paths"
+      - "MUST include line numbers when relevant"
+      - "MUST reference SPEC documents"
+      - "MUST include impact statements"
+    format:
+      - "Use ✅ checkmarks for completed items"
+      - "Use ⏳ for in-progress items"
+      - "Use ❌ for failed items"
+      - "Number achievements sequentially"
+    detail_level:
+      - "Sufficient detail for future developer to understand"
+      - "Include 'why' not just 'what'"
+      - "Include 'how' when relevant"
+      - "Reference related work"
+  
+  challenges:
+    structure:
+      - "Describe the challenge clearly"
+      - "Explain the impact"
+      - "Document the resolution"
+      - "Reference related files or SPEC documents"
+    purpose: "Help future sessions avoid same obstacles"
+  
+  lessons_learned:
+    structure:
+      - "What was learned (the principle)"
+      - "How it was applied (the practice)"
+      - "What changed (the impact)"
+      - "Where to find more (the reference)"
+    purpose: "Build institutional knowledge"
+  
+  remaining_work:
+    prioritization:
+      - "Order by priority (HIGHEST → LOWEST)"
+      - "Include rationale for priority"
+      - "Include estimated time if known"
+      - "Include dependencies"
+    clarity:
+      - "Be specific about what needs to be done"
+      - "Include file paths and line numbers"
+      - "Reference relevant documents"
+      - "Include acceptance criteria"
+
+document_references:
+  spec_documents:
+    required: true
+    pattern: "docs/implementation/in_progress/DEBUG_TROUBLESHOOTING_*.md"
+    purpose: "Link to troubleshooting and review SPEC documents"
+    format: "`path/to/file.md` - Brief description"
+  temporal_documents:
+    required: true
+    pattern: "docs/implementation/_temporal/*.md"
+    purpose: "Link to temporal documents"
+    format: "`path/to/file.md` - Brief description"
+  
+  code_files:
+    required: true
+    pattern: "src/**/*.py"
+    purpose: "Reference modified or relevant code files"
+    format: "`path/to/file.py` - Description (Lines X-Y if specific)"
+  
+  documentation_files:
+    optional: true
+    pattern: "docs/**/*.md"
+    purpose: "Reference related documentation"
+    format: "`path/to/file.md` - Description"
+
+quality_standards:
+  completeness:
+    - "All mandatory sections present"
+    - "All dates consistent"
+    - "All references valid and accessible"
+    - "All file paths correct"
+    - "All achievements documented"
+    - "All challenges resolved or documented"
+    - "All lessons learned captured"
+  
+  accuracy:
+    - "File paths verified"
+    - "Line numbers verified"
+    - "References verified"
+    - "Dates verified"
+    - "Status indicators accurate"
+  
+  clarity:
+    - "Clear section headers"
+    - "Consistent formatting"
+    - "Logical organization"
+    - "Easy to scan"
+    - "Specific details"
+  
+  usefulness:
+    - "Provides context for next session"
+    - "Prevents duplicate work"
+    - "Documents decisions"
+    - "Captures knowledge"
+    - "References essential documents"
+
+enforcement:
+  mandatory:
+    - "Handover document MUST be created/updated at end of each session"
+    - "All mandatory sections MUST be present"
+    - "Date consistency MUST be maintained"
+    - "All references MUST be valid"
+    - "All achievements MUST be documented"
+  
+  blocking:
+    rule: "Incomplete handover document = BLOCKING ISSUE - session MUST NOT end without complete handover"
+    enforcement: "Missing sections or invalid references prevent future sessions from having proper context"
+  
+  validation:
+    checklist:
+      - "✅ Header date matches filename date"
+      - "✅ All mandatory sections present"
+      - "✅ All dates consistent"
+      - "✅ All file paths valid"
+      - "✅ All references accessible"
+      - "✅ Achievements documented with file paths"
+      - "✅ Challenges include resolution"
+      - "✅ Lessons learned include application"
+      - "✅ Remaining work prioritized"
+      - "✅ Essential documents current"
+      - "✅ Last Updated date correct"
+
+output_format:
+  section_1: "Header with Date, Version, Status"
+  section_2: "Critical Warning (if applicable)"
+  section_3: "Executive Summary"
+  section_4: "Previous Session Summary"
+  section_5: "What Has Been Accomplished (This Session)"
+  section_6: "Challenges Encountered (This Session)"
+  section_7: "Lessons Learned (This Session)"
+  section_8: "Immediate Next Steps (Priority Order)"
+  section_9: "Essential Documents for Next Session"
+  section_10: "Reference Documents"
+  section_11: "Critical Notes for Next Session"
+  section_12: "Footer with Last Updated"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-08"
+  version: "1.0.0"
+  classification: "Handover Document Creation and Maintenance Instruction"
+  enforcement_level: "MANDATORY - Handover documents are ESSENTIAL for session continuity"
+
+# CRITICAL REMINDERS
+
+# HANDOVER DOCUMENTS ARE ESSENTIAL:
+# - They maintain context across sessions
+# - They prevent duplicate work
+# - They document decisions and knowledge
+# - They provide continuity for future developers
+# - They reference critical documents and files
+
+# MANDATORY REQUIREMENTS:
+# - MUST be created/updated at end of each session
+# - MUST include all mandatory sections
+# - MUST maintain date consistency
+# - MUST validate all references
+# - MUST document all achievements, challenges, and lessons
+
+# DATE CONSISTENCY IS CRITICAL:
+# - Filename date MUST match header Date field
+# - Section headers MUST use correct session date
+# - Last Updated MUST reflect actual update date
+# - Previous Session Summary MUST use correct historical dates
+# - Date mismatch = CRITICAL ERROR
+
+# QUALITY STANDARDS:
+# - Completeness: All sections present and complete
+# - Accuracy: All references valid and verified
+# - Clarity: Easy to scan and understand
+# - Usefulness: Provides value for next session
+
+# ENFORCEMENT:
+# - Incomplete handover = BLOCKING ISSUE
+# - Missing sections = BLOCKING ISSUE
+# - Invalid references = BLOCKING ISSUE
+# - Date inconsistencies = CRITICAL ERROR
+# - Session MUST NOT end without complete handover

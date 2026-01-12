@@ -1,0 +1,240 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "_meta": {
+    "description": "Canonical layout, spacing, elevation, radius, motion and behaviour tokens for the UI factory. Framework-agnostic; mapped into Tailwind, CSS vars, React props, and Jinja2/HTMX templates.",
+    "version": "0.1.0",
+    "source": "design-system-foundations + responsive-layout-protocol"
+  },
+  "spacing": {
+    "scale": [
+      0,
+      4,
+      8,
+      12,
+      16,
+      24,
+      32,
+      40,
+      48,
+      64
+    ],
+    "aliases": {
+      "xs": 4,
+      "sm": 8,
+      "md": 16,
+      "lg": 24,
+      "xl": 32,
+      "2xl": 48
+    }
+  },
+  "breakpoints": {
+    "sm": 640,
+    "md": 768,
+    "lg": 1024,
+    "xl": 1280,
+    "2xl": 1536
+  },
+  "layout": {
+    "container": {
+      "maxWidth": 1200,
+      "paddingX": 24,
+      "paddingY": 16,
+      "gutter": 16
+    },
+    "grid": {
+      "minCardWidth": 240,
+      "maxCardWidth": 420,
+      "maxColumns": 4,
+      "gutter": 16,
+      "rowGap": 16
+    },
+    "table": {
+      "minColumnWidth": 120,
+      "maxVisibleColumns": 6,
+      "rowHeight": 48
+    },
+    "list": {
+      "rowHeight": 56,
+      "dividerThickness": 1
+    },
+    "accordion": {
+      "headerMinHeight": 48,
+      "panelPadding": 16
+    },
+    "carousel": {
+      "itemMinWidth": 220,
+      "itemMaxWidth": 360,
+      "gap": 16
+    }
+  },
+  "elevation": {
+    "_note": "Shadow colors MUST use CSS custom properties to support theme switching. Never use hardcoded rgba/hex values.",
+    "none": {
+      "shadow": "none"
+    },
+    "xs": {
+      "shadow": "0 1px 1px var(--shadow-color-xs, oklch(0.2 0 0 / 0.04))"
+    },
+    "sm": {
+      "shadow": "0 1px 2px var(--shadow-color-sm, oklch(0.2 0 0 / 0.06))"
+    },
+    "md": {
+      "shadow": "0 4px 6px var(--shadow-color-md, oklch(0.2 0 0 / 0.10)), 0 -1px 2px var(--shadow-color-inset, oklch(1 0 0 / 0.40)) inset"
+    },
+    "lg": {
+      "shadow": "0 10px 15px var(--shadow-color-lg, oklch(0.2 0 0 / 0.18)), 0 -2px 4px var(--shadow-color-inset, oklch(1 0 0 / 0.40)) inset"
+    },
+    "xl": {
+      "shadow": "0 20px 25px var(--shadow-color-xl, oklch(0.2 0 0 / 0.22)), 0 -3px 6px var(--shadow-color-inset, oklch(1 0 0 / 0.45)) inset"
+    }
+  },
+  "radius": {
+    "none": 0,
+    "sm": 4,
+    "md": 8,
+    "lg": 16,
+    "xl": 24,
+    "pill": 9999
+  },
+  "typography": {
+    "scale": {
+      "xs": {
+        "fontSize": 12,
+        "lineHeight": 16
+      },
+      "sm": {
+        "fontSize": 14,
+        "lineHeight": 20
+      },
+      "base": {
+        "fontSize": 16,
+        "lineHeight": 24
+      },
+      "lg": {
+        "fontSize": 18,
+        "lineHeight": 28
+      },
+      "xl": {
+        "fontSize": 20,
+        "lineHeight": 28
+      },
+      "2xl": {
+        "fontSize": 24,
+        "lineHeight": 32
+      },
+      "3xl": {
+        "fontSize": 30,
+        "lineHeight": 36
+      }
+    },
+    "weights": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    }
+  },
+  "colourRoles": {
+    "primary": {
+      "description": "Attention anchors: CTAs, primary actions, key highlights.",
+      "tokens": [
+        "primary.DEFAULT",
+        "primary.hover",
+        "primary.soft"
+      ]
+    },
+    "secondary": {
+      "description": "Supporting accents: secondary actions, feature highlights.",
+      "tokens": [
+        "secondary.DEFAULT",
+        "secondary.hover"
+      ]
+    },
+    "neutral": {
+      "description": "Structural surfaces and typography.",
+      "tokens": [
+        "neutral.50",
+        "neutral.100",
+        "neutral.200",
+        "neutral.300",
+        "neutral.400",
+        "neutral.500",
+        "neutral.600",
+        "neutral.700",
+        "neutral.800",
+        "neutral.900"
+      ]
+    },
+    "semantic": {
+      "description": "Stateful feedback colours.",
+      "tokens": [
+        "success",
+        "warning",
+        "info",
+        "error"
+      ]
+    }
+  },
+  "behaviour": {
+    "component": {
+      "minTapTarget": 44,
+      "minInteractiveGap": 8
+    },
+    "layout": {
+      "collapseThreshold": 280,
+      "listFallbackWidth": 220,
+      "tableToCardsColumnLimit": 5,
+      "maxCardsPerRow": 4
+    },
+    "density": {
+      "high": {
+        "description": "Many fields, comparison-heavy → prefer table.",
+        "maxColumns": 8
+      },
+      "medium": {
+        "description": "Moderate fields, scanning → prefer grid/cards.",
+        "maxColumns": 5
+      },
+      "low": {
+        "description": "Few fields, narrative or object-centric → prefer list/cards.",
+        "maxColumns": 3
+      }
+    }
+  },
+  "motion": {
+    "durations": {
+      "fast": 120,
+      "normal": 180,
+      "slow": 260
+    },
+    "easing": {
+      "standard": "cubic-bezier(0.2, 0.0, 0.2, 1)",
+      "inOut": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+      "snappy": "cubic-bezier(0.25, 0.8, 0.25, 1)"
+    },
+    "patterns": {
+      "enter": {
+        "fadeInUp": {
+          "duration": "normal",
+          "easing": "standard"
+        },
+        "scaleIn": {
+          "duration": "fast",
+          "easing": "inOut"
+        }
+      },
+      "exit": {
+        "fadeOutDown": {
+          "duration": "normal",
+          "easing": "standard"
+        }
+      },
+      "transitions": {
+        "tableToCards": "fadeInUp",
+        "cardsToList": "fadeInUp",
+        "listToAccordion": "scaleIn",
+        "gridToCarousel": "fadeInUp"
+      }
+    }
+  }
+}

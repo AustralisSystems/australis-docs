@@ -1,0 +1,528 @@
+prompt_name: "WebUI_Router_Service_Integration"
+version: "1.0.0"
+type: "webui_router_integration"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor integrating templates with FastAPI routers and service layers"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute router/service integration phase by creating FastAPI router functions for all page and
+    partial templates, implementing service layer calls, validating all HTMX endpoints reference
+    existing router paths with relative URLs, and ensuring service imports use relative paths.
+
+  reference_docs:
+    primary:
+      - "ui-model.json"
+      - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+      - "OpenAPI specification"
+    supporting:
+      - "design_system_foundations.md"
+      - "renderer_mapping_spec.md"
+
+  color_scheme_mandate:
+    reference: "COLOR_SCHEME_DIRECTIVE.md"
+    applies_to: "All API response templates and HTMX partials"
+    requirement: "Use DaisyUI semantic colors only - NO hardcoded colors (bg-white, text-gray-*, etc.)"
+    validation: "All returned HTML fragments must use bg-base-*, text-base-content, semantic component classes"
+
+  github_scaffolding_mandate:
+    priority: "MANDATORY - NO EXCEPTIONS"
+    description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+    priority_hierarchy:
+      tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+      tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+      tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+      tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+      tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+      tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+      tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+      tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+      tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+
+  prerequisite_validation:
+    - "[ ] Template scaffolding phase (Step 23) completed with all templates created"
+    - "[ ] ui-model.json exists with page and endpoint mappings"
+    - "[ ] OpenAPI specification available"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+    - "[ ] Target project routers and services directories exist"
+
+instructions:
+  objective: >
+    Integrate templates with FastAPI backend by creating router endpoints for pages and HTMX
+    partials, implementing service layer calls with proper error handling, validating all template
+    URLs match router paths (relative URLs only), and ensuring service imports use relative paths.
+
+  steps:
+    - step: 1
+      name: "Audit Existing FastAPI Routers"
+      reference: "OpenAPI specification"
+      actions:
+        - "Scan project for existing router files (typically src/services/*/routers/*.py)"
+        - "List all existing API endpoints with HTTP methods and paths"
+        - "Compare against OpenAPI specification for completeness"
+        - "Identify any missing endpoints needed for HTMX interactions"
+        - "Document router prefix structure (e.g., /api/users, /api/orders)"
+        - "Map router endpoints to ui-model.json page definitions"
+      outputs:
+        - "existing_routers: List[RouterDefinition]"
+        - "missing_endpoints: List[str]"
+        - "router_prefix_map: Dict[str, str]"
+      gates:
+        - "All existing routers catalogued"
+        - "Endpoint coverage gaps identified"
+
+    - step: 2
+      name: "Create UI Router for Template Rendering"
+      actions:
+        - "Create new router file: src/ui/routers/ui_router.py"
+        - "CRITICAL: Use relative imports for all service layer calls:"
+        - "  - CORRECT: from ..services.user_service import get_user_service"
+        - "  - INCORRECT: from src.ui.services.user_service import ..."
+        - "Configure Jinja2Templates with project templates directory"
+        - "Create route functions for each page in ui-model.json:"
+        - "  - List pages: @router.get('/<entity>') → TemplateResponse"
+        - "  - Detail pages: @router.get('/<entity>/{id}') → TemplateResponse"
+        - "  - Create pages: @router.get('/<entity>/create') → TemplateResponse"
+        - "  - Edit pages: @router.get('/<entity>/{id}/edit') → TemplateResponse"
+        - "All routes return HTMLResponse with TemplateResponse"
+        - "Add authentication/authorization checks where needed"
+      implementation_pattern: |
+        # src/ui/routers/ui_router.py
+
+        from fastapi import APIRouter, Request, Depends
+        from fastapi.responses import HTMLResponse
+        from fastapi.templating import Jinja2Templates
+
+        # CRITICAL: Relative imports for service layer
+        from ..services.user_service import get_user_service
+        from ..models.user import UserResponse
+        from ...common.auth import get_current_user
+
+        # Configure templates with PROJECT directory (NOT src_templates/)
+        templates = Jinja2Templates(directory="src/ui/templates")
+
+        router = APIRouter(prefix="", tags=["UI"])
+
+        # Home page
+        @router.get("/", response_class=HTMLResponse)
+        async def home_page(
+            request: Request,
+            current_user = Depends(get_current_user)
+        ):
+            return templates.TemplateResponse(
+                request=request,
+                name="pages/home.html",
+                context={
+                    "current_user": current_user,
+                    "title": "Home"
+                }
+            )
+
+        # User list page
+        @router.get("/users", response_class=HTMLResponse)
+        async def users_list_page(
+            request: Request,
+            current_user = Depends(get_current_user)
+        ):
+            return templates.TemplateResponse(
+                request=request,
+                name="pages/users/list.html",
+                context={
+                    "current_user": current_user,
+                    "title": "Users"
+                }
+            )
+
+        # User detail page
+        @router.get("/users/{user_id}", response_class=HTMLResponse)
+        async def user_detail_page(
+            user_id: str,
+            request: Request,
+            current_user = Depends(get_current_user),
+            user_service = Depends(get_user_service)
+        ):
+            user = await user_service.get_user(user_id)
+            return templates.TemplateResponse(
+                request=request,
+                name="pages/users/detail.html",
+                context={
+                    "current_user": current_user,
+                    "user": user,
+                    "title": f"User: {user.name}"
+                }
+            )
+      validation:
+        - "[ ] ui_router.py created in project routers directory"
+        - "[ ] All service imports use relative paths (..services.*, ..models.*)"
+        - "[ ] Jinja2Templates configured with project templates directory"
+        - "[ ] Routes created for all pages in ui-model.json"
+        - "[ ] All routes return HTMLResponse with TemplateResponse"
+        - "[ ] Authentication/authorization dependencies added where needed"
+      gates:
+        - "UI router functional with all page routes"
+        - "Zero absolute imports (no from src.services...)"
+
+    - step: 3
+      name: "Create HTMX Partial Endpoints"
+      actions:
+        - "Create partial router file: src/ui/routers/partials_router.py"
+        - "CRITICAL: Use relative imports for service layer"
+        - "Create endpoints for HTMX partials (HTML fragments):"
+        - "  - GET /api/<entity> → List partials (table rows or cards)"
+        - "  - GET /api/<entity>/{id} → Detail partial"
+        - "  - POST /api/<entity> → Create action → return success partial"
+        - "  - PUT/PATCH /api/<entity>/{id} → Update action → return updated partial"
+        - "  - DELETE /api/<entity>/{id} → Delete action → return empty or success message"
+        - "All endpoints return HTML fragments (not full pages)"
+        - "Use appropriate HTTP status codes (200, 201, 204, 400, 404, 500)"
+        - "Return appropriate HTMX response headers (HX-Trigger, HX-Redirect, etc.)"
+      implementation_pattern: |
+        # src/ui/routers/partials_router.py
+
+        from fastapi import APIRouter, Request, Depends, HTTPException
+        from fastapi.responses import HTMLResponse, Response
+
+        # CRITICAL: Relative imports
+        from ..services.user_service import get_user_service
+        from ..models.user import UserCreate, UserUpdate
+
+        templates = Jinja2Templates(directory="src/ui/templates")
+
+        router = APIRouter(prefix="/api", tags=["HTMX Partials"])
+
+        # Get user list (returns table rows or cards)
+        @router.get("/users", response_class=HTMLResponse)
+        async def get_users_partial(
+            request: Request,
+            user_service = Depends(get_user_service)
+        ):
+            users = await user_service.get_all_users()
+            return templates.TemplateResponse(
+                request=request,
+                name="partials/users/table_rows.html",
+                context={"users": users}
+            )
+
+        # Create user (returns new table row)
+        @router.post("/users", response_class=HTMLResponse, status_code=201)
+        async def create_user_partial(
+            request: Request,
+            user_data: UserCreate,
+            user_service = Depends(get_user_service)
+        ):
+            new_user = await user_service.create_user(user_data)
+
+            # Return new table row partial
+            return templates.TemplateResponse(
+                request=request,
+                name="partials/users/table_row.html",
+                context={"user": new_user},
+                headers={
+                    "HX-Trigger": "userCreated"  # Trigger HTMX event
+                }
+            )
+
+        # Update user (returns updated row)
+        @router.put("/users/{user_id}", response_class=HTMLResponse)
+        async def update_user_partial(
+            user_id: str,
+            user_data: UserUpdate,
+            request: Request,
+            user_service = Depends(get_user_service)
+        ):
+            updated_user = await user_service.update_user(user_id, user_data)
+
+            return templates.TemplateResponse(
+                request=request,
+                name="partials/users/table_row.html",
+                context={"user": updated_user},
+                headers={
+                    "HX-Trigger": "userUpdated"
+                }
+            )
+
+        # Delete user (returns 204 No Content or success message)
+        @router.delete("/users/{user_id}")
+        async def delete_user(
+            user_id: str,
+            user_service = Depends(get_user_service)
+        ):
+            await user_service.delete_user(user_id)
+            return Response(status_code=204, headers={"HX-Trigger": "userDeleted"})
+      validation:
+        - "[ ] partials_router.py created"
+        - "[ ] All service imports use relative paths"
+        - "[ ] Endpoints created for all CRUD operations"
+        - "[ ] All endpoints return HTML fragments (not full pages)"
+        - "[ ] Appropriate HTTP status codes used"
+        - "[ ] HTMX response headers used (HX-Trigger, etc.)"
+      gates:
+        - "HTMX partial endpoints functional"
+        - "Zero absolute imports"
+
+    - step: 4
+      name: "Validate Template URLs Match Router Endpoints"
+      actions:
+        - "CRITICAL: Audit all template files for URL references:"
+        - "  - hx-get, hx-post, hx-put, hx-patch, hx-delete attributes"
+        - "  - href attributes on <a> tags"
+        - "  - action attributes on <form> tags"
+        - "For each URL found, verify:"
+        - "  - CORRECT: Relative URLs (/users, /api/users, ../api/users)"
+        - "  - INCORRECT: Absolute URLs (http://localhost:8080/users)"
+        - "  - URL matches an existing router endpoint"
+        - "  - HTTP method matches router endpoint method"
+        - "Create validation report: all URLs → router endpoint mappings"
+        - "Document any mismatches or missing endpoints"
+      implementation_pattern: |
+        # URL Validation Report
+
+        Template: pages/users/list.html
+        ├─ hx-get="/api/users" → ✅ VALID (GET /api/users exists)
+        ├─ hx-post="/api/users" → ✅ VALID (POST /api/users exists)
+        └─ href="/users/create" → ✅ VALID (GET /users/create exists)
+
+        Template: partials/users/table_row.html
+        ├─ hx-get="/users/{id}" → ✅ VALID (GET /users/{user_id} exists)
+        ├─ hx-delete="/api/users/{id}" → ✅ VALID (DELETE /api/users/{user_id} exists)
+        └─ ZERO absolute URLs → ✅ PASS
+
+        Template: pages/users/form.html
+        ├─ action="/api/users" → ✅ VALID (POST /api/users exists)
+        └─ ZERO absolute URLs → ✅ PASS
+
+        # Violations Found:
+        Template: pages/dashboard.html
+        ├─ hx-get="http://localhost:8080/api/stats" → ❌ INVALID (absolute URL)
+        └─ MUST FIX: Change to "/api/stats"
+      validation:
+        - "[ ] All template files scanned for URL references"
+        - "[ ] All URLs validated against router endpoints"
+        - "[ ] Zero absolute URLs found (http://, https://)"
+        - "[ ] All hx-* URLs match existing endpoints"
+        - "[ ] All href URLs match existing page routes"
+        - "[ ] HTTP methods match (GET, POST, PUT, DELETE)"
+        - "[ ] Validation report generated"
+      gates:
+        - "All template URLs validated"
+        - "Zero absolute URLs"
+        - "All URLs match existing router endpoints"
+
+    - step: 5
+      name: "Implement Service Layer Error Handling"
+      actions:
+        - "Add try/except blocks to all router functions"
+        - "Handle common exceptions:"
+        - "  - HTTPException → Return error partial or redirect"
+        - "  - ValidationError → Return form with validation errors"
+        - "  - NotFoundError → Return 404 error page"
+        - "  - DatabaseError → Return 500 error page"
+        - "Use HTMX response headers for error handling:"
+        - "  - HX-Retarget: Change target element for error messages"
+        - "  - HX-Reswap: Change swap strategy for errors"
+        - "  - HX-Trigger: Trigger error event for client-side handling"
+        - "Create error partial templates (partials/errors/)"
+      implementation_pattern: |
+        # Error handling in router
+
+        @router.post("/api/users", response_class=HTMLResponse, status_code=201)
+        async def create_user_partial(
+            request: Request,
+            user_data: UserCreate,
+            user_service = Depends(get_user_service)
+        ):
+            try:
+                new_user = await user_service.create_user(user_data)
+
+                return templates.TemplateResponse(
+                    request=request,
+                    name="partials/users/table_row.html",
+                    context={"user": new_user},
+                    headers={"HX-Trigger": "userCreated"}
+                )
+
+            except ValidationError as e:
+                # Return form with validation errors
+                return templates.TemplateResponse(
+                    request=request,
+                    name="partials/users/form.html",
+                    context={
+                        "errors": e.errors(),
+                        "user_data": user_data
+                    },
+                    status_code=400,
+                    headers={
+                        "HX-Retarget": "#form-container",
+                        "HX-Reswap": "innerHTML"
+                    }
+                )
+
+            except HTTPException as e:
+                # Return error alert partial
+                return templates.TemplateResponse(
+                    request=request,
+                    name="partials/errors/alert.html",
+                    context={
+                        "type": "error",
+                        "message": str(e.detail)
+                    },
+                    status_code=e.status_code,
+                    headers={
+                        "HX-Retarget": "#alerts-container",
+                        "HX-Reswap": "beforeend"
+                    }
+                )
+
+            except Exception as e:
+                # Return generic error
+                return templates.TemplateResponse(
+                    request=request,
+                    name="partials/errors/alert.html",
+                    context={
+                        "type": "error",
+                        "message": "An unexpected error occurred"
+                    },
+                    status_code=500
+                )
+      validation:
+        - "[ ] Error handling added to all router functions"
+        - "[ ] Common exceptions handled (HTTP, Validation, NotFound, Database)"
+        - "[ ] HTMX error response headers used"
+        - "[ ] Error partial templates created"
+        - "[ ] Error scenarios tested (validation errors, 404, 500)"
+      gates:
+        - "Comprehensive error handling implemented"
+        - "Error partials functional"
+
+    - step: 6
+      name: "Register Routers in FastAPI Application"
+      actions:
+        - "Import UI router and partials router in main application"
+        - "Register routers with app.include_router()"
+        - "Configure static files serving (for Tailwind CSS output)"
+        - "Test all page routes and HTMX partial endpoints"
+        - "Verify template rendering works end-to-end"
+      implementation_pattern: |
+        # main.py or app.py
+
+        from fastapi import FastAPI
+        from fastapi.staticfiles import StaticFiles
+
+        # CRITICAL: Relative imports
+        from .services.ui.routers.ui_router import router as ui_router
+        from .services.ui.routers.partials_router import router as partials_router
+
+        app = FastAPI(title="My Application")
+
+        # Static files (Tailwind CSS output)
+        app.mount("/static", StaticFiles(directory="static"), name="static")
+
+        # Register UI routers
+        app.include_router(ui_router)
+        app.include_router(partials_router)
+
+        # Health check
+        @app.get("/health")
+        async def health():
+            return {"status": "ok"}
+      validation:
+        - "[ ] UI router registered in main app"
+        - "[ ] Partials router registered in main app"
+        - "[ ] Static files configured for Tailwind CSS"
+        - "[ ] All page routes accessible (smoke test)"
+        - "[ ] All HTMX partial endpoints accessible"
+        - "[ ] Template rendering works end-to-end"
+      gates:
+        - "Routers registered and functional"
+        - "Full integration smoke test passes"
+
+    - step: 7
+      name: "Document Router/Service Integration"
+      actions:
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Existing router audit results"
+        - "  - UI router creation details"
+        - "  - HTMX partials router creation details"
+        - "  - Template URL validation results"
+        - "  - Error handling implementation details"
+        - "  - Router registration configuration"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN with Phase 3 Router Integration completion"
+        - "CRITICAL: DO NOT create temporal documents - all updates in SPEC and IMPLEMENTATION_PLAN"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property"
+        - "  - Router/service integration decisions"
+        - "  - Relationships: session → integrates → routers"
+      outputs:
+        - "spec_updated: Boolean"
+        - "plan_updated: Boolean"
+        - "memory_entities_created: List[str]"
+      gates:
+        - "SPEC document updated with all integration details"
+        - "IMPLEMENTATION_PLAN Phase 3 checklist updated"
+        - "Memory entities created with Date properties"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: All service imports MUST use relative paths (..services.*, ..models.*)"
+  - "CRITICAL: Zero absolute imports (from src.services... forbidden)"
+  - "CRITICAL: All template URLs MUST be relative (/users, /api/users, ../api/users)"
+  - "CRITICAL: Zero absolute URLs (http://localhost:8080 forbidden)"
+  - "CRITICAL: All HTMX endpoints MUST reference existing router endpoints"
+  - "CRITICAL: All HTMX partials MUST return HTML fragments (not full pages)"
+  - "All error handling must use HTMX response headers where appropriate"
+  - "All router functions must have proper authentication/authorization"
+
+forbidden:
+  - "Absolute imports (from src.ui.services... forbidden)"
+  - "Absolute URLs in templates (http://, https://)"
+  - "HTMX endpoints without matching router functions"
+  - "Full page responses from HTMX partial endpoints"
+  - "Missing error handling in router functions"
+  - "Hardcoded host/port values (localhost:8080)"
+  - "Creating temporal documents (all updates in SPEC and IMPLEMENTATION_PLAN)"
+
+output_format:
+  require_sections:
+    - "Section 1: Existing Router Audit Results"
+    - "Section 2: UI Router Creation (page routes)"
+    - "Section 3: HTMX Partials Router Creation"
+    - "Section 4: Template URL Validation Results"
+    - "Section 5: Error Handling Implementation"
+    - "Section 6: Router Registration and Smoke Testing"
+    - "Section 7: Memory Writes (session entity, integration decisions, relationships)"
+    - "Section 8: Next Steps (proceed to Interactive Behavior Implementation Phase 25)"
+  language: "Australian English"
+
+success_criteria:
+  - "Existing routers audited and documented"
+  - "UI router created with all page routes"
+  - "HTMX partials router created with all CRUD endpoints"
+  - "All template URLs validated against router endpoints"
+  - "Zero absolute URLs in templates"
+  - "Zero absolute imports in router files"
+  - "Comprehensive error handling implemented"
+  - "Routers registered and functional"
+  - "SPEC and IMPLEMENTATION_PLAN updated (no temporal documents)"
+  - "Memory entities created with Date properties"
+
+halt_condition: "After successful router/service integration completion and memory persistence, halt and await instruction to proceed to Phase 25 (Interactive Behavior Implementation)."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Router Service Integration Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol"
+  language: "en-AU"
+  references:
+    - "ui-model.json"
+    - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+    - "OpenAPI specification"
+    - "design_system_foundations.md"
+
+# EXECUTION PROTOCOL
+# Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/24-WebUI_Router_Service_Integration.yaml under those enforced rules.

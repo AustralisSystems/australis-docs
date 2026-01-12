@@ -1,0 +1,622 @@
+prompt_name: "Manual_UI_CLI_Regression_Testing"
+version: "1.0.0"
+type: "manual_ui_cli_regression_testing"
+context:
+  role: "Standards-governed implementation executor performing CLI-first web UI regression validation"
+  governance:
+      canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+      golden_rule_execution_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute manual CLI-based regression testing of all frontend web UI routes/pages using an INCREMENTAL,
+    STEP-BY-STEP methodology. Work ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME. Get route definitions
+    from navigation configs and OpenAPI spec, create/update SPEC, authenticate, select ONE untested route
+    group, test it completely with remediation, then move to the next group. For each route test, capture
+    the returned HTML, verify critical fragments (forms, tables, macros, HTMX fragments), confirm HTTP
+    headers/cache directives, and remediate ALL identified issues before moving to the next route. This
+    instruction may be executed standalone, but it is recommended as a precursor to Instruction 13
+    (Manual_UI_Browser_Regression_Testing) to provide layered assurance (CLI first, visible browser second).
+    CRITICAL: When code changes are made, rebuild containers with "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+    before retesting.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    status reports, progress reports, completion reports, test results, regression findings, and
+    remediation actions MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the relevant SPEC(s) and
+    IMPLEMENTATION_PLAN with all progress, findings, and status information. This rule is
+    NON-NEGOTIABLE and must be enforced strictly.
+  critical_testing_rule: >
+    **CRITICAL TESTING RULE**: MANUAL CLI TESTING ONLY - NO AUTOMATED BROWSER SCRIPTS.
+
+    - ALL testing MUST be performed manually via CLI / single-invocation tools (curl, HTTPie,
+      MCP fetch/browser extension in raw mode).
+    - Browser automation (Playwright/Cypress/etc.) is NOT allowed in Instruction 12; those belong
+      to Instruction 13.
+    - Each route/page MUST be exercised individually, one at a time, with manual observation of
+      HTTP status codes, headers, and HTML payloads.
+    - Responses MUST be reviewed manually for macro rendering, HTMX fragments, and required widgets.
+    - Remediation MUST occur immediately after each failed test before proceeding.
+    - Automated regression frameworks (selenium, playwright scripts, pytest, etc.) are FORBIDDEN here.
+  doc_references:
+    canonical:
+      - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+      - "docs/implementation/README_TEMPLATE.md"
+      - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+      - "docs/implementation/SPEC_README.md"
+      - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    plan:
+      - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+  best_practices_references:
+    core_fastapi:
+      - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+      - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+    async_performance:
+      - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+    reliability_resilience:
+      - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+    architecture_patterns:
+      - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+    security_compliance:
+      - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+      - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+    observability_monitoring:
+      - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+      - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+    data_persistence:
+      - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+      - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+      - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+      - "docs/implementation/best-practices/redis-caching-best-practices.md"
+      - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+      - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+    configuration_deployment:
+      - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+      - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+    background_tasks:
+      - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+      - "docs/implementation/best-practices/celery-production-best-practices.md"
+      - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+    integration_patterns:
+      - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+      - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+    ui_integration:
+      - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+      - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+      - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+    code_quality_testing:
+      - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+      - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+    templating_scaffolding:
+      - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+
+  environment_assumptions:
+    - "Web application is running and accessible (Docker, local server, or remote URL)."
+    - "CLI HTTP tools (curl, HTTPie) and MCP fetch tools are available."
+    - "Authentication credentials (username/password, tokens) are available if required."
+    - "Developers can tail Docker/service logs for corroborating evidence."
+    - "Baseline HTML snapshots or component specs are available for comparison (if applicable)."
+prerequisites:
+  validations:
+    - "All canonical docs are present and readable."
+    - "IMPLEMENTATION_PLAN_v#.#.#.md describes the current phase/task."
+    - "Associated SPECs exist in docs/implementation/in_progress (or are created first)."
+    - "Web application stack is healthy and reachable over the intended host/port."
+    - "CLI tooling (curl/HTTPie/MCP fetch) is configured for the environment."
+instructions:
+  objective: >
+    Execute manual CLI-based regression testing using an INCREMENTAL, STEP-BY-STEP methodology. Work
+    ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME. Get route definitions from navigation configs and
+    OpenAPI spec, create/update SPEC with route list grouped by function, authenticate to the app,
+    select ONE untested route group, test it completely with remediation, document results as you progress,
+    resolve all issues found during testing, rebuild containers when code changes are made, then select
+    the next untested route group and continue. For each route test, capture the returned HTML, verify
+    critical fragments (forms, tables, macros, HTMX fragments), confirm HTTP headers/cache directives,
+    and remediate ALL identified issues before moving to the next route. Recommended flow: Instruction 12
+    (CLI) → Instruction 13 (visible browser) for the same scope. CRITICAL: When code changes are made,
+    rebuild containers with "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+    before retesting to ensure 0 errors, 0 warnings, and 0 issues.
+  best_practices_requirement: "MUST review and implement relevant best practices documents during route enumeration and CLI testing - NO exceptions"
+
+  incremental_execution_methodology:
+    rule: "MANDATORY - MUST follow this incremental methodology - ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME"
+    description: >
+      This instruction MUST be executed incrementally, breaking down the work into manageable steps.
+      Do NOT attempt to execute all steps at once. Work ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME.
+      Complete each step fully before proceeding to the next step. Complete each route group fully before
+      selecting the next untested route group.
+    steps:
+      - step: "Get route definitions from navigation configs, router definitions, template directories, and OpenAPI spec"
+      - step: "Update existing or Create a SPEC for regression testing and list routes, group them by function"
+      - step: "Authenticate to the app and have authentication available for all REST API commands"
+      - step: "Select ONE of the untested route groups"
+      - step: "Begin the regression testing for the selected route group"
+      - step: "Document test results as you progress"
+      - step: "Resolve all issues that you find during the testing"
+      - step: "Complete the regression testing for the route group (ensure 0 errors, 0 warnings, 0 issues)"
+      - step: "When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+      - step: "Retest to ensure 0 errors, 0 warnings, and 0 issues"
+      - step: "Select the next untested route group and continue testing using the same methodology"
+    continuation_instruction: >
+      When instructed to CONTINUE:
+      - Continue with the next steps
+      - Ensure there are 0 errors, 0 warnings, and 0 issues
+      - Check the docker container logs to ensure the app and all containers have 0 errors, 0 warnings, and 0 issues
+      - Resolve all known issues, remediate and apply all fixes
+      - REMEMBER: When you make changes to the codebase, run "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+        to rebuild the container to pick up the changes, then retest to ensure there are 0 errors, 0 warnings, and 0 issues
+      - Select one of the untested route groups and continue testing using the same instructions and methodology
+
+  steps:
+    - step: 1
+      name: "Review Canonical Documentation"
+      actions:
+        - "Read all canonical docs listed in context.doc_references.canonical."
+        - "Extract naming/workflow rules relevant to CLI evidence capture."
+        - "Note that Instruction 12 focuses on CLI/manual HTTP, while Instruction 13 handles browser UI."
+      gates:
+        - "Do not proceed unless required docs are readable."
+
+    - step: 2
+      name: "Confirm Plan + SPEC Scope"
+      actions:
+        - "Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md to identify the active phase + tasks."
+        - "List SPECs covering the UI scope (docs/implementation/in_progress); if no SPEC exists for this regression cycle, create one via the canonical SPEC template."
+        - "Before testing begins, ensure the SPEC contains a checklist enumerating every route/partial/component that will be exercised so results can be ticked off during execution."
+        - "Document whether this run is standalone or a precursor to Instruction 13."
+        - "Capture any scope constraints (e.g., only /api-management routes). If none are specified, ALL documented routes/partials must be covered."
+      outputs:
+        - "current_phase: <string>"
+        - "current_tasks: [<task_ids>]"
+        - "associated_specs: [<spec filenames>]"
+        - "cli_test_scope: <all_routes|constrained>"
+        - "scope_constraints: [<patterns>]"
+      gates:
+        - "Do not proceed without clear scope + plan alignment."
+
+    - step: 3
+      name: "Verify Web Application Status"
+      actions:
+        - "Ensure containers/services are running (docker compose ps)."
+        - "Hit health endpoints via curl to confirm HTTP 200 responses."
+        - "Authenticate (if required) and store session cookies/tokens."
+        - "Capture initial log snapshot proving zero WARN/ERROR before testing."
+      suggested_commands:
+        - "docker compose -f docker-compose.base.yml -f docker-compose.dev.yml ps"
+        - "docker compose ... logs api --tail=200 | Select-String 'WARNING|ERROR'"
+        - "curl -i http://localhost:8150/health"
+        - "curl -i -c cookies.txt -d 'username=devadmin&password=devadmin' http://localhost:8150/api/login"
+      gates:
+        - "Stop if health/auth fails; remediate infra before continuing."
+
+    - step: 4
+      name: "Get Route Definitions and Enumerate Routes & Partials - Group by Function"
+      incremental_execution: true
+      description: >
+        CRITICAL: Execute this step incrementally. First get route definitions, then enumerate routes,
+        then group them by function. Do NOT attempt to do everything at once.
+      sub_steps:
+        - sub_step: "4.1: Get Route Definitions from Navigation Configs and OpenAPI Spec"
+          actions:
+            - "CRITICAL: Get route definitions from navigation configs, router definitions, template directories, and the OpenAPI specification (openapi_spec.json)"
+            - "Retrieve route definitions from running containers/services if available"
+            - "Check navigation configs, router definitions, template directories"
+            - "Reconcile routes with OpenAPI specification so CLI inventory matches documented contract"
+            - "Save route definitions for reference"
+            - "Verify route definitions are complete and valid"
+          suggested_commands:
+            - "rg -n 'hx-get' -g"*.html" src/ui/templates"
+            - "rg -n '@ui_router' src/ui/routers"
+            - "python parse_openapi_endpoints.py --ui-only (if available)"
+            - "curl -s http://localhost:<port>/openapi.json | jq '.paths | keys'"
+          gates:
+            - "Do not proceed if route definitions cannot be retrieved"
+            - "Do not proceed if route definitions are incomplete or invalid"
+        - sub_step: "4.2: Enumerate Routes from Definitions"
+          actions:
+            - "Use route definitions as the authoritative inventory"
+            - "Derive route list from navigation configs, router definitions, template directories"
+            - "Reconcile any gaps found in definitions vs OpenAPI spec"
+            - "Include HTMX partial endpoints (/partials/**, /components/**) and CLI-viewable fragments"
+            - "List all routes with: path, description, auth requirements, expected macro/partial"
+            - "Unless a constrained scope is documented, every route/partial must be present"
+          suggested_commands:
+            - "rg -n 'hx-get' -g"*.html" src/ui/templates"
+            - "rg -n '@ui_router' src/ui/routers"
+            - "find . -path '*/templates/*' -name '*.html'"
+          gates:
+            - "Do not proceed if no routes can be enumerated"
+        - sub_step: "4.3: Group Routes by Function and Update SPEC"
+          actions:
+            - "CRITICAL: Group all routes by logical function/category (e.g., Dashboard, Storage, Workflows, API Management, etc.)"
+            - "Create route groups: { group_name: <string>, routes: [<route_list>], tested: <false>, test_status: <pending|in_progress|passed|failed> }"
+            - "Update existing SPEC or create new SPEC for regression testing"
+            - "Add each route group to the SPEC checklist with test status tracking"
+            - "Mark all route groups as 'tested: false' initially"
+            - "Record route metadata: path, auth requirements (always plan to authenticate when required), expected macro/partial, logical grouping, and notes"
+            - "Order routes for deterministic testing (e.g., public → authenticated)"
+            - "Apply scope constraints if specified; otherwise all routes MUST be included"
+          outputs:
+            - "route_groups: [ { group_name: <string>, routes: [ { path: <string>, description: <string>, requires_auth: <bool>, expected_fragment: <string> } ], tested: <false>, test_status: <pending> } ]"
+            - "total_routes: <int>"
+            - "total_groups: <int>"
+            - "untested_groups: [<group_names>]"
+          gates:
+            - "Do not proceed if routes cannot be grouped by function"
+            - "Do not proceed if SPEC cannot be updated/created"
+      actions:
+        - "CRITICAL: Execute sub-steps 4.1, 4.2, 4.3 sequentially - ONE AT A TIME"
+        - "Do NOT attempt to execute all sub-steps simultaneously"
+      outputs:
+        - "route_definitions_source: <path_to_definitions>"
+        - "ui_routes: [ { path: <string>, description: <string>, requires_auth: <bool>, expected_fragment: <string> } ]"
+        - "route_groups: [ { group_name: <string>, routes: [<route_list>], tested: <false>, test_status: <pending> } ]"
+        - "total_routes: <int>"
+        - "total_groups: <int>"
+        - "untested_groups: [<group_names>]"
+        - "cli_test_plan: [<ordered routes>]"
+      gates:
+        - "Do not proceed if route definitions cannot be retrieved"
+        - "Do not proceed if routes cannot be enumerated"
+        - "Do not proceed if routes cannot be grouped by function"
+        - "Do not proceed if SPEC cannot be updated/created"
+        - "Do not proceed without a test plan referencing every in-scope route."
+
+    - step: 5
+      name: "Prepare Authentication (If Needed)"
+      actions:
+        - "Perform CLI login and store cookies (cookies.txt) or bearer tokens."
+        - "Document token lifetime, CSRF headers, and required cookies for HTMX requests."
+        - "Create helper env vars (e.g., export HX_HEADERS='HX-Request:true')."
+      outputs:
+        - "auth_method: <session|jwt|basic|none>"
+        - "auth_materials: <path_to_cookies_or_token>"
+      gates:
+        - "If auth fails, halt and remediate before continuing."
+
+    - step: 6
+      name: "Manual CLI Route Testing - ONE GROUP AT A TIME with Systematic Remediation"
+      incremental_execution: true
+      description: >
+        CRITICAL: Execute this step incrementally - ONE ROUTE GROUP AT A TIME. Select ONE untested route
+        group, test all routes in that group completely, resolve all issues, then move to the next group.
+        Do NOT attempt to test multiple groups simultaneously.
+      actions:
+        - "CRITICAL: Select ONE untested route group from the list"
+        - "CRITICAL: Test routes in the selected group ONE AT A TIME - never in parallel or batch"
+        - "CRITICAL: Complete testing for the selected group before selecting the next group"
+        - "For the selected route group:"
+        - "  a. Build the exact HTTP call (method, headers, query params)."
+        - "  b. Execute via curl/HTTPie/MCP fetch; capture status, headers, HTML."
+        - "  c. Inspect HTML for required macros/blocks, placeholder text, HTMX targets, etc."
+        - "  d. Validate content-length, caching headers, and response time (use Measure-Command or curl -w)."
+        - "  e. Tail service logs for WARN/ERROR tied to the request timestamp."
+        - "  f. If response is a partial (hx-get), verify it contains expected fragments (table rows, modals)."
+        - "  g. Simulate realistic CRUD/navigation flows where applicable: retrieve collections, fetch individual detail fragments, submit create/edit payloads, re-fetch to confirm persistence, and trigger delete/reset endpoints to ensure cleanup."
+        - "  h. Document findings (PASS/FAIL, snippet references, remediation)."
+        - "  i. Remediate issues immediately"
+        - "    - CRITICAL: When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+        - "    - CRITICAL: Wait for containers to be fully up and healthy before retesting"
+        - "    - Check docker container logs: docker logs <container_name> --tail 50"
+        - "    - Verify containers have 0 errors, 0 warnings, 0 issues"
+        - "    - Re-run same route until PASS"
+        - "    - CRITICAL: Ensure 0 errors, 0 warnings, and 0 issues before marking test as passed"
+        - "  j. Complete route group testing"
+        - "    - Continue testing all routes in the selected group until all are PASSED"
+        - "    - Mark route group as 'tested: true' and 'test_status: passed' when all routes pass"
+        - "    - Document all test results for the route group in SPEC"
+        - "  k. Select next untested route group"
+        - "    - CRITICAL: Only after completing current route group, select ONE untested route group"
+        - "    - Mark selected group as 'test_status: in_progress'"
+        - "    - Repeat steps a-j for the new route group"
+        - "    - Continue until all route groups are tested"
+      suggested_commands:
+        - "curl -i -b cookies.txt -H 'HX-Request:true' http://localhost:8150/api-management"
+        - "curl -i -b cookies.txt -H 'HX-Request:true' -H 'HX-Target:endpoints' http://localhost:8150/api-management/partials/endpoints/list?page=1"
+        - "Measure-Command { curl.exe -s -o NUL http://localhost:8150/dashboard }"
+        - "mcp_fetch_fetch url=http://localhost:8150/storage partial=true"
+      outputs:
+        - "current_route_group: <group_name>"
+        - "route_test_results: [ { route: <string>, method: <verb>, status: <PASSED|FAILED>, http_code: <int>, response_time_ms: <float>, snippets_verified: [<desc>], issues_found: [<desc>], issues_remediated: [<desc>], verified: <bool> } ]"
+        - "group_test_status: <in_progress|passed|failed>"
+        - "total_routes_tested: <int>"
+        - "total_routes_passed: <int>"
+        - "total_routes_failed: <int>"
+        - "untested_groups_remaining: [<group_names>]"
+        - "testing_status: <complete|in_progress>"
+      gates:
+        - "CRITICAL: Do not proceed to next route until current route test is PASSED."
+        - "CRITICAL: Do not proceed to next route group until current route group is COMPLETE (all routes PASSED)."
+        - "CRITICAL: When code changes are made, containers MUST be rebuilt before retesting."
+        - "CRITICAL: Containers MUST have 0 errors, 0 warnings, 0 issues before marking test as PASSED."
+        - "Automated/batch CLI scripts are forbidden; each invocation must be human-triggered."
+
+    - step: 7
+      name: "Cross-Route Navigation Integrity (Logical)"
+      actions:
+        - "Use CLI to validate key navigation entry points (e.g., ensure dashboard cards link to existing routes)."
+        - "Check header/footer includes once per section to verify macros render."
+        - "Record any inconsistencies for follow-up in Instruction 13."
+      outputs:
+        - "navigation_findings: [<description>]"
+
+    - step: 8
+      name: "Performance + Asset Checks"
+      actions:
+        - "For routes with baselines, compare response time + payload size (±20%)."
+        - "Verify static assets referenced in HTML (CSS/JS) return 200 via curl -I."
+      outputs:
+        - "performance_comparison: [ { route: <string>, baseline_ms: <float>, current_ms: <float>, regression: <bool> } ]"
+      gates:
+        - ">20% regression requires remediation or documented exception."
+
+    - step: 9
+      name: "Documentation & Handoff"
+      actions:
+        - "Update SPEC(s) with enumerations, CLI evidence, issues, and remediation notes."
+        - "Update IMPLEMENTATION_PLAN checklists, marking Instruction 12 progress + linking to Instruction 13 as recommended next step."
+        - "Summarise blockers (if any) preventing Instruction 13."
+      outputs:
+        - "spec_updates: [<specs_modified>]"
+        - "plan_updates: [<sections_modified>]"
+
+    - step: 10
+      name: "Audit Readiness"
+      actions:
+        - "Ensure logs/snippets referenced in SPEC/PLAN are persisted or reproducible."
+        - "Set next_instruction_state to 'ready_for_instruction_13' if applicable."
+        - "Halt awaiting next orders."
+      outputs:
+        - "audit_readiness: <true|false>"
+        - "next_instruction_state: <awaiting_orders|ready_for_instruction_13>"
+
+constraints:
+  - "Australian English for all documentation updates."
+  - "CRITICAL: Execute incrementally - ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME."
+  - "Manual CLI execution ONLY (curl, HTTPie, MCP fetch)."
+  - "No browser automation, Playwright scripts, Cypress, Selenium, etc."
+  - "CRITICAL: Test routes ONE AT A TIME - never in parallel or batch."
+  - "CRITICAL: Test route groups ONE AT A TIME - complete one group before selecting the next."
+  - "CRITICAL: Remediate issues ONE AT A TIME before proceeding to next route."
+  - "CRITICAL: Do not proceed to next route until current route test is PASSED."
+  - "CRITICAL: Do not proceed to next route group until current route group is COMPLETE (all routes PASSED)."
+  - "CRITICAL: When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+  - "CRITICAL: After rebuilding containers, verify 0 errors, 0 warnings, 0 issues in docker logs before retesting."
+  - "CRITICAL: Check docker container logs to ensure app and all containers have 0 errors, 0 warnings, 0 issues."
+  - "Log inspections required after each route (0 WARN/ERROR)."
+  - "Do not fabricate routes-only test those evidenced by code/spec."
+  - "SPEC/PLAN updates mandatory; no temporal docs."
+  - "If CLI test uncovers blockers, document them for Instruction 13."
+  - "Authentication tokens/cookies MUST be supplied whenever a route requires authorization."
+  - "Unless an explicit scope exception is recorded, 100% of routes/partials/components (per OpenAPI + templates) must be exercised."
+  - "All CLI testing must uphold the Canonical + Golden Rule standards (no TODO/mocks/stubs, zero warnings/errors); issues must be fixed iteratively until clean output is achieved."
+
+examples:
+  - route_cli_example: |
+      # Example CLI workflow for /api-management (authenticated)
+      curl -i -c cookies.txt -d "username=devadmin&password=devadmin" http://localhost:8150/api/login
+      curl -i -b cookies.txt -H "HX-Request:true" http://localhost:8150/api-management > api-management.html
+      rg "interactive_card_group" api-management.html  # verify stats cards rendered
+      curl -i -b cookies.txt "http://localhost:8150/api-management/partials/endpoints/list?page=1" > endpoints.html
+      rg "htmx-indicator" endpoints.html  # ensure HTMX indicators present
+      docker compose -f docker-compose.base.yml -f docker-compose.dev.yml logs api --since 2m | Select-String 'WARNING|ERROR'
+  - remediation_example:
+      route_test_results:
+        - route: "/api-management"
+          method: "GET"
+          status: "FAILED"
+          http_code: 500
+          response_time_ms: 0
+          snippets_verified: []
+          issues_found: ["Jinja macro error: expected token 'name', got '**'"]
+          issues_remediated: ["Updated interactive_modal macro usage", "Re-ran curl to confirm 200"]
+          verified: true
+output_format:
+  section_1: "Current phase, tasks, SPECs"
+  section_2: "App status + auth setup"
+  section_3: "Route enumeration + plan"
+  section_4: "CLI testing results per route"
+  section_5: "Issues + remediation log"
+  section_6: "Navigation + asset findings"
+  section_7: "Performance comparison"
+  section_8: "Documentation updates"
+  section_9: "Audit readiness + next steps"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise Canonical Manual Web UI CLI Regression Testing Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol"
+  language: "en-AU"
+
+[END OF INSTRUCTIONS]
+
+continuation_instruction: |
+  You are executing Manual Web UI CLI Regression Testing per Enterprise Canonical Execution Protocol v1.0.0.
+
+  INCREMENTAL EXECUTION METHODOLOGY (MANDATORY - ABSOLUTE)
+  - MUST follow incremental methodology - ONE STEP AT A TIME, ONE ROUTE GROUP AT A TIME
+  - Do NOT attempt to execute all steps at once
+  - Complete each step fully before proceeding to the next step
+  - Complete each route group fully before selecting the next untested route group
+  - When instructed to CONTINUE:
+    * Continue with the next steps
+    * Ensure there are 0 errors, 0 warnings, and 0 issues
+    * Check the docker container logs to ensure the app and all containers have 0 errors, 0 warnings, and 0 issues
+    * Resolve all known issues, remediate and apply all fixes
+    * REMEMBER: When you make changes to the codebase, run "docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date"
+      to rebuild the container to pick up the changes, then retest to ensure there are 0 errors, 0 warnings, and 0 issues
+    * Select one of the untested route groups and continue testing using the same instructions and methodology
+
+  METHODOLOGY STEPS (SEQUENTIAL - EXECUTE ONE AT A TIME)
+  1. Get route definitions from navigation configs, router definitions, template directories, and OpenAPI spec
+  2. Update existing or Create a SPEC for regression testing and list routes, group them by function
+  3. Authenticate to the app and have authentication available for all REST API commands
+  4. Select ONE of the untested route groups
+  5. Begin the regression testing for the selected route group
+  6. Document test results as you progress
+  7. Resolve all issues that you find during the testing
+  8. Complete the regression testing for the route group (ensure 0 errors, 0 warnings, 0 issues)
+  9. When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date
+  10. Retest to ensure 0 errors, 0 warnings, and 0 issues
+  11. Select the next untested route group and continue testing using the same methodology
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REVIEW)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability/Resilience: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture Patterns: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-best-practices-2025.md
+  Security: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md, secrets-management-best-practices-2025.md
+  Observability: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, redis-caching-best-practices.md
+  Configuration: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+  UI Integration: fastapi-htmx-jinja2-best-practices-2025.md, web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md, component-libraries-daisyui-tailwind-v4-best-practices-2025.md
+  - MANDATORY: Review UI integration and HTMX best practices BEFORE enumerating routes
+  - MANDATORY: Review testing, HTMX, and error handling best practices BEFORE testing routes
+  - MUST validate routes against best practices standards during enumeration and testing
+  - MUST apply best practices patterns during testing
+
+  CRITICAL DOCUMENTATION RULE (ABSOLUTE - NO EXCEPTIONS)
+  - TEMPORAL DOCUMENTS MUST NOT BE CREATED
+  - ALL updates, status reports, progress reports, completion reports, test results, regression findings, and remediation actions MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+  - DO NOT create standalone temporal documents
+  - Update relevant SPEC(s) and IMPLEMENTATION_PLAN with all progress, findings, and status information
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  CRITICAL TESTING RULE (ABSOLUTE - NO EXCEPTIONS)
+  - MANUAL CLI TESTING ONLY - NO AUTOMATED BROWSER SCRIPTS
+  - ALL testing MUST be performed manually via CLI / single-invocation tools (curl, HTTPie, MCP fetch/browser extension in raw mode)
+  - Browser automation (Playwright/Cypress/etc.) is NOT allowed in Instruction 12
+  - Each route/page MUST be exercised individually, one at a time, with manual observation of HTTP status codes, headers, and HTML payloads
+  - Responses MUST be reviewed manually for macro rendering, HTMX fragments, and required widgets
+  - Remediation MUST occur immediately after each failed test before proceeding
+  - Automated regression frameworks (selenium, playwright scripts, pytest, etc.) are FORBIDDEN here
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  MANDATORY WORKFLOW (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Review Canonical Documentation
+  - Read all canonical docs listed in context.doc_references.canonical
+  - Extract naming/workflow rules relevant to CLI evidence capture
+  - Note that Instruction 12 focuses on CLI/manual HTTP, while Instruction 13 handles browser UI
+
+  Step 2: Confirm Plan + SPEC Scope
+  - Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md to identify the active phase + tasks
+  - List SPECs covering the UI scope (docs/implementation/in_progress)
+  - Ensure the SPEC contains a checklist enumerating every route/partial/component that will be exercised
+  - Document whether this run is standalone or a precursor to Instruction 13
+  - Capture any scope constraints; if none are specified, ALL documented routes/partials must be covered
+
+  Step 3: Verify Web Application Status
+  - Ensure containers/services are running (docker compose ps)
+  - Hit health endpoints via curl to confirm HTTP 200 responses
+  - Authenticate (if required) and store session cookies/tokens
+  - Capture initial log snapshot proving zero WARN/ERROR before testing
+
+  Step 4: Get Route Definitions and Enumerate Routes & Partials - Group by Function
+  - CRITICAL: Execute incrementally - sub-steps 4.1, 4.2, 4.3 sequentially
+  - Sub-step 4.1: Get route definitions from navigation configs, router definitions, template directories, and OpenAPI spec
+  - Sub-step 4.2: Enumerate routes from definitions
+  - Sub-step 4.3: Group routes by function and update SPEC
+  - Review UI integration and HTMX best practices documents BEFORE proceeding
+  - Use route definitions as the authoritative inventory
+  - Group all routes by logical function/category (e.g., Dashboard, Storage, Workflows, API Management)
+  - Update existing SPEC or create new SPEC for regression testing
+  - Mark all route groups as 'tested: false' initially
+  - Validate routes against best practices standards
+  - Include HTMX partial endpoints (/partials/**, /components/**) and CLI-viewable fragments
+  - Order routes for deterministic testing (e.g., public → authenticated)
+
+  Step 5: Prepare Authentication (If Needed)
+  - Perform CLI login and store cookies (cookies.txt) or bearer tokens
+  - Document token lifetime, CSRF headers, and required cookies for HTMX requests
+  - Create helper env vars (e.g., export HX_HEADERS='HX-Request:true')
+
+  Step 6: Manual CLI Route Testing - ONE GROUP AT A TIME with Systematic Remediation
+  - CRITICAL: Execute incrementally - ONE ROUTE GROUP AT A TIME
+  - CRITICAL: Select ONE untested route group from the list
+  - Review testing, HTMX, and error handling best practices documents BEFORE proceeding
+  - CRITICAL: Test routes in selected group ONE AT A TIME - never in parallel or batch
+  - Validate routes against best practices standards during testing
+  - For each route in selected group: Build HTTP call → Execute via curl/HTTPie/MCP fetch → Inspect HTML → Validate content → Check logs → Document findings → Remediate issues (if any) → Rebuild containers if code changed → Re-run until PASS → Proceed to next route
+  - CRITICAL: When code changes are made, rebuild containers: docker compose -f docker-compose.standalone.yml up -d --build --remove-orphans && date
+  - CRITICAL: Check docker container logs to ensure 0 errors, 0 warnings, 0 issues before retesting
+  - CRITICAL: Do not proceed to next route until current route test is PASSED
+  - CRITICAL: Do not proceed to next route group until current route group is COMPLETE (all routes PASSED)
+  - CRITICAL: Ensure 0 errors, 0 warnings, and 0 issues before marking test as passed
+  - Automated/batch CLI scripts are forbidden; each invocation must be human-triggered
+  - After completing current route group, select next untested route group and repeat
+
+  Step 7: Cross-Route Navigation Integrity (Logical)
+  - Use CLI to validate key navigation entry points
+  - Check header/footer includes once per section to verify macros render
+  - Record any inconsistencies for follow-up in Instruction 13
+
+  Step 8: Performance + Asset Checks
+  - For routes with baselines, compare response time + payload size (±20%)
+  - Verify static assets referenced in HTML (CSS/JS) return 200 via curl -I
+  - >20% regression requires remediation or documented exception
+
+  Step 9: Documentation & Handoff
+  - Update SPEC(s) with enumerations, CLI evidence, issues, and remediation notes
+  - Update IMPLEMENTATION_PLAN checklists, marking Instruction 12 progress + linking to Instruction 13 as recommended next step
+  - Summarise blockers (if any) preventing Instruction 13
+
+  Step 10: Audit Readiness
+  - Ensure logs/snippets referenced in SPEC/PLAN are persisted or reproducible
+  - Set next_instruction_state to 'ready_for_instruction_13' if applicable
+  - Halt awaiting next orders
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL)
+  - [ ] UI integration and HTMX best practices reviewed BEFORE enumerating routes
+  - [ ] Routes validated against best practices standards
+  - [ ] Testing, HTMX, and error handling best practices reviewed BEFORE testing routes
+  - [ ] All routes tested manually ONE AT A TIME via CLI
+  - [ ] All route tests PASSED (issues remediated before marking as passed)
+  - [ ] Performance regressions (>20% degradation) remediated (if baseline available)
+  - [ ] SPEC(s) updated with CLI evidence, issues, and remediation notes
+  - [ ] IMPLEMENTATION_PLAN updated with progress
+  - [ ] All test results, findings, and remediation actions documented in SPECs and IMPLEMENTATION_PLAN only (NO temporal documents)
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/12-Manual_WebUI_Regression_Testing.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/12-Manual_WebUI_Regression_Testing.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/12-Manual_WebUI_Regression_Testing.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/12-Manual_WebUI_Regression_Testing.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/12-Manual_WebUI_Regression_Testing.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/12-Manual_WebUI_Regression_Testing.yaml under those enforced rules.

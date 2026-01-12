@@ -1,0 +1,625 @@
+prompt_name: "WebUI_Template_Scaffolding_Phase"
+version: "1.0.0"
+type: "webui_template_scaffolding"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor creating HTMX/Jinja2 template structure from scaffolding library"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute template scaffolding phase by copying src_templates/ library to project templates directory,
+    creating base layouts, pages, partials, and component templates. Follow technology stack hierarchy
+    (HTMX primitives → HTMX extensions → Alpine.js → public libs → custom JS). Ensure all templates
+    use DaisyUI + Tailwind v4 styling and reference the generated tailwind.config.js.
+
+  reference_docs:
+    primary:
+      - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+      - "renderer_mapping_spec.md"
+      - "design_system_foundations.md"
+    supporting:
+      - "ui-model.json"
+      - "tailwind.config.js"
+      - "component_tokens.json"
+
+  codebase_scaffolding_mandate:
+  priority: "MANDATORY - NO EXCEPTIONS"
+  description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+  priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+  color_scheme_mandate:
+    reference: "COLOR_SCHEME_DIRECTIVE.md"
+    enforcement: "CRITICAL - All template generation MUST use DaisyUI semantic color classes"
+    validation_required:
+      - "NO bg-white, bg-gray-*, bg-{color}-{shade} classes"
+      - "NO text-black, text-gray-*, text-{color}-{shade} classes"
+      - "NO border-gray-*, border-{color}-{shade} classes"
+      - "ONLY use: bg-base-{100,200,300}, text-base-content, btn btn-{variant}, input input-bordered, etc."
+    theme_support: "All templates MUST work in light, dark, and custom themes"
+
+  prerequisite_validation:
+    - "[ ] Token generation phase (Step 22) completed with tailwind.config.js generated"
+    - "[ ] ui-model.json exists (from Step 21 Component Mapping)"
+    - "[ ] src_templates/ scaffolding library accessible"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+    - "[ ] Target project templates directory identified and writable"
+
+  critical_rule:
+    template_copying: >
+      **CRITICAL TEMPLATE COPYING RULE**: The src_templates/ library MUST be copied to the project's
+      templates directory (typically src/ui/templates/ or similar). Templates MUST NOT be
+      used directly from the src_templates/ source location. All template paths must be relative to
+      the project's templates directory.
+
+instructions:
+  objective: >
+    Copy src_templates/ library to project templates directory, create initial template structure
+    (base layouts, pages, partials, components), and configure Jinja2 template system. All templates
+    must use HTMX primitives for server interactions, DaisyUI + Tailwind for styling, and follow
+    the technology stack hierarchy before considering JavaScript.
+
+  steps:
+    - step: 1
+      name: "Copy Scaffolding Templates to Project"
+      reference: "SCAFFOLDING_LIBRARIES_OVERVIEW.md Section 1"
+      actions:
+        - "CRITICAL: Identify project templates directory (typically src/ui/templates/)"
+        - "CRITICAL: Copy ENTIRE src_templates/ directory contents to project templates directory:"
+        - "  - Source: src_templates/ (scaffolding library)"
+        - "  - Destination: <project_root>/src/ui/templates/ (or equivalent)"
+        - "Preserve directory structure during copy:"
+        - "  - base.html, base_dashboard.html, base_hub.html → root"
+        - "  - components/ → components/"
+        - "  - pages/ → pages/"
+        - "  - partials/ → partials/"
+        - "  - macros/ → macros/"
+        - "  - errors/ → errors/"
+        - "Verify all files copied successfully (check file count)"
+        - "CRITICAL: Do NOT reference src_templates/ directly - use copied project templates"
+      implementation_pattern: |
+        # Template Copy Pattern (bash/PowerShell)
+
+        # Identify source and destination
+        SOURCE="C:/github_development/projects/fastapi-fastmcp-htmx-jit-generator/src_templates/"
+        DEST="./src/ui/templates/"
+
+        # Copy entire directory structure
+        cp -r "$SOURCE"* "$DEST"
+
+        # Verify copy
+        echo "Source file count:"
+        find "$SOURCE" -type f | wc -l
+
+        echo "Destination file count:"
+        find "$DEST" -type f | wc -l
+
+        # Expected structure after copy:
+        # ./src/ui/templates/
+        # ├── base.html
+        # ├── base_dashboard.html
+        # ├── base_hub.html
+        # ├── components/
+        # │   ├── alerts/
+        # │   ├── interactive_card.html
+        # │   ├── interactive_data_table.html
+        # │   └── ... (50+ components)
+        # ├── pages/
+        # ├── partials/
+        # ├── macros/
+        # └── errors/
+      validation:
+        - "[ ] Project templates directory exists"
+        - "[ ] All src_templates/ files copied to project"
+        - "[ ] Directory structure preserved (components/, pages/, etc.)"
+        - "[ ] File count matches source (no missing files)"
+        - "[ ] base.html, base_dashboard.html, base_hub.html present in root"
+        - "[ ] components/ directory contains 50+ component files"
+      gates:
+        - "All validation checkboxes marked as complete"
+        - "Template library successfully copied to project"
+
+    - step: 2
+      name: "Select and Configure Base Layout"
+      reference: "SCAFFOLDING_LIBRARIES_OVERVIEW.md Section 1.3"
+      actions:
+        - "Review available base layouts in project templates directory:"
+        - "  - base.html: Minimal layout (header, content, footer)"
+        - "  - base_dashboard.html: Dashboard layout with sidebar navigation"
+        - "  - base_hub.html: Hub layout for dynamic content loading"
+        - "Select base layout based on application type:"
+        - "  - Dashboard apps → base_dashboard.html"
+        - "  - Content-heavy apps → base_hub.html"
+        - "  - Simple apps → base.html"
+        - "Customize selected base layout:"
+        - "  - Update <title> tag with application name"
+        - "  - Update navigation links to match application routes"
+        - "  - Add application logo/branding"
+        - "  - Configure Tailwind CSS link (reference generated tailwind.config.js)"
+        - "  - Add HTMX CDN script tag (<script src='https://unpkg.com/htmx.org@1.9.10'></script>)"
+        - "  - Add DaisyUI theme class to <html> or <body> tag"
+      implementation_pattern: |
+        <!-- base_dashboard.html (customized) -->
+        <!DOCTYPE html>
+        <html lang="en" data-theme="light">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>{% block title %}My Application{% endblock %}</title>
+
+          <!-- Tailwind CSS (from generated config) -->
+          <link href="/static/css/output.css" rel="stylesheet">
+
+          <!-- HTMX (HIGHEST PRIORITY - Technology Stack Hierarchy) -->
+          <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+          {% block extra_head %}{% endblock %}
+        </head>
+        <body class="bg-base-100">
+          <!-- Sidebar navigation -->
+          <div class="drawer lg:drawer-open">
+            <input id="drawer" type="checkbox" class="drawer-toggle" />
+
+            <!-- Main content -->
+            <div class="drawer-content">
+              {% include "components/page_header.html" %}
+
+              <main class="p-6">
+                {% block content %}{% endblock %}
+              </main>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="drawer-side">
+              <label for="drawer" class="drawer-overlay"></label>
+              {% include "components/sidebar_navigation.html" %}
+            </div>
+          </div>
+
+          <!-- Alpine.js (MEDIUM PRIORITY - only if HTMX cannot achieve functionality) -->
+          {% block extra_scripts %}{% endblock %}
+        </body>
+        </html>
+      validation:
+        - "[ ] Base layout selected based on application type"
+        - "[ ] Application branding added (title, logo)"
+        - "[ ] Navigation links updated to match application routes"
+        - "[ ] Tailwind CSS link configured (references generated CSS)"
+        - "[ ] HTMX script tag added (HIGHEST PRIORITY per technology hierarchy)"
+        - "[ ] DaisyUI theme class applied to HTML element"
+        - "[ ] Template extends pattern works (test with simple page)"
+      gates:
+        - "Base layout configured and functional"
+        - "Tailwind + DaisyUI + HTMX loaded correctly"
+
+    - step: 3
+      name: "Create Page Templates from ui-model.json"
+      reference: "ui-model.json (from Step 21)"
+      actions:
+        - "Read ui-model.json and extract pages section"
+        - "For each page in ui-model.json, create template file:"
+        - "  - List pages: pages/<entity>/list.html"
+        - "  - Detail pages: pages/<entity>/detail.html"
+        - "  - Create pages: pages/<entity>/create.html"
+        - "  - Edit pages: pages/<entity>/edit.html"
+        - "Extend selected base layout: {% extends 'base_dashboard.html' %}"
+        - "Import required components from components/ directory"
+        - "Use HTMX attributes for all server interactions (hx-get, hx-post, etc.)"
+        - "Apply DaisyUI component classes for styling"
+        - "Follow technology stack hierarchy (HTMX FIRST, no JavaScript unless justified)"
+      implementation_pattern: |
+        <!-- pages/users/list.html (generated from ui-model.json) -->
+        {% extends "base_dashboard.html" %}
+        {% from "components/interactive_data_table.html" import interactive_data_table %}
+        {% from "components/interactive_button.html" import interactive_button %}
+        {% from "components/page_header.html" import page_header %}
+
+        {% block title %}Users - My Application{% endblock %}
+
+        {% block content %}
+          {{ page_header(
+            title="Users",
+            breadcrumbs=[
+              {"text": "Home", "url": "/"},
+              {"text": "Users", "url": "/users"}
+            ]
+          ) }}
+
+          <div class="mb-4">
+            {{ interactive_button(
+              text="Create User",
+              hx_get="/users/create",
+              hx_target="#main-content",
+              hx_swap="innerHTML",
+              variant="primary"
+            ) }}
+          </div>
+
+          {{ interactive_data_table(
+            columns=[
+              {"key": "id", "title": "ID", "type": "text"},
+              {"key": "name", "title": "Name", "type": "text"},
+              {"key": "email", "title": "Email", "type": "email"},
+              {"key": "status", "title": "Status", "type": "badge"},
+              {"key": "actions", "title": "Actions", "type": "actions"}
+            ],
+            hx_get="/api/users",
+            hx_trigger="load",
+            hx_target="#user-table",
+            hx_swap="innerHTML"
+          ) }}
+        {% endblock %}
+      validation:
+        - "[ ] All pages from ui-model.json created as template files"
+        - "[ ] Pages extend selected base layout"
+        - "[ ] Required components imported from components/ directory"
+        - "[ ] HTMX attributes used for all server interactions (NO JavaScript)"
+        - "[ ] DaisyUI classes applied for styling"
+        - "[ ] Template paths relative to project templates directory"
+        - "[ ] NO references to src_templates/ source directory"
+      gates:
+        - "All page templates created and functional"
+        - "Technology stack hierarchy followed (HTMX first)"
+
+    - step: 4
+      name: "Create Partial Templates for HTMX Responses"
+      reference: "SCAFFOLDING_LIBRARIES_OVERVIEW.md Section 1"
+      actions:
+        - "Create partials/ directory structure matching pages:"
+        - "  - partials/<entity>/table_row.html"
+        - "  - partials/<entity>/card.html"
+        - "  - partials/<entity>/form.html"
+        - "  - partials/empty_state.html"
+        - "  - partials/loading_indicator.html"
+        - "Partials return HTML fragments (not full pages) for HTMX swapping"
+        - "Use component macros for reusable elements"
+        - "Apply DaisyUI classes consistently"
+        - "Follow responsive layout principles (container queries, three-tier visibility)"
+      implementation_pattern: |
+        <!-- partials/users/table_row.html -->
+        <tr class="hover" data-user-id="{{ user.id }}">
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="badge badge-{% if user.status == 'active' %}success{% else %}error{% endif %}">
+              {{ user.status }}
+            </span>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-ghost"
+                      hx-get="/users/{{ user.id }}"
+                      hx-target="#main-content"
+                      hx-swap="innerHTML">
+                View
+              </button>
+              <button class="btn btn-sm btn-ghost"
+                      hx-delete="/api/users/{{ user.id }}"
+                      hx-confirm="Delete {{ user.name }}?"
+                      hx-target="closest tr"
+                      hx-swap="outerHTML swap:1s">
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- partials/users/card.html (responsive mobile view) -->
+        <div class="card bg-base-100 shadow-md mb-4" data-user-id="{{ user.id }}">
+          <div class="card-body">
+            <div class="flex items-center gap-4">
+              <div class="avatar">
+                <div class="w-12 rounded-full">
+                  <img src="{{ user.avatar_url }}" alt="{{ user.name }}">
+                </div>
+              </div>
+              <div class="flex-1">
+                <h3 class="card-title text-lg">{{ user.name }}</h3>
+                <p class="text-sm text-base-content/70">{{ user.email }}</p>
+              </div>
+              <span class="badge badge-{% if user.status == 'active' %}success{% else %}error{% endif %}">
+                {{ user.status }}
+              </span>
+            </div>
+            <div class="card-actions justify-end mt-4">
+              <button class="btn btn-sm btn-ghost"
+                      hx-get="/users/{{ user.id }}"
+                      hx-target="#main-content"
+                      hx-swap="innerHTML">
+                View
+              </button>
+              <button class="btn btn-sm btn-error"
+                      hx-delete="/api/users/{{ user.id }}"
+                      hx-confirm="Delete?"
+                      hx-target="closest .card"
+                      hx-swap="outerHTML swap:1s">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      validation:
+        - "[ ] Partials created for all page types (table_row, card, form)"
+        - "[ ] Partials return HTML fragments (not full pages)"
+        - "[ ] HTMX attributes configured for swapping into page"
+        - "[ ] DaisyUI classes applied consistently"
+        - "[ ] Responsive variants created (table_row for desktop, card for mobile)"
+        - "[ ] Container query classes applied for responsive behavior"
+      gates:
+        - "All partials functional and ready for HTMX responses"
+
+    - step: 5
+      name: "Configure Jinja2 Template System"
+      actions:
+        - "Configure Jinja2Templates in FastAPI application:"
+        - "  - Set directory to project templates directory (src/ui/templates/)"
+        - "  - Enable auto-reload for development"
+        - "  - Configure custom filters if needed"
+        - "Create template context processors for common data:"
+        - "  - current_user (authentication context)"
+        - "  - navigation_menu (sidebar links)"
+        - "  - flash_messages (success/error alerts)"
+        - "  - app_config (application settings)"
+        - "Test template rendering with sample data"
+      implementation_pattern: |
+        # FastAPI router configuration
+        from fastapi import APIRouter, Request
+        from fastapi.responses import HTMLResponse
+        from fastapi.templating import Jinja2Templates
+
+        # CRITICAL: Point to PROJECT templates directory (NOT src_templates/)
+        templates = Jinja2Templates(directory="src/ui/templates")
+
+        router = APIRouter(prefix="", tags=["UI"])
+
+        @router.get("/", response_class=HTMLResponse)
+        async def home_page(request: Request):
+            return templates.TemplateResponse(
+                request=request,
+                name="pages/home.html",
+                context={
+                    "current_user": get_current_user(),
+                    "navigation_menu": get_navigation_menu(),
+                }
+            )
+
+        @router.get("/users", response_class=HTMLResponse)
+        async def users_list_page(request: Request):
+            return templates.TemplateResponse(
+                request=request,
+                name="pages/users/list.html",
+                context={"users": []}
+            )
+
+        # HTMX partial endpoint (returns HTML fragment)
+        @router.get("/api/users", response_class=HTMLResponse)
+        async def users_table_data(request: Request):
+            users = await user_service.get_all()
+            return templates.TemplateResponse(
+                request=request,
+                name="partials/users/table_rows.html",
+                context={"users": users}
+            )
+      validation:
+        - "[ ] Jinja2Templates configured with project templates directory"
+        - "[ ] Template directory path correct (NOT src_templates/ source)"
+        - "[ ] Auto-reload enabled for development"
+        - "[ ] Context processors created for common data"
+        - "[ ] Test page renders successfully"
+        - "[ ] HTMX partial endpoints return HTML fragments"
+      gates:
+        - "Jinja2 system configured and functional"
+        - "Templates render correctly with sample data"
+
+    - step: 6
+      name: "Validate Technology Stack Hierarchy Compliance"
+      reference: "SCAFFOLDING_LIBRARIES_OVERVIEW.md Section 3"
+      actions:
+        - "CRITICAL: Audit all templates for technology stack hierarchy compliance:"
+        - "  1. HTMX Primitives (HIGHEST PRIORITY):"
+        - "     - All server interactions use hx-get, hx-post, hx-delete, etc."
+        - "     - NO onclick handlers for server calls"
+        - "     - NO fetch() calls in templates"
+        - "  2. HTMX Extensions (HIGH PRIORITY):"
+        - "     - Check if loading states, multi-swap needed"
+        - "     - Use official extensions from unpkg CDN"
+        - "  3. Alpine.js (MEDIUM PRIORITY):"
+        - "     - ONLY for client-side state (dropdowns, toggles)"
+        - "     - NO Alpine.js for server interactions"
+        - "     - Document justification if used"
+        - "  4. Public Libraries (MEDIUM-LOW PRIORITY):"
+        - "     - Chart.js, Flatpickr, etc. from CDN"
+        - "     - Document library name, version, CDN URL"
+        - "  5. Custom JavaScript (LAST RESORT):"
+        - "     - FORBIDDEN unless all above options exhausted"
+        - "     - Requires written justification (see SCAFFOLDING_LIBRARIES_OVERVIEW.md Section 3.5)"
+        - "Verify DaisyUI + Tailwind used for ALL styling (no custom CSS frameworks)"
+        - "Check all template paths are relative to project templates directory"
+        - "Verify NO absolute URLs (http://localhost:8080) in templates"
+      validation:
+        - "[ ] All server interactions use HTMX primitives (hx-* attributes)"
+        - "[ ] Zero onclick handlers for server calls"
+        - "[ ] HTMX extensions used before Alpine.js (if needed)"
+        - "[ ] Alpine.js ONLY for client-side state (if used)"
+        - "[ ] Public libraries from CDN documented (if used)"
+        - "[ ] Zero custom JavaScript (or fully justified with documentation)"
+        - "[ ] DaisyUI + Tailwind classes used for all styling"
+        - "[ ] All template paths relative to project directory"
+        - "[ ] Zero absolute URLs in templates"
+      gates:
+        - "Technology stack hierarchy strictly followed"
+        - "All validation checkboxes marked as complete"
+
+    - step: 7
+      name: "Document Template Scaffolding Decisions"
+      actions:
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Template library copy details (source → destination)"
+        - "  - Base layout selection and customization"
+        - "  - Page template creation results"
+        - "  - Partial template creation results"
+        - "  - Jinja2 configuration details"
+        - "  - Technology stack hierarchy compliance audit results"
+        - "  - File paths for all created templates"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN with Phase 3 Template Scaffolding completion"
+        - "CRITICAL: DO NOT create temporal documents - all updates in SPEC and IMPLEMENTATION_PLAN"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property"
+        - "  - Template scaffolding decisions and rationale"
+        - "  - Relationships: session → creates → templates"
+      outputs:
+        - "spec_updated: Boolean"
+        - "plan_updated: Boolean"
+        - "memory_entities_created: List[str]"
+      gates:
+        - "SPEC document updated with all scaffolding details"
+        - "IMPLEMENTATION_PLAN Phase 3 checklist updated"
+        - "Memory entities created with Date properties"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: src_templates/ library MUST be copied to project templates directory"
+  - "CRITICAL: Templates MUST NOT reference src_templates/ source directory"
+  - "CRITICAL: All server interactions MUST use HTMX primitives (NO JavaScript)"
+  - "CRITICAL: HTMX HIGHEST PRIORITY → extensions → Alpine.js → public libs → custom JS"
+  - "CRITICAL: DaisyUI + Tailwind MANDATORY for styling (no custom CSS frameworks)"
+  - "CRITICAL: All template paths relative to project templates directory"
+  - "CRITICAL: Zero absolute URLs in templates (http://localhost:8080 forbidden)"
+  - "All templates must reference design_system_foundations.md principles"
+  - "All templates must use generated tailwind.config.js for styling"
+
+forbidden:
+  - "Using src_templates/ directly without copying to project"
+  - "onclick handlers for server interactions (use HTMX hx-* attributes)"
+  - "fetch() calls in templates (use HTMX)"
+  - "Alpine.js for server interactions (use HTMX)"
+  - "Custom JavaScript without exhausting all other options"
+  - "jQuery or custom JavaScript frameworks"
+  - "Custom CSS frameworks (must use DaisyUI + Tailwind)"
+  - "Absolute URLs (http://, https://)"
+  - "Absolute template paths referencing src_templates/"
+  - "Creating temporal documents (all updates in SPEC and IMPLEMENTATION_PLAN)"
+
+output_format:
+  require_sections:
+    - "Section 1: Template Library Copy Results (src_templates → project)"
+    - "Section 2: Base Layout Selection and Customization"
+    - "Section 3: Page Template Creation (from ui-model.json)"
+    - "Section 4: Partial Template Creation (HTMX fragments)"
+    - "Section 5: Jinja2 Configuration"
+    - "Section 6: Technology Stack Hierarchy Compliance Audit"
+    - "Section 7: Memory Writes (session entity, scaffolding decisions, relationships)"
+    - "Section 8: Next Steps (proceed to Router Service Integration Phase 24)"
+  language: "Australian English"
+
+success_criteria:
+  - "src_templates/ library copied to project templates directory"
+  - "Base layout selected and customized"
+  - "All page templates created from ui-model.json"
+  - "Partial templates created for HTMX responses"
+  - "Jinja2 system configured with project templates directory"
+  - "Technology stack hierarchy strictly followed (HTMX first)"
+  - "DaisyUI + Tailwind used for all styling"
+  - "Zero absolute URLs in templates"
+  - "SPEC and IMPLEMENTATION_PLAN updated (no temporal documents)"
+  - "Memory entities created with Date properties"
+
+halt_condition: "After successful template scaffolding completion and memory persistence, halt and await instruction to proceed to Phase 24 (Router Service Integration)."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Template Scaffolding Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol"
+  language: "en-AU"
+  references:
+    - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+    - "renderer_mapping_spec.md"
+    - "design_system_foundations.md"
+    - "ui-model.json"
+    - "tailwind.config.js"
+
+# EXECUTION PROTOCOL
+# Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/23-WebUI_Template_Scaffolding_Phase.yaml under those enforced rules.

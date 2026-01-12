@@ -1,0 +1,637 @@
+prompt_name: "Execute_Implementation_Phase_Tasks"
+version: "1.0.0"
+type: "task_execution_and_tracking"
+context:
+  role: "LLM implementation executor operating within a standards-governed documentation system"
+  governance:
+    canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  doc_references:
+    - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+    - "docs/implementation/README_TEMPLATE.md"
+    - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+    - "docs/implementation/SPEC_README.md"
+    - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+  best_practices_references:
+    core_fastapi:
+      - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+      - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+
+    async_performance:
+      - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+
+    reliability_resilience:
+      - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+
+    architecture_patterns:
+      - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+
+    security_compliance:
+      - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+      - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+
+    observability_monitoring:
+      - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+      - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+
+    data_persistence:
+      - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+      - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+      - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+      - "docs/implementation/best-practices/redis-caching-best-practices.md"
+      - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+      - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+
+    configuration_deployment:
+      - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+      - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+
+    background_tasks:
+      - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+      - "docs/implementation/best-practices/celery-production-best-practices.md"
+      - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+
+    integration_patterns:
+      - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+      - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+
+    ui_integration:
+      - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+      - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+      - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+
+    code_quality_testing:
+      - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+      - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+
+    templating_scaffolding:
+      - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    status reports, progress reports, completion reports, session summaries, and findings
+    MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the relevant SPEC(s) and
+    IMPLEMENTATION_PLAN with all progress, findings, and status information. This rule is
+    NON-NEGOTIABLE and must be enforced strictly.
+
+codebase_scaffolding_mandate:
+  priority: "MANDATORY - NO EXCEPTIONS"
+  description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+  priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+instructions:
+  objective: >
+    Enforce documentation-driven implementation workflow by executing all tasks in the current phase, tracking progress through aligned SPEC updates, and maintaining up-to-date status visibility for audit readiness.
+  steps:
+    - step: 1
+      name: "Review Canonical Documentation Standards"
+      best_practices_review:
+        mandatory: true
+        documents:
+          - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+          - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+          - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+        requirement: "MUST review FastAPI best practices, code quality, and scaffolding patterns BEFORE proceeding"
+        implementation: "MUST apply best practices patterns when implementing code"
+      actions:
+        - "Parse all listed documentation files"
+        - "Review FastAPI best practices (fastapi-best-practices-2025.md)"
+        - "Review code quality and linting best practices (code-quality-linting-best-practices-2025.md)"
+        - "Review scaffolding best practices (python-fastapi-templatized-scaffolding-best-practices-2025.md)"
+        - "Extract implementation lifecycle standards, naming rules, and file organisation rules"
+        - "Identify relevant best practices for current implementation phase"
+    - step: 2
+      name: "Audit Implementation Plan"
+      actions:
+        - "Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+        - "Confirm that all checklist items for each phase/task/action/step are present"
+        - "Ensure checklists reflect current codebase state"
+    - step: 3
+      name: "Execute Current Task(s)"
+      best_practices_review:
+        mandatory: true
+        requirement: "MUST review relevant best practices documents BEFORE executing task(s) based on task type"
+        task_specific_reviews:
+          fastapi_endpoints:
+            documents:
+              - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+              - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+              - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+              - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+            requirement: "MUST review FastAPI best practices before creating/modifying endpoints"
+
+          async_performance:
+            documents:
+              - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+              - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+              - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+            requirement: "MUST review async/performance best practices before implementing async operations"
+
+          error_handling:
+            documents:
+              - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+              - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+              - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+            requirement: "MUST review error handling and resilience patterns before implementing error handling"
+
+          database_operations:
+            documents:
+              - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+              - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+              - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+            requirement: "MUST review database best practices before implementing database operations"
+
+          security_authentication:
+            documents:
+              - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+              - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+              - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+            requirement: "MUST review security best practices before implementing authentication/authorization"
+
+          caching:
+            documents:
+              - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+              - "docs/implementation/best-practices/redis-caching-best-practices.md"
+              - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+            requirement: "MUST review caching best practices before implementing caching"
+
+          background_tasks:
+            documents:
+              - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+              - "docs/implementation/best-practices/celery-production-best-practices.md"
+              - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+            requirement: "MUST review background task best practices before implementing background tasks"
+
+          testing:
+            documents:
+              - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+              - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+              - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+            requirement: "MUST review testing best practices before writing tests"
+
+          observability:
+            documents:
+              - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+              - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+            requirement: "MUST review observability best practices before implementing logging/monitoring"
+      actions:
+        - "Identify the current phase and task from the implementation plan"
+        - "Identify task type (FastAPI endpoints, async/performance, error handling, database, security, caching, background tasks, testing, observability)"
+        - "Review relevant best practices documents based on task type BEFORE proceeding"
+        - "Locate the associated SPECs in docs/implementation/in_progress/"
+        - "CRITICAL: Before proceeding, verify in_progress/ contains ONLY SPEC documents"
+        - "If any non-SPEC files found in in_progress/:"
+        - "  - Extract important information from temporal documents"
+        - "  - Update IMPLEMENTATION_PLAN and SPEC documents with extracted information"
+        - "  - Move ALL non-SPEC files to docs/implementation/temporal/"
+        - "Perform the step(s), action(s), and task(s) defined in the SPEC using best practices patterns"
+        - "CRITICAL: Update the SPEC document incrementally with status notes, progress, findings, and outcomes"
+        - "CRITICAL: Document which best practices were applied in the SPEC"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN checklists to reflect progress"
+        - "CRITICAL: DO NOT create temporal documents - all updates go into SPECs and IMPLEMENTATION_PLAN"
+        - "Upon completion:"
+        - "  - Update the SPEC document with final outcomes, validation results, and completion status"
+        - "  - Document best practices compliance in the SPEC"
+        - "  - Update IMPLEMENTATION_PLAN with completion status"
+        - "  - Move the SPEC to docs/implementation/done/"
+        - "CRITICAL: After completion, verify done/ contains ONLY SPEC documents"
+        - "If any non-SPEC files found in done/:"
+        - "  - Extract important information from temporal documents"
+        - "  - Update IMPLEMENTATION_PLAN and SPEC documents with extracted information"
+        - "  - Move ALL non-SPEC files to docs/implementation/temporal/"
+    - step: 4
+      name: "Advance if Phase Complete"
+      actions:
+        - "If all steps in current phase are complete:"
+        - "  - Start next task(s) in current or next phase as defined in the plan"
+        - "  - Move the next SPEC(s) from backlog/done to in_progress"
+        - "  - Repeat execution and tracking steps"
+    - step: 5
+      name: "Reconcile and Finalise Checklists"
+      actions:
+        - "Update docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md with all progress, findings, and outcomes"
+        - "Update relevant SPEC documents with all progress, findings, and outcomes"
+        - "CRITICAL: DO NOT create temporal documents - all information goes into SPECs and IMPLEMENTATION_PLAN"
+        - "Confirm all checklists reflect current implementation status"
+        - "Verify SPEC and PLAN synchronisation across directories"
+        - "CRITICAL: Verify backlog/, in_progress/, and done/ contain ONLY SPEC documents"
+        - "Run scripts/Audit-WorkflowCompliance.ps1 to verify compliance"
+        - "If violations found, run scripts/Move-NonSpecFilesFromSpecDirectories.ps1 to move non-SPEC files to temporal/"
+constraints:
+  - "SPECs must be updated incrementally with task status"
+  - "Do not execute a task unless it is aligned with current phase"
+  - "Do not move SPECs without changing file location and status inside the document"
+  - "All plan and spec updates must maintain traceability"
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: ALL non-SPEC files MUST be moved to temporal/ AFTER information extraction and plan/documentation updates"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all updates go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Status reports, progress updates, completion summaries MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-11-08"
+  version: "1.0.0"
+  classification: "Enterprise Canonical Implementation Task Execution Governance Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, and Enterprise Canonical Implementation Task Execution Governance Protocol"
+  language: "en-AU"
+
+
+# [END OF INSTRUCTIONS]
+
+continuation_instruction: |
+  You are executing Implementation Phase Tasks per Enterprise Canonical Execution Protocol v1.0.0.
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REVIEW)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability/Resilience: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture Patterns: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-auto-discovery-integration-best-practices-2025.md, python-fastapi-plugin-architecture-best-practices-2025.md
+  Security/Compliance: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md, secrets-management-external-key-vaults-best-practices-2025.md, secrets-management-local-development-best-practices-2025.md
+  Observability/Monitoring: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data Persistence: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, mongodb-replica-set-best-practices.md, redis-caching-best-practices.md, redis-cluster-best-practices.md, redis-message-bus-best-practices.md
+  Configuration/Deployment: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Background Tasks: background-tasks-celery-best-practices-2025.md, celery-production-best-practices.md, celery-tasks-best-practices.md
+  Integration Patterns: fastapi-fastmcp-integration-best-practices-2025.md, fastmcp-best-practices-2025.md, webhook-handling-best-practices-2025.md
+  UI Integration: fastapi-htmx-jinja2-best-practices-2025.md, web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md, component-libraries-daisyui-tailwind-v4-best-practices-2025.md
+  Code Quality/Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+  Templating/Scaffolding: python-fastapi-templatized-scaffolding-best-practices-2025.md
+  - MANDATORY: Review relevant best practices documents BEFORE executing tasks based on task type
+  - MUST apply best practices patterns when implementing code
+  - MUST document which best practices were applied in the SPEC
+
+  CRITICAL DOCUMENTATION RULE (ABSOLUTE - NO EXCEPTIONS)
+  - TEMPORAL DOCUMENTS MUST NOT BE CREATED
+  - ALL updates, status reports, progress reports, completion reports, session summaries, and findings MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+  - DO NOT create standalone temporal documents
+  - Update relevant SPEC(s) and IMPLEMENTATION_PLAN with all progress, findings, and status information
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  CODEBASE SCAFFOLDING MANDATE (MANDATORY - NO EXCEPTIONS)
+  - ALWAYS search for existing code repositories FIRST before writing any custom code
+  - Priority hierarchy: Golden Template (C:\github_development\projects\fastapi-enterprise-core-template) → Local Repos → tristanaburns GitHub → Public GitHub → Official SDKs → CNCF Projects → Open Source Libraries → Public Packages → Custom Code (LAST RESORT)
+  - Document ALL discovered repos/files in SPEC files BEFORE cloning
+  - Clone to tmp/ directory ONLY (never project root)
+  - Add attribution comments to ALL scaffolded code
+  - Delete cloned repos after extraction
+  - Custom code requires full justification (all search queries attempted, repos evaluated, technical gaps, effort comparison)
+
+  MANDATORY WORKFLOW (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Review Canonical Documentation Standards
+  - Parse all listed documentation files
+  - Extract implementation lifecycle standards, naming rules, and file organisation rules
+
+  Step 2: Audit Implementation Plan
+  - Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md
+  - Confirm that all checklist items for each phase/task/action/step are present
+  - Ensure checklists reflect current codebase state
+
+  Step 3: Execute Current Task(s)
+  - Identify the current phase and task from the implementation plan
+  - Locate the associated SPECs in docs/implementation/in_progress/
+  - CRITICAL: Before proceeding, verify in_progress/ contains ONLY SPEC documents
+  - If any non-SPEC files found in in_progress/:
+    - Extract important information from temporal documents
+    - Update IMPLEMENTATION_PLAN and SPEC documents with extracted information
+    - Move ALL non-SPEC files to docs/implementation/temporal/
+  - Perform the step(s), action(s), and task(s) defined in the SPEC
+  - CRITICAL: Update the SPEC document incrementally with status notes, progress, findings, and outcomes
+  - CRITICAL: Update IMPLEMENTATION_PLAN checklists to reflect progress
+  - CRITICAL: DO NOT create temporal documents - all updates go into SPECs and IMPLEMENTATION_PLAN
+  - Upon completion:
+    - Update the SPEC document with final outcomes, validation results, and completion status
+    - Update IMPLEMENTATION_PLAN with completion status
+    - Move the SPEC to docs/implementation/done/
+  - CRITICAL: After completion, verify done/ contains ONLY SPEC documents
+  - If any non-SPEC files found in done/:
+    - Extract important information from temporal documents
+    - Update IMPLEMENTATION_PLAN and SPEC documents with extracted information
+    - Move ALL non-SPEC files to docs/implementation/temporal/
+
+  Step 4: Advance if Phase Complete
+  - If all steps in current phase are complete:
+    - Start next task(s) in current or next phase as defined in the plan
+    - Move the next SPEC(s) from backlog/done to in_progress
+    - Repeat execution and tracking steps
+
+  Step 5: Reconcile and Finalise Checklists
+  - Update docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md with all progress, findings, and outcomes
+  - Update relevant SPEC documents with all progress, findings, and outcomes
+  - CRITICAL: DO NOT create temporal documents - all information goes into SPECs and IMPLEMENTATION_PLAN
+  - Confirm all checklists reflect current implementation status
+  - Verify SPEC and PLAN synchronisation across directories
+  - CRITICAL: Verify backlog/, in_progress/, and done/ contain ONLY SPEC documents
+  - Run scripts/Audit-WorkflowCompliance.ps1 to verify compliance
+  - If violations found, run scripts/Move-NonSpecFilesFromSpecDirectories.ps1 to move non-SPEC files to temporal/
+
+  CONSTRAINTS (ABSOLUTE - NO EXCEPTIONS)
+  - SPECs must be updated incrementally with task status
+  - Do not execute a task unless it is aligned with current phase
+  - Do not move SPECs without changing file location and status inside the document
+  - All plan and spec updates must maintain traceability
+  - CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents
+  - CRITICAL: ALL non-SPEC files MUST be moved to temporal/ AFTER information extraction and plan/documentation updates
+  - CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all updates go into SPECs and IMPLEMENTATION_PLAN only
+  - CRITICAL: Status reports, progress updates, completion summaries MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents
+
+  DIRECTORY STRUCTURE REQUIREMENTS
+  - backlog/: MUST contain ONLY SPEC documents
+  - in_progress/: MUST contain ONLY SPEC documents
+  - done/: MUST contain ONLY SPEC documents
+  - temporal/: Contains non-SPEC files moved from spec directories after information extraction
+
+  SPEC DOCUMENT REQUIREMENTS
+  - Must be updated incrementally with task status
+  - Must include status notes, progress, findings, and outcomes
+  - Must maintain traceability with IMPLEMENTATION_PLAN
+  - Must be moved to done/ upon completion with updated status inside document
+
+  IMPLEMENTATION_PLAN REQUIREMENTS
+  - Must have all checklist items for each phase/task/action/step present
+  - Must reflect current codebase state
+  - Must be updated with all progress, findings, and outcomes
+  - Must maintain synchronisation with SPEC documents
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL)
+  - [ ] All checklist items present in IMPLEMENTATION_PLAN
+  - [ ] Checklists reflect current codebase state
+  - [ ] in_progress/ contains ONLY SPEC documents (before execution)
+  - [ ] SPEC document updated incrementally with status notes, progress, findings, outcomes
+  - [ ] IMPLEMENTATION_PLAN checklists updated to reflect progress
+  - [ ] No temporal documents created (all updates in SPECs and IMPLEMENTATION_PLAN)
+  - [ ] SPEC moved to done/ upon completion with updated status
+  - [ ] done/ contains ONLY SPEC documents (after completion)
+  - [ ] All non-SPEC files moved to temporal/ after information extraction
+  - [ ] SPEC and PLAN synchronisation verified across directories
+  - [ ] Workflow compliance verified (scripts/Audit-WorkflowCompliance.ps1)
+
+  CURRENT SESSION CONTEXT
+  - Focus: Execute tasks in current phase, track progress through SPEC updates, maintain status visibility
+  - Priority: Follow sequential workflow steps, update SPECs incrementally, maintain directory structure compliance
+  - Mode: Documentation-driven implementation workflow with strict temporal document prohibition
+  - Remember: ALL updates go into SPECs and IMPLEMENTATION_PLAN - NO temporal documents allowed
+
+
+
+
+# EXECUTION EXAMPLES
+# The following examples demonstrate different ways to execute this instruction file.
+# Choose the method that best fits your needs.
+
+# EXECUTION EXAMPLES
+# The following examples demonstrate different ways to execute this instruction file.
+# Choose the method that best fits your needs. Copy and paste the command you want to use.
+
+# ============================================================================
+# METHOD 1: FULL EXECUTION FROM BEGINNING (Recommended for First-Time Use)
+# ============================================================================
+# Executes the entire instruction file from step 1, loading all context and following all workflow steps sequentially.
+
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml from the beginning
+
+# Alternative formats:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml
+# Load and execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml
+# Follow @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml starting from step 1
+
+# ============================================================================
+# METHOD 2: CONTINUATION INSTRUCTION EXECUTION (Recommended for Subsequent Use)
+# ============================================================================
+# Executes using only the continuation_instruction section (assumes file context already available).
+# Faster execution without reloading the entire file structure.
+
+# Follow the continuation_instruction from @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml
+
+# Alternative formats:
+# Execute per continuation_instruction in @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml
+# Continue per @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml continuation_instruction
+
+# ============================================================================
+# METHOD 3: DIRECT PASTE (Fastest - No File Lookup)
+# ============================================================================
+# Copy the entire continuation_instruction section (lines 343-477) and paste directly:
+
+# [Paste the entire continuation_instruction section here]
+
+# ============================================================================
+# METHOD 4: EXECUTE SPECIFIC STEP(S)
+# ============================================================================
+# Execute only specific workflow steps instead of the entire instruction.
+
+# Execute Step 1 only (Review Canonical Documentation Standards):
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 1
+
+# Execute Step 2 only (Audit Implementation Plan):
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 2
+
+# Execute Step 3 only (Execute Current Task(s)):
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3
+
+# Execute multiple steps (Steps 1-3):
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - steps 1-3
+
+# Execute from Step 3 onwards:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - from step 3
+
+# ============================================================================
+# METHOD 5: EXECUTE WITH BEST PRACTICES REVIEW FOCUS
+# ============================================================================
+# Execute with emphasis on reviewing and applying best practices documents.
+
+# Execute with FastAPI best practices review:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - review best practices: fastapi
+
+# Execute with security best practices review:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - review best practices: security
+
+# Execute with all best practices review:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - review all best practices
+
+# ============================================================================
+# METHOD 6: EXECUTE WITH TASK TYPE FOCUS
+# ============================================================================
+# Execute Step 3 (Execute Current Task(s)) with specific task type best practices review.
+
+# For FastAPI endpoints:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: fastapi_endpoints
+
+# For async/performance tasks:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: async_performance
+
+# For error handling:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: error_handling
+
+# For database operations:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: database_operations
+
+# For security/authentication:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: security_authentication
+
+# For caching:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: caching
+
+# For background tasks:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: background_tasks
+
+# For testing:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: testing
+
+# For observability:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: observability
+
+# ============================================================================
+# METHOD 7: EXECUTE WITH CANONICAL PROTOCOL LOADING
+# ============================================================================
+# Explicitly load canonical protocols before executing (usually automatic, but can be explicit).
+
+# Load protocols then execute:
+# Load @docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && Load @docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml from the beginning
+
+# Alternative format:
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml --enforce
+
+# ============================================================================
+# METHOD 8: EXECUTE WITH VALIDATION FOCUS
+# ============================================================================
+# Execute with emphasis on validation checkpoints and compliance verification.
+
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - validate checkpoints
+
+# Execute Step 5 only (Reconcile and Finalise Checklists - includes validation):
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 5
+
+# ============================================================================
+# METHOD 9: EXECUTE WITH DIRECTORY STRUCTURE AUDIT
+# ============================================================================
+# Execute with focus on verifying directory structure compliance (backlog/, in_progress/, done/ contain only SPECs).
+
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - audit directory structure
+
+# Execute Step 3 with directory audit:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - audit directories
+
+# ============================================================================
+# METHOD 10: EXECUTE WITH SPECIFIC PHASE/TASK TARGET
+# ============================================================================
+# Execute targeting a specific phase or task from the implementation plan.
+
+# Execute for specific phase:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - phase: "Phase 1: Foundation Setup"
+
+# Execute for specific task:
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - task: "Task 1.1: Setup Project Structure"
+
+# Execute for current phase/task (auto-detect from IMPLEMENTATION_PLAN):
+# Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - current phase
+
+# ============================================================================
+# QUICK REFERENCE: MOST COMMON EXECUTION PATTERNS
+# ============================================================================
+# Full execution (first time): Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml from the beginning
+# Continuation (subsequent): Follow the continuation_instruction from @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml
+# Specific step: Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3
+# Task type focus: Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - step 3 - task type: fastapi_endpoints
+# Best practices review: Execute @docs/implementation/instructions/04-Execute_Implementation_Phase_Tasks.yaml - review best practices: fastapi

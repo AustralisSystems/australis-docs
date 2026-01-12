@@ -1,0 +1,78 @@
+mcp:
+  name: draft-diataxis-tutorial-instruction
+  version: "1.0.0"
+  type: execution_instruction
+  language: en-AU
+  description: >
+    Execution-layer MCP instruction for drafting Diataxis Tutorial documentation
+    using the standardized TEMPLATE_DIATAXIS_TUTORIAL_v1.0.0.md. This instruction
+    drives the creation of learning-oriented lessons that lead the user to success.
+
+references:
+  - governance/au-sys-governance/documentation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md
+  - governance/au-sys-governance/documentation/DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/architecture/RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_TUTORIAL_v1.0.0.md
+  - governance/au-sys-governance/implementation/python/python-code-implementation/instructions/v2/911-PROTOCOL-Diataxis_Documentation_Framework-v1.0.0.yaml
+
+instruction: |
+  =========================
+  DRAFT: DIATAXIS TUTORIAL
+  =========================
+
+  ROLE DEFINITION (NON-NEGOTIABLE)
+  You are a Documentation Specialist (Tutorial Focus).
+  Your Goal: Create a strictly guided learning experience.
+  Your Input: The blank `TEMPLATE_DIATAXIS_TUTORIAL_v1.0.0.md`.
+  Your Output: A beginner-friendly, error-proof Markdown tutorial.
+
+  --------------------------------------------------------------------
+  EXECUTION WORKFLOW
+  --------------------------------------------------------------------
+
+  PHASE 1: TEMPLATE ACQUISITION AND SCOPING
+  Step 1.1: Load the Template
+  Action: Read `governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_TUTORIAL_v1.0.0.md`.
+  Requirement: Do NOT modify the "Instructional Preamble".
+
+  Step 1.2: Define Learning Goal
+  Action: Determine clearly what the user will have BUILT or ACHIEVED by the end.
+  Constraint: It must be a concrete result (e.g., "Build a Hello World App"), not an abstract concept.
+
+  PHASE 2: DRAFTING - CORE SECTIONS
+  Step 2.1: Populate Metadata
+  Action: Fill Section 1 (Metadata) adhering to `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md`.
+  Requirement: Status="DRAFT". Objectives must be measurable (e.g., "You will be able to run the server"). Ensure all metadata fields are present.
+
+  Step 2.2: Set the Scenario
+  Action: Fill Section 3.
+  Requirement: Keep it brief. Contextualize the task.
+
+  Step 2.3: Write the Steps (The Core)
+  Action: Fill Section 4, 5... with sequential steps.
+  Requirement:
+  - Use Imperative mood ("Click", "Run", "Type").
+  - Provide specific code/commands.
+  - Show the EXPECTED OUTPUT for every command.
+  - Do NOT offer choices or branches. Guide them down ONE path.
+
+  PHASE 3: VALIDATION AND BEST PRACTICES
+  Step 3.1: Map Best Practices
+  Action: Fill Section 7 (Mandatory Best Practice Mapping).
+  Requirement: Ensure the tutorial teaches patterns that align with `python-best-practices`.
+  Example: If teaching logging, map to `logging-observability-best-practices-2025.md`.
+
+  Step 3.2: Verify References
+  Action: Fill Section 8 (Verification & References).
+  Requirement: Link to the How-To, Reference, or Explanation docs that support this tutorial.
+
+  --------------------------------------------------------------------
+  FINAL QUALITY GATE
+  --------------------------------------------------------------------
+  Before saving:
+  1. [ ] Is the tone instructional ("We will") and not normative ("You MUST")?
+  2. [ ] Are there zero choices/options for the user?
+  3. [ ] Is there Expected Output for every code block?
+  4. [ ] Did you map the Best Practices?
+
+  Output: Save the file to `docs/tutorials/[Topic]_Tutorial_v[Major].[Minor].[Patch].md` following `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md`.

@@ -1,0 +1,64 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://example.com/schemas/protocol-schema.json"
+title: "Protocol Schema (MCP Tier)"
+type: object
+additionalProperties: false
+required:
+  - version
+  - schema
+  - id
+  - title
+  - description
+  - enforce
+properties:
+  version:
+    type: string
+  schema:
+    type: string
+    const: "mcp.protocol/v1"
+  id:
+    type: string
+    pattern: "^[a-z0-9_.:-]+$"
+  title:
+    type: string
+  description:
+    type: string
+  enforce:
+    type: boolean
+  versioning:
+    type: string
+    description: "Optional. Semantic versioning for this protocol (e.g., 'v1.0.0' or a date)."
+  directives:
+    type: array
+    items:
+      type: string
+    description: "Optional. Short directive keys or statements that this protocol introduces or enforces."
+  inputs:
+    type: array
+    items:
+      type: string
+    description: "Optional. Named inputs or context items the protocol expects to be present when executed."
+  outputs:
+    type: array
+    items:
+      type: string
+    description: "Optional. Named outputs or artifacts the protocol produces when executed."
+  related_doctrine:
+    type: string
+    description: "Optional. The id of a related doctrine that this protocol implements or supports."
+  notes:
+    type: array
+    items:
+      type: string
+    description: "Optional. Human-readable notes, caveats, or governance guidance."
+  raw:
+    type: string
+    description: "Optional. Embedded original content for traceability. Prefer raw_ref for large/sensitive content."
+  raw_ref:
+    type: string
+    format: uri
+    description: "Optional. Reference (URI or repo path) to original/raw content stored externally."
+  raw_hash:
+    type: string
+    pattern: "^[A-Fa-f0-9]{64}$"
+    description: "Optional. SHA-256 hex digest of the original content for integrity verification."

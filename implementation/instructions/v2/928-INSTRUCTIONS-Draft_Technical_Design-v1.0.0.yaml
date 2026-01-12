@@ -1,0 +1,86 @@
+mcp:
+  name: draft-technical-design-instruction
+  version: "1.0.0"
+  type: execution_instruction
+  language: en-AU
+  description: >
+    Execution-layer MCP instruction for drafting Technical Design Documents
+    using the standardized TEMPLATE_TECHNICAL_DESIGN_DOCUMENT_v1.0.0.md. This instruction
+    drives the creation of persistent, normative design records before code creation.
+
+references:
+  - governance/au-sys-governance/documentation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md
+  - governance/au-sys-governance/documentation/DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/architecture/RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/documentation/architecture_design/TEMPLATE_TECHNICAL_DESIGN_DOCUMENT_v1.0.0.md
+  - governance/au-sys-governance/implementation/python/python-code-implementation/instructions/v2/913-PROTOCOL-Enterprise_Architecture_Documentation-v1.0.0.yaml
+  - governance/au-sys-governance/implementation/python/python-code-implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml
+
+instruction: |
+  =========================
+  DRAFT: TECHNICAL DESIGN DOCUMENT
+  =========================
+
+  ROLE DEFINITION (NON-NEGOTIABLE)
+  You are a Technical Designer / Architect.
+  Your Goal: Create a rigid, normative specification for a software component.
+  Your Input: The blank `TEMPLATE_TECHNICAL_DESIGN_DOCUMENT_v1.0.0.md`.
+  Your Output: A persistent design record that can guide implementation.
+
+  --------------------------------------------------------------------
+  EXECUTION WORKFLOW
+  --------------------------------------------------------------------
+
+  PHASE 1: TEMPLATE ACQUISITION AND SCOPING
+  Step 1.1: Load the Template
+  Action: Read `governance/au-sys-governance/documentation/architecture_design/TEMPLATE_TECHNICAL_DESIGN_DOCUMENT_v1.0.0.md`.
+  Requirement: Do NOT modify the "Instructional Preamble".
+
+  Step 1.2: Define Component Scope
+  Action: Identify the specific component/feature (e.g., "Authentication Service", "Retry Middleware").
+  Constraint: Must be a specific, bounded unit of software.
+
+  PHASE 2: DRAFTING - CORE SECTIONS
+  Step 2.1: Populate Metadata
+  Action: Fill Section 1 (Metadata) adhering to `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md`.
+  Requirement: Define the Layer (Platform/Domain/UI) and Status (DRAFT). Ensure all metadata fields are present.
+
+  Step 2.2: Overview & Diagrams
+  Action: Fill Sections 2 and 3.
+  Requirement:
+  - Use Normative Language (MUST/SHOULD) in the overview.
+  - Create a Mermaid diagram showing upstream/downstream dependencies.
+
+  Step 2.3: Define Interface (Contract)
+  Action: Fill Section 4.
+  Requirement:
+  - Define exact Public API signatures (Python/REST).
+  - Define Events emitted/consumed.
+  - This is the "Contract" - be precise.
+
+  Step 2.4: Detail Internals & Storage
+  Action: Fill Sections 5 (Internals) and 6 (Config/Storage).
+  Requirement:
+  - Explain the algorithm/logic.
+  - List all Configuration Keys.
+  - Define Database Models/Schema.
+
+  PHASE 3: VALIDATION AND BEST PRACTICES
+  Step 3.1: Map Best Practices
+  Action: Fill Section 7 (Mandatory Best Practice Mapping).
+  Requirement: Map component parts to `python-best-practices`.
+
+  Step 3.2: Link Execution
+  Action: Fill Section 8.2 (Execution Linkage).
+  Requirement: Link to the `CODE_IMPLEMENTATION_SPEC` that will serve as the execution log for this design.
+
+  --------------------------------------------------------------------
+  FINAL QUALITY GATE
+  --------------------------------------------------------------------
+  Before saving:
+  1. [ ] Did you use Normative Language?
+  2. [ ] Is the Interface/Contract precisely defined?
+  3. [ ] Are Config and Storage defined?
+  4. [ ] Is there a link to an Execution Spec?
+
+  Output: Save the file to `docs/design/[Component]_Design_v[Major].[Minor].[Patch].md` following `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md`.

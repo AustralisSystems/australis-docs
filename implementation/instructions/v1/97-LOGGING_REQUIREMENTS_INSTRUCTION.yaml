@@ -1,0 +1,112 @@
+---
+prompt_name: "Logging_Requirements"
+version: "1.0.0"
+type: "logging_compliance"
+language: "en-AU"
+reference: "docs/implementation/IMPLEMENTATION_SYSLOG_LOGGING_MANDATE_v1.0.0.md"
+---
+
+context:
+  role: "Enforce enterprise logging standards compliance"
+  mandate: "docs/implementation/IMPLEMENTATION_SYSLOG_LOGGING_MANDATE_v1.0.0.md"
+  core_principle: "Logger factory is the ONLY authorized logging mechanism"
+
+requirements:
+  logger_factory:
+    mandatory: true
+    location: "src/services/logging/logger_factory.py (or project-specific path)"
+    rule: "ALL logging MUST use logger factory - NO exceptions"
+  
+  standards:
+    syslog_compliance: "RFC 3164/RFC 5424 compliant structured logging"
+    console_format: "Structured JSON (machine-readable)"
+    file_format: "Detailed text (human-readable)"
+    syslog_format: "Structured JSON (RFC compliant)"
+  
+  audit_logging:
+    mandatory: true
+    purpose: "Cybersecurity compliance"
+    component: "get_component_logger('audit', 'security') or get_component_logger('audit', 'compliance')"
+    required_for:
+      - "Authentication events"
+      - "Authorization events"
+      - "Data access events"
+      - "Security policy violations"
+      - "Compliance events"
+  
+  debug_logging:
+    mandatory: true
+    purpose: "Development and troubleshooting"
+    logger: "create_debug_logger(__name__) or standard logger with DEBUG level"
+    required_for:
+      - "Detailed execution flow"
+      - "Variable states"
+      - "Decision points"
+      - "Performance metrics"
+
+mandatory_patterns:
+  standard_logger: |
+    from src.services.logging.logger_factory import get_logger
+    logger = get_logger(__name__)
+    logger.info("Message")
+  
+  component_logger: |
+    from src.services.logging.logger_factory import get_component_logger
+    audit_logger = get_component_logger("audit", "security")
+    audit_logger.info("Security event", extra={"user_id": user_id, "event_type": "authentication"})
+  
+  debug_logger: |
+    from src.services.logging.logger_factory import create_debug_logger
+    debug_logger = create_debug_logger(__name__)
+    debug_logger.debug("Detailed execution flow", extra={"variable": value})
+
+prohibited_patterns:
+  - "Direct logging.getLogger(__name__) usage"
+  - "logging.basicConfig() calls"
+  - "print() statements for operational logging"
+  - "Direct logging.info(), logging.error(), etc. calls"
+  - "Custom logger creation outside factory"
+
+compliance_requirements:
+  zero_tolerance:
+    - "0 direct logging.getLogger() calls (except in logger_factory itself)"
+    - "0 logging.basicConfig() calls (except in logger_factory itself)"
+    - "0 print() statements for operational logging (test scripts exempt)"
+  
+  coverage:
+    - "100% of security modules use audit logging"
+    - "100% of service modules have debug logging capability"
+    - "100% console output is JSON formatted"
+    - "100% file output is detailed text formatted"
+
+enforcement:
+  validation:
+    - "Scan for logging violations"
+    - "Verify logger factory usage"
+    - "Check audit logging in security modules"
+    - "Check debug logging in service modules"
+    - "Validate output formats (JSON console, text files)"
+  
+  blocking:
+    rule: "Non-compliance is a blocking issue - code MUST NOT proceed until fixed"
+
+output_format:
+  section_1: "Logging violations found (with file paths and line numbers)"
+  section_2: "Remediation actions taken (per file)"
+  section_3: "Audit logging added (security modules)"
+  section_4: "Debug logging added (service modules)"
+  section_5: "Compliance validation results"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-08"
+  version: "1.0.0"
+  classification: "Enterprise Logging Compliance Instruction"
+
+# RUNNER PROMPT (6-line quick reference for LLM instructions)
+# Load and obey @docs/implementation/instructions/97-LOGGING_REQUIREMENTS_INSTRUCTION.yaml
+# The logger factory (@src/services/logging/logger_factory.py) is the ONLY logger that must be used.
+# ALL logging MUST use logger factory functions (get_logger, get_component_logger, create_debug_logger) - NO direct logging.getLogger(), logging.basicConfig(), or print() statements.
+# Security modules MUST use audit logging (get_component_logger("audit", "security")) for cybersecurity compliance.
+# Service modules MUST have debug logging capability (create_debug_logger(__name__)) for troubleshooting.
+# Console output MUST be JSON formatted, file output MUST be detailed text formatted. Non-compliance is a blocking issue.

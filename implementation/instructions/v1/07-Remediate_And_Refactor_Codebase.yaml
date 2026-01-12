@@ -1,0 +1,507 @@
+prompt_name: "Remediate_And_Refactor_Codebase"
+version: "1.0.0"
+type: "controlled_refactoring_protocol"
+context:
+  role: "MCP agent executing canonical code remediation and refactoring under validated governance"
+  governance:
+    canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    golden_rule_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    prerequisite_task: "docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml"
+  description: >
+    This protocol defines the controlled remediation and refactoring process for resolving validation failures
+    and improving maintainability within the defined canonical standards. It ensures all code changes follow
+    the Golden Rule sequence (context7  grep  neo4j-memory  code  neo4j-memory) and remain
+    fully auditable and reversible. No custom scripts, patches, or auto-fixes are permitted.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    remediation results, refactoring outcomes, and findings MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the relevant SPEC(s) and
+    IMPLEMENTATION_PLAN with all remediation actions, results, and outcomes. This rule is
+    NON-NEGOTIABLE and must be enforced strictly.
+
+  doc_references:
+    - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+    - "docs/implementation/README_TEMPLATE.md"
+    - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+    - "docs/implementation/SPEC_README.md"
+    - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+  best_practices_references:
+    core_fastapi:
+      - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+      - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+
+    async_performance:
+      - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+
+    reliability_resilience:
+      - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+
+    architecture_patterns:
+      - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+
+    security_compliance:
+      - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+      - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+
+    observability_monitoring:
+      - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+      - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+
+    data_persistence:
+      - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+      - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+      - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+      - "docs/implementation/best-practices/redis-caching-best-practices.md"
+      - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+      - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+
+    configuration_deployment:
+      - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+      - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+
+    background_tasks:
+      - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+      - "docs/implementation/best-practices/celery-production-best-practices.md"
+      - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+
+    integration_patterns:
+      - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+      - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+
+    ui_integration:
+      - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+      - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+      - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+
+    code_quality_testing:
+      - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+      - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+
+    templating_scaffolding:
+      - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+
+codebase_scaffolding_mandate:
+  priority: "MANDATORY - NO EXCEPTIONS"
+  description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+  priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+instructions:
+  objective: >
+    Identify, analyse, and remediate code quality issues identified during validation.
+    Perform controlled, standards-aligned refactoring operations using official MCP tools only.
+    Record all remediation actions, rationale, and resulting improvements into Neo4j-Memory for traceability.
+  best_practices_requirement: "MUST review and implement relevant best practices documents at each step - NO exceptions"
+
+  steps:
+    - step: 1
+      name: "Pre-Remediation Initialisation"
+      actions:
+        - "Load Enterprise Canonical Execution Protocol and Golden Rule Execution Protocol"
+        - "Load validation results from relevant SPEC(s) in docs/implementation/in_progress/"
+        - "Load validation results from IMPLEMENTATION_PLAN_v#.#.#.md"
+        - "CRITICAL: DO NOT look for VALIDATION_REPORT.md - validation results are in SPECs and IMPLEMENTATION_PLAN"
+        - "Identify failed tools, metrics, or code files flagged as non-compliant from SPECs and IMPLEMENTATION_PLAN"
+        - "Query Neo4j-Memory for related patterns, previous fixes, or known remediation strategies"
+      expected_outcome: "All failed validation results and context successfully loaded for analysis from SPECs and IMPLEMENTATION_PLAN."
+
+    - step: 2
+      name: "Root Cause Analysis"
+      best_practices_review:
+        mandatory: true
+        requirement: "MUST review relevant best practices documents BEFORE remediation based on issue type"
+        issue_specific_reviews:
+          code_quality:
+            documents:
+              - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+              - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+            requirement: "MUST review code quality and FastAPI best practices before fixing code quality issues"
+          error_handling:
+            documents:
+              - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+              - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+            requirement: "MUST review error handling best practices before fixing error handling issues"
+          security:
+            documents:
+              - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+              - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+            requirement: "MUST review security best practices before fixing security issues"
+          performance:
+            documents:
+              - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+              - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+            requirement: "MUST review performance best practices before fixing performance issues"
+      actions:
+        - "For each failed validation, identify root cause categories: formatting, style, type, security, or complexity"
+        - "Review relevant best practices documents based on issue type BEFORE proceeding"
+        - "Use Context7 and grep to confirm recommended remediation approaches"
+        - "Validate recommended fix patterns against official documentation and examples"
+        - "Log reasoning and references to Neo4j-Memory before any changes occur"
+      expected_outcome: "Root cause and validated remediation plan established for each issue."
+
+    - step: 3
+      name: "Controlled Remediation"
+      best_practices_review:
+        mandatory: true
+        requirement: "MUST apply best practices patterns during remediation implementation"
+        implementation_guidance:
+          - "Apply FastAPI best practices when refactoring FastAPI code"
+          - "Apply error handling patterns when fixing error handling issues"
+          - "Apply security patterns when fixing security issues"
+          - "Apply performance patterns when fixing performance issues"
+          - "Apply code quality patterns when fixing code quality issues"
+          - "Document which best practices were applied in Neo4j-Memory"
+      actions:
+        - "Use MCP filesystem edit tools to apply code changes"
+        - "Apply changes strictly aligned with verified patterns and documentation"
+        - "Apply best practices patterns from reviewed best practices documents"
+        - "Update comments, type hints, and docstrings to meet canonical conventions"
+        - "Refactor code following SOLID, DRY, and KISS principles"
+        - "Prohibit complex structural rewrites unless validated through prior plan approval"
+        - "Log each change (file, line range, description, rationale, best practices applied) into Neo4j-Memory"
+      enforcement:
+        - "Custom scripts or auto-fix utilities are FORBIDDEN"
+        - "All changes must be atomic and reversible"
+        - "Each modification must be justified with documentation reference"
+        - "Best practices patterns must be applied during remediation"
+      expected_outcome: "All flagged validation issues remediated and codebase refactored in controlled fashion using best practices."
+
+    - step: 4
+      name: "Re-Validation Cycle"
+      actions:
+        - "Re-run the entire 06-Validate_Code_Quality_and_Compliance.yaml protocol"
+        - "Confirm 100% compliance with all validation tools"
+        - "Capture new metrics for complexity, maintainability, and security"
+        - "If new issues arise, repeat remediation process until complete pass achieved"
+      success_criteria:
+        - "0 errors, 0 warnings across all validation tools"
+        - "All files maintain MI ≥ 20 and CC ≤ 15"
+        - "All security, typing, and linting checks pass"
+        - "Codebase achieves Production Ready state"
+
+    - step: 5
+      name: "Post-Remediation Documentation Updates"
+      actions:
+        - "CRITICAL: Update SPEC(s) in docs/implementation/in_progress to reflect remediation actions"
+        - "Include updated validation metrics and compliance summary in SPECs"
+        - "Include all remediation results, fixes applied, and outcomes in SPECs"
+        - "CRITICAL: Update Implementation Plan checklists marking all refactor and fix tasks as completed"
+        - "CRITICAL: DO NOT create temporal documents (e.g., REMEDIATION_REPORT_YYYY-MM-DD.md)"
+        - "CRITICAL: All remediation results MUST be documented in SPECs and IMPLEMENTATION_PLAN only"
+      expected_outcome: "Documentation and plan synchronised with updated implementation state. All remediation results documented in SPECs and IMPLEMENTATION_PLAN only."
+
+    - step: 6
+      name: "Persistence and Audit Logging"
+      actions:
+        - "Create entities in Neo4j-Memory for each refactored module or function"
+        - "Add relationships: session  remediates  file, session  improves  metric"
+        - "Include timestamps, validation results, rationale, and references"
+        - "Store remediation summary as canonical pattern for future retrieval"
+      expected_outcome: "All remediation and refactor operations permanently logged in Neo4j-Memory for future recall."
+
+    - step: 7
+      name: "Completion and Lockout"
+      actions:
+        - "When validation passes and all remediations complete, lock the current refactor session"
+        - "Mark remediation entities as verified and archived"
+        - "Emit signal to initiate next implementation or deployment task"
+      expected_outcome: "Codebase restored to fully validated state, ready for production or next-phase execution."
+
+constraints:
+  - "All remediation operations must be based on prior validation output; speculative edits are forbidden"
+  - "All actions must follow the canonical directory structure and naming conventions"
+  - "No unlogged edits or changes outside Neo4j-Memory tracking are permitted"
+  - "Code must retain readability, maintainability, and functional equivalence post-refactor"
+  - "Partial compliance or unresolved warnings constitute protocol failure"
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all remediation results go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Remediation reports, refactoring summaries MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+
+examples:
+  remediation_example:
+    issue_detected:
+      file: "src/auth/auth.py"
+      tool: "flake8"
+      problem: "Line length >120"
+    remediation_action:
+      approach: "Reformat with Black and manually restructure long expressions"
+      result: "flake8  0 errors; black  clean"
+    record_logged:
+      memory_entities:
+        - "session  remediates  src/auth/auth.py"
+        - "session  validates  flake8"
+
+  refactor_example:
+    issue_detected:
+      file: "src/api/routes/user.py"
+      problem: "Cyclomatic complexity 19"
+    remediation_action:
+      approach: "Extract logic into helper functions, reduce nested conditionals"
+      result: "radon cc  13; maintainability index  22"
+    record_logged:
+      memory_entities:
+        - "session  improves  maintainability"
+        - "session  remediates  src/api/routes/user.py"
+
+output_format:
+  section_1: "Pre-remediation context and validation summary"
+  section_2: "Root cause and remediation plan per failure"
+  section_3: "Code modification records (per file and tool)"
+  section_4: "Re-validation results and final metrics"
+  section_5: "Documentation updates and audit entries"
+  section_6: "Neo4j-Memory entities and relationships created"
+  section_7: "Final Production Ready confirmation"
+
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml --verify"
+    - "!run ./docs/implementation/instructions/07-Remediate_And_Refactor_Codebase.yaml --enforce"
+  system_instruction: >
+    System: Load and obey the Enterprise Canonical and Golden Rule Execution Protocols.
+    Review the latest validation report and execute controlled remediation for all failed items.
+    Re-validate after every remediation cycle. Persist all outcomes and reasoning to Neo4j-Memory.
+    Halt if any compliance failure remains unresolved.
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-11-08"
+  version: "1.0.0"
+  classification: "Canonical Remediation Protocol"
+  compliance: "Fully aligned with Enterprise and Golden Rule Execution Protocols"
+  language: "en-AU"
+
+[END OF INSTRUCTIONS]
+
+continuation_instruction: |
+  You are executing Remediate and Refactor Codebase per Enterprise Canonical Execution Protocol v1.0.0.
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REVIEW)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability/Resilience: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture Patterns: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-best-practices-2025.md
+  Security: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md, secrets-management-best-practices-2025.md
+  Observability: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, redis-caching-best-practices.md
+  Configuration: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+  - MANDATORY: Review relevant best practices documents BEFORE remediation based on issue type
+  - MUST apply best practices patterns during remediation implementation
+  - MUST document which best practices were applied in Neo4j-Memory
+
+  CRITICAL DOCUMENTATION RULE (ABSOLUTE - NO EXCEPTIONS)
+  - TEMPORAL DOCUMENTS MUST NOT BE CREATED
+  - ALL updates, remediation results, refactoring outcomes, and findings MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+  - DO NOT create standalone temporal documents
+  - Update relevant SPEC(s) and IMPLEMENTATION_PLAN with all remediation actions, results, and outcomes
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  CODEBASE SCAFFOLDING MANDATE (MANDATORY - NO EXCEPTIONS)
+  - ALWAYS search for existing code repositories FIRST before writing any custom code
+  - Priority hierarchy: Golden Template → Local Repos → tristanaburns GitHub → Public GitHub → Official SDKs → CNCF Projects → Open Source Libraries → Public Packages → Custom Code (LAST RESORT)
+  - Document ALL discovered repos/files in SPEC files BEFORE cloning
+  - Clone to tmp/ directory ONLY (never project root)
+  - Add attribution comments to ALL scaffolded code
+  - Delete cloned repos after extraction
+  - Custom code requires full justification
+
+  MANDATORY WORKFLOW (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Pre-Remediation Initialisation
+  - Load Enterprise Canonical Execution Protocol and Golden Rule Execution Protocol
+  - Load validation results from relevant SPEC(s) in docs/implementation/in_progress/
+  - Load validation results from IMPLEMENTATION_PLAN_v#.#.#.md
+  - Identify failed tools, metrics, or code files flagged as non-compliant
+  - Query Neo4j-Memory for related patterns, previous fixes, or known remediation strategies
+
+  Step 2: Root Cause Analysis
+  - For each failed validation, identify root cause categories: formatting, style, type, security, or complexity
+  - Review relevant best practices documents based on issue type BEFORE proceeding:
+    - Code quality issues: code-quality-linting-best-practices-2025.md, fastapi-best-practices-2025.md
+    - Error handling issues: error-handling-resilience-patterns-best-practices-2025.md, middleware-patterns-best-practices-2025.md
+    - Security issues: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md
+    - Performance issues: object-pooling-resource-management-best-practices-2025.md, caching-strategies-best-practices-2025.md
+  - Use Context7 and grep to confirm recommended remediation approaches
+  - Validate recommended fix patterns against official documentation and examples
+  - Log reasoning and references to Neo4j-Memory before any changes occur
+
+  Step 3: Controlled Remediation
+  - Use MCP filesystem edit tools to apply code changes
+  - Apply changes strictly aligned with verified patterns and documentation
+  - Apply best practices patterns from reviewed best practices documents
+  - Update comments, type hints, and docstrings to meet canonical conventions
+  - Refactor code following SOLID, DRY, and KISS principles
+  - Log each change (file, line range, description, rationale, best practices applied) into Neo4j-Memory
+  - Custom scripts or auto-fix utilities are FORBIDDEN
+  - All changes must be atomic and reversible
+  - Each modification must be justified with documentation reference
+
+  Step 4: Re-Validation Cycle
+  - Re-run the entire 06-Validate_Code_Quality_and_Compliance.yaml protocol
+  - Confirm 100% compliance with all validation tools
+  - Capture new metrics for complexity, maintainability, and security
+  - If new issues arise, repeat remediation process until complete pass achieved
+
+  Step 5: Post-Remediation Documentation Updates
+  - CRITICAL: Update SPEC(s) in docs/implementation/in_progress to reflect remediation actions
+  - Include updated validation metrics and compliance summary in SPECs
+  - Include all remediation results, fixes applied, and outcomes in SPECs
+  - CRITICAL: Update Implementation Plan checklists marking all refactor and fix tasks as completed
+  - CRITICAL: DO NOT create temporal documents
+  - CRITICAL: All remediation results MUST be documented in SPECs and IMPLEMENTATION_PLAN only
+
+  Step 6: Persistence and Audit Logging
+  - Create entities in Neo4j-Memory for each refactored module or function
+  - Add relationships: session → remediates → file, session → improves → metric
+  - Include timestamps, validation results, rationale, and references
+  - Store remediation summary as canonical pattern for future retrieval
+
+  Step 7: Completion and Lockout
+  - When validation passes and all remediations complete, lock the current refactor session
+  - Mark remediation entities as verified and archived
+  - Emit signal to initiate next implementation or deployment task
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL)
+  - [ ] Relevant best practices documents reviewed BEFORE remediation based on issue type
+  - [ ] Best practices patterns applied during remediation implementation
+  - [ ] Best practices applied documented in Neo4j-Memory
+  - [ ] All validation issues remediated and codebase refactored in controlled fashion
+  - [ ] 0 errors, 0 warnings across all validation tools
+  - [ ] All files maintain MI ≥ 20 and CC ≤ 15
+  - [ ] All security, typing, and linting checks pass
+  - [ ] Codebase achieves Production Ready state
+  - [ ] SPEC(s) updated with remediation actions and outcomes
+  - [ ] IMPLEMENTATION_PLAN updated with completion status
+  - [ ] All remediation results documented in SPECs and IMPLEMENTATION_PLAN only (NO temporal documents)
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/07-Remediate_And_Refactor_Codebase.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/07-Remediate_And_Refactor_Codebase.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/07-Remediate_And_Refactor_Codebase.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/07-Remediate_And_Refactor_Codebase.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/07-Remediate_And_Refactor_Codebase.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/07-Remediate_And_Refactor_Codebase.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/07-Remediate_And_Refactor_Codebase.yaml --enforce"

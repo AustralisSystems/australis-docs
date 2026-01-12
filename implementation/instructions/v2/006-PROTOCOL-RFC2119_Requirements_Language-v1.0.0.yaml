@@ -1,0 +1,520 @@
+mcp:
+  name: rfc2119-requirements-language-protocol
+  version: "1.0.0"
+  type: requirements_language_protocol
+  language: en-AU
+  description: >
+    RFC 2119 Requirements Language Protocol. Defines standard terminology for
+    requirements language used in protocol specifications, API documentation,
+    and compliance frameworks. Ensures consistent interpretation and enforcement
+    of requirement levels across all documentation and code.
+
+references:
+  - docs/implementation/instructions/v2/000-DOCTRINE-Enterprise_Canonical_Execution-v2.0.1.yaml
+  - https://datatracker.ietf.org/doc/html/rfc2119
+
+---
+context:
+  role: Requirements language authority
+  intent: Define and enforce RFC 2119 terminology and enterprise-specific extensions
+  workflow: Terminology is referenced by all DOCTRINE, PROTOCOL, and INSTRUCTION files
+  execution_mode: REFERENCE ONLY - Terminology is loaded and referenced, not executed
+
+rfc2119_standard_terms:
+  must:
+    term: "MUST / REQUIRED / SHALL / ALWAYS"
+    meaning: "Indicates an absolute, non-negotiable requirement of this protocol. Compliance is mandatory in all cases. No exceptions."
+    enforcement: "Immediate remediation required on violation. Execution SHALL STOP."
+    examples:
+      - "API requests MUST include a valid authentication token"
+      - "All code SHALL pass type checking with zero errors"
+      - "Production deployments MUST use HTTPS"
+
+  must_not:
+    term: "MUST NOT / SHALL NOT / NEVER"
+    meaning: "Indicates an absolute, non-negotiable prohibition. This action, behaviour, or outcome is forbidden. No exceptions."
+    enforcement: "Immediate remediation required on violation. Execution SHALL STOP."
+    examples:
+      - "Authentication tokens MUST NOT be transmitted in URL query parameters"
+      - "Code MUST NOT contain security vulnerabilities"
+      - "Production databases SHALL NOT be directly exposed to internet"
+
+  should:
+    term: "SHOULD / RECOMMENDED"
+    meaning: "Indicates a strong recommendation. There may exist valid reasons to deviate, but these should be rare and all consequences must be carefully weighed, documented, and justified."
+    enforcement: "Deviation requires justification and documentation."
+    examples:
+      - "Token refresh SHOULD occur automatically before expiration"
+      - "Functions SHOULD have comprehensive docstrings"
+      - "Code SHOULD follow PEP 8 style guidelines"
+
+  should_not:
+    term: "SHOULD NOT / NOT RECOMMENDED"
+    meaning: "Indicates that the behaviour is strongly discouraged. There may exist valid reasons in particular circumstances when the behaviour is acceptable, but the full implications must be understood and documented."
+    enforcement: "Use requires justification and documentation."
+    examples:
+      - "Code SHOULD NOT exceed cyclomatic complexity of 15"
+      - "Synchronous operations SHOULD NOT be used in async contexts"
+
+  may:
+    term: "MAY / OPTIONAL"
+    meaning: "Indicates something that is truly optional. The choice to include or omit the feature or action is left to the implementer, without impact on overall protocol compliance."
+    enforcement: "No enforcement required. Implementation choice permitted."
+    examples:
+      - "Clients MAY cache tokens for the duration of their validity period"
+      - "Developers MAY use alternative formatters if team-approved"
+      - "Local testing environments MAY use HTTP for debugging"
+
+enterprise_extension_terms:
+  forbidden:
+    term: "FORBIDDEN"
+    meaning: "HARD MUST NOT: Indicates an action, word, pattern, code, file, or artefact that is strictly prohibited. Equivalent to MUST NOT / SHALL NOT, but requires ACTIVE ENFORCEMENT."
+    enforcement: "Active prevention required. Execution SHALL STOP if detected. Violations require immediate remediation."
+    detection: "Active checks SHALL be performed to detect violations"
+    remediation_requirements:
+      - "If any item matching a FORBIDDEN rule is found in the codebase (e.g. forbidden file names like 'enhanced', forbidden function names, or other banned terms, logic, or artefacts), it MUST be immediately removed, renamed, or replaced"
+      - "All references MUST be updated and corrected"
+      - "Remediation MUST be logged as a protocol enforcement action"
+      - "No exceptions, and no warnings--violations require immediate correction"
+    examples:
+      - "FORBIDDEN: Creating documentation files without explicit request"
+      - "FORBIDDEN: Using print() statements"
+      - "FORBIDDEN: Cosmetic refactoring unrelated to defects"
+      - "The term 'enhanced' is FORBIDDEN in all file names and module names"
+      - "Any existing usage MUST be immediately refactored"
+
+  prohibited:
+    term: "PROHIBITED"
+    meaning: "Absolute requirement to ACTIVELY SEARCH FOR, LOCATE, AND ERADICATE. When something is PROHIBITED, active scanning SHALL be performed to locate all instances, all instances SHALL be found and documented, all instances SHALL be eradicated immediately, and verification SHALL confirm zero instances remain."
+    enforcement: "Active scanning required. All instances SHALL be found, documented, and eradicated. Verification required."
+    detection: "Active scanning SHALL be performed to locate all instances"
+    documentation: "All instances SHALL be found and documented"
+    remediation: "All instances SHALL be eradicated immediately"
+    verification: "Verification SHALL confirm zero instances remain"
+    examples:
+      - "PROHIBITED: TODOs in production code"
+      - "PROHIBITED: Mocks in production code"
+      - "PROHIBITED: Stubs in production code"
+      - "PROHIBITED: Hard-coded dynamic values"
+
+special_interpretations:
+  always:
+    term: "ALWAYS"
+    equivalent: "MUST"
+    meaning: "Absolute, non-negotiable requirement"
+    enforcement: "Same as MUST - immediate remediation required on violation"
+    note: "ALWAYS = MUST (absolute, non-negotiable requirement). All instructions containing 'ALWAYS' SHALL be interpreted and enforced as strictly as 'MUST'."
+
+  never:
+    term: "NEVER"
+    equivalent: "MUST NOT"
+    meaning: "Absolute, non-negotiable prohibition"
+    enforcement: "Same as MUST NOT - immediate remediation required on violation"
+    note: "NEVER = MUST NOT (absolute, non-negotiable prohibition). All instructions containing 'NEVER' SHALL be interpreted and enforced as strictly as 'MUST NOT'."
+
+  forbidden_special_note:
+    term: "FORBIDDEN"
+    equivalent: "Hard MUST NOT"
+    meaning: "Any artefact, word, file, or pattern labelled as FORBIDDEN"
+    requirements:
+      - "MUST be detected, flagged, and immediately removed or refactored from the codebase"
+      - "All references MUST be updated and corrected"
+      - "Remediation MUST be logged as a protocol enforcement action"
+      - "No exceptions and no warnings--immediate correction is REQUIRED"
+
+  required:
+    term: "REQUIRED"
+    equivalent: "MUST"
+    meaning: "Absolute, non-negotiable requirement"
+    enforcement: "Same as MUST - immediate remediation required on violation"
+
+  recommended:
+    term: "RECOMMENDED"
+    equivalent: "SHOULD"
+    meaning: "Strong recommendation with rare exceptions"
+    enforcement: "Deviation requires justification and documentation"
+
+  optional:
+    term: "OPTIONAL"
+    equivalent: "MAY"
+    meaning: "Truly optional without compliance impact"
+    enforcement: "No enforcement required"
+
+terminology_comparison:
+  must_not:
+    meaning: "Do not do this (passive prohibition)"
+    enforcement: "Prevent occurrence, stop if detected"
+
+  forbidden:
+    meaning: "Do not do this AND actively prevent/stop it (active enforcement)"
+    enforcement: "Actively prevent occurrence, stop execution if detected, perform active checks"
+
+  prohibited:
+    meaning: "Actively search for existing instances and eliminate them (eradication)"
+    enforcement: "Actively scan, locate, document, and eradicate all instances"
+
+pattern_terminology:
+  pattern:
+    definition: "A proven, acceptable practice or approach that SHOULD be followed. Patterns represent good design, implementation, or behavior."
+    usage: "Pattern terminology SHALL be determined by the RFC 2119 requirement level specified in the surrounding context."
+
+  mandatory_pattern:
+    definition: "A pattern that MUST/SHALL be followed (uses RFC 2119 MUST/SHALL terminology). Non-compliance is a violation. Execution SHALL STOP if violated."
+    format: "MANDATORY PATTERN: X = MUST/SHALL follow pattern X"
+    example: "MANDATORY PATTERN: Use logger_factory for all logging = MUST use logger_factory"
+    enforcement: "Same rigor as MUST/SHALL requirements. Violation SHALL result in execution STOP."
+
+  required_pattern:
+    definition: "A pattern that SHOULD be followed (uses RFC 2119 SHOULD terminology). Deviation requires justification."
+    format: "REQUIRED PATTERN: X = SHOULD follow pattern X"
+    example: "REQUIRED PATTERN: Use async/await for I/O operations = SHOULD use async/await"
+    enforcement: "SHALL be followed unless deviation is justified."
+
+  optional_pattern:
+    definition: "A pattern that MAY be used (uses RFC 2119 MAY terminology). Implementation choice is permitted."
+    format: "OPTIONAL PATTERN: X = MAY use pattern X"
+    example: "OPTIONAL PATTERN: Use alternative formatters = MAY use alternative formatters"
+    enforcement: "Implementation choice permitted."
+
+  anti_pattern:
+    definition: "A proven, unacceptable practice or approach that SHALL NOT be used. Anti-patterns represent bad design, implementation, or behavior that leads to problems."
+    usage: "Anti-pattern terminology SHALL be determined by the RFC 2119 requirement level specified in the surrounding context."
+
+  forbidden_anti_pattern:
+    definition: "An anti-pattern that MUST NOT occur and SHALL be actively prevented. Execution SHALL STOP if detected."
+    format: "FORBIDDEN ANTI-PATTERN: X = MUST NOT do X, actively prevent X"
+    example: "FORBIDDEN ANTI-PATTERN: Using print() statements = MUST NOT use print(), actively prevent print()"
+    enforcement: "SHALL trigger immediate execution STOP."
+
+  prohibited_anti_pattern:
+    definition: "An anti-pattern that MUST be actively searched for, located, documented, and eradicated from the codebase."
+    format: "PROHIBITED ANTI-PATTERN: X = MUST scan for X, find all instances, eradicate all instances"
+    example: "PROHIBITED ANTI-PATTERN: TODOs in production code = MUST scan codebase for TODOs, find all TODOs, replace all TODOs with production code"
+    enforcement: "SHALL trigger active scanning and eradication."
+
+no_deprecation_policy:
+  policy: "DEPRECATION IS FORBIDDEN. There SHALL be no deprecation, no shims, no glue code, no temporary solutions, no phased migrations, and no gradual transitions."
+  enterprise_standard:
+    - "ALL code SHALL be 100% enterprise production code at the highest standards"
+    - "ALL implementations SHALL be complete (100%), not partial"
+    - "ALL remediation SHALL be complete (100%), not partial"
+    - "ALL debugging SHALL be complete (100%), not partial"
+    - "ALL refactoring SHALL be complete (100%), not partial"
+    - "ALL rewrites SHALL be complete (100%), not partial"
+  forbidden_practices:
+    - "FORBIDDEN: Deprecating code or features"
+    - "FORBIDDEN: Creating shims or adapter layers for compatibility"
+    - "FORBIDDEN: Creating glue code or temporary bridges"
+    - "FORBIDDEN: Phased migrations or gradual transitions"
+    - "FORBIDDEN: Marking code as 'deprecated' with future removal dates"
+    - "FORBIDDEN: Maintaining old and new code paths simultaneously"
+    - "FORBIDDEN: Using feature flags to toggle between old/new implementations"
+    - "FORBIDDEN: Creating compatibility layers or wrappers"
+  required_approach:
+    - "When code needs to be replaced: COMPLETE REWRITE (100%)"
+    - "When code needs to be fixed: COMPLETE REMEDIATION (100%)"
+    - "When code needs to be improved: COMPLETE REFACTORING (100%)"
+    - "When code needs debugging: COMPLETE DEBUGGING (100%)"
+    - "When code needs implementation: COMPLETE IMPLEMENTATION (100%)"
+  enforcement:
+    - "Finding deprecated code = BLOCKING ISSUE - execution MUST STOP"
+    - "Finding shims or glue code = BLOCKING ISSUE - execution MUST STOP"
+    - "Finding temporary solutions = BLOCKING ISSUE - execution MUST STOP"
+    - "Finding phased migrations = BLOCKING ISSUE - execution MUST STOP"
+    - "Violations SHALL be remediated with complete replacement, not deprecation"
+  violation_examples:
+    - '"@deprecated This will be removed in v3.0" = FORBIDDEN'
+    - '"def legacy_function(): # TODO: Remove in next release" = FORBIDDEN'
+    - '"if use_new_api: ... else: legacy_api()" = FORBIDDEN'
+    - '"class ShimAdapter: # Temporary compatibility layer" = FORBIDDEN'
+    - '"def glue_function(): # Bridges old and new systems" = FORBIDDEN'
+  correct_approach_examples:
+    - "Remove old code completely, implement new code completely"
+    - "Fix all issues completely, do not leave partial fixes"
+    - "Refactor entire module completely, do not refactor incrementally"
+    - "Debug and fix root cause completely, do not apply workarounds"
+    - "Implement feature completely, do not implement partially"
+
+enforcement_protocol:
+  rfc2119_compliance_statement: "All instructions in this protocol MUST be interpreted according to RFC 2119 (https://datatracker.ietf.org/doc/html/rfc2119)"
+
+  non_negotiable_rules:
+    - "No Relaxation: No AI, LLM, or agent is permitted to relax, reinterpret, or weaken the force of these terms"
+    - "Protocol Status: All instructions using these words are enforceable protocol, not mere suggestions"
+    - "Immediate Action: MUST and MUST NOT violations require immediate remediation"
+    - "Zero Tolerance: FORBIDDEN items require detection and immediate removal without exception"
+    - "Active Scanning: PROHIBITED items require active scanning, location, documentation, and eradication"
+    - "Absolute Requirements: MUST/SHALL = absolute requirement, NEVER/FORBIDDEN = absolute prohibition"
+
+  enforcement_statement: "MUST/SHALL = absolute requirement, NEVER/FORBIDDEN = absolute prohibition. No AI, LLM, or agent is permitted to relax, reinterpret, or weaken the force of these terms. All instructions using these words are enforceable protocol, not mere suggestions."
+  compliance_validation:
+    when_reviewing_requirements:
+      - "Verify correct term usage for requirement level"
+      - "Ensure no ambiguous language that could be misinterpreted"
+      - "Validate that enforcement level matches actual requirement importance"
+      - "Check for consistent usage throughout documentation"
+      - "Verify capitalization (capitalized terms are requirements, lowercase are descriptive)"
+  violation_response:
+    must_violations:
+      action: "Execution SHALL STOP immediately"
+      remediation: "Violation SHALL be remediated before continuation"
+      documentation: "Violation SHALL be documented with evidence"
+    must_not_violations:
+      action: "Execution SHALL STOP immediately"
+      remediation: "Violation SHALL be remediated before continuation"
+      documentation: "Violation SHALL be documented with evidence"
+    forbidden_violations:
+      action: "Execution SHALL STOP immediately"
+      detection: "Active checks SHALL be performed"
+      remediation: "Violation SHALL be remediated immediately, all references updated"
+      logging: "Remediation SHALL be logged as protocol enforcement action"
+    prohibited_violations:
+      action: "Active scanning SHALL be performed immediately"
+      detection: "All instances SHALL be located and documented"
+      remediation: "All instances SHALL be eradicated immediately"
+      verification: "Verification SHALL confirm zero instances remain"
+    should_violations:
+      action: "Deviation SHALL be documented with justification"
+      remediation: "No immediate remediation required, but deviation must be justified"
+
+capitalization_requirement:
+  rule: "RFC 2119 terms SHALL be capitalized when used as requirements. FORBIDDEN and PROHIBITED SHALL be capitalized when used as requirements. Lowercase usage (must, shall, should, forbidden, prohibited) SHALL be treated as descriptive text, not requirements. Mixed case (Must, Shall, Should, Forbidden, Prohibited) SHALL be treated as requirements if context indicates requirement intent."
+  capitalized_terms:
+    meaning: "Requirements - enforceable protocol"
+    examples:
+      - "MUST comply"
+      - "SHALL implement"
+      - "SHOULD consider"
+      - "FORBIDDEN: Creating documentation"
+      - "PROHIBITED: TODOs in codebase"
+  lowercase_terms:
+    meaning: "Descriptive text - not a requirement"
+    examples:
+      - "must comply"
+      - "shall implement"
+      - "should consider"
+      - "forbidden pattern"
+      - "prohibited items"
+
+decision_tree:
+  absolutely_required:
+    question: "Is this requirement absolutely required with no exceptions?"
+    use: "MUST / SHALL / REQUIRED / ALWAYS"
+    enforcement: "Immediate remediation required on violation"
+
+  absolutely_prohibited:
+    question: "Is this absolutely prohibited with no exceptions?"
+    use: "MUST NOT / SHALL NOT / NEVER"
+    enforcement: "Immediate remediation required on violation"
+
+  prohibited_with_active_enforcement:
+    question: "Is this prohibited and must be actively prevented/stopped?"
+    use: "FORBIDDEN"
+    enforcement: "Active prevention required, stop execution if detected"
+
+  prohibited_with_active_eradication:
+    question: "Must existing instances be actively searched for and eliminated?"
+    use: "PROHIBITED"
+    enforcement: "Active scanning, location, documentation, and eradication required"
+
+  strongly_recommended:
+    question: "Is this strongly recommended but may have valid exceptions?"
+    use: "SHOULD / RECOMMENDED"
+    enforcement: "Deviation requires justification"
+
+  strongly_discouraged:
+    question: "Is this strongly discouraged but may have valid use cases?"
+    use: "SHOULD NOT / NOT RECOMMENDED"
+    enforcement: "Use requires justification"
+
+  truly_optional:
+    question: "Is this truly optional without impact on compliance?"
+    use: "MAY / OPTIONAL"
+    enforcement: "No enforcement required"
+
+compliance_workflow:
+  step_1_analyze_criticality:
+    critical_must:
+      - "Security requirements"
+      - "Data integrity requirements"
+      - "Legal/regulatory compliance"
+      - "API contract guarantees"
+      - "System stability requirements"
+    strong_recommendation_should:
+      - "Best practices"
+      - "Performance optimization"
+      - "User experience guidelines"
+      - "Code quality standards"
+    optional_may:
+      - "Enhancement features"
+      - "Alternative implementations"
+      - "Configurable behaviors"
+      - "Optional integrations"
+
+  step_2_select_term:
+    process: "Use decision_tree to select appropriate term based on requirement criticality"
+    validation: "Verify term matches requirement importance"
+
+  step_3_document_enforcement:
+    for_must_requirements:
+      - "Enforcement mechanism"
+      - "Validation procedure"
+      - "Remediation process"
+      - "Consequences of non-compliance"
+
+  step_4_validate_compliance:
+    checks:
+      - "All MUST requirements are implemented"
+      - "No MUST NOT violations exist"
+      - "No FORBIDDEN items are present"
+      - "No PROHIBITED items remain (zero instances verified)"
+      - "SHOULD recommendations are followed or deviations documented"
+
+validation_checklist:
+  before_publishing:
+    - "All critical requirements use MUST or MUST NOT"
+    - "No ambiguous terms like 'should probably' or 'try to'"
+    - "SHOULD statements have documented deviation processes"
+    - "FORBIDDEN items have detection and remediation procedures"
+    - "PROHIBITED items have scanning, location, documentation, and eradication procedures"
+    - "MAY statements are truly optional without compliance impact"
+    - "Consistent terminology throughout document"
+    - "Enforcement mechanisms defined for all MUST requirements"
+    - "No weakening language like 'generally' or 'usually'"
+    - "Capitalization is correct (capitalized = requirements, lowercase = descriptive)"
+
+anti_patterns_incorrect_usage:
+  ambiguous_language:
+    wrong:
+      - "Authentication is important and should be implemented"
+      - "Try to validate all inputs"
+      - "It's recommended to use HTTPS"
+    right:
+      - "Authentication MUST be implemented for all API endpoints"
+      - "All user inputs MUST be validated before processing"
+      - "Production deployments MUST use HTTPS"
+
+  weak_enforcement:
+    wrong:
+      - "Code must generally pass all tests"
+      - "Security scanning is usually required"
+      - "Production code should normally be reviewed"
+    right:
+      - "Code MUST pass all tests before merging"
+      - "Security scanning MUST be performed on all releases"
+      - "Production code MUST undergo peer review"
+
+  incorrect_term_selection:
+    wrong:
+      - "Critical security patches SHOULD be applied immediately"
+      - "SQL injection vulnerabilities MAY be fixed"
+      - "Production databases SHOULD NOT be exposed to internet"
+    right:
+      - "Critical security patches MUST be applied within 24 hours"
+      - "SQL injection vulnerabilities MUST be fixed immediately"
+      - "Production databases MUST NOT be directly exposed to internet"
+
+  missing_forbidden_enforcement:
+    wrong:
+      - "The term 'legacy' should not be used in new code"
+    right:
+      - "The term 'legacy' is FORBIDDEN in all new module names"
+      - "Any usage MUST be detected and immediately refactored"
+      - "Automated scanning MUST flag all violations"
+
+  missing_prohibited_enforcement:
+    wrong:
+      - "TODOs should be removed from production code"
+    right:
+      - "TODOs are PROHIBITED in production code"
+      - "Active scanning SHALL locate all TODOs"
+      - "All TODOs SHALL be documented and eradicated"
+      - "Verification SHALL confirm zero TODOs remain"
+
+practical_examples:
+  api_authentication:
+    correct:
+      - "API requests MUST include a valid authentication token in the Authorization header"
+      - "Authentication tokens MUST NOT be transmitted in URL query parameters"
+      - "Expired tokens MUST be rejected with HTTP 401 status"
+      - "Token refresh SHOULD occur automatically before expiration"
+      - "Clients MAY cache tokens for the duration of their validity period"
+    incorrect:
+      - "API requests should probably have authentication"
+      - "Don't put tokens in URLs"
+      - "Try to reject expired tokens"
+      - "It would be nice if token refresh was automatic"
+
+  code_quality:
+    correct:
+      - "All code MUST pass type checking with zero errors"
+      - "Code MUST NOT contain security vulnerabilities"
+      - "Functions SHOULD have comprehensive docstrings"
+      - "Code SHOULD follow PEP 8 style guidelines"
+      - "Developers MAY use alternative formatters if team-approved"
+    incorrect:
+      - "Try to make code pass type checking"
+      - "Avoid security vulnerabilities when possible"
+      - "Docstrings are recommended"
+      - "Follow PEP 8 if you can"
+
+  forbidden_pattern:
+    correct:
+      - "Module names MUST use snake_case"
+      - "Class names MUST use PascalCase"
+      - "The term 'enhanced' is FORBIDDEN in all file names and module names"
+      - "Any existing usage MUST be immediately refactored"
+    implementation:
+      forbidden: "# enhanced_processor.py - FORBIDDEN - Immediate removal required"
+      correct: "# advanced_processor.py, optimized_processor.py, improved_processor.py"
+
+  prohibited_pattern:
+    correct:
+      - "TODOs are PROHIBITED in production code"
+      - "Active scanning SHALL locate all TODOs"
+      - "All TODOs SHALL be documented"
+      - "All TODOs SHALL be eradicated immediately"
+      - "Verification SHALL confirm zero TODOs remain"
+    implementation:
+      step_1: "Scan codebase for TODO patterns"
+      step_2: "Document all TODOs found with locations"
+      step_3: "Replace each TODO with production code"
+      step_4: "Verify zero TODOs remain"
+
+instruction: |
+  =========================
+  RFC 2119 REQUIREMENTS LANGUAGE PROTOCOL
+  =========================
+
+  RFC 2119 COMPLIANCE:
+  All instructions in this protocol MUST be interpreted according to RFC 2119
+  (https://datatracker.ietf.org/doc/html/rfc2119).
+
+  This protocol defines standardized requirements language that SHALL be used
+  in all DOCTRINE, PROTOCOL, and INSTRUCTION files. All requirements language
+  SHALL be interpreted as defined in RFC 2119 with enterprise-specific extensions.
+
+  ENFORCEMENT STATEMENT:
+  MUST/SHALL = absolute requirement, NEVER/FORBIDDEN = absolute prohibition.
+  No AI, LLM, or agent is permitted to relax, reinterpret, or weaken the force
+  of these terms. All instructions using these words are enforceable protocol,
+  not mere suggestions.
+
+  TERMINOLOGY REFERENCE:
+  - Standard RFC 2119 terms: `rfc2119_standard_terms.must`, `rfc2119_standard_terms.should`, etc.
+  - Enterprise extensions: `enterprise_extension_terms.forbidden`, `enterprise_extension_terms.prohibited`
+  - Pattern terminology: `pattern_terminology.mandatory_pattern`, `pattern_terminology.forbidden_anti_pattern`
+  - No deprecation policy: `no_deprecation_policy.policy`
+
+  CAPITALIZATION RULE:
+  - Capitalized terms (MUST, SHALL, SHOULD, FORBIDDEN, PROHIBITED) = Requirements
+  - Lowercase terms (must, shall, should, forbidden, prohibited) = Descriptive text
+
+  ENFORCEMENT:
+  - MUST/MUST NOT violations = Execution STOP, immediate remediation
+  - FORBIDDEN violations = Execution STOP, active prevention, immediate remediation
+  - PROHIBITED violations = Active scanning, location, documentation, eradication
+  - SHOULD violations = Deviation requires justification
+
+  See `enforcement_protocol`, `decision_tree`, and `compliance_workflow` sections
+  for detailed rules and workflows.

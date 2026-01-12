@@ -1,0 +1,485 @@
+mcp:
+  name: test-implementation-protocol
+  version: "1.0.0"
+  type: testing_protocol
+  language: en-AU
+  description: >
+    Test Implementation Protocol. Defines comprehensive test suite creation
+    including unit tests, integration tests, API tests, and E2E validation.
+    Provides test strategies, patterns, and quality standards for production-ready
+    test implementations.
+
+references:
+  - docs/implementation/instructions/v2/000-DOCTRINE-Enterprise_Canonical_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/001-PROTOCOL-The_GoldenRule_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml
+  - docs/implementation/instructions/v2/007-PROTOCOL-MCP_Tools_Workflow-v1.0.0.yaml
+  - docs/implementation/instructions/v2/008-PROTOCOL-Production_Code_Quality-v1.0.0.yaml
+
+---
+context:
+  role: Test implementation orchestrator
+  intent: Create comprehensive test suites with unit, integration, API, and E2E tests
+  workflow: Research → Plan → Implement → Validate → Persist
+  execution_mode: RECOMMENDED workflow with mandatory gates when appropriate
+
+test_implementation_scope:
+  test_types:
+    unit_tests:
+      description: "Test individual functions, methods, and classes in isolation"
+      framework: "pytest"
+      recommendation: "SHOULD be created for all production code"
+      mandatory_when: "Implementing new functionality"
+      coverage_target: "≥80% minimum enforced"
+
+    integration_tests:
+      description: "Test interactions between components and services"
+      framework: "pytest with integration markers"
+      recommendation: "SHOULD be created for component interactions"
+      mandatory_when: "Implementing multi-component features"
+      location: "tests/integration/"
+
+    api_tests:
+      description: "Test API endpoints, request/response handling, authentication"
+      framework: "FastAPI TestClient"
+      recommendation: "SHOULD be created for all API endpoints"
+      mandatory_when: "Implementing REST API endpoints"
+      location: "tests/api/ or tests/integration/"
+
+    e2e_tests:
+      description: "End-to-end validation of complete workflows"
+      framework: "pytest with E2E markers"
+      recommendation: "SHOULD be created for critical user workflows"
+      mandatory_when: "Implementing critical business workflows"
+      location: "tests/e2e/ or tests/integration/"
+
+    security_tests:
+      description: "Test security vulnerabilities, authentication, authorization"
+      framework: "pytest with security markers"
+      recommendation: "SHOULD be created for security-sensitive code"
+      mandatory_when: "Implementing authentication, authorization, or security features"
+      location: "tests/security/"
+
+  activation_triggers:
+    - "create/write [tests/test suite]"
+    - "implement [unit/integration/E2E] tests"
+    - "test [implementation/creation]"
+    - "improve test coverage"
+    - "generate tests"
+
+mcp_workflow_integration:
+  rule: "ALL test implementations SHOULD follow the MCP workflow"
+  golden_rule: "context7 (docs) → grep (examples) → neo4j-memory (record) → code (SOLID/DRY/KISS) → neo4j-memory (persist)"
+
+  six_phase_sequence:
+    phase_1_context_load:
+      tool: "neo4j-memory"
+      action: "Load test context and patterns"
+      recommendation: "SHOULD load previous test patterns at session start"
+      mandatory_when: "Working on complex test suites"
+
+    phase_2_mandatory_research:
+      tools: ["context7", "grep"]
+      action: "Research pytest/testing patterns BEFORE coding"
+      recommendation: "SHOULD research before writing tests, MUST research for unfamiliar testing frameworks"
+      context7_queries:
+        - "pytest best practices 2025"
+        - "FastAPI testing patterns"
+        - "pytest fixtures and markers"
+      grep_queries:
+        - "pytest fixture examples github"
+        - "FastAPI TestClient patterns"
+        - "pytest async test examples"
+      mandatory_when: "Using unfamiliar testing frameworks or patterns"
+
+    phase_3_planning:
+      tool: "sequential-thinking"
+      action: "Design test strategy"
+      recommendation: "SHOULD plan test strategy for complex test suites"
+      mandatory_when: "Creating comprehensive test suites"
+
+    phase_4_implementation:
+      tool: "filesystem"
+      action: "Write test code"
+      recommendation: "SHOULD follow SOLID/DRY/KISS principles"
+      mandatory_when: "Implementing tests"
+
+    phase_5_progress_tracking:
+      tool: "neo4j-memory"
+      action: "Record progress during work"
+      recommendation: "SHOULD track progress for complex test suites"
+      mandatory_when: "Multi-file test implementations"
+
+    phase_6_context_save:
+      tool: "neo4j-memory"
+      action: "Persist test patterns"
+      recommendation: "SHOULD save significant test patterns"
+      mandatory_when: "Creating reusable test patterns or fixtures"
+
+  absolutely_forbidden:
+    - "Writing tests without context7 + grep research (for unfamiliar frameworks)"
+    - "Skipping neo4j-memory context load (for complex test suites)"
+    - "Completing without saving test patterns to neo4j-memory (for significant patterns)"
+
+enterprise_template_requirement:
+  rule: "FOR FastAPI/Python projects, SHOULD use enterprise template test framework"
+  mandatory_when: "Working on FastAPI/Python projects"
+
+  template_structure:
+    tests_directory: "tests/"
+    fixtures_directory: "tests/fixtures/"
+    integration_directory: "tests/integration/"
+    security_directory: "tests/security/"
+    plans_directory: "tests/plans/"
+
+  template_features:
+    - "Pytest configuration with markers"
+    - "80% coverage minimum enforced"
+    - "Security test framework"
+    - "Plugin testing support"
+
+  pytest_configuration:
+    file: "pytest.ini"
+    markers:
+      - "unit: Unit tests"
+      - "integration: Integration tests"
+      - "e2e: End-to-end tests"
+      - "security: Security tests"
+      - "slow: Slow-running tests"
+      - "asyncio: Async tests"
+    coverage:
+      minimum: "80%"
+      enforced: true
+
+  validation_command: "make test"
+  recommendation: "SHOULD use enterprise template structure"
+
+test_implementation_standards:
+  pytest_configuration:
+    recommendation: "SHOULD use pytest with proper configuration"
+    required_markers:
+      - "unit"
+      - "integration"
+      - "e2e"
+      - "security"
+      - "slow"
+      - "asyncio"
+    configuration_file: "pytest.ini"
+
+  test_naming_conventions:
+    files: "test_*.py or *_test.py"
+    functions: "test_*"
+    classes: "Test*"
+    recommendation: "SHOULD follow pytest naming conventions"
+
+  test_organization:
+    structure:
+      - "tests/fixtures/ - Shared test fixtures"
+      - "tests/integration/ - Integration tests"
+      - "tests/security/ - Security tests"
+      - "tests/plans/ - Test plans"
+      - "tests/unit/ - Unit tests (optional, can be in tests/)"
+    recommendation: "SHOULD organize tests by type and feature"
+
+  coverage_requirements:
+    minimum: "80%"
+    enforced: true
+    recommendation: "SHOULD achieve ≥80% coverage for production code"
+    mandatory_when: "Implementing production features"
+
+  test_quality_standards:
+    - "Tests SHOULD be independent and isolated"
+    - "Tests SHOULD be fast (unit tests <1s each)"
+    - "Tests SHOULD be deterministic (no flaky tests)"
+    - "Tests SHOULD have clear, descriptive names"
+    - "Tests SHOULD follow Arrange-Act-Assert pattern"
+    - "Tests SHOULD use appropriate fixtures"
+    - "Tests SHOULD NOT depend on external services (use mocks)"
+    - "Tests SHOULD NOT have side effects"
+
+test_types_detailed:
+  unit_tests:
+    purpose: "Test individual functions, methods, and classes in isolation"
+    framework: "pytest"
+    location: "tests/ or tests/unit/"
+    naming: "test_*.py"
+    markers: ["unit"]
+    characteristics:
+      - "Fast execution (<1s per test)"
+      - "Isolated (no external dependencies)"
+      - "Use mocks for dependencies"
+      - "Test single responsibility"
+    recommendation: "SHOULD be created for all production code"
+    mandatory_when: "Implementing new functionality"
+
+  integration_tests:
+    purpose: "Test interactions between components and services"
+    framework: "pytest with integration markers"
+    location: "tests/integration/"
+    naming: "test_*.py"
+    markers: ["integration"]
+    characteristics:
+      - "Test component interactions"
+      - "May use test databases"
+      - "May use test services"
+      - "Test complete workflows"
+    recommendation: "SHOULD be created for component interactions"
+    mandatory_when: "Implementing multi-component features"
+
+  api_tests:
+    purpose: "Test API endpoints, request/response handling, authentication"
+    framework: "FastAPI TestClient"
+    location: "tests/api/ or tests/integration/"
+    naming: "test_*.py"
+    markers: ["integration", "api"]
+    characteristics:
+      - "Test HTTP endpoints"
+      - "Test request/response formats"
+      - "Test authentication/authorization"
+      - "Test error handling"
+      - "Test status codes"
+    recommendation: "SHOULD be created for all API endpoints"
+    mandatory_when: "Implementing REST API endpoints"
+
+  e2e_tests:
+    purpose: "End-to-end validation of complete workflows"
+    framework: "pytest with E2E markers"
+    location: "tests/e2e/ or tests/integration/"
+    naming: "test_*.py"
+    markers: ["e2e", "slow"]
+    characteristics:
+      - "Test complete user workflows"
+      - "May use real services (in test environment)"
+      - "Test business logic end-to-end"
+      - "Slower execution acceptable"
+    recommendation: "SHOULD be created for critical user workflows"
+    mandatory_when: "Implementing critical business workflows"
+
+  security_tests:
+    purpose: "Test security vulnerabilities, authentication, authorization"
+    framework: "pytest with security markers"
+    location: "tests/security/"
+    naming: "test_*.py"
+    markers: ["security"]
+    characteristics:
+      - "Test authentication mechanisms"
+      - "Test authorization rules"
+      - "Test input validation"
+      - "Test security vulnerabilities"
+      - "Test encryption/decryption"
+    recommendation: "SHOULD be created for security-sensitive code"
+    mandatory_when: "Implementing authentication, authorization, or security features"
+
+test_implementation_patterns:
+  arrange_act_assert:
+    pattern: "Arrange-Act-Assert (AAA)"
+    description: "Standard test structure"
+    example: |
+      def test_user_creation():
+          # Arrange
+          user_data = {"name": "Test User", "email": "test@example.com"}
+
+          # Act
+          result = create_user(user_data)
+
+          # Assert
+          assert result.id is not None
+          assert result.name == "Test User"
+    recommendation: "SHOULD follow AAA pattern"
+
+  fixture_usage:
+    pattern: "Use pytest fixtures for setup/teardown"
+    description: "Reusable test setup and teardown"
+    example: |
+      @pytest.fixture
+      def test_client():
+          # Setup
+          client = TestClient(app)
+          yield client
+          # Teardown
+    recommendation: "SHOULD use fixtures for common setup"
+
+  parametrize_tests:
+    pattern: "Use @pytest.mark.parametrize for multiple test cases"
+    description: "Test multiple inputs with single test function"
+    example: |
+      @pytest.mark.parametrize("input,expected", [
+          ("valid@email.com", True),
+          ("invalid", False),
+      ])
+      def test_email_validation(input, expected):
+          assert validate_email(input) == expected
+    recommendation: "SHOULD use parametrize for similar test cases"
+
+  mock_external_services:
+    pattern: "Mock external services and dependencies"
+    description: "Isolate tests from external dependencies"
+    example: |
+      @pytest.fixture
+      def mock_api_client(monkeypatch):
+          mock_client = Mock()
+          monkeypatch.setattr("module.api_client", mock_client)
+          return mock_client
+    recommendation: "SHOULD mock external services in unit tests"
+    mandatory_when: "Testing code with external dependencies"
+
+test_quality_checklist:
+  before_claiming_complete:
+    test_structure:
+      - "Tests follow Arrange-Act-Assert pattern"
+      - "Tests have clear, descriptive names"
+      - "Tests are properly organized by type"
+      - "Tests use appropriate markers"
+
+    test_quality:
+      - "Tests are independent and isolated"
+      - "Tests are fast (unit tests <1s each)"
+      - "Tests are deterministic (no flaky tests)"
+      - "Tests use appropriate fixtures"
+      - "Tests mock external dependencies"
+      - "Tests have proper assertions"
+
+    coverage:
+      - "≥80% coverage achieved"
+      - "Critical paths are tested"
+      - "Edge cases are covered"
+      - "Error handling is tested"
+
+    integration:
+      - "Tests run successfully with pytest"
+      - "Tests pass in CI/CD pipeline"
+      - "Test fixtures are properly configured"
+      - "Test data is properly managed"
+
+auto_approval_mode:
+  enable_with_phrases:
+    - "with auto-approval"
+    - "auto-approve"
+    - "skip approval gates"
+    - "autonomous mode"
+    - "auto-approve Gate 1"
+    - "auto-approve Gate 2"
+
+  what_happens:
+    - "Execute all steps without pausing at Gate 1 & Gate 2"
+    - "Make decisions autonomously based on best practices"
+    - "Proceed directly to deliverables"
+    - "State is still saved for review/rollback"
+
+  safety: "CAUTION: Creates tests. Review test coverage and quality"
+  recommendation: "MAY be used for well-understood test implementations"
+
+test_deliverables:
+  unit_tests:
+    - "Unit tests (pytest)"
+    - "Test fixtures"
+    - "Mock configurations"
+
+  integration_tests:
+    - "Integration tests"
+    - "Component interaction tests"
+    - "Service integration tests"
+
+  api_tests:
+    - "API tests (FastAPI TestClient)"
+    - "Endpoint validation tests"
+    - "Authentication/authorization tests"
+
+  e2e_tests:
+    - "E2E validation scripts"
+    - "Complete workflow tests"
+    - "User journey tests"
+
+  reporting:
+    - "Coverage reports"
+    - "Test execution reports"
+    - "CI/CD test integration"
+
+related_protocols:
+  - "python-implement"
+  - "fastapi-implement"
+  - "quality-validation"
+  - "production-code-quality"
+
+forbidden_practices:
+  absolutely_forbidden:
+    - "Writing tests without context7 + grep research (for unfamiliar frameworks)"
+    - "Skipping neo4j-memory context load (for complex test suites)"
+    - "Completing without saving test patterns to neo4j-memory (for significant patterns)"
+    - "Creating flaky tests (non-deterministic)"
+    - "Tests with side effects"
+    - "Tests that depend on external services without mocks"
+    - "Tests without proper assertions"
+    - "Tests that are too slow (>10s for unit tests)"
+
+  strongly_discouraged:
+    - "Tests without clear names"
+    - "Tests that test multiple things"
+    - "Tests without proper cleanup"
+    - "Tests that depend on execution order"
+
+instruction: |
+  =========================
+  TEST IMPLEMENTATION PROTOCOL
+  =========================
+
+  This protocol defines comprehensive test suite creation including unit tests,
+  integration tests, API tests, and E2E validation. It provides test strategies,
+  patterns, and quality standards for production-ready test implementations.
+
+  TEST TYPES:
+  - Unit Tests: Test individual functions/methods in isolation (pytest)
+  - Integration Tests: Test component interactions (pytest with integration markers)
+  - API Tests: Test API endpoints (FastAPI TestClient)
+  - E2E Tests: Test complete workflows (pytest with E2E markers)
+  - Security Tests: Test security vulnerabilities (pytest with security markers)
+
+  Reference: `test_implementation_scope.test_types`, `test_types_detailed`
+
+  MCP WORKFLOW INTEGRATION:
+  ALL test implementations SHOULD follow THE GOLDEN RULE workflow:
+  context7 (docs) → grep (examples) → neo4j-memory (record) → code → neo4j-memory (persist)
+
+  The 6-phase sequence:
+  1. Context Load (neo4j-memory) - SHOULD load test patterns
+  2. Mandatory Research (context7 + grep) - SHOULD research before coding, MUST for unfamiliar frameworks
+  3. Planning (sequential-thinking) - SHOULD plan test strategy
+  4. Implementation (filesystem) - SHOULD follow SOLID/DRY/KISS
+  5. Progress Tracking (neo4j-memory) - SHOULD track complex suites
+  6. Context Save (neo4j-memory) - SHOULD save significant patterns
+
+  Reference: `mcp_workflow_integration`
+
+  ENTERPRISE TEMPLATE REQUIREMENT:
+  FOR FastAPI/Python projects, SHOULD use enterprise template test framework.
+  Template includes: pytest configuration, 80% coverage minimum, security test framework.
+
+  Reference: `enterprise_template_requirement`
+
+  TEST QUALITY STANDARDS:
+  - Tests SHOULD be independent and isolated
+  - Tests SHOULD be fast (unit tests <1s each)
+  - Tests SHOULD be deterministic (no flaky tests)
+  - Tests SHOULD follow Arrange-Act-Assert pattern
+  - Tests SHOULD use appropriate fixtures
+  - Tests SHOULD mock external dependencies
+  - Coverage SHOULD achieve ≥80% minimum
+
+  Reference: `test_quality_standards`, `test_implementation_patterns`
+
+  COVERAGE REQUIREMENTS:
+  Minimum: 80% coverage enforced
+  Recommendation: SHOULD achieve ≥80% coverage for production code
+  Mandatory when: Implementing production features
+
+  Reference: `test_implementation_standards.coverage_requirements`
+
+  FORBIDDEN PRACTICES:
+  - Writing tests without research (for unfamiliar frameworks)
+  - Creating flaky tests
+  - Tests with side effects
+  - Tests that depend on external services without mocks
+
+  Reference: `forbidden_practices`
+
+  See `test_quality_checklist` for complete validation checklist before claiming tests complete.

@@ -1,0 +1,506 @@
+prompt_name: "Build_Deploy_Test_and_Document_REST_API"
+version: "1.0.0"
+type: "build_deploy_validate_and_doc_sync"
+context:
+  role: "Standards-governed implementation executor with documentation compliance duties"
+  governance:
+      canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+      golden_rule_execution_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute the current phase of the implementation plan by building and deploying the app/container(s)
+    locally, validating health and logs, enumerating and function-testing REST endpoints, and synchronising
+    documentation (SPECs and IMPLEMENTATION_PLAN) for audit readiness.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    status reports, progress reports, completion reports, build results, test results, and
+    findings MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the relevant SPEC(s) and
+    IMPLEMENTATION_PLAN with all progress, findings, and status information. This rule is
+    NON-NEGOTIABLE and must be enforced strictly.
+  critical_testing_rule: >
+    **CRITICAL TESTING RULE**: MANUAL TESTING ONLY - NO SCRIPTED TESTS.
+
+    - ALL testing MUST be performed manually using interactive tools (curl, Postman, MCP fetch, browser)
+    - NO automated test scripts, test frameworks, or batch test execution
+    - NO pytest, unittest, Postman collections with auto-run, or any automated test runners
+    - Each endpoint MUST be tested individually, one at a time, with manual observation
+    - Each test MUST be executed manually, results observed manually, issues identified manually
+    - Remediation MUST occur immediately after each failed test before proceeding
+    - This rule is NON-NEGOTIABLE and must be enforced strictly.
+  doc_references:
+    canonical:
+      - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+      - "docs/implementation/README_TEMPLATE.md"
+      - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+      - "docs/implementation/SPEC_README.md"
+      - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    plan:
+      - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+  best_practices_references:
+    core_fastapi:
+      - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+      - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+    async_performance:
+      - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+    reliability_resilience:
+      - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+    architecture_patterns:
+      - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+    security_compliance:
+      - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+      - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+    observability_monitoring:
+      - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+      - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+    data_persistence:
+      - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+      - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+      - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+      - "docs/implementation/best-practices/redis-caching-best-practices.md"
+      - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+      - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+    configuration_deployment:
+      - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+      - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+    background_tasks:
+      - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+      - "docs/implementation/best-practices/celery-production-best-practices.md"
+      - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+    integration_patterns:
+      - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+      - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+    ui_integration:
+      - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+      - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+      - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+    code_quality_testing:
+      - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+      - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+    templating_scaffolding:
+      - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+
+  environment_assumptions:
+    - "Docker Desktop is installed and running locally."
+    - "Project includes the necessary Dockerfile(s) and/or docker-compose.yml."
+    - "Local execution does not require external secrets beyond what is provided in the repo or allowed env vars."
+    - "Network access for REST API testing is limited to localhost unless explicitly permitted."
+prerequisites:
+  validations:
+    - "All canonical docs are present and readable."
+    - "IMPLEMENTATION_PLAN_v#.#.#.md exists and defines the current phase and task(s)."
+    - "SPECs related to the current task(s) exist in docs/implementation/in_progress (or are created before execution)."
+instructions:
+  objective: >
+    Determine the current phase task(s)/action(s)/step(s), build and deploy all container(s) locally, ensure
+    runtime stability, enumerate and test REST endpoints, and document all findings and updates in SPECs and the
+    implementation plan for audit.
+  best_practices_requirement: "MUST review and implement relevant best practices documents during build, deploy, and testing - NO exceptions"
+
+  steps:
+    - step: 1
+      name: "Review Canonical Documentation"
+      actions:
+        - "Read all canonical docs listed in context.doc_references.canonical."
+        - "Extract required standards for naming, SPEC structure, workflow order, and documentation updates."
+      gates:
+        - "Do not proceed unless all required docs are present and readable."
+
+    - step: 2
+      name: "Read Implementation Plan & Determine CURRENT Work"
+      actions:
+        - "Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md."
+        - "Identify CURRENT phase and the specific task(s), action(s), and step(s) to execute now."
+        - "Confirm associated SPEC document(s) are located in docs/implementation/in_progress."
+      outputs:
+        - "current_phase: <string>"
+        - "current_tasks: [<task_id_or_name>]"
+        - "associated_specs: [<spec_filenames>]"
+      gates:
+        - "Do not proceed if CURRENT tasks are ambiguous or missing."
+
+    - step: 3
+      name: "Build and Deploy Locally"
+      actions:
+        - "Build container image(s) required for the CURRENT tasks."
+        - "Deploy to local Docker Desktop (prefer docker compose if available)."
+      suggested_commands:
+        - "docker compose build"
+        - "docker compose up -d"
+        - "docker build -t <image_name>:<tag> <context_dir>"
+        - "docker run -d --name <container_name> -p <host:container> <image_name>:<tag>"
+      gates:
+        - "If build errors/warnings occur, halt, resolve, and re-attempt until clean build."
+        - "Do not proceed until all required container(s) show healthy status."
+
+    - step: 4
+      name: "Initial Runtime Verification"
+      actions:
+        - "Inspect container health and logs for init/runtime issues."
+      suggested_commands:
+        - "docker ps"
+        - "docker compose ps"
+        - "docker logs --tail=200 <container_name>"
+      gates:
+        - "If errors or critical warnings are observed in logs, halt and resolve before continuing."
+
+    - step: 5
+      name: "REST API Enumeration"
+      actions:
+        - "List all exposed REST API endpoints from source, OpenAPI/Swagger (if present), or service routing."
+        - "Derive endpoints if no spec file exists (e.g., route definitions in code or compose labels)."
+      outputs:
+        - "rest_endpoints: [ { method: <GET|POST|...>, url: <http://localhost:port/path>, auth: <none|type>, notes: <string> } ]"
+
+    - step: 6
+      name: "Manual Functional REST Testing - One at a Time with Systematic Remediation"
+      actions:
+        - "CRITICAL: Test endpoints ONE AT A TIME - never in parallel or batch."
+        - "CRITICAL: Use MANUAL testing methods only (curl, Postman, MCP fetch) - NO scripted tests."
+        - "For each endpoint in the enumeration from step 5:"
+        - "  STEP 6.1: Execute manual test"
+        - "    - Manually construct HTTP request (curl command, Postman request, or MCP fetch)"
+        - "    - Manually execute the request"
+        - "    - Manually observe HTTP status code"
+        - "    - Manually observe response body"
+        - "    - Manually measure response time (if applicable)"
+        - "    - Manually check Docker logs (if applicable)"
+        - "  STEP 6.2: Validate response"
+        - "    - Compare HTTP status code with expected value"
+        - "    - Validate response body schema/structure"
+        - "    - Check response time against baseline/tolerance (if applicable)"
+        - "    - Review Docker logs for errors/warnings"
+        - "    - Verify response data matches expected format"
+        - "  STEP 6.3: Identify issues"
+        - "    - Document any errors, warnings, or unexpected behaviour"
+        - "    - Categorise issues (functional, performance, schema, etc.)"
+        - "    - Note severity (critical, high, medium, low)"
+        - "  STEP 6.4: Remediate issues (if any found)"
+        - "    - CRITICAL: STOP testing and remediate issues ONE AT A TIME"
+        - "    - Analyse root cause of each issue"
+        - "    - Fix code, configuration, or infrastructure issues"
+        - "    - Restart API server if necessary"
+        - "    - Re-execute the SAME endpoint test manually"
+        - "    - Verify fix resolves the issue"
+        - "    - Continue remediation cycle until test passes"
+        - "  STEP 6.5: Mark test as passed"
+        - "    - Only mark test as PASSED when:"
+        - "      * HTTP status code matches expected"
+        - "      * Response body validates correctly"
+        - "      * Response time within tolerance (if applicable)"
+        - "      * Docker logs show 0 errors, 0 warnings"
+        - "      * All issues remediated and verified"
+        - "  STEP 6.6: Document results"
+        - "    - Record test result (PASSED/FAILED)"
+        - "    - Document issues found and remediated"
+        - "    - Record response time and performance metrics"
+        - "    - Update SPEC file with test result"
+        - "  STEP 6.7: Proceed to next endpoint"
+        - "    - Only proceed to next endpoint after current test is PASSED"
+        - "    - If test fails after remediation attempts, escalate but do not skip"
+      suggested_manual_testing_tools:
+        - "curl - Manual HTTP requests from command line"
+        - "Postman - Manual GUI-based API testing"
+        - "mcp_fetch_fetch - MCP tool for manual HTTP requests"
+        - "Browser - Manual GET requests and form submissions"
+        - "docker logs - Manual log inspection"
+      forbidden_testing_methods:
+        - " pytest, unittest, or any Python test framework"
+        - " Postman collections with auto-run or Newman"
+        - " Automated test scripts or batch test execution"
+        - " Test runners or CI/CD test pipelines"
+        - " Parallel or concurrent test execution"
+        - " Any form of automated test execution"
+      suggested_commands:
+        - "curl -i -X GET http://localhost:<port>/health"
+        - "curl -i -X POST http://localhost:<port>/api/resource -H 'Content-Type: application/json' -d '{...}'"
+      outputs:
+        - "endpoint_test_results: [ { endpoint: <url>, method: <verb>, status: <PASSED|FAILED>, http_code: <integer>, response_time_ms: <float>, issues_found: [<description>], issues_remediated: [<description>], verified: <true|false> } ]"
+        - "total_tests_executed: <integer>"
+        - "total_tests_passed: <integer>"
+        - "total_tests_failed: <integer>"
+        - "total_issues_found: <integer>"
+        - "total_issues_remediated: <integer>"
+        - "testing_status: <complete|in_progress>"
+      gates:
+        - "CRITICAL: Do not proceed to next endpoint until current endpoint test is PASSED."
+        - "CRITICAL: All issues MUST be remediated before marking test as PASSED."
+        - "CRITICAL: Testing MUST be manual - NO scripted tests allowed."
+        - "If endpoint test fails after remediation attempts, document and escalate - do not skip."
+
+    - step: 7
+      name: "Issue Collation & Documentation Update"
+      actions:
+        - "For each endpoint, collate observed issues, errors, and warnings."
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Build & deployment outcomes"
+        - "  - Log analysis summaries"
+        - "  - Endpoint catalogue"
+        - "  - Test results and known issues"
+        - "  - All findings, progress, and status information"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN checklists for phases/tasks/steps to reflect progress."
+        - "CRITICAL: DO NOT create temporal documents (e.g., BUILD_REPORT_YYYY-MM-DD.md, TEST_RESULTS_YYYY-MM-DD.md)"
+        - "CRITICAL: All build results, test results, and findings MUST be documented in SPECs and IMPLEMENTATION_PLAN only"
+      gates:
+        - "Do not move a SPEC to 'done' unless acceptance criteria are met per SPEC and plan definitions."
+
+    - step: 8
+      name: "Audit Readiness & Halt"
+      actions:
+        - "Verify checklists across IMPLEMENTATION_PLAN are up to date for all phases/tasks/steps touched."
+        - "Confirm SPECs reflect current status (in_progress or done) and are located in the correct directories."
+        - "Halt and await next instruction after producing the output artefacts."
+      outputs:
+        - "audit_readiness: <true|false>"
+        - "next_instruction_state: 'awaiting_orders'"
+
+constraints:
+  - "Australian English for all documentation updates."
+  - "CRITICAL: NO scripted tests - ALL testing MUST be manual and interactive."
+  - "CRITICAL: Test endpoints ONE AT A TIME - never in parallel or batch."
+  - "CRITICAL: Remediate issues ONE AT A TIME before proceeding to next endpoint."
+  - "CRITICAL: Do not proceed to next endpoint until current endpoint test is PASSED."
+  - "No advancement to subsequent steps while unresolved errors persist in build, deploy, logs, or endpoint tests."
+  - "Do not fabricate endpoints; only list those evidenced by code/config/spec."
+  - "All new/updated SPECs must conform to SPEC_CREATION_GUIDE and SPEC_TEMPLATE."
+  - "All file moves must respect DOCUMENTATION_NAMING_CONVENTION and directory policy (backlog/in_progress/done)."
+  - "If security or auth is required for testing, request or load sanctioned credentials/secrets only."
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all updates go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Build results, test results, deployment outcomes MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+  - "By default, ALL endpoints MUST be tested unless additional instructions explicitly constrain scope."
+
+examples:
+  - build_deploy_example: |
+      docker compose build && docker compose up -d
+      # Verify:
+      docker compose ps
+      docker logs --tail=200 api-service
+  - endpoint_matrix_example:
+      rest_endpoints:
+        - method: GET
+          url: "http://localhost:8080/health"
+          auth: "none"
+          notes: "Liveness probe; expect 200 OK with {status: 'ok'}"
+        - method: POST
+          url: "http://localhost:8080/api/v1/items"
+          auth: "Bearer"
+          notes: "Create item; expect 201, Location header"
+  - manual_testing_example: |
+      # Example: Manual testing with curl (ONE endpoint at a time)
+
+      # Test 1: Health endpoint
+      curl -i -X GET http://localhost:8080/health
+      # Observe: HTTP 200 OK, response contains {status: 'ok'}
+      # Check Docker logs: docker logs api-service --tail 20
+      # Verify: 0 errors, 0 warnings in logs
+      # If issue found: STOP, fix, retest SAME endpoint before proceeding
+
+      # Test 2: Create item endpoint
+      curl -i -X POST http://localhost:8080/api/v1/items \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer $JWT_TOKEN" \
+        -d '{"name":"Test Item","description":"Test description"}'
+      # Observe: HTTP 201 Created, response contains item data
+      # Verify: Item created successfully, no errors in logs
+      # If issue found: STOP, fix, retest SAME endpoint before proceeding
+  - test_result_example:
+      endpoint_test_results:
+        - endpoint: "http://localhost:8080/health"
+          method: "GET"
+          status: "PASSED"
+          http_code: 200
+          response_time_ms: 45.23
+          issues_found: []
+          issues_remediated: []
+          verified: true
+        - endpoint: "http://localhost:8080/api/v1/items/123"
+          method: "DELETE"
+          status: "PASSED"
+          http_code: 204
+          response_time_ms: 89.12
+          issues_found: ["Initial test returned 500 Internal Server Error", "Docker logs showed DB constraint violation"]
+          issues_remediated: ["Fixed database foreign key constraint", "Added proper error handling"]
+          verified: true
+  - forbidden_testing_example: |
+      #  FORBIDDEN: Automated test script
+      #!/bin/bash
+      # for endpoint in "${endpoints[@]}"; do
+      #   curl -X GET "$endpoint"
+      # done
+
+      #  FORBIDDEN: pytest test
+      # def test_all_endpoints():
+      #     for endpoint in endpoints:
+      #         assert client.get(endpoint).status_code == 200
+
+      #  ALLOWED: Manual curl commands executed one at a time
+      curl -i -X GET http://localhost:8080/health
+      # Observe results manually, then proceed to next command
+
+output_format:
+  section_1: "Current phase, tasks, and associated SPECs"
+  section_2: "Build & deployment summary (images, containers, health status, key logs)"
+  section_3: "REST endpoint catalogue and test results table"
+  section_4: "Issues per endpoint (with severity and remediation notes)"
+  section_5: "Documentation updates (SPECs changed; IMPLEMENTATION_PLAN checklist diffs)"
+  section_6: "Final audit readiness and next-instruction state"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-11-08"
+  version: "1.0.0"
+  classification: "Enterprise Canonical REST API Build, Deploy, Test, and Document Governance Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, and Enterprise Canonical REST API Build, Deploy, Test, and Document Governance Protocol"
+  language: "en-AU"
+
+[END OF INSTRUCTIONS]
+
+continuation_instruction: |
+  You are executing Build, Deploy, Test and Document REST API per Enterprise Canonical Execution Protocol v1.0.0.
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REVIEW)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability/Resilience: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture Patterns: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-best-practices-2025.md
+  Security: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md, secrets-management-best-practices-2025.md
+  Observability: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, redis-caching-best-practices.md
+  Configuration: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+  - MANDATORY: Review Docker, configuration, and FastAPI best practices BEFORE building and deploying
+  - MANDATORY: Review FastAPI and API gateway best practices BEFORE enumerating endpoints
+  - MANDATORY: Review testing, error handling, and security best practices BEFORE testing endpoints
+  - MUST apply best practices patterns during build, deployment, and testing
+  - MUST validate endpoints against best practices standards
+
+  CRITICAL DOCUMENTATION RULE (ABSOLUTE - NO EXCEPTIONS)
+  - TEMPORAL DOCUMENTS MUST NOT BE CREATED
+  - ALL updates, status reports, progress reports, completion reports, build results, test results, and findings MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+  - DO NOT create standalone temporal documents
+  - Update relevant SPEC(s) and IMPLEMENTATION_PLAN with all progress, findings, and status information
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  CRITICAL TESTING RULE (ABSOLUTE - NO EXCEPTIONS)
+  - MANUAL TESTING ONLY - NO SCRIPTED TESTS
+  - ALL testing MUST be performed manually using interactive tools (curl, Postman, MCP fetch, browser)
+  - NO automated test scripts, test frameworks, or batch test execution
+  - NO pytest, unittest, Postman collections with auto-run, or any automated test runners
+  - Each endpoint MUST be tested individually, one at a time, with manual observation
+  - Each test MUST be executed manually, results observed manually, issues identified manually
+  - Remediation MUST occur immediately after each failed test before proceeding
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  MANDATORY WORKFLOW (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Review Canonical Documentation
+  - Read all canonical docs listed in context.doc_references.canonical
+  - Extract required standards for naming, SPEC structure, workflow order, and documentation updates
+
+  Step 2: Read Implementation Plan & Determine CURRENT Work
+  - Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md
+  - Identify CURRENT phase and the specific task(s), action(s), and step(s) to execute now
+  - Confirm associated SPEC document(s) are located in docs/implementation/in_progress
+
+  Step 3: Build and Deploy Locally
+  - Review Docker, configuration, and FastAPI best practices documents BEFORE proceeding
+  - Build container image(s) required for the CURRENT tasks
+  - Apply best practices patterns from reviewed documents during build
+  - Deploy to local Docker Desktop (prefer docker compose if available)
+  - If build errors/warnings occur, halt, resolve, and re-attempt until clean build
+  - Do not proceed until all required container(s) show healthy status
+
+  Step 4: Initial Runtime Verification
+  - Inspect container health and logs for init/runtime issues
+  - If errors or critical warnings are observed in logs, halt and resolve before continuing
+
+  Step 5: REST API Enumeration
+  - Review FastAPI and API gateway best practices documents BEFORE proceeding
+  - List all exposed REST API endpoints from source, OpenAPI/Swagger (if present), or service routing
+  - Validate endpoints against best practices standards
+  - Derive endpoints if no spec file exists
+
+  Step 6: Manual Functional REST Testing - One at a Time with Systematic Remediation
+  - Review testing, error handling, and security best practices documents BEFORE proceeding
+  - CRITICAL: Test endpoints ONE AT A TIME - never in parallel or batch
+  - CRITICAL: Use MANUAL testing methods only (curl, Postman, MCP fetch) - NO scripted tests
+  - Validate endpoints against best practices standards during testing
+  - For each endpoint: Execute manual test → Validate response → Identify issues → Remediate issues (if any) → Mark test as passed → Document results → Proceed to next endpoint
+  - CRITICAL: Do not proceed to next endpoint until current endpoint test is PASSED
+  - CRITICAL: All issues MUST be remediated before marking test as PASSED
+  - CRITICAL: Testing MUST be manual - NO scripted tests allowed
+
+  Step 7: Issue Collation & Documentation Update
+  - For each endpoint, collate observed issues, errors, and warnings
+  - CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with build & deployment outcomes, log analysis summaries, endpoint catalogue, test results, and all findings
+  - CRITICAL: Update IMPLEMENTATION_PLAN checklists for phases/tasks/steps to reflect progress
+  - CRITICAL: DO NOT create temporal documents
+  - CRITICAL: All build results, test results, and findings MUST be documented in SPECs and IMPLEMENTATION_PLAN only
+
+  Step 8: Audit Readiness & Halt
+  - Verify checklists across IMPLEMENTATION_PLAN are up to date for all phases/tasks/steps touched
+  - Confirm SPECs reflect current status (in_progress or done) and are located in the correct directories
+  - Halt and await next instruction after producing the output artefacts
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL)
+  - [ ] Docker, configuration, and FastAPI best practices reviewed BEFORE building and deploying
+  - [ ] Best practices patterns applied during build and deployment
+  - [ ] FastAPI and API gateway best practices reviewed BEFORE enumerating endpoints
+  - [ ] Endpoints validated against best practices standards
+  - [ ] Testing, error handling, and security best practices reviewed BEFORE testing endpoints
+  - [ ] All endpoints tested manually ONE AT A TIME
+  - [ ] All endpoint tests PASSED (issues remediated before marking as passed)
+  - [ ] SPEC(s) updated with build & deployment outcomes, test results, and findings
+  - [ ] IMPLEMENTATION_PLAN updated with progress
+  - [ ] All build results, test results, and findings documented in SPECs and IMPLEMENTATION_PLAN only (NO temporal documents)
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/10-Build_Deploy_Test_and_Document_REST_API.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/10-Build_Deploy_Test_and_Document_REST_API.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/10-Build_Deploy_Test_and_Document_REST_API.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/10-Build_Deploy_Test_and_Document_REST_API.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/10-Build_Deploy_Test_and_Document_REST_API.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/10-Build_Deploy_Test_and_Document_REST_API.yaml under those enforced rules.
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/10-Build_Deploy_Test_and_Document_REST_API.yaml --enforce"

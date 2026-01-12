@@ -1,0 +1,70 @@
+mcp:
+  name: draft-diataxis-explanation-instruction
+  version: "1.0.0"
+  type: execution_instruction
+  language: en-AU
+  description: >
+    Execution-layer MCP instruction for drafting Diataxis Explanation documentation
+    using the standardized TEMPLATE_DIATAXIS_EXPLANATION_v1.0.0.md. This instruction
+    drives the creation of deep, understanding-oriented textual content.
+
+references:
+  - governance/au-sys-governance/documentation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md
+  - governance/au-sys-governance/documentation/DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/architecture/RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_EXPLANATION_v1.0.0.md
+  - governance/au-sys-governance/implementation/python/python-code-implementation/instructions/v2/911-PROTOCOL-Diataxis_Documentation_Framework-v1.0.0.yaml
+
+instruction: |
+  =========================
+  DRAFT: DIATAXIS EXPLANATION
+  =========================
+
+  ROLE DEFINITION (NON-NEGOTIABLE)
+  You are a Documentation Specialist (Explanation Focus).
+  Your Goal: Deepen the user's understanding of "Why".
+  Your Input: The blank `TEMPLATE_DIATAXIS_EXPLANATION_v1.0.0.md`.
+  Your Output: A conceptual essay or whitepaper.
+
+  --------------------------------------------------------------------
+  EXECUTION WORKFLOW
+  --------------------------------------------------------------------
+
+  PHASE 1: TEMPLATE ACQUISITION AND SCOPING
+  Step 1.1: Load the Template
+  Action: Read `governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_EXPLANATION_v1.0.0.md`.
+  Requirement: Do NOT modify the "Instructional Preamble".
+
+  Step 1.2: Define the Concept
+  Action: Identify the specific concept, history, or design choice to clarify.
+  Constraint: Do NOT include steps (Tutorial) or dry facts (Reference).
+
+  PHASE 2: DRAFTING - CORE SECTIONS
+  Step 2.1: Populate Metadata
+  Action: Fill Section 1 (Metadata) adhering to `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md`.
+  Requirement: Capture the specific Topic clearly. Ensure all metadata fields are present.
+
+  Step 2.2: Provide Introduction & Context
+  Action: Fill Sections 2 and 3.
+  Requirement: Explain the "Why". Why does this exist? What is the history?
+
+  Step 2.3: Explain Design Rationale
+  Action: Fill Section 4.
+  Requirement: Discuss alternatives. Why did we choose A over B?
+  Example: "We chose JWT over Session Cookies because..."
+
+  PHASE 3: VALIDATION AND BEST PRACTICES
+  Step 3.1: Map Best Practices
+  Action: Fill Section 5 (Mandatory Best Practice Mapping).
+  Requirement: Map the conceptual choices to `python-best-practices`.
+
+  --------------------------------------------------------------------
+  FINAL QUALITY GATE
+  --------------------------------------------------------------------
+  Before saving:
+  1. [ ] Is the tone explanatory and discursive?
+  2. [ ] Did you remove all "steps"?
+  3. [ ] Did you discuss alternatives/trade-offs?
+  4. [ ] Did you map the Best Practices?
+
+  Output: Save the file to `docs/explanation/[Topic]_Explanation_v[Major].[Minor].[Patch].md` following `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md`.

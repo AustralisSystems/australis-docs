@@ -1,0 +1,801 @@
+prompt_name: "WebUI_Interactive_Behavior_Implementation"
+version: "1.0.0"
+type: "webui_interactive_behavior"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor adding interactive behavior using HTMX-first technology hierarchy"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute interactive behavior implementation phase by progressively enhancing templates with
+    HTMX attributes, HTMX extensions, Alpine.js components (when justified), and finally custom
+    JavaScript (LAST RESORT with documented justification). Follow SCAFFOLDING_LIBRARIES_OVERVIEW.md
+    Section 3 technology hierarchy strictly.
+
+  reference_docs:
+    primary:
+      - "SCAFFOLDING_LIBRARIES_OVERVIEW.md (Section 3: Technology Decision Hierarchy)"
+      - "ui-model.json"
+      - "component_tokens.json"
+    supporting:
+      - "design_system_foundations.md"
+      - "motion_transition_spec.md"
+
+  color_scheme_mandate:
+    reference: "COLOR_SCHEME_DIRECTIVE.md"
+    interactive_components: "All interactive states (hover, active, focus, disabled) MUST use DaisyUI state variants"
+    examples:
+      correct: "btn btn-primary (uses semantic hover/focus states automatically)"
+      wrong: "bg-blue-500 hover:bg-blue-600 (hardcoded colors break themes)"
+    dynamic_classes: "If adding classes dynamically via Alpine.js/JS, use semantic classes only"
+
+  codebase_scaffolding_mandate:
+    priority: "MANDATORY - NO EXCEPTIONS"
+    description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+    priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+  prerequisite_validation:
+    - "[ ] Router/service integration phase (Step 24) completed"
+    - "[ ] All template URLs validated against router endpoints"
+    - "[ ] ui-model.json exists with component interaction patterns"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+
+instructions:
+  objective: >
+    Add interactive behavior to templates following the HTMX-first technology hierarchy: HTMX
+    attributes → HTMX extensions → Alpine.js → public JS libraries → custom JavaScript (LAST
+    RESORT). Document justification for any Alpine.js or custom JS usage. Implement all common
+    UI patterns (modals, tabs, dropdowns, forms) using HTMX first.
+
+  technology_hierarchy:
+    tier_1_htmx_attributes:
+      priority: "HIGHEST - Use FIRST for all interactions"
+      capabilities:
+        - "AJAX requests (hx-get, hx-post, hx-put, hx-delete)"
+        - "Target swapping (hx-target, hx-swap)"
+        - "Trigger events (hx-trigger)"
+        - "Request indicators (hx-indicator)"
+        - "Polling (hx-trigger='every 2s')"
+        - "Boosted links (hx-boost)"
+        - "Confirmation dialogs (hx-confirm)"
+        - "Form validation (hx-validate)"
+      examples:
+        - "Load data on click: hx-get='/api/users' hx-target='#results'"
+        - "Auto-refresh: hx-get='/api/stats' hx-trigger='every 5s'"
+        - "Optimistic UI: hx-swap='outerHTML swap:500ms'"
+
+    tier_2_htmx_extensions:
+      priority: "HIGH - Use when HTMX attributes insufficient"
+      available_extensions:
+        - "ws (WebSocket support)"
+        - "sse (Server-Sent Events)"
+        - "class-tools (CSS class manipulation)"
+        - "loading-states (request state management)"
+        - "response-targets (dynamic target selection)"
+        - "head-support (update <head> elements)"
+      justification_required: false
+      examples:
+        - "WebSocket: <div hx-ext='ws' ws-connect='/ws'>"
+        - "SSE: <div hx-ext='sse' sse-connect='/events'>"
+
+    tier_3_alpine_js:
+      priority: "MEDIUM - Use for client-side state management when HTMX insufficient"
+      use_cases:
+        - "Component-local state (open/closed, active tab)"
+        - "Client-side form validation UI (NOT validation logic)"
+        - "UI state transitions (show/hide, enable/disable)"
+        - "Multi-step forms with client-side progression"
+      justification_required: true
+      justification_template: |
+        Alpine.js Usage Justification:
+        - Component: <component_name>
+        - HTMX Limitation: <why HTMX attributes/extensions insufficient>
+        - State Requirements: <what client-side state needed>
+        - Complexity Assessment: <lines of code estimate>
+        - Maintenance Impact: <how this affects long-term maintenance>
+      examples:
+        - "Tabs: x-data='{ activeTab: 1 }' (local state without server roundtrip)"
+        - "Dropdown: x-data='{ open: false }' (toggle without backend)"
+
+    tier_4_public_libraries:
+      priority: "LOW - Use for specialized functionality unavailable in lower tiers"
+      approved_libraries:
+        - "chart.js (data visualisation)"
+        - "date-fns (date manipulation)"
+        - "sortable.js (drag-and-drop reordering)"
+      justification_required: true
+      justification_template: |
+        Public Library Usage Justification:
+        - Library: <library_name>
+        - Functionality: <specific feature needed>
+        - Lower-Tier Limitations: <why HTMX/Alpine.js insufficient>
+        - Bundle Size: <KB impact>
+        - Alternatives Considered: <list rejected alternatives>
+        - Maintenance Plan: <versioning, updates>
+
+    tier_5_custom_javascript:
+      priority: "LAST RESORT - Require explicit approval and comprehensive justification"
+      use_cases:
+        - "Complex animations not achievable with CSS/HTMX"
+        - "Third-party API integrations (maps, payments)"
+        - "Legacy browser compatibility workarounds"
+      justification_required: true
+      justification_template: |
+        Custom JavaScript Justification:
+        - Functionality: <precise requirement>
+        - Why HTMX Insufficient: <detailed explanation>
+        - Why Alpine.js Insufficient: <detailed explanation>
+        - Why Public Libraries Insufficient: <detailed explanation>
+        - Code Complexity: <lines of code, dependencies>
+        - Testing Strategy: <unit tests, integration tests>
+        - Maintenance Burden: <ongoing cost assessment>
+        - Approval: <technical lead sign-off required>
+
+  steps:
+    - step: 1
+      name: "Audit UI Component Interaction Patterns"
+      reference: "ui-model.json"
+      actions:
+        - "Extract all UI components from ui-model.json"
+        - "For each component, identify interaction patterns:"
+        - "  - Data loading (GET requests)"
+        - "  - Form submissions (POST/PUT/DELETE)"
+        - "  - Real-time updates (polling, WebSocket, SSE)"
+        - "  - State transitions (show/hide, enable/disable)"
+        - "  - User input events (click, change, submit, scroll)"
+        - "Categorise interactions by technology tier:"
+        - "  - Tier 1: HTMX attributes"
+        - "  - Tier 2: HTMX extensions"
+        - "  - Tier 3: Alpine.js"
+        - "  - Tier 4: Public libraries"
+        - "  - Tier 5: Custom JavaScript"
+        - "Create implementation plan prioritising lower tiers"
+      outputs:
+        - "interaction_patterns: List[InteractionPattern]"
+        - "tier_assignments: Dict[str, TierLevel]"
+        - "implementation_order: List[str]"
+      gates:
+        - "All components catalogued with interaction patterns"
+        - "Tier assignments follow technology hierarchy"
+
+    - step: 2
+      name: "Implement HTMX Attribute-Based Interactions (Tier 1)"
+      actions:
+        - "PRIORITY: Implement 90%+ of interactions using HTMX attributes"
+        - "Common patterns to implement:"
+        - ""
+        - "1. AJAX Data Loading:"
+        - "   <button hx-get='/api/users' hx-target='#user-list' hx-swap='innerHTML'>"
+        - "   Load Users"
+        - "   </button>"
+        - ""
+        - "2. Form Submissions with Partial Updates:"
+        - "   <form hx-post='/api/users' hx-target='#user-table' hx-swap='beforeend'>"
+        - "     <!-- form fields -->"
+        - "   </form>"
+        - ""
+        - "3. Inline Editing (Click to Edit):"
+        - "   <div hx-get='/users/{id}/edit' hx-trigger='click' hx-swap='outerHTML'>"
+        - "     <span>{{ user.name }}</span>"
+        - "   </div>"
+        - ""
+        - "4. Delete with Confirmation:"
+        - "   <button hx-delete='/api/users/{id}' "
+        - "           hx-confirm='Are you sure?' "
+        - "           hx-target='closest tr' "
+        - "           hx-swap='outerHTML swap:500ms'>"
+        - "     Delete"
+        - "   </button>"
+        - ""
+        - "5. Search with Debouncing:"
+        - "   <input type='search' "
+        - "          name='query' "
+        - "          hx-get='/api/users/search' "
+        - "          hx-trigger='keyup changed delay:500ms' "
+        - "          hx-target='#search-results'>"
+        - ""
+        - "6. Infinite Scroll:"
+        - "   <div hx-get='/api/users?page=2' "
+        - "        hx-trigger='revealed' "
+        - "        hx-swap='afterend'>"
+        - "     Load More"
+        - "   </div>"
+        - ""
+        - "7. Polling for Updates:"
+        - "   <div hx-get='/api/stats' "
+        - "        hx-trigger='every 5s' "
+        - "        hx-swap='innerHTML'>"
+        - "     <!-- stats content -->"
+        - "   </div>"
+        - ""
+        - "8. Dependent Dropdowns:"
+        - "   <select name='country' "
+        - "           hx-get='/api/states' "
+        - "           hx-trigger='change' "
+        - "           hx-target='#state-dropdown' "
+        - "           hx-include='[name=country]'>"
+        - "     <!-- options -->"
+        - "   </select>"
+        - ""
+        - "9. Loading Indicators:"
+        - "   <button hx-get='/api/data' hx-indicator='#spinner'>"
+        - "     Load Data"
+        - "   </button>"
+        - "   <div id='spinner' class='htmx-indicator loading loading-spinner'></div>"
+        - ""
+        - "10. Optimistic UI Updates:"
+        - "    <button hx-put='/api/users/{id}/archive' "
+        - "            hx-swap='outerHTML swap:300ms' "
+        - "            hx-target='closest tr'>"
+        - "      Archive"
+        - "    </button>"
+      implementation_pattern: |
+        <!-- Example: User Management Table with HTMX -->
+
+        <!-- Search with Debouncing -->
+        <div class="form-control mb-4">
+          <input
+            type="search"
+            name="query"
+            placeholder="Search users..."
+            class="input input-bordered"
+            hx-get="/api/users/search"
+            hx-trigger="keyup changed delay:500ms"
+            hx-target="#user-table-body"
+            hx-indicator="#search-spinner"
+          >
+          <span id="search-spinner" class="htmx-indicator loading loading-spinner"></span>
+        </div>
+
+        <!-- User Table -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="user-table-body">
+            {% for user in users %}
+            <tr>
+              <!-- Inline Edit: Click name to edit -->
+              <td>
+                <div hx-get="/users/{{ user.id }}/edit"
+                     hx-trigger="click"
+                     hx-swap="outerHTML">
+                  <span>{{ user.name }}</span>
+                </div>
+              </td>
+              <td>{{ user.email }}</td>
+              <td>
+                <!-- Delete with Confirmation -->
+                <button
+                  class="btn btn-error btn-sm"
+                  hx-delete="/api/users/{{ user.id }}"
+                  hx-confirm="Are you sure you want to delete {{ user.name }}?"
+                  hx-target="closest tr"
+                  hx-swap="outerHTML swap:500ms">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <!-- Infinite Scroll Trigger -->
+        <div
+          hx-get="/api/users?page={{ next_page }}"
+          hx-trigger="revealed"
+          hx-swap="beforebegin"
+          hx-target="this"
+          class="text-center p-4">
+          <span class="loading loading-spinner"></span>
+        </div>
+      validation:
+        - "[ ] All data loading implemented with hx-get"
+        - "[ ] All form submissions use hx-post/hx-put/hx-delete"
+        - "[ ] Search inputs use debouncing (delay:500ms)"
+        - "[ ] Delete actions have confirmations (hx-confirm)"
+        - "[ ] Loading indicators configured (hx-indicator)"
+        - "[ ] Optimistic UI uses swap timing (swap:500ms)"
+        - "[ ] Inline editing uses hx-trigger='click'"
+        - "[ ] Dependent dropdowns use hx-include"
+        - "[ ] Infinite scroll uses hx-trigger='revealed'"
+        - "[ ] Polling configured where needed (hx-trigger='every Xs')"
+      gates:
+        - "90%+ of interactions use HTMX attributes only"
+        - "Zero custom JavaScript for basic CRUD operations"
+
+    - step: 3
+      name: "Add HTMX Extensions Where Needed (Tier 2)"
+      actions:
+        - "Review interaction patterns requiring extensions:"
+        - "  - Real-time updates: WebSocket (ws) or SSE (sse) extension"
+        - "  - CSS class manipulation: class-tools extension"
+        - "  - Loading states: loading-states extension"
+        - "Add extension scripts to base layout:"
+        - "  <script src='https://unpkg.com/htmx.org@1.9.10/dist/ext/ws.js'></script>"
+        - "Apply extensions to components:"
+        - "  <div hx-ext='ws' ws-connect='/ws/notifications'></div>"
+      implementation_pattern: |
+        <!-- Base Layout: Load HTMX Extensions -->
+        <script src="https://unpkg.com/htmx.org@1.9.10/dist/htmx.min.js"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.10/dist/ext/ws.js"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.10/dist/ext/sse.js"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.10/dist/ext/loading-states.js"></script>
+
+        <!-- Real-Time Notifications with WebSocket -->
+        <div
+          hx-ext="ws"
+          ws-connect="/ws/notifications"
+          id="notifications">
+          <!-- WebSocket messages will be inserted here -->
+        </div>
+
+        <!-- Server-Sent Events for Live Updates -->
+        <div
+          hx-ext="sse"
+          sse-connect="/events/stats"
+          sse-swap="message">
+          <!-- Stats will be updated via SSE -->
+        </div>
+
+        <!-- Loading States Extension -->
+        <button
+          hx-get="/api/data"
+          hx-ext="loading-states"
+          data-loading-class="loading"
+          data-loading-disable>
+          Load Data
+        </button>
+      validation:
+        - "[ ] Required HTMX extensions identified"
+        - "[ ] Extension scripts loaded in base layout"
+        - "[ ] hx-ext attribute applied to components"
+        - "[ ] WebSocket/SSE connections tested"
+        - "[ ] Loading states work correctly"
+      gates:
+        - "All real-time features use HTMX extensions"
+        - "Zero custom JavaScript for WebSocket/SSE"
+
+    - step: 4
+      name: "Implement Alpine.js Components (Tier 3 - WITH JUSTIFICATION)"
+      actions:
+        - "CRITICAL: Only use Alpine.js when HTMX insufficient"
+        - "Document justification for each Alpine.js usage"
+        - "Common justified use cases:"
+        - "  - Tabs (client-side state, no server roundtrip)"
+        - "  - Dropdowns (toggle state)"
+        - "  - Modals (show/hide state)"
+        - "  - Accordions (expand/collapse state)"
+        - "  - Multi-step forms (local step tracking)"
+        - "Add Alpine.js to base layout: <script defer src='https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js'></script>"
+      implementation_pattern: |
+        <!-- JUSTIFIED USAGE: Tabs Component -->
+        <!-- Justification: Client-side tab switching without server roundtrips -->
+        <!-- HTMX Limitation: Each tab switch would require separate request -->
+
+        <div x-data="{ activeTab: 'profile' }">
+          <!-- Tab Buttons -->
+          <div class="tabs tabs-boxed">
+            <button
+              @click="activeTab = 'profile'"
+              :class="{ 'tab-active': activeTab === 'profile' }"
+              class="tab">
+              Profile
+            </button>
+            <button
+              @click="activeTab = 'settings'"
+              :class="{ 'tab-active': activeTab === 'settings' }"
+              class="tab">
+              Settings
+            </button>
+            <button
+              @click="activeTab = 'notifications'"
+              :class="{ 'tab-active': activeTab === 'notifications' }"
+              class="tab">
+              Notifications
+            </button>
+          </div>
+
+          <!-- Tab Content -->
+          <div x-show="activeTab === 'profile'" class="p-4">
+            <!-- Profile content (can still use HTMX for data loading) -->
+            <div hx-get="/api/profile" hx-trigger="load">
+              Loading profile...
+            </div>
+          </div>
+
+          <div x-show="activeTab === 'settings'" class="p-4">
+            <!-- Settings content -->
+          </div>
+
+          <div x-show="activeTab === 'notifications'" class="p-4">
+            <!-- Notifications content -->
+          </div>
+        </div>
+
+        <!-- JUSTIFIED USAGE: Modal Component -->
+        <!-- Justification: Modal show/hide state managed client-side -->
+        <!-- HTMX Limitation: Would require server to track modal open/closed state -->
+
+        <div x-data="{ open: false }">
+          <!-- Trigger Button -->
+          <button @click="open = true" class="btn btn-primary">
+            Open Modal
+          </button>
+
+          <!-- Modal -->
+          <div
+            x-show="open"
+            x-transition
+            class="modal"
+            :class="{ 'modal-open': open }">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">Modal Title</h3>
+              <p class="py-4">Modal content here</p>
+
+              <!-- Modal content can use HTMX for data -->
+              <div hx-get="/api/modal-data" hx-trigger="load">
+                Loading...
+              </div>
+
+              <div class="modal-action">
+                <button @click="open = false" class="btn">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- JUSTIFIED USAGE: Dropdown Component -->
+        <!-- Justification: Toggle state for dropdown menu -->
+
+        <div x-data="{ open: false }" @click.outside="open = false">
+          <button @click="open = !open" class="btn">
+            Menu
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          <div x-show="open" x-transition class="dropdown-content">
+            <ul class="menu bg-base-100 rounded-box shadow">
+              <li><a hx-get="/profile" hx-push-url="true">Profile</a></li>
+              <li><a hx-get="/settings" hx-push-url="true">Settings</a></li>
+              <li><a hx-post="/logout">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      justification_log: |
+        Alpine.js Usage Justifications:
+
+        1. Component: Tabs
+           - HTMX Limitation: Each tab switch requires server request (overhead)
+           - State Requirements: activeTab string (profile/settings/notifications)
+           - Complexity: ~10 lines Alpine.js vs ~30 lines HTMX + server logic
+           - Maintenance Impact: LOW (standard pattern, well-documented)
+
+        2. Component: Modal
+           - HTMX Limitation: Server must track modal open/closed state (unnecessary)
+           - State Requirements: open boolean
+           - Complexity: ~5 lines Alpine.js vs ~20 lines HTMX + server state
+           - Maintenance Impact: LOW (common pattern)
+
+        3. Component: Dropdown
+           - HTMX Limitation: Toggle requires server request (poor UX)
+           - State Requirements: open boolean
+           - Complexity: ~3 lines Alpine.js vs ~15 lines HTMX
+           - Maintenance Impact: LOW (minimal code)
+      validation:
+        - "[ ] Alpine.js usage justified for each component"
+        - "[ ] HTMX limitations documented"
+        - "[ ] State requirements documented"
+        - "[ ] Complexity assessment completed"
+        - "[ ] Justification log created"
+        - "[ ] Alpine.js combined with HTMX where beneficial"
+      gates:
+        - "All Alpine.js usage has documented justification"
+        - "Alpine.js only used for client-side state management"
+        - "Alpine.js components still use HTMX for data fetching"
+
+    - step: 5
+      name: "Add Public Libraries (Tier 4 - WITH JUSTIFICATION)"
+      actions:
+        - "CRITICAL: Only use public libraries for specialized functionality"
+        - "Approved libraries:"
+        - "  - chart.js: Data visualisation (charts, graphs)"
+        - "  - date-fns: Date manipulation"
+        - "  - sortable.js: Drag-and-drop reordering"
+        - "Document comprehensive justification for each library"
+        - "Assess bundle size impact"
+        - "Consider CDN vs npm installation"
+      implementation_pattern: |
+        <!-- JUSTIFIED USAGE: chart.js for Data Visualisation -->
+        <!-- Justification: Complex chart rendering unavailable in HTMX/Alpine.js -->
+
+        <canvas id="sales-chart" width="400" height="200"></canvas>
+
+        <script>
+        // Load chart data via HTMX
+        htmx.on('#sales-chart', 'htmx:afterSwap', function(event) {
+          const data = JSON.parse(event.detail.xhr.response);
+
+          new Chart(document.getElementById('sales-chart'), {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Sales',
+                data: data.values,
+                borderColor: 'rgb(75, 192, 192)'
+              }]
+            }
+          });
+        });
+        </script>
+
+        <!-- Trigger chart data load via HTMX -->
+        <div hx-get="/api/sales-data" hx-trigger="load" hx-target="#sales-chart"></div>
+      justification_log: |
+        Public Library Justifications:
+
+        1. Library: chart.js
+           - Functionality: Line charts, bar charts, pie charts
+           - Lower-Tier Limitations: HTMX/Alpine.js cannot render canvas charts
+           - Bundle Size: ~200KB (CDN)
+           - Alternatives Considered: D3.js (too complex), CSS-only (insufficient)
+           - Maintenance Plan: Use CDN, update quarterly
+
+        2. Library: sortable.js
+           - Functionality: Drag-and-drop table row reordering
+           - Lower-Tier Limitations: HTMX drag-drop insufficient for complex reordering
+           - Bundle Size: ~30KB
+           - Alternatives Considered: HTML5 Drag API (browser compatibility issues)
+           - Maintenance Plan: npm install, lock version
+      validation:
+        - "[ ] Library usage justified"
+        - "[ ] Lower-tier limitations documented"
+        - "[ ] Bundle size assessed"
+        - "[ ] Alternatives considered"
+        - "[ ] Maintenance plan defined"
+        - "[ ] CDN vs npm decision made"
+      gates:
+        - "All library usage has comprehensive justification"
+        - "Bundle size impact acceptable (<500KB total)"
+
+    - step: 6
+      name: "Custom JavaScript (Tier 5 - LAST RESORT WITH APPROVAL)"
+      actions:
+        - "CRITICAL: Custom JavaScript is LAST RESORT"
+        - "Require explicit technical lead approval"
+        - "Document comprehensive justification:"
+        - "  - Why HTMX insufficient"
+        - "  - Why Alpine.js insufficient"
+        - "  - Why public libraries insufficient"
+        - "  - Code complexity assessment"
+        - "  - Testing strategy"
+        - "  - Maintenance burden"
+        - "Create justification document for review"
+        - "HALT until approval received"
+      justification_template: |
+        Custom JavaScript Justification Document:
+
+        Component: <component_name>
+        Date: <current_date>
+        Author: <developer_name>
+
+        Requirement:
+        <Precise description of functionality>
+
+        Lower-Tier Analysis:
+        1. HTMX Attributes: <why insufficient>
+        2. HTMX Extensions: <why insufficient>
+        3. Alpine.js: <why insufficient>
+        4. Public Libraries: <why insufficient, list libraries considered>
+
+        Proposed Implementation:
+        - Lines of Code: <estimate>
+        - Dependencies: <list>
+        - Browser Compatibility: <requirements>
+
+        Testing Strategy:
+        - Unit Tests: <approach>
+        - Integration Tests: <approach>
+        - Browser Testing: <browsers to test>
+
+        Maintenance Assessment:
+        - Code Complexity: <LOW/MEDIUM/HIGH>
+        - Ongoing Maintenance: <hours per quarter estimate>
+        - Documentation Requirements: <what needs documenting>
+
+        Alternatives Considered:
+        1. <alternative 1>: <rejection reason>
+        2. <alternative 2>: <rejection reason>
+
+        Approval:
+        Technical Lead: _____________________ Date: _______
+      validation:
+        - "[ ] Justification document created"
+        - "[ ] All lower tiers proven insufficient"
+        - "[ ] Code complexity assessed"
+        - "[ ] Testing strategy defined"
+        - "[ ] Maintenance burden assessed"
+        - "[ ] Technical lead approval obtained"
+      gates:
+        - "Custom JavaScript approved by technical lead"
+        - "Comprehensive justification documented"
+
+    - step: 7
+      name: "Document Interactive Behavior Implementation"
+      actions:
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Interaction pattern audit results"
+        - "  - HTMX attribute implementations (Tier 1)"
+        - "  - HTMX extension usage (Tier 2)"
+        - "  - Alpine.js justifications and implementations (Tier 3)"
+        - "  - Public library justifications and implementations (Tier 4)"
+        - "  - Custom JavaScript justifications (if any - Tier 5)"
+        - "  - Technology tier distribution (percentages)"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN with Phase 4 Interactive Behavior completion"
+        - "CRITICAL: DO NOT create temporal documents"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property"
+        - "  - Technology tier decisions"
+        - "  - Justification summaries"
+        - "  - Relationships: session → implements → interactive_behaviors"
+      outputs:
+        - "spec_updated: Boolean"
+        - "plan_updated: Boolean"
+        - "tier_distribution: Dict[str, float]"
+        - "memory_entities_created: List[str]"
+      gates:
+        - "SPEC document updated comprehensively"
+        - "IMPLEMENTATION_PLAN Phase 4 checklist updated"
+        - "Technology tier distribution documented"
+        - "All justifications archived"
+        - "Memory entities created with Date properties"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: Follow HTMX-first technology hierarchy (HTMX → extensions → Alpine.js → libraries → custom JS)"
+  - "CRITICAL: 90%+ of interactions MUST use HTMX attributes"
+  - "CRITICAL: Alpine.js usage REQUIRES documented justification"
+  - "CRITICAL: Public library usage REQUIRES comprehensive justification"
+  - "CRITICAL: Custom JavaScript is LAST RESORT and requires technical lead approval"
+  - "CRITICAL: All justifications must prove lower tiers insufficient"
+  - "All Alpine.js components should still use HTMX for data fetching"
+  - "All public libraries should integrate with HTMX where possible"
+
+forbidden:
+  - "Custom JavaScript without comprehensive justification and approval"
+  - "Alpine.js usage without documented justification"
+  - "Public library usage without justification"
+  - "Choosing higher tier when lower tier sufficient"
+  - "jQuery or other legacy libraries"
+  - "Inline JavaScript event handlers (onclick, onchange, etc.)"
+  - "Creating temporal documents (all updates in SPEC and IMPLEMENTATION_PLAN)"
+
+output_format:
+  require_sections:
+    - "Section 1: Interaction Pattern Audit Results"
+    - "Section 2: HTMX Attribute Implementations (Tier 1)"
+    - "Section 3: HTMX Extension Usage (Tier 2)"
+    - "Section 4: Alpine.js Justifications and Implementations (Tier 3)"
+    - "Section 5: Public Library Justifications (Tier 4)"
+    - "Section 6: Custom JavaScript Justifications (Tier 5 - if any)"
+    - "Section 7: Technology Tier Distribution"
+    - "Section 8: Memory Writes (session entity, decisions, justifications)"
+    - "Section 9: Next Steps (proceed to Motion/Transitions Implementation Phase 26)"
+  language: "Australian English"
+
+success_criteria:
+  - "90%+ of interactions use HTMX attributes (Tier 1)"
+  - "All HTMX extension usage documented (Tier 2)"
+  - "All Alpine.js usage has documented justification (Tier 3)"
+  - "All public library usage has comprehensive justification (Tier 4)"
+  - "All custom JavaScript (if any) approved by technical lead (Tier 5)"
+  - "Technology tier distribution documented"
+  - "All justifications archived for future reference"
+  - "SPEC and IMPLEMENTATION_PLAN updated (no temporal documents)"
+  - "Memory entities created with Date properties"
+
+halt_condition: "After successful interactive behavior implementation and memory persistence, halt and await instruction to proceed to Phase 26 (Motion/Transitions Implementation)."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Interactive Behavior Implementation Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, SCAFFOLDING_LIBRARIES_OVERVIEW.md Section 3"
+  language: "en-AU"
+  references:
+    - "SCAFFOLDING_LIBRARIES_OVERVIEW.md (Section 3: Technology Decision Hierarchy)"
+    - "ui-model.json"
+    - "component_tokens.json"
+    - "design_system_foundations.md"
+
+# EXECUTION PROTOCOL
+# Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/25-WebUI_Interactive_Behavior_Implementation.yaml under those enforced rules.

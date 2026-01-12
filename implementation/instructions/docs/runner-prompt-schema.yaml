@@ -1,0 +1,70 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://example.com/schemas/runner-prompt-schema.json"
+title: "Runner Prompt Schema (MCP runner wrapper)"
+type: object
+additionalProperties: false
+required:
+  - version
+  - schema
+  - id
+  - title
+  - action
+properties:
+  version:
+    type: string
+    description: "Schema version"
+  schema:
+    type: string
+    description: "Schema identifier (mcp.prompt/v1)"
+  id:
+    type: string
+    pattern: "^[a-z0-9_\-:\.]+$"
+    description: "Unique prompt id (kebab/snake)"
+  title:
+    type: string
+    description: "Required. Human-friendly title for the prompt."
+  description:
+    type: string
+    description: "Optional. Longer human-readable description of the prompt's intent."
+  source_md_section_index:
+    type: integer
+    minimum: 0
+    description: "Optional. Index for the source section in the original MD file (for traceability)."
+  action:
+    type: string
+    description: "Action name or type"
+  files:
+    type: array
+    items:
+      type: string
+  steps:
+    type: array
+    items:
+      type: string
+  variables:
+    type: object
+    additionalProperties:
+      type: object
+      properties:
+        required:
+          type: boolean
+        default: {}
+        description:
+          type: string
+  notes:
+    type: array
+    items:
+      type: string
+  raw:
+    type: string
+    description: "Optional embedded original content for traceability (may be large). Prefer using raw_ref for large or sensitive content."
+  raw_ref:
+    type: string
+    format: uri
+    description: "Optional reference (URI or repo path) to the original/raw content instead of embedding it."
+  raw_hash:
+    type: string
+    pattern: "^[A-Fa-f0-9]{64}$"
+    description: "Optional SHA-256 hash of the original content for integrity checks."
+  halt:
+    type: boolean

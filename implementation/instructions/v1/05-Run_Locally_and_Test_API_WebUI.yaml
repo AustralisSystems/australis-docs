@@ -1,0 +1,712 @@
+prompt_name: "Run_Locally_and_Test_UI"
+version: "2.0.0"
+type: "local_execution_api_and_ui_validation"
+context:
+  role: "Standards-governed implementation executor with local execution, REST API, and web UI testing duties"
+  governance:
+      canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+      golden_rule_execution_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute the current phase of the implementation plan by clearing local caches, running the application
+    locally using uvicorn (Python/FastAPI) or equivalent Node.js/Next.js/NestJS runtime, ensuring clean
+    startup with zero errors/warnings/issues, then systematically testing BOTH backend REST API endpoints
+    (FIRST) and frontend web UI routes (SECOND) through manual, real-world user interaction simulation.
+    REST API testing uses manual tools (curl, Postman, MCP fetch), and web UI testing uses MCP browser
+    automation tools (fetch/playwright) in non-headless mode. Both testing phases must be executed by default
+    unless user instructions explicitly constrain the scope to REST API only or Web UI only. By default,
+    ALL REST endpoints and ALL web UI routes must be tested unless instructions include specific focus/limits.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    status reports, progress reports, completion reports, execution results, test results, and
+    findings MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents. Instead, update the relevant SPEC(s) and
+    IMPLEMENTATION_PLAN with all progress, findings, and status information. This rule is
+    NON-NEGOTIABLE and must be enforced strictly.
+  critical_testing_rule: >
+    **CRITICAL TESTING RULE**: MANUAL TESTING ONLY - NO SCRIPTED TEST FRAMEWORKS.
+
+    **REST API Testing:**
+    - ALL REST API testing MUST be performed manually using interactive tools (curl, Postman, MCP fetch)
+    - NO automated test scripts, test frameworks, or batch test execution
+    - NO pytest, unittest, Postman collections with auto-run, or any automated test runners
+    - Each endpoint MUST be tested individually, one at a time, with manual observation
+    - Each test MUST be executed manually, results observed manually, issues identified manually
+    - Remediation MUST occur immediately after each failed test before proceeding
+
+    **Web UI Testing:**
+    - ALL web UI testing MUST be performed manually using MCP browser automation tools (playwright, fetch, browser extension)
+    - Testing MUST simulate real human user interactions (navigate, click, type, scroll, wait, observe)
+    - NO Playwright test scripts, Cypress, Selenium scripts, Jest/Vitest browser tests, or any automated test runners
+    - Each route/page MUST be tested individually, one at a time, with manual observation
+    - Each test MUST be executed manually via MCP tools, results observed manually, issues identified manually
+    - Remediation MUST occur immediately after each failed test before proceeding
+    - Browser automation tools are used for INTERACTION, not for automated test execution
+    - **CRITICAL: Browser MUST run in NON-HEADLESS mode (visible browser window) so developers can observe tests in real-time**
+    - **CRITICAL: Headless mode is FORBIDDEN - browser window MUST be visible during all web UI testing**
+
+    **Execution Order:**
+    - **CRITICAL: REST API testing MUST occur FIRST, before web UI testing**
+    - Both REST API and Web UI testing MUST be executed by default unless user instructions explicitly constrain scope
+    - By default, ALL REST endpoints and ALL web UI routes must be tested unless instructions include specific focus/limits/constraints
+
+    - This rule is NON-NEGOTIABLE and must be enforced strictly.
+  doc_references:
+    canonical:
+      - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+      - "docs/implementation/README_TEMPLATE.md"
+      - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+      - "docs/implementation/SPEC_README.md"
+      - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+      - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    plan:
+      - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+  environment_assumptions:
+    - "Python 3.8+ is installed (for uvicorn/FastAPI) OR Node.js 18+ is installed (for Next.js/NestJS)."
+    - "Required dependencies are installed via pip/poetry/uv (Python) or npm/yarn/pnpm (Node.js)."
+    - "Local execution does not require external secrets beyond what is provided in the repo or allowed env vars."
+    - "Manual REST API testing tools are available (curl, Postman, MCP fetch tools)."
+    - "MCP browser automation tools (fetch, playwright) are available and configured for web UI testing."
+    - "Browser automation MUST be configured to run in NON-HEADLESS mode (visible browser window)."
+    - "Display/graphical environment is available for visible browser window (X11, Windows display, macOS display)."
+    - "Application has both REST API endpoints and web UI components accessible via HTTP/HTTPS on localhost."
+prerequisites:
+  validations:
+    - "All canonical docs are present and readable."
+    - "IMPLEMENTATION_PLAN_v#.#.#.md exists and defines the current phase and task(s)."
+    - "SPECs related to the current task(s) exist in docs/implementation/in_progress (or are created before execution)."
+    - "Application source code is present and identifiable (main.py, app.py, server.js, etc.)."
+instructions:
+  objective: >
+    Determine the current phase task(s)/action(s)/step(s), clear local Python cache and temp files for
+    a clean start, initialise and start the application locally using the appropriate runtime (uvicorn for
+    Python/FastAPI or equivalent for Node.js/Next.js/NestJS), observe and remediate all init/startup
+    errors/warnings/issues until achieving zero errors/warnings/issues, then systematically test BOTH
+    backend REST API endpoints (FIRST) and frontend web UI routes (SECOND) through manual, real-world
+    user interaction simulation. REST API testing uses manual tools (curl, Postman, MCP fetch), and web
+    UI testing uses MCP browser automation tools in non-headless mode. Both testing phases must be executed
+    by default unless user instructions explicitly constrain the scope. By default, ALL REST endpoints and
+    ALL web UI routes must be tested unless instructions include specific focus/limits/constraints.
+  steps:
+    - step: 1
+      name: "Review Canonical Documentation"
+      actions:
+        - "Read all canonical docs listed in context.doc_references.canonical."
+        - "Extract required standards for naming, SPEC structure, workflow order, and documentation updates."
+      gates:
+        - "Do not proceed unless all required docs are present and readable."
+
+    - step: 2
+      name: "Read Implementation Plan & Determine CURRENT Work and Test Scope"
+      actions:
+        - "Open docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md."
+        - "Identify CURRENT phase and the specific task(s), action(s), and step(s) to execute now."
+        - "Confirm associated SPEC document(s) are located in docs/implementation/in_progress."
+        - "Identify the application type (Python/FastAPI, Node.js/Next.js/NestJS, etc.) and entry point."
+        - "Check user instructions for test scope constraints:"
+        - "  - If instructions specify 'REST API only' or 'API only'  test_scope: 'rest_api_only'"
+        - "  - If instructions specify 'Web UI only' or 'frontend only'  test_scope: 'ui_only'"
+        - "  - If instructions specify both or no constraints  test_scope: 'both' (default)"
+        - "Check user instructions for endpoint/route constraints:"
+        - "  - If specific endpoints/routes mentioned  apply those constraints"
+        - "  - If no constraints  test ALL endpoints and ALL routes (default)"
+      outputs:
+        - "current_phase: <string>"
+        - "current_tasks: [<task_id_or_name>]"
+        - "associated_specs: [<spec_filenames>]"
+        - "application_type: <python|nodejs|nextjs|nestjs>"
+        - "entry_point: <file_path>"
+        - "test_scope: <both|rest_api_only|ui_only>"
+        - "rest_api_constraints: [<endpoint_patterns_or_categories>] (if any)"
+        - "ui_constraints: [<route_patterns_or_categories>] (if any)"
+      gates:
+        - "Do not proceed if CURRENT tasks are ambiguous or missing."
+        - "Do not proceed if application type or entry point cannot be determined."
+
+    - step: 3
+      name: "Clear Local Python Cache and Temp Files"
+      actions:
+        - "Remove all __pycache__ directories recursively from the project."
+        - "Remove all .pyc files from the project."
+        - "Remove all .pyo files from the project."
+        - "Remove all .pytest_cache directories."
+        - "Remove all .mypy_cache directories."
+        - "Remove all .ruff_cache directories."
+        - "Remove all temporary files (*.tmp, *.temp, *.log if appropriate)."
+        - "Remove all .coverage files and htmlcov directories (if present)."
+        - "For Node.js projects: Remove node_modules/.cache, .next, .nuxt, dist, build directories (if regeneratable)."
+      suggested_commands:
+        - "find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true"
+        - "find . -type f -name '*.pyc' -delete"
+        - "find . -type f -name '*.pyo' -delete"
+        - "find . -type d -name '.pytest_cache' -exec rm -rf {} + 2>/dev/null || true"
+        - "find . -type d -name '.mypy_cache' -exec rm -rf {} + 2>/dev/null || true"
+        - "find . -type d -name '.ruff_cache' -exec rm -rf {} + 2>/dev/null || true"
+        - "find . -type d -name 'htmlcov' -exec rm -rf {} + 2>/dev/null || true"
+        - "rm -f .coverage coverage.xml"
+        - "rm -rf node_modules/.cache .next .nuxt dist build 2>/dev/null || true"
+      gates:
+        - "Do not proceed until cache cleanup is complete and verified."
+
+    - step: 4
+      name: "Initialise and Start Application Locally"
+      actions:
+        - "For Python/FastAPI: Start application using uvicorn."
+        - "For Node.js/Next.js: Start application using npm/yarn/pnpm run dev or equivalent."
+        - "For NestJS: Start application using npm/yarn/pnpm run start:dev or equivalent."
+        - "Capture startup output and logs for analysis."
+      suggested_commands:
+        - "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+        - "uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
+        - "python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+        - "npm run dev"
+        - "yarn dev"
+        - "pnpm dev"
+        - "npm run start:dev"
+        - "yarn start:dev"
+        - "pnpm start:dev"
+      gates:
+        - "Do not proceed if application fails to start."
+        - "Application must be running and accessible before proceeding to observation step."
+
+    - step: 5
+      name: "Observe Init and Startup - Remediate Errors/Warnings/Issues"
+      actions:
+        - "Monitor application startup logs and console output."
+        - "Identify all errors, warnings, and issues during initialisation and startup."
+        - "CRITICAL: Remediate errors/warnings/issues ONE AT A TIME."
+        - "After each remediation, restart the application and verify the fix."
+        - "Continue remediation cycle until achieving ZERO errors, ZERO warnings, and ZERO issues."
+        - "Document each issue found, remediation applied, and verification result."
+      suggested_commands:
+        - "Monitor startup logs in real-time."
+        - "Check for import errors, missing dependencies, configuration issues."
+        - "Verify database connections, environment variables, and service dependencies."
+        - "Check for port conflicts, permission issues, and resource availability."
+      outputs:
+        - "startup_issues: [ { issue: <description>, severity: <error|warning|info>, remediation: <action_taken>, verified: <true|false> } ]"
+        - "startup_status: <clean|issues_remaining>"
+        - "error_count: <integer>"
+        - "warning_count: <integer>"
+        - "issue_count: <integer>"
+      gates:
+        - "CRITICAL: Do not proceed to REST API testing until startup is CLEAN with 0 errors, 0 warnings, 0 issues."
+        - "Each issue MUST be remediated before proceeding to the next issue."
+        - "Application MUST restart successfully after each remediation."
+
+    - step: 6
+      name: "Enumerate REST API Endpoints (If Scope Includes REST API)"
+      actions:
+        - "If test_scope is 'both' or 'rest_api_only', proceed with REST API enumeration."
+        - "If test_scope is 'ui_only', skip this step and proceed to step 8."
+        - "Identify all REST API endpoints from source code (route definitions, OpenAPI/Swagger specs, or service routing)."
+        - "For Python/FastAPI: Check FastAPI route decorators, APIRouter registrations."
+        - "For Node.js/Express: Check Express route definitions, router configs."
+        - "For NestJS: Check controller decorators and route definitions."
+        - "Check for OpenAPI/Swagger specification files (openapi.json, swagger.yaml, etc.)."
+        - "List all endpoints with: HTTP method, path, description, authentication requirements."
+        - "Apply REST API constraints if specified in step 2, otherwise include ALL endpoints."
+        - "Create ordered test plan for systematic REST API testing."
+      suggested_commands:
+        - "grep -r '@app\\.(get|post|put|delete|patch)' --include='*.py'"
+        - "grep -r 'router\\.(get|post|put|delete|patch)' --include='*.py'"
+        - "grep -r '@Get|@Post|@Put|@Delete|@Patch' --include='*.ts'"
+        - "find . -name 'openapi.json' -o -name 'swagger.yaml' -o -name 'swagger.json'"
+        - "cat openapi.json | jq '.paths | keys'"
+      outputs:
+        - "rest_api_endpoints: [ { method: <GET|POST|PUT|DELETE|PATCH>, path: <string>, description: <string>, requires_auth: <true|false>, category: <string> } ]"
+        - "total_rest_endpoints: <integer>"
+        - "rest_api_test_plan: [<ordered_list_of_endpoints>]"
+      gates:
+        - "If test_scope includes REST API, do not proceed if no endpoints can be identified."
+        - "If test_scope includes REST API, do not proceed if test plan cannot be created."
+
+    - step: 7
+      name: "Manual REST API Endpoint Testing - One at a Time with Systematic Remediation (If Scope Includes REST API)"
+      actions:
+        - "If test_scope is 'both' or 'rest_api_only', proceed with REST API testing."
+        - "If test_scope is 'ui_only', skip this step and proceed to step 8."
+        - "CRITICAL: Test endpoints ONE AT A TIME - never in parallel or batch."
+        - "CRITICAL: Use MANUAL testing methods only (curl, Postman, MCP fetch) - NO scripted tests."
+        - "For each endpoint in the REST API test plan:"
+        - "  STEP 7.1: Execute manual test"
+        - "    - Manually construct HTTP request (curl command, Postman request, or MCP fetch)"
+        - "    - Manually execute the request"
+        - "    - Manually observe HTTP status code"
+        - "    - Manually observe response body"
+        - "    - Manually measure response time (if applicable)"
+        - "    - Manually check application logs for errors/warnings"
+        - "  STEP 7.2: Validate response"
+        - "    - Compare HTTP status code with expected value"
+        - "    - Validate response body schema/structure"
+        - "    - Check response time against baseline/tolerance (if applicable)"
+        - "    - Review application logs for errors/warnings"
+        - "    - Verify response data matches expected format"
+        - "  STEP 7.3: Identify issues"
+        - "    - Document any errors, warnings, or unexpected behaviour"
+        - "    - Categorise issues (functional, performance, schema, etc.)"
+        - "    - Note severity (critical, high, medium, low)"
+        - "  STEP 7.4: Remediate issues (if any found)"
+        - "    - CRITICAL: STOP testing and remediate issues ONE AT A TIME"
+        - "    - Analyse root cause of each issue"
+        - "    - Fix code, configuration, or infrastructure issues"
+        - "    - Restart application if necessary"
+        - "    - Re-execute the SAME endpoint test manually"
+        - "    - Verify fix resolves the issue"
+        - "    - Continue remediation cycle until test passes"
+        - "  STEP 7.5: Mark test as passed"
+        - "    - Only mark test as PASSED when:"
+        - "      * HTTP status code matches expected"
+        - "      * Response body validates correctly"
+        - "      * Response time within tolerance (if applicable)"
+        - "      * Application logs show 0 errors, 0 warnings"
+        - "      * All issues remediated and verified"
+        - "  STEP 7.6: Document results"
+        - "    - Record test result (PASSED/FAILED)"
+        - "    - Document issues found and remediated"
+        - "    - Record response time and performance metrics"
+        - "    - Update SPEC file with test result"
+        - "  STEP 7.7: Proceed to next endpoint"
+        - "    - Only proceed to next endpoint after current test is PASSED"
+        - "    - If test fails after remediation attempts, escalate but do not skip"
+      suggested_manual_testing_tools:
+        - "curl - Manual HTTP requests from command line"
+        - "Postman - Manual GUI-based API testing"
+        - "mcp_fetch_fetch - MCP tool for manual HTTP requests"
+        - "Browser - Manual GET requests and form submissions"
+      forbidden_testing_methods:
+        - " pytest, unittest, or any Python test framework"
+        - " Postman collections with auto-run or Newman"
+        - " Automated test scripts or batch test execution"
+        - " Test runners or CI/CD test pipelines"
+        - " Parallel or concurrent test execution"
+        - " Any form of automated test execution"
+      suggested_commands:
+        - "curl -i -X GET http://localhost:<port>/health"
+        - "curl -i -X POST http://localhost:<port>/api/resource -H 'Content-Type: application/json' -d '{...}'"
+      outputs:
+        - "rest_api_test_results: [ { endpoint: <url>, method: <verb>, status: <PASSED|FAILED>, http_code: <integer>, response_time_ms: <float>, issues_found: [<description>], issues_remediated: [<description>], verified: <true|false> } ]"
+        - "total_rest_tests_executed: <integer>"
+        - "total_rest_tests_passed: <integer>"
+        - "total_rest_tests_failed: <integer>"
+        - "total_rest_issues_found: <integer>"
+        - "total_rest_issues_remediated: <integer>"
+        - "rest_api_testing_status: <complete|in_progress>"
+      gates:
+        - "CRITICAL: Do not proceed to web UI testing until all REST API tests are PASSED (if REST API testing is in scope)."
+        - "CRITICAL: Do not proceed to next endpoint until current endpoint test is PASSED."
+        - "CRITICAL: All issues MUST be remediated before marking test as PASSED."
+        - "CRITICAL: Testing MUST be manual - NO scripted tests allowed."
+        - "If endpoint test fails after remediation attempts, document and escalate - do not skip."
+
+    - step: 8
+      name: "Enumerate Web UI Routes (If Scope Includes Web UI)"
+      actions:
+        - "If test_scope is 'both' or 'ui_only', proceed with Web UI enumeration."
+        - "If test_scope is 'rest_api_only', skip this step and proceed to step 10."
+        - "Identify all web UI routes from source code (route definitions, router configs, page files)."
+        - "For Python/FastAPI: Check FastAPI route decorators, APIRouter registrations, and static file routes."
+        - "For Next.js: Check pages/ directory, app/ directory (App Router), and route.ts/route.js files."
+        - "For NestJS: Check controller decorators and route definitions."
+        - "Identify default/root route and all available navigation paths."
+        - "Apply Web UI constraints if specified in step 2, otherwise include ALL routes."
+        - "Create systematic route navigation plan."
+      outputs:
+        - "ui_routes: [ { route: <path>, method: <GET|POST|...>, description: <string>, requires_auth: <true|false> } ]"
+        - "default_route: <path>"
+        - "navigation_plan: [<ordered_list_of_routes>]"
+      gates:
+        - "If test_scope includes Web UI, do not proceed if no routes can be identified."
+        - "If test_scope includes Web UI, do not proceed if default route cannot be determined."
+
+    - step: 9
+      name: "Manual Web UI Route Testing - One at a Time with Systematic Remediation (If Scope Includes Web UI)"
+      actions:
+        - "If test_scope is 'both' or 'ui_only', proceed with Web UI testing."
+        - "If test_scope is 'rest_api_only', skip this step and proceed to step 10."
+        - "CRITICAL: Test routes ONE AT A TIME - never in parallel or batch."
+        - "CRITICAL: Use MANUAL browser automation via MCP tools - NO scripted test frameworks."
+        - "CRITICAL: Verify browser is running in NON-HEADLESS mode (visible browser window)."
+        - "For each route in the navigation plan:"
+        - "  STEP 9.1: Navigate to route"
+        - "    - Manually navigate to route URL using MCP browser_navigate tool"
+        - "    - Manually observe page load (wait for content to appear)"
+        - "    - Manually capture page snapshot using browser_snapshot tool"
+        - "    - Manually check browser console for errors/warnings"
+        - "    - Manually check network requests for failures"
+        - "  STEP 9.2: Verify page rendering"
+        - "    - Manually observe page structure and layout"
+        - "    - Verify expected content is present (text, images, components)"
+        - "    - Check for visual glitches, broken images, missing styles"
+        - "    - Verify responsive design (if applicable)"
+        - "    - Check accessibility (basic checks: alt text, ARIA labels)"
+        - "  STEP 9.3: Test user interactions"
+        - "    - Manually click interactive elements (buttons, links, menus)"
+        - "    - Manually fill forms (type into input fields)"
+        - "    - Manually submit forms and observe responses"
+        - "    - Manually test navigation (breadcrumbs, menus, back buttons)"
+        - "    - Manually test user flows (e.g., create  view  edit  delete)"
+        - "    - Observe page state changes and updates"
+        - "  STEP 9.4: Validate functionality"
+        - "    - Verify interactive elements respond correctly"
+        - "    - Verify forms submit and show appropriate feedback"
+        - "    - Verify data displays correctly"
+        - "    - Verify navigation works as expected"
+        - "    - Check for JavaScript errors in console"
+        - "    - Check for failed network requests"
+        - "  STEP 9.5: Identify issues"
+        - "    - Document any errors, warnings, or unexpected behaviour"
+        - "    - Categorise issues (rendering, functionality, performance, accessibility, etc.)"
+        - "    - Note severity (critical, high, medium, low)"
+        - "    - Capture screenshots or snapshots of issues (if applicable)"
+        - "  STEP 9.6: Remediate issues (if any found)"
+        - "    - CRITICAL: STOP testing and remediate issues ONE AT A TIME"
+        - "    - Analyse root cause of each issue"
+        - "    - Fix code, configuration, or infrastructure issues"
+        - "    - Restart web application if necessary"
+        - "    - Re-navigate to the SAME route using MCP browser tools"
+        - "    - Re-test the same interactions manually"
+        - "    - Verify fix resolves the issue"
+        - "    - Continue remediation cycle until test passes"
+        - "  STEP 9.7: Mark test as passed"
+        - "    - Only mark test as PASSED when:"
+        - "      * Page loads without errors"
+        - "      * Page renders correctly with expected content"
+        - "      * All interactive elements function correctly"
+        - "      * Forms submit successfully"
+        - "      * Navigation works as expected"
+        - "      * Browser console shows 0 errors, 0 warnings (or acceptable warnings)"
+        - "      * Network requests complete successfully"
+        - "      * All issues remediated and verified"
+        - "  STEP 9.8: Document results"
+        - "    - Record test result (PASSED/FAILED)"
+        - "    - Document issues found and remediated"
+        - "    - Record console errors/warnings (before and after remediation)"
+        - "    - Record network request failures (if any)"
+        - "    - Update SPEC file with test result"
+        - "  STEP 9.9: Proceed to next route"
+        - "    - Only proceed to next route after current route test is PASSED"
+        - "    - If test fails after remediation attempts, escalate but do not skip"
+      suggested_mcp_browser_tools:
+        - "mcp_cursor-browser-extension_browser_navigate - Navigate to URLs"
+        - "mcp_cursor-browser-extension_browser_snapshot - Capture page accessibility snapshot"
+        - "mcp_cursor-browser-extension_browser_click - Click elements (buttons, links, form controls)"
+        - "mcp_cursor-browser-extension_browser_type - Type text into input fields"
+        - "mcp_cursor-browser-extension_browser_wait_for - Wait for text/content to appear or disappear"
+        - "mcp_cursor-browser-extension_browser_hover - Hover over elements"
+        - "mcp_cursor-browser-extension_browser_select_option - Select dropdown options"
+        - "mcp_cursor-browser-extension_browser_drag - Drag and drop elements"
+        - "mcp_cursor-browser-extension_browser_evaluate - Evaluate JavaScript expressions"
+        - "mcp_cursor-browser-extension_browser_fill_form - Fill multiple form fields"
+        - "mcp_cursor-browser-extension_browser_console_messages - Get console messages"
+        - "mcp_cursor-browser-extension_browser_network_requests - Get network request logs"
+        - "mcp_cursor-browser-extension_browser_take_screenshot - Capture screenshots"
+        - "mcp_fetch_fetch - Fetch HTTP resources for verification"
+      forbidden_testing_methods:
+        - " Playwright test scripts (.spec.ts files with test() functions)"
+        - " Cypress test scripts or E2E test frameworks"
+        - " Selenium WebDriver scripts or test suites"
+        - " Jest/Vitest browser tests or automated test runners"
+        - " Puppeteer test scripts or batch test execution"
+        - " Any form of automated test execution or test frameworks"
+        - " Parallel or concurrent route testing"
+      outputs:
+        - "route_test_results: [ { route: <path>, status: <PASSED|FAILED>, issues_found: [<description>], issues_remediated: [<description>], console_errors: [<string>], console_warnings: [<string>], network_failures: [<string>], verified: <true|false> } ]"
+        - "total_tests_executed: <integer>"
+        - "total_tests_passed: <integer>"
+        - "total_tests_failed: <integer>"
+        - "total_issues_found: <integer>"
+        - "total_issues_remediated: <integer>"
+        - "testing_status: <complete|in_progress>"
+      gates:
+        - "CRITICAL: Do not proceed to next route until current route test is PASSED."
+        - "CRITICAL: All issues MUST be remediated before marking test as PASSED."
+        - "CRITICAL: Testing MUST be manual via MCP browser tools - NO scripted test frameworks allowed."
+        - "CRITICAL: Browser MUST be running in NON-HEADLESS mode - visible browser window required."
+        - "If route test fails after remediation attempts, document and escalate - do not skip."
+
+    - step: 10
+      name: "Issue Collation & Documentation Update"
+      actions:
+        - "Collate all observed issues, errors, warnings, and findings from startup, REST API testing, and web UI testing."
+        - "CRITICAL: Update the relevant SPEC(s) in docs/implementation/in_progress with:"
+        - "  - Cache cleanup outcomes"
+        - "  - Application startup results"
+        - "  - Init/startup issue remediation log"
+        - "  - REST API endpoint enumeration (if tested)"
+        - "  - REST API test results and issues found (if tested)"
+        - "  - Web UI route enumeration (if tested)"
+        - "  - Web UI test results and issues found (if tested)"
+        - "  - Remediation actions taken for each issue"
+        - "  - Verification results"
+        - "  - All findings, progress, and status information"
+        - "CRITICAL: Update IMPLEMENTATION_PLAN checklists for phases/tasks/steps to reflect progress."
+        - "CRITICAL: DO NOT create temporal documents (e.g., STARTUP_REPORT_YYYY-MM-DD.md, API_TEST_RESULTS_YYYY-MM-DD.md, WEBUI_TEST_RESULTS_YYYY-MM-DD.md)"
+        - "CRITICAL: All execution results, test results, and findings MUST be documented in SPECs and IMPLEMENTATION_PLAN only"
+      gates:
+        - "Do not move a SPEC to 'done' unless acceptance criteria are met per SPEC and plan definitions."
+
+    - step: 11
+      name: "Audit Readiness & Halt"
+      actions:
+        - "Verify checklists across IMPLEMENTATION_PLAN are up to date for all phases/tasks/steps touched."
+        - "Confirm SPECs reflect current status (in_progress or done) and are located in the correct directories."
+        - "Verify application is still running cleanly with zero errors/warnings/issues."
+        - "Halt and await next instruction after producing the output artefacts."
+      outputs:
+        - "audit_readiness: <true|false>"
+        - "next_instruction_state: 'awaiting_orders'"
+        - "final_startup_status: <clean|issues_remaining>"
+        - "final_rest_api_status: <all_tested|in_progress|skipped>"
+        - "final_ui_status: <all_routes_tested|in_progress|skipped>"
+
+constraints:
+  - "Australian English for all documentation updates."
+  - "CRITICAL: NO scripted test frameworks - ALL testing MUST be manual (REST API: curl/Postman/MCP fetch, Web UI: MCP browser tools)."
+  - "CRITICAL: REST API testing MUST occur FIRST, before web UI testing."
+  - "CRITICAL: Both REST API and Web UI testing MUST be executed by default unless user instructions explicitly constrain scope."
+  - "CRITICAL: By default, ALL REST endpoints and ALL web UI routes must be tested unless instructions include specific focus/limits/constraints."
+  - "CRITICAL: Browser MUST run in NON-HEADLESS mode (visible browser window) - headless mode is FORBIDDEN for web UI testing."
+  - "CRITICAL: Browser window MUST be visible during all web UI testing so developers can observe tests in real-time."
+  - "CRITICAL: Test endpoints/routes ONE AT A TIME - never in parallel or batch."
+  - "CRITICAL: Remediate issues ONE AT A TIME before proceeding to next endpoint/route."
+  - "CRITICAL: Do not proceed to next endpoint/route until current test is PASSED."
+  - "CRITICAL: Do not proceed to web UI testing until REST API testing is complete (if REST API testing is in scope)."
+  - "No advancement to subsequent steps while unresolved errors persist in startup, REST API tests, or web UI tests."
+  - "CRITICAL: Startup MUST achieve zero errors, zero warnings, zero issues before REST API testing."
+  - "Do not fabricate endpoints/routes; only test those evidenced by code/config/spec."
+  - "All new/updated SPECs must conform to SPEC_CREATION_GUIDE and SPEC_TEMPLATE."
+  - "All file moves must respect DOCUMENTATION_NAMING_CONVENTION and directory policy (backlog/in_progress/done)."
+  - "If security or auth is required for testing, request or load sanctioned credentials/secrets only."
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all updates go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Execution results, test results, startup outcomes MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+  - "Application must remain running throughout REST API and web UI testing - do not stop/restart unnecessarily."
+  - "Browser console errors and warnings MUST be checked and remediated for each web UI route."
+
+examples:
+  - cache_cleanup_example: |
+      # Python cache cleanup
+      find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
+      find . -type f -name '*.pyc' -delete
+      find . -type d -name '.pytest_cache' -exec rm -rf {} + 2>/dev/null || true
+      find . -type d -name '.mypy_cache' -exec rm -rf {} + 2>/dev/null || true
+
+      # Node.js cache cleanup
+      rm -rf node_modules/.cache .next dist build 2>/dev/null || true
+  - startup_example: |
+      # FastAPI/Python
+      uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+      # Next.js
+      npm run dev
+
+      # NestJS
+      npm run start:dev
+  - startup_issue_remediation_example:
+      startup_issues:
+        - issue: "ImportError: cannot import name 'SomeClass' from 'module'"
+          severity: "error"
+          remediation: "Fixed import path from 'module' to 'module.submodule'"
+          verified: true
+        - issue: "Warning: Unused environment variable 'OLD_VAR'"
+          severity: "warning"
+          remediation: "Removed unused environment variable from .env file"
+          verified: true
+        - issue: "Database connection timeout"
+          severity: "error"
+          remediation: "Updated database connection string and increased timeout"
+          verified: true
+      startup_status: "clean"
+      error_count: 0
+      warning_count: 0
+      issue_count: 0
+  - rest_api_testing_example: |
+      # Example: Manual REST API testing with curl (ONE endpoint at a time)
+      # CRITICAL: REST API testing occurs FIRST, before web UI testing
+
+      # Test 1: Health endpoint
+      curl -i -X GET http://localhost:8000/health
+      # Observe: HTTP 200 OK, response contains {status: 'ok'}
+      # Check application logs for errors/warnings
+      # Verify: 0 errors, 0 warnings in logs
+      # If issue found: STOP, fix, retest SAME endpoint before proceeding
+
+      # Test 2: Create item endpoint (requires auth)
+      curl -i -X POST http://localhost:8000/api/v1/items \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer $JWT_TOKEN" \
+        -d '{"name":"Test Item","description":"Test description"}'
+      # Observe: HTTP 201 Created, response contains item data
+      # Verify: Item created successfully, no errors in logs
+      # If issue found: STOP, fix, retest SAME endpoint before proceeding
+  - rest_api_test_result_example:
+      rest_api_test_results:
+        - endpoint: "http://localhost:8000/health"
+          method: "GET"
+          status: "PASSED"
+          http_code: 200
+          response_time_ms: 45.23
+          issues_found: []
+          issues_remediated: []
+          verified: true
+        - endpoint: "http://localhost:8000/api/v1/items/123"
+          method: "DELETE"
+          status: "PASSED"
+          http_code: 204
+          response_time_ms: 89.12
+          issues_found: ["Initial test returned 500 Internal Server Error", "Application logs showed DB constraint violation"]
+          issues_remediated: ["Fixed database foreign key constraint", "Added proper error handling"]
+          verified: true
+      total_rest_tests_executed: 2
+      total_rest_tests_passed: 2
+      total_rest_tests_failed: 0
+      total_rest_issues_found: 2
+      total_rest_issues_remediated: 2
+      rest_api_testing_status: "complete"
+  - ui_route_example:
+      ui_routes:
+        - route: "/"
+          method: "GET"
+          description: "Home page"
+          requires_auth: false
+        - route: "/dashboard"
+          method: "GET"
+          description: "User dashboard"
+          requires_auth: true
+        - route: "/api/users"
+          method: "GET"
+          description: "User list API"
+          requires_auth: true
+      default_route: "/"
+      navigation_plan: ["/", "/dashboard", "/api/users"]
+  - manual_testing_example: |
+      # Example: Manual testing with MCP browser tools (ONE route at a time)
+      # CRITICAL: Browser MUST be running in NON-HEADLESS mode (visible window)
+      # Developers MUST be able to see the browser window during testing
+
+      # Test 1: Home page route
+      # Step 1: Navigate to home page (browser window should be visible)
+      mcp_cursor-browser-extension_browser_navigate(url: "http://localhost:3000/")
+
+      # Step 2: Wait for page to load (observe visible browser window)
+      mcp_cursor-browser-extension_browser_wait_for(text: "Welcome")
+
+      # Step 3: Capture page snapshot (visible browser window should show page content)
+      mcp_cursor-browser-extension_browser_snapshot()
+
+      # Step 4: Check console for errors (browser DevTools should be visible/accessible)
+      mcp_cursor-browser-extension_browser_console_messages()
+
+      # Step 5: Check network requests
+      mcp_cursor-browser-extension_browser_network_requests()
+
+      # Step 6: Interact with page (click a button)
+      mcp_cursor-browser-extension_browser_click(element: "Get Started button", ref: "button[data-testid='get-started']")
+
+      # Step 7: Observe result, verify expected behaviour
+      # If issue found: STOP, fix, retest SAME route before proceeding
+  - ui_test_result_example:
+      route_test_results:
+        - route: "/"
+          status: "PASSED"
+          issues_found: []
+          issues_remediated: []
+          console_errors: []
+          console_warnings: []
+          network_failures: []
+          verified: true
+        - route: "/dashboard"
+          status: "PASSED"
+          issues_found: ["Missing favicon", "Console warning: deprecated API"]
+          issues_remediated: ["Added favicon.ico", "Updated API call to use new endpoint"]
+          console_errors: []
+          console_warnings: []
+          network_failures: []
+          verified: true
+        - route: "/settings"
+          status: "FAILED"
+          issues_found: ["Form submission returns 500 error", "Console error: 'Validation failed'"]
+          issues_remediated: ["Issue identified but not yet fixed - awaiting remediation"]
+          console_errors: ["Validation failed: email format invalid"]
+          console_warnings: []
+          network_failures: ["POST /api/settings returned 500"]
+          verified: false
+      total_tests_executed: 3
+      total_tests_passed: 2
+      total_tests_failed: 1
+      total_issues_found: 3
+      total_issues_remediated: 2
+      testing_status: "in_progress"
+  - forbidden_testing_example: |
+      #  FORBIDDEN: Playwright test script
+      # import { test, expect } from '@playwright/test';
+      # test('test all routes', async ({ page }) => {
+      #   for (const route of routes) {
+      #     await page.goto(route);
+      #     await expect(page).toHaveTitle(/.../);
+      #   }
+      # });
+
+      #  FORBIDDEN: Cypress test
+      # describe('Route tests', () => {
+      #   it('tests all routes', () => {
+      #     routes.forEach(route => {
+      #       cy.visit(route);
+      #       cy.get('body').should('be.visible');
+      #     });
+      #   });
+      # });
+
+      #  ALLOWED: Manual MCP browser tool usage, one route at a time
+      mcp_cursor-browser-extension_browser_navigate(url: "http://localhost:3000/")
+      # Observe results manually, then proceed to next route
+
+output_format:
+  section_1: "Current phase, tasks, and associated SPECs"
+  section_2: "Test scope determination (both/rest_api_only/ui_only, constraints)"
+  section_3: "Cache cleanup summary (files/directories removed)"
+  section_4: "Application startup summary (runtime, entry point, port, status)"
+  section_5: "Init/startup observation and remediation log (issues found, remediated, verified)"
+  section_6: "REST API endpoint enumeration (if tested) - endpoints identified, test plan"
+  section_7: "REST API test results table (if tested) - endpoint-by-endpoint testing, issues found/remediated)"
+  section_8: "Web UI route enumeration (if tested) - routes identified, navigation plan"
+  section_9: "Web UI test results table (if tested) - route-by-route testing, issues found/remediated)"
+  section_10: "Issues per endpoint/route (with severity and remediation notes)"
+  section_11: "Documentation updates (SPECs changed; IMPLEMENTATION_PLAN checklist diffs)"
+  section_12: "Final audit readiness and next-instruction state"
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-01-27"
+  version: "2.0.0"
+  classification: "Enterprise Canonical Local Execution and Web UI Testing Governance Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, and Enterprise Canonical Local Execution and Web UI Testing Governance Protocol"
+  language: "en-AU"
+
+[END OF INSTRUCTIONS]
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/05-Run_Locally_and_Test_API_UI.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/05-Run_Locally_and_Test_API_UI.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/05-Run_Locally_and_Test_API_UI.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/05-Run_Locally_and_Test_API_UI.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/05-Run_Locally_and_Test_API_UI.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/05-Run_Locally_and_Test_API_UI.yaml under those enforced rules.

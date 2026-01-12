@@ -1,0 +1,86 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://example.com/schemas/instruction-schema.json"
+title: "Instruction Schema (MCP Tier)"
+type: object
+additionalProperties: false
+required:
+  - version
+  - schema
+  - id
+  - title
+  - action
+properties:
+  version:
+    type: string
+  schema:
+    type: string
+    const: "mcp.instruction/v1"
+  id:
+    type: string
+    pattern: "^[a-z0-9_.:-]+$"
+  title:
+    type: string
+  description:
+    type: string
+  action:
+    type: string
+  doctrine_ref:
+    type: string
+    description: "Optional. The id of the doctrine this instruction implements or is governed by."
+  protocol_refs:
+    type: array
+    items:
+      type: string
+    description: "Optional. List of protocol ids that this instruction references or must comply with."
+  directives:
+    type: array
+    items:
+      type: string
+    description: "Optional. Explicit directives or rules to apply during execution (e.g., 'no_mass_modifications')."
+  inputs:
+    type: array
+    items:
+      type: string
+    description: "Optional. Named inputs or resources required by the instruction (e.g., CODE_IMPLEMENTATION_SPEC)."
+  outputs:
+    type: array
+    items:
+      type: string
+    description: "Optional. Artifacts or outputs produced by the instruction."
+  steps:
+    type: array
+    items:
+      type: string
+    description: "Optional. Ordered list of explicit, single-action steps to execute for this instruction."
+  variables:
+    type: object
+    additionalProperties:
+      type: object
+      properties:
+        required:
+          type: boolean
+          description: "Optional flag indicating whether the variable is required for execution."
+        default: {}
+        description:
+          type: string
+          description: "Optional human-readable description of the variable's purpose."
+    description: "Optional. Mapping of template variables used by the instruction (name → metadata)."
+  notes:
+    type: array
+    items:
+      type: string
+    description: "Optional. Free-form notes or governance comments."
+  raw:
+    type: string
+    description: "Optional. Embedded original content for traceability. Prefer raw_ref for large/sensitive content."
+  raw_ref:
+    type: string
+    format: uri
+    description: "Optional. Reference (URI or repo path) to original/raw content stored externally."
+  raw_hash:
+    type: string
+    pattern: "^[A-Fa-f0-9]{64}$"
+    description: "Optional. SHA-256 hex digest of the original content for integrity verification."
+  halt:
+    type: boolean
+    description: "Optional. If true, the instruction must pause (halt) after completion and await explicit operator authorization."

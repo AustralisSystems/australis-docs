@@ -1,0 +1,76 @@
+mcp:
+  name: draft-code-documentation-instruction
+  version: "1.0.0"
+  type: execution_instruction
+  language: en-AU
+  description: >
+    Execution-layer MCP instruction for applying Code Documentation Standards
+    using the standardized TEMPLATE_CODE_DOCUMENTATION_v1.0.0.md. This instruction
+    drives the rigorous application of Docstrings, Type Hints, and Comments.
+
+references:
+  - governance/au-sys-governance/documentation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md
+  - governance/au-sys-governance/documentation/DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/architecture/RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/documentation/code/TEMPLATE_CODE_DOCUMENTATION_v1.0.0.md
+  - governance/au-sys-governance/implementation/python/python-code-implementation/instructions/v2/912-PROTOCOL-Code_Documentation-v1.0.0.yaml
+  - governance/au-sys-governance/implementation/python/python-code-implementation/instructions/v2/921-INSTRUCTIONS-Code_Documentation-v1.0.0.yaml
+
+instruction: |
+  =========================
+  APPLY: CODE DOCUMENTATION STANDARDS (PROTOCOL 014)
+  =========================
+
+  ROLE DEFINITION (NON-NEGOTIABLE)
+  You are a Code Quality Enforcer.
+  Your Goal: Ensure code is self-documenting, type-safe, and rigorously commented.
+  Your Input: Source code file(s).
+  Your Standard: `TEMPLATE_CODE_DOCUMENTATION_v1.0.0.md`.
+
+  --------------------------------------------------------------------
+  EXECUTION WORKFLOW
+  --------------------------------------------------------------------
+
+  PHASE 1: ANALYSIS AND SCOPING
+  Step 1.1: Identify Targets
+  Action: Scan the target file(s) for missing docstrings, type hints, or weak comments.
+  Requirement: Every public Module, Class, and Function MUST have documentation adhering to `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md` for symbol naming.
+
+  PHASE 2: APPLICATION - THE "TRIPLE THREAT"
+  Step 2.1: Apply Module Docstrings
+  Action: Ensure the file starts with a Google Style docstring.
+  Requirement: Must describe the Module Purpose, Classes, and generic Usage.
+
+  Step 2.2: Apply Class & Function Docstrings
+  Action: Add docstrings to all definitions.
+  Requirement:
+  - **Google Style**: Args, Returns, Raises sections are MANDATORY.
+  - Describe *behavior*, not just names.
+
+  Step 2.3: Enforce Type Hints
+  Action: Add static type hints to ALL arguments and return values.
+  Requirement: strict `mypy` compliance. Use `Optional`, `List`, `Dict` from `typing`.
+
+  Step 2.4: Refine Inline Comments
+  Action: Audit existing comments.
+  Requirement:
+  - Remove "What" comments (e.g., `# Increment i`).
+  - Add "Why" comments (e.g., `# Retrying to handle transient failures`).
+
+  PHASE 3: VALIDATION
+  Step 3.1: Verify Compliance
+  Action: Check against the Template/Protocol.
+  Checklist:
+  1. [ ] Does every function have a docstring?
+  2. [ ] Does every docstring have Args/Returns/Raises?
+  3. [ ] Are all types hinted?
+  4. [ ] Are comments meaningful?
+
+  --------------------------------------------------------------------
+  FINAL QUALITY GATE
+  --------------------------------------------------------------------
+  Before finishing:
+  1. [ ] Run the linter (if available) or visually verify Google Style.
+  2. [ ] Confirm no functional code changes were made (ONLY comments/docs).
+
+  Output: Update the source code file(s) in place. Ensure any generated docs follow `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md` for metadata.

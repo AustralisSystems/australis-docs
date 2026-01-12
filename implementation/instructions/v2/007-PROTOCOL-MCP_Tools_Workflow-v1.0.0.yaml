@@ -1,0 +1,509 @@
+mcp:
+  name: mcp-tools-workflow-protocol
+  version: "1.0.0"
+  type: workflow_protocol
+  language: en-AU
+  description: >
+    MCP Tools Workflow Protocol. Defines recommended workflows for using MCP tools
+    (neo4j-memory, context7, grep, sequential-thinking, filesystem) following
+    THE GOLDEN RULE workflow. Provides flexibility while ensuring appropriate tool
+    usage when needed.
+
+references:
+  - docs/implementation/instructions/v2/000-DOCTRINE-Enterprise_Canonical_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/001-PROTOCOL-The_GoldenRule_Execution-v2.0.1.yaml
+  - docs/implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml
+
+---
+context:
+  role: MCP tools workflow orchestrator
+  intent: Ensure proper use of MCP tools following THE GOLDEN RULE workflow with appropriate flexibility
+  workflow: Context Load → Research → Plan → Implement → Track → Save
+  execution_mode: RECOMMENDED workflow with mandatory gates when appropriate
+
+the_golden_rule_workflow:
+  rule: "context7 (docs) → grep (examples) → neo4j-memory (record) → code → neo4j-memory (persist)"
+  purpose: "Prevent AI hallucinations, ensure research-backed decisions, promote knowledge persistence"
+  flexibility: "Workflow SHOULD be followed, but MAY be adapted based on task complexity and context"
+
+  six_phase_workflow:
+    phase_1_context_load:
+      name: "Context Load"
+      purpose: "Retrieve relevant knowledge and patterns from previous sessions"
+      tool: "neo4j-memory"
+      recommendation: "SHOULD be performed at session start to understand context"
+      mandatory_when:
+        - "Starting a new session"
+        - "Working on complex tasks requiring historical context"
+        - "Resuming work from previous session"
+      optional_when:
+        - "Simple, well-understood tasks"
+        - "Tasks with no historical context needed"
+      iterative_strategy:
+        progressive_expansion:
+          - "Start narrow: Query last 5 minutes for immediate context"
+          - "Expand to 30 minutes if insufficient context found"
+          - "Expand to 1 hour if still insufficient"
+          - "Broaden timeframe to 4-48 hours as needed"
+          - "Broaden query terms if timeline expansion doesn't help"
+        query_pattern:
+          - "Get current time using mcp__time__get_current_time"
+          - "Query with progressive time windows (5 min → 30 min → 1 hour → 4-48 hours)"
+          - "Use specific entity lookups if timeline expansion doesn't help"
+          - "Analyze retrieved patterns for implementation approaches"
+        what_to_query:
+          - "Previous fix patterns for similar issues"
+          - "Architectural decisions related to current task"
+          - "Known pitfalls and solutions"
+          - "Successful implementation approaches"
+          - "Project conventions and standards"
+      forbidden:
+        - "Using neo4j-memory read_graph at session start (too broad)"
+
+    phase_2_research:
+      name: "Mandatory Research (Prevents Hallucinations)"
+      purpose: "Fetch documentation and find real-world examples before implementation"
+      tools:
+        - "context7 (official documentation)"
+        - "grep (GitHub code examples)"
+      recommendation: "SHOULD be performed before writing code, MUST be performed for unfamiliar APIs/libraries"
+      mandatory_when:
+        - "Implementing new functionality with unfamiliar libraries"
+        - "Using APIs or frameworks not previously used in project"
+        - "Working with security-sensitive code"
+        - "Implementing complex features requiring best practices"
+      optional_when:
+        - "Simple, well-understood tasks using familiar patterns"
+        - "Trivial changes to existing code"
+        - "Tasks where documentation is already loaded in context"
+      rtfm_protocol_integration:
+        step_1_smart_codebase_exploration:
+          recommendation: "SHOULD explore codebase structure (max 20 files)"
+          actions:
+            - "Use filesystem to index structure only"
+            - "Read max 10 high-priority files"
+            - "Achieve 90% codebase understanding"
+        step_2_documentation_research:
+          recommendation: "SHOULD use context7 for current, accurate documentation"
+          actions:
+            - "Get version-specific documentation via context7"
+            - "Use fetch for additional documentation if needed"
+            - "Achieve 85% documentation comprehension"
+        step_3_online_research:
+          recommendation: "SHOULD use grep to find real production code examples"
+          actions:
+            - "Search GitHub for literal code patterns (not keywords)"
+            - "Validate sources using tier-based credibility"
+            - "Achieve 95% implementation readiness"
+        step_4_quality_gate_validation:
+          recommendation: "SHOULD validate understanding before proceeding"
+          thresholds:
+            - "Codebase Understanding: ≥90%"
+            - "Documentation Comprehension: ≥85%"
+            - "Implementation Readiness: ≥95%"
+      search_strategy:
+        correct:
+          - "Search for LITERAL code patterns (e.g., 'useState(', 'async def')"
+          - "Use actual code that would appear in files"
+        incorrect:
+          - "Do NOT search for keywords or questions"
+          - "Do NOT search for 'best practices' or 'tutorial'"
+      examples:
+        good: ["'class FastAPI('", "'@app.route('", "'useEffect(() =>'"]
+        bad: ["'fastapi tutorial'", "'react best practices'"]
+
+    phase_3_planning:
+      name: "Planning"
+      purpose: "Break down implementation into structured reasoning steps"
+      tool: "sequential-thinking"
+      recommendation: "SHOULD be used for complex tasks, MAY be skipped for trivial tasks"
+      mandatory_when:
+        - "Complex multi-step implementations"
+        - "Tasks requiring architectural decisions"
+        - "Refactoring affecting multiple components"
+        - "Tasks with unclear requirements"
+      optional_when:
+        - "Simple, single-step tasks"
+        - "Well-defined, straightforward implementations"
+        - "Tasks with clear, documented approach"
+      actions:
+        - "Create structured plan using research findings"
+        - "Generate numbered steps with checkpoints"
+        - "Track every planning decision"
+        - "Save complete plan with rationale"
+      thinking_intensity:
+        simple: "Use standard thinking"
+        moderate: "Use 'think hard' for complexity"
+        complex: "Use 'ultrathink' for high complexity"
+
+    phase_4_implementation:
+      name: "Implementation"
+      purpose: "Execute the planned implementation"
+      primary_tools: "filesystem + domain-specific tools"
+      recommendation: "SHOULD follow SOLID/DRY/KISS principles, MAY use parallel execution for independent operations"
+      parallel_execution:
+        recommendation: "MAY execute independent operations concurrently"
+        max_concurrent: 3
+        when_appropriate:
+          - "Independent file operations"
+          - "Multiple unrelated code changes"
+          - "Separate feature implementations"
+      smart_recording_division:
+        active_work_tracking:
+          tool: "neo4j-memory"
+          recommendation: "SHOULD track active work in real-time"
+          use_for:
+            - "Current task tracking"
+            - "Debugging notes"
+            - "Immediate next steps"
+            - "Trial approaches"
+        significant_findings:
+          tool: "neo4j-memory"
+          recommendation: "SHOULD persist significant findings"
+          use_for:
+            - "Successful patterns discovered"
+            - "Problems solved"
+            - "Important decisions made"
+            - "Reusable approaches"
+      domain_specific_tools:
+        frontend:
+          - "shadcn-ui"
+          - "chakra-ui"
+          - "lucide-icons"
+        testing:
+          - "playwright"
+        ai_workflows:
+          - "zen"
+        time_operations:
+          - "time (for reverse date stamps)"
+
+    phase_5_progress_tracking:
+      name: "Progress Tracking"
+      purpose: "Track current state and milestones"
+      tools: "neo4j-memory, sequential-thinking"
+      recommendation: "SHOULD track progress for complex tasks, MAY be lightweight for simple tasks"
+      mandatory_when:
+        - "Multi-step implementations"
+        - "Tasks spanning multiple sessions"
+        - "Complex debugging sessions"
+      optional_when:
+        - "Single-step, quick tasks"
+        - "Tasks completed in one session"
+      smart_recording:
+        - "Track current state only"
+        - "Record significant milestones"
+        - "Document blockers immediately"
+        - "Validate against plan"
+
+    phase_6_context_save:
+      name: "Context Save"
+      purpose: "Persist successful patterns and learnings for future sessions"
+      tool: "neo4j-memory"
+      recommendation: "SHOULD be performed at session end, MUST be performed for significant learnings"
+      mandatory_when:
+        - "Significant patterns discovered"
+        - "Important problems solved"
+        - "Reusable approaches identified"
+        - "Architectural decisions made"
+      optional_when:
+        - "No significant learnings"
+        - "Trivial tasks with no reusable patterns"
+      final_knowledge_extraction:
+        - "Review session notes for important outcomes"
+        - "Transfer high-value learnings to neo4j-memory"
+        - "Persist curated knowledge with reverse date stamps"
+
+tool_usage_recommendations:
+  neo4j_memory:
+    purpose: "Enduring knowledge graph for persistence"
+    recommendation: "SHOULD be used for all knowledge persistence"
+    mandatory_when:
+      - "Saving significant patterns or learnings"
+      - "Tracking multi-session work"
+      - "Persisting architectural decisions"
+    optional_when:
+      - "Trivial, single-session tasks"
+    deprecated:
+      - "memory (replaced by neo4j-memory)"
+      - "extended-memory (replaced by neo4j-memory)"
+
+  sequential_thinking:
+    purpose: "Structured reasoning for planning"
+    recommendation: "SHOULD be used for complex tasks requiring structured reasoning"
+    mandatory_when:
+      - "Complex multi-step implementations"
+      - "Tasks requiring architectural decisions"
+      - "Unclear requirements needing analysis"
+    optional_when:
+      - "Simple, well-defined tasks"
+      - "Tasks with clear, documented approach"
+
+  context7:
+    purpose: "Official documentation retrieval"
+    recommendation: "SHOULD be used before implementing unfamiliar APIs/libraries"
+    mandatory_when:
+      - "Using new libraries or frameworks"
+      - "Implementing unfamiliar APIs"
+      - "Security-sensitive implementations"
+      - "Complex features requiring best practices"
+    optional_when:
+      - "Using well-understood, familiar APIs"
+      - "Simple tasks with existing documentation in context"
+
+  grep:
+    purpose: "GitHub code examples search"
+    recommendation: "SHOULD be used to find real-world implementation examples"
+    mandatory_when:
+      - "Implementing unfamiliar patterns"
+      - "Need production-quality examples"
+      - "Uncertain about implementation approach"
+    optional_when:
+      - "Using well-established, familiar patterns"
+      - "Simple implementations with clear approach"
+
+  filesystem:
+    purpose: "File read/write operations"
+    recommendation: "SHOULD be used for all file operations"
+    mandatory_when:
+      - "Reading existing code"
+      - "Writing new code"
+      - "Modifying files"
+    usage_guidelines:
+      - "Read files before modifying"
+      - "Use search_files to find relevant files"
+      - "Avoid directory_tree on root path (too broad)"
+
+  fetch:
+    purpose: "HTTP content retrieval"
+    recommendation: "MAY be used for additional documentation"
+    optional_when:
+      - "Context7 documentation insufficient"
+      - "Need additional external resources"
+      - "Validating information from multiple sources"
+
+  time:
+    purpose: "Timestamp generation"
+    recommendation: "SHOULD be used for reverse date stamps (YYYY-MM-DD-HHMMSS)"
+    mandatory_when:
+      - "Creating timestamped entities in neo4j-memory"
+      - "Naming timestamped files"
+      - "Recording session timestamps"
+    format: "YYYY-MM-DD-HHMMSS (UTC)"
+
+task_to_tool_mapping:
+  starting_session:
+    primary: "neo4j-memory (load context)"
+    recommendation: "SHOULD load context from previous sessions"
+    optional: "N/A"
+
+  before_any_code:
+    primary: "context7 + grep"
+    recommendation: "SHOULD research before coding, MUST research for unfamiliar APIs"
+    optional: "fetch, filesystem"
+
+  planning_features:
+    primary: "sequential-thinking"
+    recommendation: "SHOULD use for complex features"
+    optional: "neo4j-memory"
+
+  debugging_issues:
+    primary: "grep (search errors), context7 (docs)"
+    recommendation: "SHOULD search for error patterns and documentation"
+    optional: "sequential-thinking"
+
+  writing_code:
+    primary: "context7 (FIRST), grep (SECOND), filesystem"
+    recommendation: "SHOULD research before writing, MUST research for unfamiliar code"
+    optional: "neo4j-memory"
+
+  refactoring:
+    primary: "context7 (patterns), grep (examples)"
+    recommendation: "SHOULD research patterns and examples"
+    optional: "sequential-thinking"
+
+  frontend_dev:
+    primary: "context7 (framework docs), shadcn-ui, chakra-ui"
+    recommendation: "SHOULD use framework documentation and component libraries"
+    optional: "lucide-icons"
+
+  api_testing:
+    primary: "playwright, fetch"
+    recommendation: "SHOULD use appropriate testing tools"
+    optional: "context7 (API docs)"
+
+  documentation:
+    primary: "context7 (specs), filesystem"
+    recommendation: "SHOULD reference official specifications"
+    optional: "neo4j-memory"
+
+  security:
+    primary: "grep (vulnerabilities), context7 (security docs)"
+    recommendation: "SHOULD research security patterns and vulnerabilities"
+    optional: "sequential-thinking"
+
+common_tool_combination_patterns:
+  pattern_1_feature_implementation:
+    sequence: "neo4j-memory (load) → context7 (docs) → grep (examples) → sequential-thinking (plan) → filesystem (code) → neo4j-memory (track) → neo4j-memory (save)"
+    recommendation: "SHOULD follow this sequence for feature implementation"
+    flexibility: "MAY adapt based on task complexity"
+
+  pattern_2_bug_investigation:
+    sequence: "neo4j-memory (context) → grep (error patterns) → context7 (API docs) → sequential-thinking (analyze) → filesystem (fix) → neo4j-memory (document)"
+    recommendation: "SHOULD follow this sequence for bug investigation"
+    flexibility: "MAY skip steps if context already available"
+
+  pattern_3_frontend_component:
+    sequence: "context7 (framework docs) → grep (examples) → shadcn-ui (component) → filesystem (integrate) → playwright (test) → neo4j-memory (save)"
+    recommendation: "SHOULD follow this sequence for frontend components"
+    flexibility: "MAY use alternative component libraries"
+
+  pattern_4_api_development:
+    sequence: "context7 (framework docs) → grep (patterns) → sequential-thinking (design) → filesystem (implement) → fetch (test) → neo4j-memory (persist)"
+    recommendation: "SHOULD follow this sequence for API development"
+    flexibility: "MAY adapt testing approach"
+
+compliance_rules:
+  recommended_practices:
+    - "SHOULD use context7 BEFORE writing code for unfamiliar APIs"
+    - "SHOULD use grep to search GitHub for real examples"
+    - "SHOULD record in neo4j-memory AS YOU WORK for complex tasks"
+    - "SHOULD save to neo4j-memory at session end for significant learnings"
+    - "SHOULD use sequential-thinking for complex tasks"
+    - "SHOULD use time for reverse date stamps (YYYY-MM-DD-HHMMSS format)"
+
+  mandatory_practices:
+    - "MUST use context7 + grep before implementing unfamiliar APIs/libraries"
+    - "MUST use neo4j-memory for significant pattern persistence"
+    - "MUST use time for timestamped entities and files"
+    - "MUST NOT skip research phase for security-sensitive code"
+
+  forbidden_practices:
+    - "FORBIDDEN: Using deprecated memory or extended-memory tools (use neo4j-memory)"
+    - "FORBIDDEN: Using filesystem directory_tree on root path (too broad)"
+    - "FORBIDDEN: Skipping research phase for unfamiliar APIs (MUST research)"
+
+  violation_response:
+    for_mandatory_violations:
+      action: "Execution SHALL STOP immediately"
+      remediation: "Violation SHALL be remediated before continuation"
+      documentation: "Violation SHALL be documented with evidence"
+    for_recommended_violations:
+      action: "SHOULD be corrected, but execution MAY continue"
+      remediation: "Deviation SHOULD be documented with justification"
+      documentation: "Reason for deviation SHOULD be recorded"
+
+date_stamp_requirements:
+  format: "YYYY-MM-DD-HHMMSS (UTC)"
+  recommendation: "SHOULD be used for all neo4j-memory operations and file outputs"
+  mandatory_when:
+    - "Creating timestamped entities in neo4j-memory"
+    - "Naming timestamped files"
+    - "Recording session timestamps"
+  optional_when:
+    - "Temporary, single-session work"
+    - "Non-persistent operations"
+  forbidden:
+    - "Operations without timestamps when persistence required"
+    - "Inconsistent date formats"
+    - "Missing timestamps in documentation when required"
+
+autonomous_execution_mode:
+  recommendation: "MAY use autonomous execution mode for appropriate tasks"
+  enabled_by:
+    - "Adding 'with auto-approval'"
+    - "Adding 'auto-approve'"
+    - "Adding 'skip approval gates'"
+    - "Adding 'autonomous mode'"
+  what_happens:
+    - "Validates MCP tool usage without pausing"
+    - "Ensures compliance with THE GOLDEN RULE"
+    - "Verifies all 6 phases are followed when appropriate"
+    - "Tracks state for review/rollback"
+  safety: "SAFE - Compliance validation skill (read-only verification)"
+  requirements:
+    - "Execute ALL steps WITHOUT manual intervention when appropriate"
+    - "Use appropriate thinking intensity for task complexity"
+    - "Follow stepwise approach: PLAN → EXECUTE → VALIDATE → COMMIT"
+    - "Use parallelism for independent operations (max 3 concurrent tasks)"
+    - "Apply progressive thinking triggers ('think' → 'think hard' → 'ultrathink')"
+
+quality_thresholds:
+  codebase_understanding:
+    threshold: "≥90%"
+    recommendation: "SHOULD achieve before implementation"
+    mandatory_when: "Complex implementations affecting multiple components"
+
+  documentation_comprehension:
+    threshold: "≥85%"
+    recommendation: "SHOULD achieve before implementation"
+    mandatory_when: "Using unfamiliar APIs or libraries"
+
+  implementation_readiness:
+    threshold: "≥95%"
+    recommendation: "SHOULD achieve before implementation"
+    mandatory_when: "Security-sensitive or critical path implementations"
+
+flexibility_guidelines:
+  when_to_adapt:
+    - "Task complexity is lower than expected"
+    - "Context is already available from previous work"
+    - "Pattern is well-established and familiar"
+    - "Time constraints require streamlined approach"
+
+  when_to_follow_strictly:
+    - "Unfamiliar APIs or libraries"
+    - "Security-sensitive implementations"
+    - "Complex multi-component changes"
+    - "Architectural decisions required"
+
+  adaptation_requirements:
+    - "SHOULD document reason for adaptation"
+    - "SHOULD ensure quality thresholds still met"
+    - "MUST NOT skip mandatory practices"
+    - "MUST NOT violate forbidden practices"
+
+instruction: |
+  =========================
+  MCP TOOLS WORKFLOW PROTOCOL
+  =========================
+
+  This protocol defines recommended workflows for using MCP tools following
+  THE GOLDEN RULE. It provides flexibility while ensuring appropriate tool
+  usage when needed.
+
+  THE GOLDEN RULE WORKFLOW:
+  The recommended 6-phase workflow SHOULD be followed for most tasks:
+  1. Context Load (neo4j-memory) - SHOULD load context at session start
+  2. Research (context7 + grep) - SHOULD research before coding, MUST for unfamiliar APIs
+  3. Planning (sequential-thinking) - SHOULD plan complex tasks
+  4. Implementation (filesystem + domain tools) - SHOULD follow SOLID/DRY/KISS
+  5. Progress Tracking (neo4j-memory) - SHOULD track complex tasks
+  6. Context Save (neo4j-memory) - SHOULD save significant learnings
+
+  Reference workflow details: `the_golden_rule_workflow.six_phase_workflow`
+
+  TOOL USAGE RECOMMENDATIONS:
+  - neo4j-memory: SHOULD be used for knowledge persistence
+  - context7: SHOULD be used before implementing unfamiliar APIs (MUST for new libraries)
+  - grep: SHOULD be used to find real-world examples (MUST for unfamiliar patterns)
+  - sequential-thinking: SHOULD be used for complex tasks
+  - filesystem: SHOULD be used for all file operations
+  - time: SHOULD be used for reverse date stamps (MUST for persistent entities)
+
+  Reference tool recommendations: `tool_usage_recommendations`
+
+  COMPLIANCE RULES:
+  - Recommended practices: SHOULD be followed but MAY be adapted
+  - Mandatory practices: MUST be followed (no exceptions)
+  - Forbidden practices: MUST NOT be performed (no exceptions)
+
+  Reference compliance: `compliance_rules`
+
+  FLEXIBILITY:
+  - Workflow MAY be adapted based on task complexity and context
+  - Tools SHOULD be used when appropriate, MAY be skipped for trivial tasks
+  - Mandatory gates MUST be followed regardless of adaptation
+
+  Reference flexibility: `flexibility_guidelines`
+
+  See `task_to_tool_mapping` for task-specific tool recommendations.

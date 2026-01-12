@@ -1,0 +1,982 @@
+prompt_name: "WebUI_Refactoring_Phase"
+version: "1.0.0"
+type: "webui_refactoring"
+language: "en-AU"
+
+context:
+  role: "LLM implementation executor refactoring existing HTMX/Jinja2 templates to align with new design system standards"
+  governance:
+    canonical_protocol: "../00-Enterprise_Canonical_Execution_Protocol.yaml"
+    golden_rule_execution_protocol: "../01-The_GoldenRule_Execution_Protocol.yaml"
+  purpose: >
+    Execute refactoring of existing HTMX/Jinja2 templates, pages, partials, macros,
+    and components to align with NEW design system standards. This is a comprehensive compliance
+    audit and remediation phase that ensures all existing code meets the standards defined in
+    COLOR_SCHEME_DIRECTIVE.md, universal_component_mapping_protocol.md, responsive_layout_principles.md,
+    and all other design protocols.
+
+  reference_docs:
+    enforcement_protocols:
+      ui_instructions:
+        - "20-WebUI_Design_Phase_Tasks.yaml"
+        - "21-WebUI_Component_Mapping_Phase.yaml"
+      ui_design_protocols:
+        - "design_system_foundations.md"
+        - "COLOR_SCHEME_DIRECTIVE.md"
+        - "responsive_layout_principles.md"
+        - "openapi_ui_model_conversion_rules.md"
+        - "motion_transition_spec.md"
+        - "renderer_mapping_spec.md"
+      ui_implementation_protocols:
+        - "responsive_layout_developer_workflow.md"
+        - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+      ui_token_protocols:
+        - "universal_component_mapping_protocol.md"
+        - "layout_tokens.json"
+        - "component_tokens.json"
+        - "tailwind_generator_template.js"
+
+  target_scope:
+    description: >
+      The target scope MUST be determined dynamically at execution time by scanning the actual
+      codebase structure. If no explicit scope is provided by the executor, the system will
+      default to scanning ALL HTMX/Jinja2 template files in the production codebase.
+
+    discovery_protocol:
+      - "CRITICAL: At execution start, run file_search or list_dir to discover actual template structure"
+      - "Identify all base templates (base*.html, layout*.html, etc.)"
+      - "Identify all page templates (pages/*, views/*, etc.)"
+      - "Identify all component templates (components/*, partials/*, etc.)"
+      - "Identify all macro files (macros/*, includes/*, etc.)"
+      - "Generate complete file list for audit"
+
+    default_scan_patterns:
+      base_templates:
+        - "**/templates/**/base*.html"
+        - "**/templates/**/layout*.html"
+        - "**/templates/**/_layout*.html"
+      pages:
+        - "**/templates/pages/**/*.html"
+        - "**/templates/views/**/*.html"
+      components:
+        - "**/templates/components/**/*.html"
+        - "**/templates/partials/**/*.html"
+      macros:
+        - "**/templates/macros/**/*.html"
+        - "**/templates/includes/**/*.html"
+
+    example_scope_if_explicit:
+      # This is an EXAMPLE ONLY - actual paths must be discovered at execution time
+      base_templates:
+        - "src/ui/templates/base.html"
+        - "src/ui/templates/base_dashboard.html"
+        - "src/ui/templates/base_hub.html"
+      pages:
+        - "src/ui/templates/pages/index.html"
+      components:
+        - "src/ui/templates/components/interactive/anchored_actions_bar.html"
+        - "src/ui/templates/components/interactive/button.html"
+        # ... (additional components discovered at runtime)
+      macros:
+        - "src/ui/templates/macros/daisyui/*"
+        - "src/ui/templates/macros/ucmp/*"
+
+  enforcement_matrix:
+    color_scheme_directive:
+      reference: "COLOR_SCHEME_DIRECTIVE.md"
+      prohibited_patterns:
+        - "bg-white"
+        - "bg-gray-*"
+        - "bg-blue-*, bg-red-*, bg-green-* (any color-shade pattern)"
+        - "text-black"
+        - "text-gray-*"
+        - "text-blue-*, text-red-* (any color-shade pattern)"
+        - "border-gray-*"
+        - "border-blue-*, border-red-* (any border-color pattern)"
+        - "Hardcoded hex colors (#fff, #000, #rgb)"
+        - "Hardcoded rgb/rgba values"
+        - "Hardcoded hsl/hsla values"
+      required_patterns:
+        - "bg-base-{100,200,300}"
+        - "text-base-content"
+        - "text-base-content/70 (opacity variants)"
+        - "border-base-300"
+        - "btn btn-{primary,secondary,accent,ghost,neutral}"
+        - "input input-bordered"
+        - "select select-bordered"
+        - "alert alert-{info,success,warning,error}"
+        - "badge badge-{primary,secondary,accent,neutral}"
+      enforcement: "AUTOMATIC REJECTION of any code containing prohibited patterns"
+
+    design_system_foundations:
+      reference: "design_system_foundations.md"
+      shadow_system:
+        prohibited: "Single shadows, border usage"
+        required: "Dual-shadow system (shadow-sm, shadow-md, shadow-lg)"
+        implementation: "Top light shadow + bottom dark shadow"
+      color_layering:
+        required: "3-4 tonal variations per base color"
+        implementation: "bg-base-100 (front) -> bg-base-200 (middle) -> bg-base-300 (back)"
+      borders:
+        prohibited: "ALL border properties (border, border-*)"
+        required: "Tonal contrast via color layering"
+
+    responsive_layout_principles:
+      reference: "responsive_layout_principles.md"
+      container_queries:
+        prohibited: "@media viewport queries"
+        required: "@container queries with container-type: inline-size"
+      responsive_strategy:
+        prohibited: "Shrinking components below readable size"
+        required: "Purposeful rearrangement (Must/Should/Nice visibility tiers)"
+      touch_targets:
+        minimum: "44px for all interactive elements"
+
+    component_mapping_protocol:
+      reference: "universal_component_mapping_protocol.md"
+      dual_tokens:
+        required: "Primary token (desktop) + Secondary token (mobile) for all components"
+      semantic_overrides:
+        required: "email field -> email_primary, status field -> badge_primary, etc."
+
+    technology_stack_hierarchy:
+      reference: "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+      priority_order:
+        1: "HTMX primitives (hx-get, hx-post, hx-swap, etc.)"
+        2: "HTMX extensions (loading-states, multi-swap, response-targets)"
+        3: "Alpine.js (ONLY when HTMX cannot achieve functionality)"
+        4: "Public JS libraries (Chart.js, D3.js, maintained repos)"
+        5: "Custom JavaScript (LAST RESORT with full justification)"
+      prohibited:
+        - "jQuery"
+        - "Custom JavaScript frameworks"
+        - "Inline JavaScript in templates (extract to separate files)"
+        - "Unmaintained libraries"
+
+  prerequisite_validation:
+    - "[ ] All reference documentation files exist and are readable"
+    - "[ ] COLOR_SCHEME_DIRECTIVE.md reviewed and enforcement rules understood"
+    - "[ ] Current date/time retrieved (mcp__time__get_current_time)"
+    - "[ ] Memory context loaded (neo4j-memory: last 448 hours)"
+    - "[ ] Target file paths exist and are accessible"
+    - "[ ] Backup of existing files created before refactoring"
+
+instructions:
+  objective: >
+    Audit all existing HTMX/Jinja2 templates for compliance with new design system standards,
+    generate a comprehensive remediation plan, and execute systematic refactoring of all
+    non-compliant files to meet enforcement protocols. All changes must be tracked, validated,
+    and tested before proceeding to the next file.
+
+  steps:
+    - step: 1
+      name: "Comprehensive Compliance Audit"
+      actions:
+        - "CRITICAL: Scan ALL files in target_scope for violations"
+        - "Run automated grep searches for prohibited patterns:"
+        - "  1. Color violations: bg-white, bg-gray-*, text-black, text-gray-*, border-gray-*"
+        - "  2. Hardcoded colors: #[0-9a-fA-F]{3,6}, rgb(, rgba(, hsl(, hsla("
+        - "  3. Border usage: border:, border-top:, border-bottom:, border-left:, border-right:"
+        - "  4. Viewport queries: @media (max-width:, @media (min-width:"
+        - "  5. jQuery usage: $(, jQuery("
+        - "  6. Inline JavaScript: onclick=, onload=, onchange="
+        - "Read each file and perform manual inspection for:"
+        - "  1. Missing dual-shadow system (single shadows)"
+        - "  2. Missing container queries (viewport breakpoints)"
+        - "  3. Component shrinking instead of rearrangement"
+        - "  4. Touch targets < 44px"
+        - "  5. HTMX hierarchy violations (Alpine.js before HTMX)"
+        - "  6. Missing semantic color classes"
+        - "Generate violations matrix:"
+      implementation_pattern: |
+        # Automated Grep Searches
+
+        # 1. Color Violations
+        grep -r "bg-white\|bg-gray-\|text-black\|text-gray-\|border-gray-" src/ui/templates/
+
+        # 2. Hardcoded Colors
+        grep -rE "#[0-9a-fA-F]{3,6}|rgba?\(|hsla?\(" src/ui/templates/
+
+        # 3. Border Usage
+        grep -r "border:" src/ui/templates/
+
+        # 4. Viewport Queries
+        grep -r "@media" src/ui/templates/
+
+        # 5. jQuery Usage
+        grep -r "\$(\|jQuery(" src/ui/templates/
+
+        # 6. Inline JavaScript
+        grep -rE "on(click|load|change|submit)=" src/ui/templates/
+      outputs:
+        - "violations_matrix: Dict[str, List[Violation]]"
+        - "file_compliance_scores: Dict[str, float]"
+        - "total_violations_count: int"
+      violation_matrix_structure: |
+        {
+          "file_path": "src/ui/templates/components/interactive_button.html",
+          "violations": [
+            {
+              "type": "COLOR_SCHEME_DIRECTIVE",
+              "severity": "CRITICAL",
+              "line_number": 12,
+              "violation": "bg-gray-200",
+              "required_fix": "bg-base-200",
+              "reference": "COLOR_SCHEME_DIRECTIVE.md Section 3"
+            },
+            {
+              "type": "DESIGN_SYSTEM_FOUNDATIONS",
+              "severity": "HIGH",
+              "line_number": 15,
+              "violation": "border border-gray-300",
+              "required_fix": "Remove border, use tonal contrast (bg-base-300)",
+              "reference": "design_system_foundations.md Section 2.1"
+            },
+            {
+              "type": "RESPONSIVE_LAYOUT_PRINCIPLES",
+              "severity": "MEDIUM",
+              "line_number": 28,
+              "violation": "@media (max-width: 768px)",
+              "required_fix": "@container (max-width: 768px)",
+              "reference": "responsive_layout_principles.md Section 2.7"
+            }
+          ],
+          "compliance_score": 0.65,
+          "priority": "HIGH"
+        }
+      validation:
+        - "[ ] All files in target_scope scanned"
+        - "[ ] Automated grep searches completed for all prohibited patterns"
+        - "[ ] Manual inspection completed for complex violations"
+        - "[ ] Violations matrix generated with file paths, line numbers, and fixes"
+        - "[ ] Compliance scores calculated (0.0-1.0) per file"
+        - "[ ] Files prioritized by severity and compliance score"
+      gates:
+        - "Violations matrix complete with ALL files audited"
+        - "Compliance scores calculated for ALL files"
+        - "Do not proceed until audit is comprehensive and validated"
+
+    - step: 2
+      name: "Generate Remediation Plan"
+      actions:
+        - "Sort files by priority: CRITICAL violations first, then HIGH, MEDIUM, LOW"
+        - "Group files by component type: base templates, pages, components, macros"
+        - "For each file, generate detailed remediation checklist:"
+        - "  1. List all violations with line numbers"
+        - "  2. Specify exact fixes with before/after code examples"
+        - "  3. Document dependent files that may be affected"
+        - "  4. Estimate complexity (Simple/Medium/Complex)"
+        - "  5. Define validation tests for each fix"
+        - "Create remediation order based on dependencies:"
+        - "  - Fix base templates FIRST (base.html, base_dashboard.html)"
+        - "  - Then fix macros (daisyui/*, ucmp/*)"
+        - "  - Then fix components (alphabetical order)"
+        - "  - Finally fix pages"
+        - "Calculate total effort estimate and timeline"
+      outputs:
+        - "remediation_plan: Dict[str, RemediationTask]"
+        - "execution_order: List[str]"
+        - "estimated_effort: Dict[str, int]"
+      remediation_task_structure: |
+        {
+          "file_path": "src/ui/templates/components/interactive_button.html",
+          "priority": "HIGH",
+          "complexity": "MEDIUM",
+          "violations_count": 8,
+          "remediation_steps": [
+            {
+              "step": 1,
+              "violation": "bg-gray-200 on line 12",
+              "fix": "Replace with bg-base-200",
+              "before": "<button class=\"px-4 py-2 bg-gray-200 text-gray-700 rounded\">",
+              "after": "<button class=\"btn btn-neutral\">",
+              "reference": "COLOR_SCHEME_DIRECTIVE.md Section 3.3",
+              "validation": "Visual inspection: button should adapt to theme changes"
+            },
+            {
+              "step": 2,
+              "violation": "border border-gray-300 on line 15",
+              "fix": "Remove border, use tonal contrast",
+              "before": "<div class=\"border border-gray-300 p-4\">",
+              "after": "<div class=\"bg-base-200 p-4\">",
+              "reference": "design_system_foundations.md Section 2.1",
+              "validation": "Visual inspection: no visible border, depth via color"
+            }
+          ],
+          "dependent_files": [
+            "src/ui/templates/pages/index.html"
+          ],
+          "test_requirements": [
+            "Test in light theme",
+            "Test in dark theme",
+            "Test responsive behavior"
+          ],
+          "estimated_effort_minutes": 30
+        }
+      validation:
+        - "[ ] All files from violations matrix included in remediation plan"
+        - "[ ] Remediation steps documented with before/after examples"
+        - "[ ] Execution order respects dependencies (base -> macros -> components -> pages)"
+        - "[ ] Complexity and effort estimates provided"
+        - "[ ] Test requirements defined for each file"
+      gates:
+        - "Remediation plan complete with ALL files included"
+        - "Execution order validated (dependencies resolved)"
+        - "Do not proceed until plan is comprehensive and approved"
+
+    - step: 3
+      name: "Execute Remediation - Base Templates"
+      actions:
+        - "CRITICAL: Start with base templates (highest priority dependencies)"
+        - "For each base template file:"
+        - "  1. Create backup: cp {file} {file}.backup.$(date +%Y%m%d_%H%M%S)"
+        - "  2. Read entire file content"
+        - "  3. Apply fixes from remediation plan sequentially"
+        - "  4. Validate syntax (Jinja2 template validation)"
+        - "  5. Run automated compliance checks (grep for violations)"
+        - "  6. Write updated file"
+        - "  7. Document changes in change log"
+        - "  8. Test in browser (manual verification)"
+        - "Fix priority order:"
+        - "  1. base.html"
+        - "  2. base_dashboard.html"
+        - "  3. base_hub.html"
+      implementation_pattern: |
+        # Example: Refactoring base.html
+
+        # BEFORE (Non-Compliant)
+        <body class="bg-gray-100 text-gray-900">
+          <header class="bg-white border-b border-gray-200 shadow-sm">
+            <nav class="container mx-auto px-4">
+              <a href="/" class="text-blue-600 hover:text-blue-800">Home</a>
+            </nav>
+          </header>
+          <main class="container mx-auto px-4 py-8">
+            {% block content %}{% endblock %}
+          </main>
+        </body>
+
+        # AFTER (Compliant)
+        <body class="bg-base-100 text-base-content">
+          <header class="bg-base-200 shadow-md">
+            <nav class="container mx-auto px-4">
+              <a href="/" class="link link-primary">Home</a>
+            </nav>
+          </header>
+          <main class="container mx-auto px-4 py-8">
+            {% block content %}{% endblock %}
+          </main>
+        </body>
+
+        # Changes Applied:
+        # 1. bg-gray-100 -> bg-base-100 (COLOR_SCHEME_DIRECTIVE)
+        # 2. text-gray-900 -> text-base-content (COLOR_SCHEME_DIRECTIVE)
+        # 3. bg-white -> bg-base-200 (COLOR_SCHEME_DIRECTIVE)
+        # 4. border-b border-gray-200 -> REMOVED (design_system_foundations)
+        # 5. shadow-sm -> shadow-md (dual-shadow system)
+        # 6. text-blue-600 -> link link-primary (DaisyUI semantic)
+      validation:
+        - "[ ] Backup created for each file before editing"
+        - "[ ] All COLOR_SCHEME_DIRECTIVE violations fixed"
+        - "[ ] All border usage removed (replaced with tonal contrast)"
+        - "[ ] Dual-shadow system applied to elevated elements"
+        - "[ ] Jinja2 template syntax validated"
+        - "[ ] Automated compliance check PASSED (zero violations)"
+        - "[ ] Browser rendering test PASSED (light and dark themes)"
+      gates:
+        - "All base template files refactored and validated"
+        - "Zero COLOR_SCHEME_DIRECTIVE violations remaining"
+        - "Zero design_system_foundations violations remaining"
+        - "Do not proceed until base templates are compliant"
+
+    - step: 4
+      name: "Execute Remediation - Macros"
+      actions:
+        - "CRITICAL: Refactor all macros before components (components depend on macros)"
+        - "For each macro file in src/ui/templates/macros/:"
+        - "  1. Create backup"
+        - "  2. Read entire file"
+        - "  3. Apply COLOR_SCHEME_DIRECTIVE fixes"
+        - "  4. Apply design_system_foundations fixes (shadows, borders)"
+        - "  5. Ensure macros accept theme-aware classes as parameters"
+        - "  6. Validate macro syntax"
+        - "  7. Test macro rendering with sample data"
+        - "  8. Document changes"
+        - "Priority order:"
+        - "  1. macros/daisyui/* (DaisyUI component wrappers)"
+        - "  2. macros/ucmp/* (UCMP component implementations)"
+      implementation_pattern: |
+        # Example: Refactoring button macro
+
+        # BEFORE (Non-Compliant)
+        {% macro button(text, url, style='primary') %}
+          {% if style == 'primary' %}
+            <a href="{{ url }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              {{ text }}
+            </a>
+          {% elif style == 'secondary' %}
+            <a href="{{ url }}" class="px-4 py-2 bg-gray-200 text-gray-700 border border-gray-300 rounded">
+              {{ text }}
+            </a>
+          {% endif %}
+        {% endmacro %}
+
+        # AFTER (Compliant)
+        {% macro button(text, url, variant='primary') %}
+          <a href="{{ url }}" class="btn btn-{{ variant }}">
+            {{ text }}
+          </a>
+        {% endmacro %}
+
+        # Changes Applied:
+        # 1. Removed hardcoded colors (bg-blue-600, bg-gray-200, etc.)
+        # 2. Removed border usage (border border-gray-300)
+        # 3. Replaced with DaisyUI btn btn-{variant} classes
+        # 4. Simplified macro (DaisyUI handles all styling)
+        # 5. Renamed 'style' parameter to 'variant' (semantic clarity)
+
+        # Usage:
+        # {{ button('Click Me', '/action', variant='primary') }}
+        # {{ button('Cancel', '/cancel', variant='ghost') }}
+      validation:
+        - "[ ] All macro files backed up"
+        - "[ ] COLOR_SCHEME_DIRECTIVE violations fixed"
+        - "[ ] Macros simplified using DaisyUI components"
+        - "[ ] Macro parameters accept semantic variants (primary, secondary, etc.)"
+        - "[ ] Macro syntax validated"
+        - "[ ] Macros tested with sample data"
+      gates:
+        - "All macro files refactored and validated"
+        - "Macros produce theme-aware output"
+        - "Do not proceed until macros are compliant"
+
+    - step: 5
+      name: "Execute Remediation - Components"
+      actions:
+        - "CRITICAL: Refactor components in alphabetical order (for tracking)"
+        - "For each component file:"
+        - "  1. Create backup"
+        - "  2. Read entire file"
+        - "  3. Apply all COLOR_SCHEME_DIRECTIVE fixes"
+        - "  4. Apply design_system_foundations fixes (shadows, borders, color layering)"
+        - "  5. Apply responsive_layout_principles fixes (container queries)"
+        - "  6. Apply technology_stack_hierarchy fixes (HTMX > Alpine.js)"
+        - "  7. Validate template syntax"
+        - "  8. Test component rendering"
+        - "  9. Document changes"
+        - "Component refactoring order (alphabetical):"
+        - "  1. anchored_actions_bar.html"
+        - "  2. data_table_elements.html"
+        - "  3. empty_state.html"
+        - "  4. form_elements.html"
+        - "  5. interactive_button_group.html"
+        - "  6. interactive_button.html"
+        - "  ... (continue alphabetically)"
+      implementation_pattern: |
+        # Example: Refactoring interactive_card.html
+
+        # BEFORE (Non-Compliant)
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+          <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+          <p class="mt-2 text-gray-600">{{ description }}</p>
+
+          <!-- Alpine.js for toggle (should use HTMX if server interaction) -->
+          <div x-data="{ open: false }">
+            <button @click="open = !open" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
+              Toggle Details
+            </button>
+            <div x-show="open" class="mt-4 bg-gray-50 p-4 rounded">
+              {{ details }}
+            </div>
+          </div>
+        </div>
+
+        # AFTER (Compliant)
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-base-content">{{ title }}</h2>
+            <p class="text-base-content/70">{{ description }}</p>
+
+            <!-- HTMX for server interaction (preferred over Alpine.js) -->
+            <button
+              class="btn btn-primary mt-4"
+              hx-get="/api/card-details/{{ card_id }}"
+              hx-target="#details-{{ card_id }}"
+              hx-swap="innerHTML"
+            >
+              Load Details
+            </button>
+            <div id="details-{{ card_id }}" class="mt-4 bg-base-200 p-4 rounded-box">
+              <!-- Details loaded via HTMX -->
+            </div>
+          </div>
+        </div>
+
+        # Changes Applied:
+        # 1. bg-white -> bg-base-100 (COLOR_SCHEME_DIRECTIVE)
+        # 2. border border-gray-200 -> REMOVED (design_system_foundations)
+        # 3. shadow-sm -> shadow-xl (dual-shadow system)
+        # 4. text-gray-900 -> text-base-content (COLOR_SCHEME_DIRECTIVE)
+        # 5. text-gray-600 -> text-base-content/70 (semantic opacity)
+        # 6. Alpine.js toggle -> HTMX server interaction (technology_stack_hierarchy)
+        # 7. bg-blue-600 -> btn btn-primary (DaisyUI semantic)
+        # 8. bg-gray-50 -> bg-base-200 (COLOR_SCHEME_DIRECTIVE)
+        # 9. Used DaisyUI card component structure
+      validation:
+        - "[ ] All component files backed up"
+        - "[ ] COLOR_SCHEME_DIRECTIVE violations fixed"
+        - "[ ] Borders removed, replaced with tonal contrast"
+        - "[ ] Dual-shadow system applied"
+        - "[ ] HTMX used instead of Alpine.js where server interaction exists"
+        - "[ ] Container queries used instead of viewport queries"
+        - "[ ] Touch targets >= 44px"
+        - "[ ] Component syntax validated"
+        - "[ ] Component rendering tested"
+      gates:
+        - "All component files refactored and validated"
+        - "Zero violations remaining in components"
+        - "Technology stack hierarchy enforced"
+
+    - step: 6
+      name: "Execute Remediation - Pages"
+      actions:
+        - "CRITICAL: Refactor page templates LAST (depend on base, macros, components)"
+        - "For each page file:"
+        - "  1. Create backup"
+        - "  2. Read entire file"
+        - "  3. Apply all compliance fixes"
+        - "  4. Ensure page uses refactored components/macros correctly"
+        - "  5. Validate template syntax"
+        - "  6. Test page rendering end-to-end"
+        - "  7. Document changes"
+        - "Page refactoring order:"
+        - "  1. pages/index.html"
+        - "  ... (additional pages as discovered)"
+      validation:
+        - "[ ] All page files backed up"
+        - "[ ] All compliance fixes applied"
+        - "[ ] Pages use refactored components correctly"
+        - "[ ] Page syntax validated"
+        - "[ ] End-to-end page rendering tested"
+      gates:
+        - "All page files refactored and validated"
+
+    - step: 7
+      name: "Regenerate Tailwind Configuration"
+      actions:
+        - "CRITICAL: Regenerate tailwind.config.js using tailwind_generator_template.js"
+        - "Steps:"
+        - "  1. Read layout_tokens.json"
+        - "  2. Execute tailwind_generator_template.js logic"
+        - "  3. Generate new tailwind.config.js with:"
+        - "     - All spacing tokens from layout_tokens.json"
+        - "     - All breakpoint tokens"
+        - "     - All elevation (shadow) tokens with CSS custom properties"
+        - "     - All typography tokens"
+        - "     - All motion tokens"
+        - "     - Color system using CSS custom properties (var(--color-*))"
+        - "  4. Add @tailwindcss/container-queries plugin"
+        - "  5. Validate config syntax"
+        - "  6. Backup old config"
+        - "  7. Write new config"
+      implementation_pattern: |
+        // tailwind.config.js (Generated from layout_tokens.json)
+
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: [
+            './src/ui/templates/**/*.html',
+            './src/ui/static/js/**/*.js',
+          ],
+          theme: {
+            container: {
+              center: true,
+              padding: {
+                DEFAULT: '24px',
+                sm: '24px',
+                md: '24px',
+              },
+            },
+            extend: {
+              // From layout_tokens.json
+              screens: {
+                'sm': '640px',
+                'md': '768px',
+                'lg': '1024px',
+                'xl': '1280px',
+                '2xl': '1536px',
+              },
+              spacing: {
+                0: '0',
+                1: '0.25rem',
+                2: '0.5rem',
+                3: '0.75rem',
+                4: '1rem',
+                5: '1.25rem',
+                6: '1.5rem',
+                8: '2rem',
+                10: '2.5rem',
+                12: '3rem',
+                16: '4rem',
+              },
+              boxShadow: {
+                'none': 'none',
+                'xs': '0 1px 1px var(--shadow-color-xs, oklch(0.2 0 0 / 0.04))',
+                'sm': '0 1px 2px var(--shadow-color-sm, oklch(0.2 0 0 / 0.06))',
+                'md': '0 4px 6px var(--shadow-color-md, oklch(0.2 0 0 / 0.10)), 0 -1px 2px var(--shadow-color-inset, oklch(1 0 0 / 0.40)) inset',
+                'lg': '0 10px 15px var(--shadow-color-lg, oklch(0.2 0 0 / 0.18)), 0 -2px 4px var(--shadow-color-inset, oklch(1 0 0 / 0.40)) inset',
+                'xl': '0 20px 25px var(--shadow-color-xl, oklch(0.2 0 0 / 0.22)), 0 -3px 6px var(--shadow-color-inset, oklch(1 0 0 / 0.45)) inset',
+              },
+              fontSize: {
+                'xs': ['0.75rem', { lineHeight: '1.4' }],
+                'sm': ['0.875rem', { lineHeight: '1.5' }],
+                'base': ['1rem', { lineHeight: '1.5' }],
+                'lg': ['1.125rem', { lineHeight: '1.6' }],
+                'xl': ['1.25rem', { lineHeight: '1.6' }],
+                '2xl': ['1.5rem', { lineHeight: '1.3' }],
+                '3xl': ['1.875rem', { lineHeight: '1.2' }],
+              },
+              transitionDuration: {
+                'fast': '120ms',
+                'normal': '180ms',
+                'slow': '260ms',
+              },
+              transitionTimingFunction: {
+                'standard': 'cubic-bezier(0.2, 0.0, 0.2, 1)',
+                'inOut': 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+                'snappy': 'cubic-bezier(0.25, 0.8, 0.25, 1)',
+              },
+            },
+          },
+          plugins: [
+            require('@tailwindcss/container-queries'),
+            require('daisyui'),
+          ],
+          daisyui: {
+            themes: ['light', 'dark', 'corporate', 'cyberpunk', 'synthwave', 'retro', 'valentine', 'aqua'],
+            darkTheme: 'dark',
+            base: true,
+            styled: true,
+            utils: true,
+          },
+        };
+      validation:
+        - "[ ] layout_tokens.json values correctly mapped to Tailwind config"
+        - "[ ] All spacing, breakpoint, shadow, typography tokens present"
+        - "[ ] CSS custom properties used for colors and shadows"
+        - "[ ] @tailwindcss/container-queries plugin added"
+        - "[ ] DaisyUI plugin configured with all themes"
+        - "[ ] Config syntax validated (JavaScript)"
+        - "[ ] Old config backed up"
+      gates:
+        - "New tailwind.config.js generated and validated"
+        - "All design tokens from layout_tokens.json present"
+
+    - step: 8
+      name: "Create CSS Custom Properties for Theming"
+      actions:
+        - "CRITICAL: Create CSS file with custom properties for theme support"
+        - "Create src/ui/static/css/theme-variables.css with:"
+        - "  1. Shadow color variables (--shadow-color-xs, --shadow-color-sm, etc.)"
+        - "  2. Theme-specific overrides for light and dark themes"
+        - "  3. User customization variables (brightness, color adjustments)"
+        - "Import this file in base.html <head>"
+      implementation_pattern: |
+        /* src/ui/static/css/theme-variables.css */
+
+        :root {
+          /* Shadow Color Variables (Light Theme Defaults) */
+          --shadow-color-xs: oklch(0.2 0 0 / 0.04);
+          --shadow-color-sm: oklch(0.2 0 0 / 0.06);
+          --shadow-color-md: oklch(0.2 0 0 / 0.10);
+          --shadow-color-lg: oklch(0.2 0 0 / 0.18);
+          --shadow-color-xl: oklch(0.2 0 0 / 0.22);
+          --shadow-color-inset: oklch(1 0 0 / 0.40);
+
+          /* User Customization Variables */
+          --brightness-light: 1;
+          --brightness-dark: 1;
+          --base-100-adjust: 1;
+          --base-200-adjust: 1;
+          --base-300-adjust: 1;
+        }
+
+        /* Dark Theme Shadow Adjustments */
+        [data-theme="dark"] {
+          --shadow-color-xs: oklch(0.1 0 0 / 0.08);
+          --shadow-color-sm: oklch(0.1 0 0 / 0.12);
+          --shadow-color-md: oklch(0.1 0 0 / 0.20);
+          --shadow-color-lg: oklch(0.1 0 0 / 0.28);
+          --shadow-color-xl: oklch(0.1 0 0 / 0.35);
+          --shadow-color-inset: oklch(0.9 0 0 / 0.20);
+        }
+
+        /* Apply User Brightness Customization */
+        [data-theme="light"] {
+          filter: brightness(var(--brightness-light));
+        }
+
+        [data-theme="dark"] {
+          filter: brightness(var(--brightness-dark));
+        }
+
+        /* Base Color Adjustments (from user customization) */
+        .bg-base-100 {
+          background-color: oklch(from var(--b1) calc(l * var(--base-100-adjust)) c h);
+        }
+
+        .bg-base-200 {
+          background-color: oklch(from var(--b2) calc(l * var(--base-200-adjust)) c h);
+        }
+
+        .bg-base-300 {
+          background-color: oklch(from var(--b3) calc(l * var(--base-300-adjust)) c h);
+        }
+      validation:
+        - "[ ] theme-variables.css created with all custom properties"
+        - "[ ] Shadow color variables defined for light and dark themes"
+        - "[ ] User customization variables defined"
+        - "[ ] File imported in base.html"
+        - "[ ] CSS syntax validated"
+      gates:
+        - "theme-variables.css created and imported"
+        - "Custom properties support theme switching"
+
+    - step: 9
+      name: "Execute Manual Testing"
+      reference: "12-Manual_WebUI_Regression_Testing.yaml, 13-Manual_WebUI_Browser_Regression_Testing.yaml"
+      actions:
+        - "CRITICAL: Test all refactored files in browser"
+        - "Execute 12-Manual_WebUI_Regression_Testing.yaml:"
+        - "  1. Test all refactored base templates"
+        - "  2. Test all refactored components"
+        - "  3. Test all refactored pages"
+        - "  4. Verify authentication mechanisms work"
+        - "  5. Verify HTMX interactions work"
+        - "  6. Verify form submissions work"
+        - "Execute 13-Manual_WebUI_Browser_Regression_Testing.yaml:"
+        - "  1. Test in Chrome (latest)"
+        - "  2. Test in Firefox (latest)"
+        - "  3. Test in Safari (latest)"
+        - "  4. Test responsive behavior (resize container)"
+        - "  5. Test theme switching (light/dark/custom)"
+        - "  6. Test accessibility (keyboard navigation, screen reader)"
+        - "Document all test results"
+      validation_checklist:
+        theme_switching:
+          - "[ ] Light theme renders correctly"
+          - "[ ] Dark theme renders correctly"
+          - "[ ] Custom themes render correctly"
+          - "[ ] Theme switching updates all components"
+          - "[ ] No hardcoded colors break themes"
+        responsive_behavior:
+          - "[ ] Components rearrange at breakpoints (not shrink)"
+          - "[ ] Container queries trigger correctly"
+          - "[ ] Three-tier visibility works (Must/Should/Nice)"
+          - "[ ] Touch targets >= 44px on mobile"
+        accessibility:
+          - "[ ] Keyboard navigation works"
+          - "[ ] Focus indicators visible"
+          - "[ ] WCAG AA contrast ratios met"
+          - "[ ] Screen reader labels present"
+        functionality:
+          - "[ ] All HTMX interactions work"
+          - "[ ] Form submissions work"
+          - "[ ] Authentication works"
+          - "[ ] All links functional"
+      gates:
+        - "All manual tests passed"
+        - "All browsers tested"
+        - "Theme switching validated"
+        - "Responsive behavior validated"
+        - "Accessibility validated"
+
+    - step: 10
+      name: "Automated Compliance Verification"
+      actions:
+        - "CRITICAL: Run final automated compliance checks on ALL refactored files"
+        - "Execute grep searches for remaining violations:"
+        - "  1. grep -r 'bg-white\\|bg-gray-\\|text-black\\|text-gray-\\|border-gray-' src/ui/templates/"
+        - "  2. grep -rE '#[0-9a-fA-F]{3,6}|rgba?\\(|hsla?\\(' src/ui/templates/"
+        - "  3. grep -r 'border:' src/ui/templates/"
+        - "  4. grep -r '@media' src/ui/templates/"
+        - "  5. grep -r '\\$(\\|jQuery(' src/ui/templates/"
+        - "Expected result: ZERO matches for all searches"
+        - "Generate compliance report:"
+        - "  - Total files refactored"
+        - "  - Total violations fixed"
+        - "  - Compliance rate before/after"
+        - "  - Files with 100% compliance"
+        - "  - Any remaining violations (should be ZERO)"
+      outputs:
+        - "compliance_report: Dict[str, Any]"
+        - "final_compliance_rate: float"
+      compliance_report_structure: |
+        {
+          "summary": {
+            "total_files_audited": 30,
+            "total_files_refactored": 30,
+            "total_violations_found": 487,
+            "total_violations_fixed": 487,
+            "remaining_violations": 0,
+            "compliance_rate_before": 0.42,
+            "compliance_rate_after": 1.0
+          },
+          "violations_by_type": {
+            "COLOR_SCHEME_DIRECTIVE": {
+              "found": 312,
+              "fixed": 312,
+              "remaining": 0
+            },
+            "DESIGN_SYSTEM_FOUNDATIONS": {
+              "found": 98,
+              "fixed": 98,
+              "remaining": 0
+            },
+            "RESPONSIVE_LAYOUT_PRINCIPLES": {
+              "found": 45,
+              "fixed": 45,
+              "remaining": 0
+            },
+            "TECHNOLOGY_STACK_HIERARCHY": {
+              "found": 32,
+              "fixed": 32,
+              "remaining": 0
+            }
+          },
+          "files_100_percent_compliant": [
+            "src/ui/templates/base.html",
+            "src/ui/templates/base_dashboard.html",
+            "... (all files)"
+          ]
+        }
+      validation:
+        - "[ ] All automated grep searches return ZERO violations"
+        - "[ ] Compliance report generated"
+        - "[ ] 100% compliance achieved across all files"
+        - "[ ] All files listed as 100% compliant"
+      gates:
+        - "ZERO violations remaining"
+        - "100% compliance achieved"
+        - "Do not proceed until all violations fixed"
+
+    - step: 11
+      name: "Document Refactoring and Update Memory"
+      actions:
+        - "CRITICAL: Update IMPLEMENTATION_PLAN with Phase 30 Refactoring completion"
+        - "CRITICAL: Document all changes in SPEC files:"
+        - "  - List of all files refactored"
+        - "  - Summary of violations fixed per file"
+        - "  - Compliance report"
+        - "  - Test results"
+        - "  - Known issues (if any)"
+        - "Write to neo4j-memory:"
+        - "  - Session entity with Date property"
+        - "  - Refactoring decisions and rationale"
+        - "  - Compliance metrics"
+        - "  - Relationships: session → refactored → template_files"
+        - "CRITICAL: Create REFACTORING_REPORT.md with:"
+        - "  - Executive summary"
+        - "  - Detailed violations matrix (before)"
+        - "  - Remediation plan"
+        - "  - Execution log (all files refactored)"
+        - "  - Compliance report (after)"
+        - "  - Test results"
+        - "  - Lessons learned"
+        - "  - Recommendations for future refactoring"
+      outputs:
+        - "spec_updated: Boolean"
+        - "plan_updated: Boolean"
+        - "memory_entities_created: List[str]"
+        - "refactoring_report_path: str"
+      gates:
+        - "SPEC document updated"
+        - "IMPLEMENTATION_PLAN Phase 30 updated"
+        - "Memory entities created"
+        - "REFACTORING_REPORT.md created"
+
+constraints:
+  - "Australian English for all documentation"
+  - "CRITICAL: All files MUST be backed up before refactoring"
+  - "CRITICAL: Refactoring order MUST be: base → macros → components → pages"
+  - "CRITICAL: Each file MUST be validated before proceeding to next file"
+  - "CRITICAL: Zero violations allowed after refactoring (100% compliance)"
+  - "CRITICAL: All changes MUST be tested in browser (manual verification)"
+  - "CRITICAL: Theme switching MUST be tested (light/dark/custom)"
+  - "CRITICAL: Responsive behavior MUST be tested (container queries)"
+  - "All refactoring must reference COLOR_SCHEME_DIRECTIVE.md"
+  - "All refactoring must reference design_system_foundations.md"
+  - "All refactoring must reference responsive_layout_principles.md"
+  - "WCAG AA compliance MUST be maintained"
+
+forbidden:
+  - "Refactoring files without backup"
+  - "Skipping validation after refactoring"
+  - "Proceeding with remaining violations"
+  - "Skipping browser testing"
+  - "Skipping theme switching tests"
+  - "Using viewport queries (@media) instead of container queries"
+  - "Introducing new hardcoded colors"
+  - "Introducing new borders (use tonal contrast)"
+  - "Using Alpine.js where HTMX can work"
+  - "Creating temporal documents (all updates in SPEC and IMPLEMENTATION_PLAN)"
+
+output_format:
+  require_sections:
+    - "Section 1: Comprehensive Compliance Audit Results (violations matrix)"
+    - "Section 2: Remediation Plan (detailed fixes with before/after examples)"
+    - "Section 3: Execution Log (all files refactored with timestamps)"
+    - "Section 4: Tailwind Configuration Regeneration (validation results)"
+    - "Section 5: CSS Custom Properties Creation (theme variables)"
+    - "Section 6: Manual Testing Results (all test checklists)"
+    - "Section 7: Automated Compliance Verification (final grep results)"
+    - "Section 8: Compliance Report (before/after metrics)"
+    - "Section 9: Memory Writes (session entity, refactoring decisions)"
+    - "Section 10: Next Steps (proceed to production deployment)"
+  language: "Australian English"
+
+success_criteria:
+  - "All files in target_scope audited with violations documented"
+  - "Comprehensive remediation plan generated with execution order"
+  - "All base templates refactored to 100% compliance"
+  - "All macros refactored to 100% compliance"
+  - "All components refactored to 100% compliance"
+  - "All pages refactored to 100% compliance"
+  - "Tailwind config regenerated from layout_tokens.json"
+  - "CSS custom properties created for theme support"
+  - "Manual testing completed and passed (all browsers, themes, responsive)"
+  - "Automated compliance verification shows ZERO violations"
+  - "Compliance report shows 100% compliance"
+  - "SPEC and IMPLEMENTATION_PLAN updated"
+  - "Memory entities created with Date properties"
+  - "REFACTORING_REPORT.md created"
+
+halt_condition: "After successful refactoring completion, automated compliance verification showing 100% compliance, manual testing passed, and memory persistence, halt and await instruction to proceed to production deployment."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-12-01"
+  version: "1.0.0"
+  classification: "Enterprise WebUI Refactoring Phase Execution Protocol"
+  compliance: "Aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol"
+  language: "en-AU"
+  references:
+    - "20-WebUI_Design_Phase_Tasks.yaml"
+    - "21-WebUI_Component_Mapping_Phase.yaml"
+    - "design_system_foundations.md"
+    - "COLOR_SCHEME_DIRECTIVE.md"
+    - "responsive_layout_principles.md"
+    - "openapi_ui_model_conversion_rules.md"
+    - "motion_transition_spec.md"
+    - "renderer_mapping_spec.md"
+    - "responsive_layout_developer_workflow.md"
+    - "SCAFFOLDING_LIBRARIES_OVERVIEW.md"
+    - "universal_component_mapping_protocol.md"
+    - "layout_tokens.json"
+    - "component_tokens.json"
+    - "tailwind_generator_template.js"
+    - "12-Manual_WebUI_Regression_Testing.yaml"
+    - "13-Manual_WebUI_Browser_Regression_Testing.yaml"
+
+# EXECUTION PROTOCOL
+# System: Load and obey ../00-Enterprise_Canonical_Execution_Protocol.yaml and ../01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute webui/30-WebUI_Refactoring_Phase.yaml under those enforced rules.

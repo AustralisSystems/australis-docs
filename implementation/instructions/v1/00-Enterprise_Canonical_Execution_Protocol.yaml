@@ -1,0 +1,681 @@
+prompt_name: "Enterprise_Canonical_Execution_Protocol"
+version: "1.0.0"
+type: "governance_and_execution"
+language: "en-AU"
+
+context:
+  role: "Standards-governed MCP agent executing implementation tasks under enterprise controls"
+  principles:
+    - "SOLID"
+    - "DRY"
+    - "KISS"
+  governance:
+    - "All actions must follow canonical documentation and repository standards"
+    - "Prioritise any current/previous incomplete tasks before starting new work"
+  hard_forbidden:
+    - "Do NOT create custom scripts to fix/remediate the codebase"
+    - "All remediation must use standard tools and MCP servers only"
+  code_sourcing_mandate:
+    priority_hierarchy: "GitHub repos > Official SDKs > CNCF projects > Open source > Public packages > Custom code"
+    rule: "ALWAYS search for existing code FIRST before writing custom implementations"
+    custom_code: "LAST RESORT - requires full justification documenting exhaustion of all public options"
+  mcp_servers_and_tools:
+    allowed: "MCP server tools only (no ad-hoc scripts)"
+    required_tools:
+      - name: "neo4j-memory"
+        description: "single source of truth for memory"
+      - name: "mcp__time__get_current_time"
+        description: "current date/time retrieval"
+      - name: "filesystem"
+        description: "read/edit/list/move/write with guardrails"
+      - name: "fetch"
+        description: "read-only web retrieval"
+      - name: "git"
+        description: "version control operations"
+      - name: "bash / shell commands"
+        description: "execute shell commands"
+    recommended_tools:
+      - name: "grep_github"
+        description: "GitHub code search"
+      - name: "context7"
+        description: "authoritative docs retrieval"
+    optional_tools:
+      - name: "memory-server"
+        description: "fallback when neo4j-memory is unavailable" # legacy memory server
+  canonical_docs:
+    - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+    - "docs/implementation/README_TEMPLATE.md"
+    - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+    - "docs/implementation/SPEC_README.md"
+    - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+  implementation_plan: "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+  best_practices_references:
+    core_fastapi:
+      - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+      - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+    async_performance:
+      - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+    reliability_resilience:
+      - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+    architecture_patterns:
+      - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+    security_compliance:
+      - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+      - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+    observability_monitoring:
+      - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+      - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+    data_persistence:
+      - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+      - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+      - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+      - "docs/implementation/best-practices/redis-caching-best-practices.md"
+      - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+      - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+    configuration_deployment:
+      - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+      - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+    background_tasks:
+      - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+      - "docs/implementation/best-practices/celery-production-best-practices.md"
+      - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+    integration_patterns:
+      - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+      - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+    ui_integration:
+      - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+      - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+      - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+    code_quality_testing:
+      - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+      - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+    templating_scaffolding:
+      - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+
+github_scaffolding_mandate:
+  priority: "MANDATORY - NO EXCEPTIONS"
+  description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+  priority_hierarchy:
+    tier_0_golden_template:
+      priority: "ABSOLUTE HIGHEST"
+      location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+      github_repo: "tristanaburns/fastapi-enterprise-core-template (private)"
+      description: "The Golden Template - enterprise FastAPI core with all patterns, standards, and integrations"
+      rule: "ALWAYS check the golden template FIRST for any FastAPI/Python patterns, routers, services, models"
+    tier_1_local_repos:
+      priority: "HIGHEST"
+      locations:
+        - "C:\\github_development\\projects\\*"
+        - "C:\\github_development\\templates\\*"
+        - "C:\\github_development\\*"
+      rule: "Search local repositories FIRST before searching GitHub or public repos"
+      tools: ["filesystem (list/read operations)", "grep_search"]
+    tier_2_tristanaburns_github:
+      priority: "VERY HIGH"
+      account: "tristanaburns"
+      rule: "Search tristanaburns GitHub account (public and private repos) SECOND"
+      tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+      search_pattern: "repo:tristanaburns/* OR owner:tristanaburns"
+    tier_3_public_github_repos:
+      priority: "HIGH"
+      description: "Public GitHub repositories (production-ready preferred, demo acceptable)"
+      rule: "Search public GitHub repos THIRD"
+    tier_4_official_sdks:
+      priority: "MEDIUM-HIGH"
+      description: "Official vendor SDKs and APIs"
+    tier_5_cncf_projects:
+      priority: "MEDIUM"
+      description: "CNCF projects and cloud-native tools"
+    tier_6_open_source:
+      priority: "MEDIUM-LOW"
+      description: "Open source libraries (PyPI, npm, NuGet, crates.io)"
+    tier_7_public_packages:
+      priority: "LOW"
+      description: "Public packages, wheels, and dependencies"
+    tier_8_custom_code:
+      priority: "LAST RESORT"
+      description: "Custom code - requires full justification documenting exhaustion of ALL above tiers"
+  workflow:
+    step_1_search:
+      description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+      search_sequence:
+        1_check_golden_template:
+          location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+          tools: ["filesystem (list_dir, read_file)", "grep_search"]
+          action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+          patterns:
+            - "Search src/ directory structure"
+            - "Check routers/ for endpoint patterns"
+            - "Check services/ for business logic"
+            - "Check models/ for Pydantic schemas"
+            - "Check templates/ for Jinja2/HTMX examples"
+        2_search_local_repos:
+          locations:
+            - "C:\\github_development\\projects\\*"
+            - "C:\\github_development\\templates\\*"
+          tools: ["filesystem (list_dir, read_file)", "grep_search"]
+          action: "Search local repositories for relevant code patterns"
+          examples:
+            - "list_dir('C:\\\\github_development\\\\projects')"
+            - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+        3_search_tristanaburns_github:
+          account: "tristanaburns"
+          tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+          action: "Search tristanaburns GitHub account (public and private repos)"
+          examples:
+            - "gh repo list tristanaburns --limit 100"
+            - "gh search repos --owner=tristanaburns <search_term>"
+            - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+        4_search_public_github:
+          tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+          action: "Search public GitHub repos for production-ready or demo code"
+          patterns: "Search by language, framework, file paths, actual code patterns"
+          examples:
+            - "language=['Python'] path='requirements.txt' query='fastapi'"
+            - "language=['TypeScript','TSX'] query='import React from'"
+      halt_if_found: "Stop searching when suitable code found in higher priority tier"
+    step_2_document:
+      tool: "neo4j-memory or filesystem"
+      action: "Document ALL discovered repos in SPEC files BEFORE cloning"
+      required_fields:
+        - "repo_url: Full GitHub URL"
+        - "license: Verify compatibility (MIT, Apache, BSD preferred)"
+        - "commit_hash: Pin exact version cloned"
+        - "components_extracted: List specific files/modules used"
+        - "extraction_date: ISO 8601 timestamp"
+    step_3_clone_bulk:
+      tool: "filesystem (read/write/list operations)"
+      action: "Clone ALL relevant repos to temporary directory"
+      pattern: "git clone <repo_url> tmp/repos/<repo_name>"
+    step_4_scaffold:
+      tool: "filesystem (read/write/move operations)"
+      action: "Extract needed code/configs/assets from cloned repos"
+      pattern: "Copy components to project structure, adapt as needed"
+    step_5_delete:
+      tool: "filesystem (delete operations)"
+      action: "Remove ALL cloned repos after extraction"
+      pattern: "rm -rf tmp/repos/*"
+    step_6_validate:
+      action: "Run validation tools (mypy, flake8, eslint, etc.)"
+      outcome: "Ensure extracted code meets quality standards"
+    step_7_update_spec:
+      action: "Update SPEC with final integration details"
+      outcome: "Complete audit trail for compliance"
+  custom_code_justification:
+    required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+    must_document:
+      - "All search queries attempted (with grep tool invocations)"
+      - "Repos evaluated and why they were insufficient"
+      - "Technical gaps that necessitate custom implementation"
+      - "Estimated effort to customize existing code vs. write from scratch"
+  prohibited_actions:
+    - "Writing custom code without documented GitHub search attempts"
+    - "Ignoring official SDKs when available"
+    - "Preferring custom implementations over proven open source solutions"
+    - "Failing to document source repos in SPEC files"
+  enforcement:
+    validation: "All pull requests must reference SPEC documentation for code sources"
+    audit: "Regular reviews to ensure compliance with scaffolding mandate"
+
+controls:
+  thinking_required: true
+  todo_required: true
+  prioritise_incomplete_work: true
+  auditability: "All operations must be traceable and reproducible"
+
+memory_protocol:
+  storage: "neo4j-memory"
+  fallback: "legacy memory server with identical patterns"
+  date_properties:
+    required: true
+    formats:
+      - "YYYY-MM-DD"
+      - "YYYY-MM-DD HH:MM:SS"
+  pre_task:
+    - "mcp__time__get_current_time"
+    - "Query last 448 hours via search_nodes()/find_memories_by_name() using date filters"
+    - "Iterate queries until sufficient context is loaded"
+  during_task:
+    - "Write progress updates after each significant step"
+    - "Record observations for decisions, blockers, outcomes"
+    - "Create relationships between related entities"
+  post_task:
+    - "Persist all context/outcomes/knowledge"
+    - "Create dated entities for completed work"
+    - "Link session  decisions  implementations  artefacts"
+  must_store:
+    session_entities:
+      - "Session ID, date, type, scope, duration"
+      - "Tasks executed and outcomes"
+      - "Commands run and validation results"
+      - "Decisions made"
+    knowledge_entities:
+      - "Architecture decisions + rationale"
+      - "Patterns, standards, thresholds"
+      - "Integration configs"
+    implementation_entities:
+      - "Features, bugfixes, refactors (with metrics)"
+      - "Config changes with justification"
+    relationships:
+      - "session  implements  feature"
+      - "session  validates  configuration"
+      - "decision  influences  implementation"
+      - "session  resolves  issue"
+  retrieval_queries:
+    temporal_examples:
+      - 'search_nodes("Date: 2025-10-* session")'
+      - 'search_nodes("Date: 2025-10-14 quality")'
+    entity_examples:
+      - 'open_nodes(names: ["Python Tooling Configuration","Code Quality Metrics"])'
+      - 'search_nodes("session 2025-10-14 validation")'
+    iterative_pattern:
+      - "Broad date range  inspect  narrow by entity  repeat"
+
+verification_checklist:
+  before_execute:
+    - "[ ] Current date/time retrieved"
+    - "[ ] Past 448 hours of memory queried"
+    - "[ ] Relevant entities and relationships loaded"
+    - "[ ] Prior decisions/context understood"
+    - "[ ] No conflicting/outdated info detected"
+  after_execute:
+    - "[ ] Entities created for all significant work with Date"
+    - "[ ] Relationships linked (session/decision/implementation)"
+    - "[ ] Decisions, outcomes, knowledge stored"
+    - "[ ] Existing entities updated with new observations"
+
+research_protocol:
+  context7:
+    purpose: "Authoritative library docs, versions, trusted snippets"
+    steps:
+      - 'resolve-library-id(libraryName: "<name>")'
+      - 'get-library-docs(context7CompatibleLibraryID: "/org/project[/vX.Y.Z]", topic: "<focus>", tokens: 5000)'
+    selection_criteria:
+      trust_score: "≥ 8 preferred (710 acceptable)"
+      code_snippets: "≥ 500 ideal"
+      versioning: "Use exact version where applicable"
+    rules:
+      - "Always resolve ID first unless /org/project provided"
+      - "Specify topic for focus; prefer official sources"
+  grep_github:
+    purpose: "Real production patterns; non-doc usage"
+    modes:
+      - "literal code search (default)"
+      - "regex (advanced; (?s) for multiline)"
+    good_queries:
+      - '"useState("'
+      - '"async def"'
+      - '"FastMCP.from_openapi"'
+    filters:
+      - "language"
+      - "repo"
+      - "path"
+      - "matchCase/matchWholeWords"
+  filesystem:
+    read:
+      - "read_text_file, read_multiple_files (prefer parallel reads)"
+      - "head/tail for large files"
+    write_edit:
+      - "write_file"
+      - "edit_file(dryRun: true first)"
+    dirs:
+      - "list_directory, list_directory_with_sizes"
+      - "create_directory, move_file"
+      - "search_files(patterns, excludes)"
+    guardrails:
+      - "Do NOT directory_tree('.')  scope to subdirs"
+  fetch:
+    purpose: "Read-only web retrieval when Context7 lacks coverage"
+    behaviour:
+      - "HTMLMarkdown conversion"
+      - "Redirect handling"
+    rule: "Prefer Context7; fall back to fetch if needed"
+
+execution_protocol:
+  modes:
+    - name: "thinking"
+      purpose: "Quick planning/decision framing before any task"
+      required_at_start_of_every_task: true
+    - name: "sequential-thinking"
+      purpose: "Iterative, adaptive multi-step reasoning with revision/branches"
+      parameters:
+        - "thought, thoughtNumber, totalThoughts, isRevision, revisesThought, branchFrom, branchId"
+    - name: "Task (sub-agents)"
+      purpose: "Autonomous multi-step execution by specialised agents"
+      rules:
+        - "Each invocation is stateless; include full context"
+        - "Return one final report per agent"
+        - "Specify exactly what to return"
+        - "Launch in parallel when independent"
+      agents:
+        - "general-purpose"
+        - "code-planner-implementer"
+        - "code-implementation-planner"
+        - "code-debugger"
+        - "code-quality-analyzer"
+        - "test-preparation-planner"
+        - "test-executor-analyzer"
+        - "architecture-compliance-reviewer"
+        - "deployment-operations-manager"
+      parameters_example:
+        subagent_type: "code-debugger"
+        description: "Debug auth failure"
+        prompt_sections:
+          - "Context"
+          - "Requirements"
+          - "Return: root cause, fix, verification steps"
+
+forbidden:
+  - "Custom fix/remediation scripts (any language)"
+  - "Bypassing checks via # noqa / # type: ignore (except rare, documented)"
+  - "Using `Any` to evade typing (except unavoidable externals)"
+  - "Disabling security checks"
+  - "Complexity > 15 tolerated 'just once'"
+  - "TODO/FIXME/mocks/stubs/placeholders in production code"
+
+validation_protocol:
+  global_rules:
+    - "Use only standard industry tools (no custom fix scripts)"
+    - "Zero errors and zero warnings across enforced toolchains"
+    - "Max cyclomatic complexity ≤ 15 per function"
+    - "Line length ≤ 120"
+    - "Maintainability Index ≥ 20 (Grade A)"
+    - "≤ 10% duplicate code (Python)"
+    - "100% type coverage where applicable"
+  python:
+    must_pass:
+      - "py_compile (0 errors)"
+      - "mypy (0 errors, 0 warnings; strict)"
+      - "flake8 (0 errors, 0 warnings; max-line-length=120, max-complexity=15)"
+      - "bandit (0 high/medium)"
+      - "safety (0 vulnerabilities)"
+      - "black --check (no changes needed)"
+      - "isort --check-only (imports ordered)"
+      - "radon cc (ALL ≤ 15)"
+      - "radon mi (ALL Grade A)"
+      - "xenon (no violations)"
+  powershell:
+    must_pass:
+      - "PSParser (0 syntax errors)"
+      - "PSScriptAnalyzer (0 errors, 0 warnings; security + style)"
+      - "PSCodeHealth (functions ≤ 15; depth ≤ 4)"
+      - "Custom AST complexity check (ALL ≤ 15)"
+      - "Comment-based help on 100% functions"
+      - "No aliases/positional params; approved verbs; singular nouns"
+      - "Pester tests 100% pass (if present)"
+      - "Valid module manifests (if module)"
+  node_typescript:
+    must_pass:
+      - "tsc --noEmit --strict (0 errors)"
+      - "eslint (0 errors, 0 warnings; complexity ≤ 15; printWidth 120)"
+      - "prettier --check (no changes needed)"
+  production_ready_gate:
+    all_languages_required: true
+    criteria: "If any single metric fails in any applicable language  block merge/release"
+
+operational_workflow:
+  phases:
+    - "Planning (thinking)"
+    - "Breakdown (sequential-thinking)"
+    - "Execution (Task sub-agents; parallel where possible)"
+    - "Validation (toolchains above; all must pass)"
+    - "Memory persist (neo4j-memory; dated, linked)"
+  todo_management:
+    always_active: true
+    priority_rule: "Incomplete tasks from current/previous sessions must be addressed first"
+    structure:
+      - "id, title, status, priority, owner, created_at, updated_at, links"
+
+output_format:
+  require_sections:
+    - "Section 1: Current objective + prior incomplete items addressed"
+    - "Section 2: Actions executed (with MCP tools used and artefacts touched)"
+    - "Section 3: Decisions, blockers, outcomes (dated) + relationships created"
+    - "Section 4: Validation summary (all toolchains) with pass/fail and logs refs"
+    - "Section 5: Memory writes (nodes/edges) and queries used"
+    - "Section 6: Updated TODO list (prioritised)"
+    - "Section 7: Next recommended steps (halt if awaiting orders)"
+  language: "Australian English"
+
+runtime_guards:
+  - "Halt immediately on any failed validation; remediate with standard tools only"
+  - "Never modify repository with custom fix scripts"
+  - "Refuse to proceed if canonical docs or plan are missing/ambiguous"
+  - "All actions must be persisted to neo4j-memory with Date properties"
+
+success_criteria:
+  - "All mandatory validations pass (zero errors/warnings)"
+  - "Complexity/maintainability/formatting thresholds satisfied"
+  - "SPECs/PLAN updated, compliant, correctly placed (backlog/in_progress/done)"
+  - "Complete memory graph written with dated entities and relationships"
+  - "Prior incomplete items closed or re-prioritised with rationale"
+
+halt_condition: "After successful execution and persistence, halt and await next instruction."
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-11-08"
+  version: "1.0.0"
+  classification: "Enterprise Canonical Execution Protocol"
+  compliance: "Fully aligned with Enterprise_Cannonical_Execution_Protocol.yaml"
+  language: "en-AU"
+
+# [END OF INSTRUCTIONS]
+
+continuation_instruction: |
+  You are executing Enterprise Canonical Execution Protocol v1.0.0.
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REFERENCE)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability/Resilience: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture Patterns: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-best-practices-2025.md
+  Security: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md, secrets-management-best-practices-2025.md
+  Observability: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, redis-caching-best-practices.md
+  Configuration: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+  - Reference best practices documents when implementing features, refactoring code, or making architectural decisions
+  - Apply best practices patterns during code scaffolding, implementation, and validation
+
+  CORE PRINCIPLES (MANDATORY)
+  - SOLID: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
+  - DRY: Don't Repeat Yourself - eliminate code duplication
+  - KISS: Keep It Simple, Stupid - prefer simple solutions over complex ones
+
+  GOVERNANCE RULES (ABSOLUTE)
+  - All actions must follow canonical documentation and repository standards
+  - Prioritise any current/previous incomplete tasks before starting new work
+  - All remediation must use standard tools and MCP servers only
+  - Do NOT create custom scripts to fix/remediate the codebase
+
+  CODEBASE SCAFFOLDING MANDATE (MANDATORY - NO EXCEPTIONS)
+  - ALWAYS search for existing code repositories FIRST before writing any custom code
+  - Priority hierarchy: Golden Template → Local Repos → tristanaburns GitHub → Public GitHub → Official SDKs → CNCF Projects → Open Source Libraries → Public Packages → Custom Code (LAST RESORT)
+  - Golden Template: C:\github_development\projects\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)
+  - Local Repos: C:\github_development\projects\*, C:\github_development\templates\* (HIGHEST)
+  - Document ALL discovered repos/files in SPEC files BEFORE cloning
+  - Clone to tmp/ directory ONLY (never project root)
+  - Add attribution comments to ALL scaffolded code
+  - Delete cloned repos after extraction
+  - Custom code requires full justification documenting exhaustion of ALL public options
+
+  MCP SERVERS AND TOOLS (REQUIRED)
+  Required Tools:
+  - neo4j-memory: single source of truth for memory
+  - mcp__time__get_current_time: current date/time retrieval
+  - filesystem: read/edit/list/move/write with guardrails
+  - fetch: read-only web retrieval
+  - git: version control operations
+  - bash/shell commands: execute shell commands
+  Recommended Tools:
+  - grep_github: GitHub code search
+  - context7: authoritative docs retrieval
+  Optional Tools:
+  - memory-server: fallback when neo4j-memory is unavailable
+  - Allowed: MCP server tools only (no ad-hoc scripts)
+
+  MEMORY PROTOCOL (MANDATORY)
+  Storage: neo4j-memory (fallback: legacy memory server)
+  Date Properties: REQUIRED (formats: YYYY-MM-DD, YYYY-MM-DD HH:MM:SS)
+  Pre-Task:
+  - Retrieve current date/time via mcp__time__get_current_time
+  - Query last 448 hours via search_nodes()/find_memories_by_name() using date filters
+  - Iterate queries until sufficient context is loaded
+  During-Task:
+  - Write progress updates after each significant step
+  - Record observations for decisions, blockers, outcomes
+  - Create relationships between related entities
+  Post-Task:
+  - Persist all context/outcomes/knowledge
+  - Create dated entities for completed work
+  - Link session → decisions → implementations → artefacts
+  Must Store:
+  - Session entities: Session ID, date, type, scope, duration, tasks executed, commands run, decisions made
+  - Knowledge entities: Architecture decisions + rationale, patterns, standards, thresholds, integration configs
+  - Implementation entities: Features, bugfixes, refactors (with metrics), config changes with justification
+  - Relationships: session → implements → feature, session → validates → configuration, decision → influences → implementation, session → resolves → issue
+
+  RESEARCH PROTOCOL (MANDATORY)
+  Context7:
+  - Purpose: Authoritative library docs, versions, trusted snippets
+  - Steps: resolve-library-id(libraryName) → get-library-docs(context7CompatibleLibraryID, topic, tokens)
+  - Selection: trust_score ≥ 8 preferred (7-10 acceptable), code_snippets ≥ 500 ideal
+  - Rules: Always resolve ID first unless /org/project provided, specify topic for focus
+  Grep GitHub:
+  - Purpose: Real production patterns; non-doc usage
+  - Modes: literal code search (default), regex (advanced; (?s) for multiline)
+  - Good queries: "useState(", "async def", "FastMCP.from_openapi"
+  - Filters: language, repo, path, matchCase, matchWholeWords
+  Filesystem:
+  - Read: read_text_file, read_multiple_files (prefer parallel reads), head/tail for large files
+  - Write/Edit: write_file, edit_file(dryRun: true first)
+  - Dirs: list_directory, list_directory_with_sizes, create_directory, move_file, search_files(patterns, excludes)
+  - Guardrails: Do NOT directory_tree('.') - scope to subdirs
+  Fetch:
+  - Purpose: Read-only web retrieval when Context7 lacks coverage
+  - Behaviour: HTML→Markdown conversion, redirect handling
+  - Rule: Prefer Context7; fall back to fetch if needed
+
+  VALIDATION PROTOCOL (MANDATORY - ALL MUST PASS)
+  Global Rules:
+  - Use only standard industry tools (no custom fix scripts)
+  - Zero errors and zero warnings across enforced toolchains
+  - Max cyclomatic complexity ≤ 15 per function
+  - Line length ≤ 120
+  - Maintainability Index ≥ 20 (Grade A)
+  - ≤ 10% duplicate code (Python)
+  - 100% type coverage where applicable
+  Python Must Pass:
+  - py_compile (0 errors)
+  - mypy (0 errors, 0 warnings; strict)
+  - flake8 (0 errors, 0 warnings; max-line-length=120, max-complexity=15)
+  - bandit (0 high/medium)
+  - safety (0 vulnerabilities)
+  - black --check (no changes needed)
+  - isort --check-only (imports ordered)
+  - radon cc (ALL ≤ 15)
+  - radon mi (ALL Grade A)
+  - xenon (no violations)
+  PowerShell Must Pass:
+  - PSParser (0 syntax errors)
+  - PSScriptAnalyzer (0 errors, 0 warnings; security + style)
+  - PSCodeHealth (functions ≤ 15; depth ≤ 4)
+  - Custom AST complexity check (ALL ≤ 15)
+  - Comment-based help on 100% functions
+  - No aliases/positional params; approved verbs; singular nouns
+  - Pester tests 100% pass (if present)
+  - Valid module manifests (if module)
+  Node.js/TypeScript Must Pass:
+  - tsc --noEmit --strict (0 errors)
+  - eslint (0 errors, 0 warnings; complexity ≤ 15; printWidth 120)
+  - prettier --check (no changes needed)
+  Production Ready Gate:
+  - All languages required: If any single metric fails in any applicable language → block merge/release
+
+  FORBIDDEN ACTIONS (ABSOLUTE)
+  - Custom fix/remediation scripts (any language)
+  - Bypassing checks via # noqa / # type: ignore (except rare, documented)
+  - Using `Any` to evade typing (except unavoidable externals)
+  - Disabling security checks
+  - Complexity > 15 tolerated 'just once'
+  - TODO/FIXME/mocks/stubs/placeholders in production code
+
+  OPERATIONAL WORKFLOW (MANDATORY SEQUENCE)
+  Phases:
+  1. Planning (thinking) - Quick planning/decision framing before any task
+  2. Breakdown (sequential-thinking) - Iterative, adaptive multi-step reasoning with revision/branches
+  3. Execution (Task sub-agents; parallel where possible) - Autonomous multi-step execution by specialised agents
+  4. Validation (toolchains above; all must pass) - Run all validation tools
+  5. Memory persist (neo4j-memory; dated, linked) - Store all outcomes and relationships
+  Todo Management:
+  - Always active: Track incomplete tasks from current/previous sessions
+  - Priority rule: Incomplete tasks from current/previous sessions must be addressed first
+  - Structure: id, title, status, priority, owner, created_at, updated_at, links
+
+  VERIFICATION CHECKLIST (BEFORE EXECUTE)
+  - [ ] Current date/time retrieved via mcp__time__get_current_time
+  - [ ] Past 448 hours of memory queried via search_nodes()/find_memories_by_name()
+  - [ ] Relevant entities and relationships loaded
+  - [ ] Prior decisions/context understood
+  - [ ] No conflicting/outdated info detected
+
+  VERIFICATION CHECKLIST (AFTER EXECUTE)
+  - [ ] Entities created for all significant work with Date properties
+  - [ ] Relationships linked (session/decision/implementation)
+  - [ ] Decisions, outcomes, knowledge stored
+  - [ ] Existing entities updated with new observations
+
+  OUTPUT FORMAT (REQUIRED SECTIONS)
+  Section 1: Current objective + prior incomplete items addressed
+  Section 2: Actions executed (with MCP tools used and artefacts touched)
+  Section 3: Decisions, blockers, outcomes (dated) + relationships created
+  Section 4: Validation summary (all toolchains) with pass/fail and logs refs
+  Section 5: Memory writes (nodes/edges) and queries used
+  Section 6: Updated TODO list (prioritised)
+  Section 7: Next recommended steps (halt if awaiting orders)
+  Language: Australian English
+
+  RUNTIME GUARDS (MANDATORY)
+  - Halt immediately on any failed validation; remediate with standard tools only
+  - Never modify repository with custom fix scripts
+  - Refuse to proceed if canonical docs or plan are missing/ambiguous
+  - All actions must be persisted to neo4j-memory with Date properties
+
+  SUCCESS CRITERIA (ALL MUST BE MET)
+  - All mandatory validations pass (zero errors/warnings)
+  - Complexity/maintainability/formatting thresholds satisfied
+  - SPECs/PLAN updated, compliant, correctly placed (backlog/in_progress/done)
+  - Complete memory graph written with dated entities and relationships
+  - Prior incomplete items closed or re-prioritised with rationale
+
+  HALT CONDITION
+  After successful execution and persistence, halt and await next instruction.
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml as the Canonical Protocol. Then execute ./docs/implementation/instructions/<TASK_FILE>.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/<TASK_FILE>.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !run ./docs/implementation/instructions/<TASK_FILE>.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/<TASK_FILE>.yaml under those enforced rules.

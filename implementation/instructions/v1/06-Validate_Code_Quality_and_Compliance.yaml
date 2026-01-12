@@ -1,0 +1,463 @@
+prompt_name: "Validate_Code_Quality_and_Compliance"
+version: "1.0.0"
+type: "validation_and_compliance_protocol"
+context:
+  role: "MCP agent performing enterprise-grade validation of codebase quality, maintainability, and compliance"
+  governance:
+    canonical_protocol: "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    golden_rule_protocol: "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+  objective: >
+    Enforce strict production-ready validation standards across all supported languages (Python, PowerShell,
+    Node.js/TypeScript). Ensure that all validation metrics meet the thresholds defined in the canonical and golden
+    protocols before declaring the codebase compliant. Record all results and relationships in Neo4j-Memory for
+    traceability and audit readiness.
+  critical_documentation_rule: >
+    **CRITICAL DOCUMENTATION RULE**: TEMPORAL DOCUMENTS MUST NOT BE CREATED. ALL updates,
+    validation results, compliance reports, quality metrics, and findings MUST be documented
+    directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+
+    DO NOT create standalone temporal documents (e.g., VALIDATION_REPORT_YYYY-MM-DD.md,
+    QUALITY_REPORT_YYYY-MM-DD.md). Instead, update the relevant SPEC(s) and IMPLEMENTATION_PLAN
+    with all validation results, metrics, and findings. This rule is NON-NEGOTIABLE and must
+    be enforced strictly.
+  doc_references:
+    - "docs/implementation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_WORKFLOW_GUIDE_v1.0.0.md"
+    - "docs/implementation/README_TEMPLATE.md"
+    - "docs/implementation/SPEC_CREATION_GUIDE_v1.0.0.md"
+    - "docs/implementation/SPEC_README.md"
+    - "docs/implementation/SPEC_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SERVICE_STATUS_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/SPEC_INDEX_TEMPLATE_v1.0.0.md"
+    - "docs/implementation/IMPLEMENTATION_PLAN_v#.#.#.md"
+
+  best_practices_references:
+    core_fastapi:
+      - "docs/implementation/best-practices/fastapi-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastapi-auto-sync-best-practices-2025.md"
+      - "docs/implementation/best-practices/FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md"
+    async_performance:
+      - "docs/implementation/best-practices/object-pooling-resource-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/websockets-server-sent-events-best-practices-2025.md"
+      - "docs/implementation/best-practices/streaming-real-time-data-best-practices-2025.md"
+    reliability_resilience:
+      - "docs/implementation/best-practices/error-handling-resilience-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/caching-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/rate-limiting-best-practices-2025.md"
+    architecture_patterns:
+      - "docs/implementation/best-practices/dependency-injection-best-practices-2025.md"
+      - "docs/implementation/best-practices/middleware-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/api-gateway-patterns-best-practices-2025.md"
+      - "docs/implementation/best-practices/plugin-architecture-auto-discovery-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/python-fastapi-plugin-architecture-best-practices-2025.md"
+    security_compliance:
+      - "docs/implementation/best-practices/security-input-validation-encryption-owasp-best-practices-2025.md"
+      - "docs/implementation/best-practices/authentication-authorization-multi-strategy-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-external-key-vaults-best-practices-2025.md"
+      - "docs/implementation/best-practices/secrets-management-local-development-best-practices-2025.md"
+    observability_monitoring:
+      - "docs/implementation/best-practices/observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md"
+      - "docs/implementation/best-practices/structured-logging-best-practices-2025.md"
+    data_persistence:
+      - "docs/implementation/best-practices/database-migrations-best-practices-2025.md"
+      - "docs/implementation/best-practices/orm-database-provider-factory-best-practices-2025.md"
+      - "docs/implementation/best-practices/mongodb-replica-set-best-practices.md"
+      - "docs/implementation/best-practices/redis-caching-best-practices.md"
+      - "docs/implementation/best-practices/redis-cluster-best-practices.md"
+      - "docs/implementation/best-practices/redis-message-bus-best-practices.md"
+    configuration_deployment:
+      - "docs/implementation/best-practices/configuration-management-best-practices-2025.md"
+      - "docs/implementation/best-practices/docker-containerization-best-practices-2025.md"
+      - "docs/implementation/best-practices/feature-flags-best-practices-2025.md"
+    background_tasks:
+      - "docs/implementation/best-practices/background-tasks-celery-best-practices-2025.md"
+      - "docs/implementation/best-practices/celery-production-best-practices.md"
+      - "docs/implementation/best-practices/celery-tasks-best-practices.md"
+    integration_patterns:
+      - "docs/implementation/best-practices/fastapi-fastmcp-integration-best-practices-2025.md"
+      - "docs/implementation/best-practices/fastmcp-best-practices-2025.md"
+      - "docs/implementation/best-practices/webhook-handling-best-practices-2025.md"
+    ui_integration:
+      - "docs/implementation/best-practices/fastapi-htmx-jinja2-best-practices-2025.md"
+      - "docs/implementation/best-practices/web-ui-reactive-components-htmx-jinja2-tailwind-v4-best-practices-2025.md"
+      - "docs/implementation/best-practices/component-libraries-daisyui-tailwind-v4-best-practices-2025.md"
+    code_quality_testing:
+      - "docs/implementation/best-practices/code-quality-linting-best-practices-2025.md"
+      - "docs/implementation/best-practices/testing-strategies-best-practices-2025.md"
+      - "docs/implementation/best-practices/playwright-e2e-testing-best-practices-2025.md"
+    templating_scaffolding:
+      - "docs/implementation/best-practices/python-fastapi-templatized-scaffolding-best-practices-2025.md"
+
+codebase_scaffolding_mandate:
+  priority: "MANDATORY - NO EXCEPTIONS"
+  description: "ALWAYS search for existing code repositories FIRST before writing any custom code"
+  priority_hierarchy:
+    tier_0_golden_template: "C:\\github_development\\projects\\fastapi-enterprise-core-template (ABSOLUTE HIGHEST - check FIRST)"
+    tier_1_local_repos: "C:\\github_development\\projects\\*, C:\\github_development\\templates\\* (HIGHEST)"
+    tier_2_tristanaburns_github: "tristanaburns GitHub account (public/private repos) (VERY HIGH)"
+    tier_3_public_github_repos: "Public GitHub repositories (HIGH)"
+    tier_4_official_sdks: "Official vendor SDKs and APIs (MEDIUM-HIGH)"
+    tier_5_cncf_projects: "CNCF projects and cloud-native tools (MEDIUM)"
+    tier_6_open_source: "Open source libraries (MEDIUM-LOW)"
+    tier_7_public_packages: "Public packages, wheels, and dependencies (LOW)"
+    tier_8_custom_code: "Custom code (LAST RESORT - requires full justification)"
+  instructions:
+    objective: >
+      Ensure ALL code is sourced from existing public GitHub repositories,
+      official SDKs, CNCF projects, open source libraries, or public packages
+      BEFORE writing ANY custom code. This mandate enforces a strict hierarchy
+      of sourcing options to maximize code reuse, reliability, and maintainability.
+    workflow:
+      step_1_search:
+        description: "Search for existing code in priority order (golden template → local repos → tristanaburns GitHub → public GitHub)"
+        search_sequence:
+          1_check_golden_template:
+            location: "C:\\github_development\\projects\\fastapi-enterprise-core-template"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Check for FastAPI patterns, routers, services, models, templates, configs"
+            patterns:
+              - "Search src/ directory structure"
+              - "Check routers/ for endpoint patterns"
+              - "Check services/ for business logic"
+              - "Check models/ for Pydantic schemas"
+              - "Check templates/ for Jinja2/HTMX examples"
+          2_search_local_repos:
+            locations:
+              - "C:\\github_development\\projects\\*"
+              - "C:\\github_development\\templates\\*"
+            tools: ["filesystem (list_dir, read_file)", "grep_search"]
+            action: "Search local repositories for relevant code patterns"
+            examples:
+              - "list_dir('C:\\\\github_development\\\\projects')"
+              - "grep_search(query='FastAPI', includePattern='C:\\\\github_development\\\\projects\\\\**\\\\*.py')"
+          3_search_tristanaburns_github:
+            account: "tristanaburns"
+            tools: ["gh cli", "fetch (GitHub API)", "grep GitHub search"]
+            action: "Search tristanaburns GitHub account (public and private repos)"
+            examples:
+              - "gh repo list tristanaburns --limit 100"
+              - "gh search repos --owner=tristanaburns <search_term>"
+              - "mcp_grep_searchGitHub(query='fastapi', repo='tristanaburns/*')"
+          4_search_public_github:
+            tool: "grep GitHub code search (mcp_grep_searchGitHub)"
+            action: "Search public GitHub repos for production-ready or demo code"
+            patterns: "Search by language, framework, file paths, actual code patterns"
+            examples:
+              - "language=['Python'] path='requirements.txt' query='fastapi'"
+              - "language=['TypeScript','TSX'] query='import React from'"
+        halt_if_found: "Stop searching when suitable code found in higher priority tier"
+      step_2_document:
+        action: "Document ALL discovered repos/files in SPEC files BEFORE cloning"
+        required_fields: ["repo_url OR local_path", "license", "commit_hash", "components_extracted", "extraction_date"]
+      step_3_clone_bulk:
+        action: "Clone ALL relevant repos to temporary directory"
+      step_4_scaffold:
+        action: "Extract needed code/configs/assets from cloned repos"
+      step_5_delete:
+        action: "Remove ALL cloned repos after extraction"
+      step_6_validate:
+        action: "Run validation tools"
+      step_7_update_spec:
+        action: "Update SPEC with final integration details"
+    custom_code_justification:
+      required_when: "No sufficient public repos/SDKs exist after exhaustive search"
+      must_document: ["All search queries attempted", "Repos evaluated", "Technical gaps", "Effort comparison"]
+    prohibited_actions:
+      - "Writing custom code without documented GitHub search attempts"
+      - "Ignoring official SDKs when available"
+      - "Preferring custom implementations over proven open source solutions"
+      - "Neglecting to explore all relevant GitHub repositories"
+      - "Failing to document source repos in SPEC files"
+  reference: "98-Codebase_Scaffolding_Mandate.yaml"
+  filepath: "./implementation/instructions/98-Codebase_Scaffolding_Mandate.yaml"
+
+instructions:
+  objective: >
+    Validate the entire implementation environment for compliance with canonical production standards.
+    This includes syntax, type safety, complexity, maintainability, security, and style verification across
+    all supported programming languages. Any deviation, warning, or error constitutes a failure.
+  best_practices_requirement: "MUST review relevant best practices documents during validation - NO exceptions"
+
+  steps:
+    - step: 1
+      name: "Canonical Preparation"
+      actions:
+        - "Load and enforce the Enterprise Canonical Execution Protocol"
+        - "Load and enforce the Golden Rule Execution Protocol"
+        - "Retrieve recent validation patterns and context from Neo4j-Memory (past 48 hours)"
+        - "Gather relevant documentation and reference configurations (Context7, grep)"
+        - "Confirm configuration file presence and parameter correctness"
+      validations:
+        - "pyproject.toml: line-length=120, max-complexity=15"
+        - ".flake8: line-length=120, max-complexity=15"
+        - "mypy.ini: strict=True"
+        - ".PSScriptAnalyzerSettings.psd1: MaxLineLength=120, MaxComplexity=15"
+        - "tsconfig.json: strict=True, noImplicitAny=True"
+        - ".eslintrc: max-line-length=120, max-complexity=15"
+        - ".prettierrc: printWidth=120"
+      expected_outcome: "All configurations verified against canonical and golden rule standards."
+
+    - step: 2
+      name: "Python Validation Suite"
+      actions:
+        - "Run Python validation commands:"
+        - "python -m py_compile $(find . -name '*.py' -not -path '*/test*' -not -path '*/.venv/*')"
+        - "python -m mypy . --exclude '(\\.venv|node_modules|__pycache__|\\.git|submodules)'"
+        - "python -m flake8 . --max-line-length=120 --max-complexity=15 --count --statistics"
+        - "python -m bandit -r . -x ./.venv,./node_modules,./submodules --skip B101,B601 -f json"
+        - "python -m safety check --json"
+        - "python -m black --check . --line-length=120"
+        - "python -m isort --check-only . --line-length=120 --profile=black"
+        - "python -m radon cc . -a --min=C"
+        - "python -m radon mi . -a"
+        - "python -m xenon . --max-absolute B --max-modules A --max-average A"
+      success_criteria:
+        - "0 errors and 0 warnings across all tools"
+        - "Cyclomatic complexity ≤15 for all functions"
+        - "Maintainability Index ≥20 (Grade A)"
+        - "≤10% duplicated code"
+        - "No security vulnerabilities or dependency issues"
+
+    - step: 3
+      name: "PowerShell Validation Suite"
+      actions:
+        - "Perform syntax validation with PSParser"
+        - "Invoke-ScriptAnalyzer -Path . -Recurse -Severity @('Error','Warning')"
+        - "Invoke-ScriptAnalyzer -Path . -Recurse -IncludeRule @('PSAvoidUsingPlainTextForPassword','PSAvoidUsingInvokeExpression','PSUseApprovedVerbs','PSProvideCommentHelp','PSUsePSCredentialType')"
+        - "Invoke-PSCodeHealth -Path . -Compliance @{MaxComplexity=15; MaxLineLength=120}"
+        - "Perform AST analysis for function complexity ≤15"
+        - "Run Pester tests (if present) ensuring 100% pass rate"
+        - "Run Test-ModuleManifest on all module manifests"
+      success_criteria:
+        - "0 syntax, linting, or style violations"
+        - "0 security or parameter validation issues"
+        - "100% functions documented and compliant"
+        - "All tests pass with 0 failures"
+
+    - step: 4
+      name: "Node.js / TypeScript Validation Suite"
+      actions:
+        - "npx tsc --noEmit --strict"
+        - "npx eslint . --ext .ts,.tsx,.js,.jsx --max-warnings 0"
+        - "npx prettier --check ."
+      success_criteria:
+        - "0 compiler errors"
+        - "0 ESLint warnings or complexity violations"
+        - "All files pass Prettier check"
+        - "Type coverage: 100%; no 'any' types allowed"
+
+    - step: 5
+      name: "Validation Results Aggregation"
+      actions:
+        - "Collect and parse all tool outputs"
+        - "Generate aggregated compliance summary"
+        - "Log results and threshold metrics to Neo4j-Memory"
+        - "Create relationships between session, validation results, and affected entities"
+        - "Attach validation results to related SPECs and Implementation Plan entries"
+      expected_outcome: "Comprehensive compliance snapshot stored in persistent memory for audit review."
+
+    - step: 6
+      name: "Remediation and Halt Conditions"
+      actions:
+        - "If any validation fails, stop immediately"
+        - "Record all failed checks in Neo4j-Memory under session entity"
+        - "Generate remediation TODOs for each failed validation item"
+        - "Re-run validation only after remediation completed"
+      enforcement:
+        - "Custom fix scripts are FORBIDDEN"
+        - "Only standard tools (Black, Isort, MyPy, Bandit, Flake8, Safety, ESLint, Prettier, PSScriptAnalyzer) are permitted"
+        - "Partial compliance is FAILURE"
+      success_criteria:
+        - "All failed validations recorded and flagged for follow-up"
+        - "No new tasks executed until full compliance is achieved"
+
+    - step: 7
+      name: "Final Declaration and Audit Record"
+      actions:
+        - "Upon 100% validation success:"
+          - "Mark codebase as Production Ready"
+          - "CRITICAL: Update relevant SPEC(s) in docs/implementation/in_progress/ with:"
+          - "  - All validation results and metrics"
+          - "  - Compliance status and quality metrics"
+          - "  - Production Ready certification"
+          - "  - All findings and outcomes"
+          - "CRITICAL: Update Implementation Plan checklists accordingly with validation results"
+          - "CRITICAL: DO NOT create VALIDATION_REPORT.md or any other temporal documents"
+          - "CRITICAL: All validation results MUST be documented in SPECs and IMPLEMENTATION_PLAN only"
+          - "Persist results to Neo4j-Memory with timestamped relationships"
+      expected_outcome: "Validation completed, codebase certified as Production Ready. All results documented in SPECs and IMPLEMENTATION_PLAN only."
+
+constraints:
+  - "Do not proceed beyond this task until full compliance is achieved"
+  - "0 errors, 0 warnings, 0 vulnerabilities across all tools is mandatory"
+  - "All metrics must meet or exceed canonical and golden rule thresholds"
+  - "Partial compliance is equivalent to failure"
+  - "All data must be persisted to Neo4j-Memory with 'Date' attributes"
+  - "CRITICAL: backlog/, in_progress/, and done/ directories MUST ONLY contain SPEC documents"
+  - "CRITICAL: TEMPORAL DOCUMENTS MUST NOT BE CREATED - all validation results go into SPECs and IMPLEMENTATION_PLAN only"
+  - "CRITICAL: Validation reports, quality reports, compliance reports MUST be documented in SPECs and IMPLEMENTATION_PLAN, NOT as standalone temporal documents"
+
+examples:
+  success_example:
+    python_tools:
+      py_compile: "0 errors"
+      mypy: "0 errors, 0 warnings"
+      flake8: "0 errors"
+      bandit: "0 high/medium issues"
+      safety: "0 vulnerabilities"
+      radon_cc: "ALL ≤15"
+      radon_mi: "ALL ≥20"
+      xenon: "0 violations"
+    powershell_tools:
+      psparser: "0 syntax errors"
+      psscriptanalyzer: "0 errors, 0 warnings"
+      pester: "100% tests passed"
+    node_tools:
+      tsc: "0 errors"
+      eslint: "0 warnings"
+      prettier: "clean"
+    outcome: "Full compliance achieved; Production Ready status confirmed"
+
+  failure_example:
+    python_tools:
+      flake8: "3 errors (line length >120)"
+      radon_cc: "1 function complexity 17"
+    outcome: "FAILURE. Halted. Generated remediation TO
+
+metadata:
+  author: "Shadow Team AI"
+  created: "2025-11-08"
+  version: "1.0.0"
+  classification: "Enterprise Canonical Code Quality and Compliance Validation Governance Protocol"
+  compliance: "Fully aligned with Enterprise Canonical Execution Protocol, Golden Rule Execution Protocol, and Enterprise Canonical Code Quality and Compliance Validation Governance Protocol"
+  language: "en-AU"
+
+[END OF INSTRUCTIONS]
+
+continuation_instruction: |
+  You are executing Validate Code Quality and Compliance per Enterprise Canonical Execution Protocol v1.0.0.
+
+  BEST PRACTICES DOCUMENTS (MANDATORY REVIEW)
+  Core FastAPI: fastapi-best-practices-2025.md, fastapi-auto-sync-best-practices-2025.md, FASTAPI_DIRECTORY_STRUCTURE_BEST_PRACTICES_2025-12-05.md
+  Async/Performance: object-pooling-resource-management-best-practices-2025.md, websockets-server-sent-events-best-practices-2025.md, streaming-real-time-data-best-practices-2025.md
+  Reliability/Resilience: error-handling-resilience-patterns-best-practices-2025.md, caching-strategies-best-practices-2025.md, rate-limiting-best-practices-2025.md
+  Architecture Patterns: dependency-injection-best-practices-2025.md, middleware-patterns-best-practices-2025.md, api-gateway-patterns-best-practices-2025.md, plugin-architecture-best-practices-2025.md
+  Security: security-input-validation-encryption-owasp-best-practices-2025.md, authentication-authorization-multi-strategy-best-practices-2025.md, secrets-management-best-practices-2025.md
+  Observability: observability-monitoring-prometheus-grafana-tracing-structlog-best-practices-2025.md, structured-logging-best-practices-2025.md
+  Data: database-migrations-best-practices-2025.md, orm-database-provider-factory-best-practices-2025.md, redis-caching-best-practices.md
+  Configuration: configuration-management-best-practices-2025.md, docker-containerization-best-practices-2025.md, feature-flags-best-practices-2025.md
+  Testing: code-quality-linting-best-practices-2025.md, testing-strategies-best-practices-2025.md, playwright-e2e-testing-best-practices-2025.md
+  - MANDATORY: Review code quality, FastAPI, and testing best practices BEFORE validation
+  - MUST validate against best practices standards during validation
+  - MUST compare validation results against best practices standards
+  - MUST document best practices compliance status in validation results
+
+  CRITICAL DOCUMENTATION RULE (ABSOLUTE - NO EXCEPTIONS)
+  - TEMPORAL DOCUMENTS MUST NOT BE CREATED
+  - ALL updates, validation results, compliance reports, quality metrics, and findings MUST be documented directly in:
+    1. The SPEC document(s) themselves (in_progress/ or done/)
+    2. The IMPLEMENTATION_PLAN_v#.#.#.md file
+  - DO NOT create standalone temporal documents
+  - Update relevant SPEC(s) and IMPLEMENTATION_PLAN with all validation results, metrics, and findings
+  - This rule is NON-NEGOTIABLE and must be enforced strictly
+
+  CODEBASE SCAFFOLDING MANDATE (MANDATORY - NO EXCEPTIONS)
+  - ALWAYS search for existing code repositories FIRST before writing any custom code
+  - Priority hierarchy: Golden Template → Local Repos → tristanaburns GitHub → Public GitHub → Official SDKs → CNCF Projects → Open Source Libraries → Public Packages → Custom Code (LAST RESORT)
+  - Document ALL discovered repos/files in SPEC files BEFORE cloning
+  - Clone to tmp/ directory ONLY (never project root)
+  - Add attribution comments to ALL scaffolded code
+  - Delete cloned repos after extraction
+  - Custom code requires full justification
+
+  MANDATORY WORKFLOW (SEQUENTIAL - CANNOT SKIP)
+  Step 1: Canonical Preparation
+  - Load and enforce the Enterprise Canonical Execution Protocol
+  - Load and enforce the Golden Rule Execution Protocol
+  - Review code quality, FastAPI, and testing best practices documents
+  - Retrieve recent validation patterns and context from Neo4j-Memory (past 48 hours)
+  - Gather relevant documentation and reference configurations (Context7, grep)
+  - Confirm configuration file presence and parameter correctness
+
+  Step 2: Python Validation Suite
+  - Run Python validation commands (py_compile, mypy, flake8, bandit, safety, black, isort, radon, xenon)
+  - Validate against best practices standards during validation
+  - Success criteria: 0 errors, 0 warnings, CC ≤15, MI ≥20, no security vulnerabilities
+
+  Step 3: PowerShell Validation Suite
+  - Perform syntax validation with PSParser
+  - Invoke-ScriptAnalyzer with error/warning checks
+  - Run Pester tests ensuring 100% pass rate
+  - Success criteria: 0 syntax/linting violations, 100% functions documented, all tests pass
+
+  Step 4: Node.js / TypeScript Validation Suite
+  - Run TypeScript compiler (tsc --noEmit --strict)
+  - Run ESLint with max-warnings 0
+  - Run Prettier check
+  - Success criteria: 0 compiler errors, 0 ESLint warnings, 100% type coverage, no 'any' types
+
+  Step 5: Validation Results Aggregation
+  - Collect and parse all tool outputs
+  - Compare validation results against best practices standards
+  - Generate aggregated compliance summary
+  - Log results and threshold metrics to Neo4j-Memory
+  - Document best practices compliance status in validation results
+  - Create relationships between session, validation results, and affected entities
+  - Attach validation results to related SPECs and Implementation Plan entries
+
+  Step 6: Remediation and Halt Conditions
+  - If any validation fails, stop immediately
+  - Record all failed checks in Neo4j-Memory under session entity
+  - Generate remediation TODOs for each failed validation item
+  - Re-run validation only after remediation completed
+
+  Step 7: Final Declaration and Audit Record
+  - Upon 100% validation success: Mark codebase as Production Ready
+  - CRITICAL: Update relevant SPEC(s) in docs/implementation/in_progress/ with all validation results, metrics, compliance status, Production Ready certification, and findings
+  - CRITICAL: Update Implementation Plan checklists accordingly with validation results
+  - CRITICAL: DO NOT create VALIDATION_REPORT.md or any other temporal documents
+  - CRITICAL: All validation results MUST be documented in SPECs and IMPLEMENTATION_PLAN only
+  - Persist results to Neo4j-Memory with timestamped relationships
+
+  VALIDATION CHECKPOINTS (MUST PASS ALL)
+  - [ ] Code quality, FastAPI, and testing best practices reviewed BEFORE validation
+  - [ ] Validation performed against best practices standards
+  - [ ] Validation results compared against best practices standards
+  - [ ] Best practices compliance status documented in validation results
+  - [ ] 0 errors, 0 warnings, 0 vulnerabilities across all tools
+  - [ ] All metrics meet or exceed canonical and golden rule thresholds
+  - [ ] SPEC(s) updated with validation results and metrics
+  - [ ] IMPLEMENTATION_PLAN updated with validation results
+  - [ ] All validation results documented in SPECs and IMPLEMENTATION_PLAN only (NO temporal documents)
+
+# EXECUTION PROTOCOL
+# Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml under those enforced rules.
+# @system LOAD "docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml" && LOAD "docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"  enforce; THEN run "docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml"
+
+# Enforce Canonical Protocol and run a task
+# !load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml && !load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml && !run ./docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml --enforce
+
+# System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml --enforce"
+  system_instruction: >
+    System: Load and obey ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml and ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml as the canonical framework. Then execute ./docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml under those enforced rules.
+
+# Example Execution Protocol
+# DO NOT EXECUTE THIS EXAMPLE PROTOCOL. IT IS FOR ILLUSTRATION PURPOSES ONLY.
+# Define the execution protocol as a YAML object with the following structure:
+execution_protocol:
+  command_sequence:
+    - "!load ./docs/implementation/instructions/00-Enterprise_Cannonical_Execution_Protocol.yaml"
+    - "!load ./docs/implementation/instructions/01-The_GoldenRule_Execution_Protocol.yaml"
+    - "!run ./docs/implementation/instructions/06-Validate_Code_Quality_and_Compliance.yaml --enforce"

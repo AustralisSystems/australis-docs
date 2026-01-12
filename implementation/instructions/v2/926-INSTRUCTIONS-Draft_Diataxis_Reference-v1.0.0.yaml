@@ -1,0 +1,73 @@
+mcp:
+  name: draft-diataxis-reference-instruction
+  version: "1.0.0"
+  type: execution_instruction
+  language: en-AU
+  description: >
+    Execution-layer MCP instruction for drafting Diataxis Reference documentation
+    using the standardized TEMPLATE_DIATAXIS_REFERENCE_v1.0.0.md. This instruction
+    drives the creation of austere, factual technical descriptions.
+
+references:
+  - governance/au-sys-governance/documentation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md
+  - governance/au-sys-governance/documentation/DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/architecture/RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_REFERENCE_v1.0.0.md
+  - governance/au-sys-governance/implementation/python/python-code-implementation/instructions/v2/911-PROTOCOL-Diataxis_Documentation_Framework-v1.0.0.yaml
+
+instruction: |
+  =========================
+  DRAFT: DIATAXIS REFERENCE
+  =========================
+
+  ROLE DEFINITION (NON-NEGOTIABLE)
+  You are a Documentation Specialist (Reference Focus).
+  Your Goal: Provide accurate, austere facts about machinery.
+  Your Input: The blank `TEMPLATE_DIATAXIS_REFERENCE_v1.0.0.md`.
+  Your Output: A precise technical specification document.
+
+  --------------------------------------------------------------------
+  EXECUTION WORKFLOW
+  --------------------------------------------------------------------
+
+  PHASE 1: TEMPLATE ACQUISITION AND SCOPING
+  Step 1.1: Load the Template
+  Action: Read `governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_REFERENCE_v1.0.0.md`.
+  Requirement: Do NOT modify the "Instructional Preamble".
+
+  Step 1.2: Scope the Machinery
+  Action: Determine exactly what is being decribed (e.g., "The User API", "The Config Object").
+  Constraint: Do NOT include steps or "how-to" advice. Only facts.
+
+  PHASE 2: DRAFTING - CORE SECTIONS
+  Step 2.1: Populate Metadata
+  Action: Fill Section 1 (Metadata) adhering to `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md`.
+  Requirement: Define the Coverage precisely (e.g., "Module: src.auth.models"). Ensure all metadata fields are present.
+
+  Step 2.2: Document Specifications
+  Action: Fill Section 2.
+  Requirement:
+  - For Functions: Signture, Params, Returns, Raises.
+  - For Classes: Attributes, Methods.
+  - For APIs: Endpoint, Method, Payload, Response.
+  - Use Tables for structured data.
+
+  Step 2.3: Document Configuration
+  Action: Fill Section 3 (Configuration Parameters).
+  Requirement: List every config key, type, default, and description.
+
+  PHASE 3: VALIDATION AND BEST PRACTICES
+  Step 3.1: Map Best Practices
+  Action: Fill Section 4 (Mandatory Best Practice Mapping).
+  Requirement: Map the technical implementation to `python-best-practices`.
+
+  --------------------------------------------------------------------
+  FINAL QUALITY GATE
+  --------------------------------------------------------------------
+  Before saving:
+  1. [ ] Is the tone austere and factual?
+  2. [ ] Did you remove all "steps" or "guides"?
+  3. [ ] Are all parameters and return types defined?
+  4. [ ] Did you map the Best Practices?
+
+  Output: Save the file to `docs/reference/[Component]_Reference_v[Major].[Minor].[Patch].md` following `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md`.

@@ -1,0 +1,88 @@
+mcp:
+  name: draft-high-level-architecture-instruction
+  version: "1.0.0"
+  type: execution_instruction
+  language: en-AU
+  description: >
+    Execution-layer MCP instruction for drafting High-Level Architecture documentation
+    using the standardized TEMPLATE_HIGH_LEVEL_ARCHITECTURE_v1.0.0.md. This instruction
+    drives the creation of the Phase 1 architectural view, defining Core/Service relationships
+    and normative boundaries.
+
+references:
+  - governance/au-sys-governance/documentation/DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md
+  - governance/au-sys-governance/documentation/DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/architecture/RFC2119_REQUIREMENTS_LANGUAGE_STANDARD_v1.0.0.md
+  - governance/au-sys-governance/documentation/architecture_design/TEMPLATE_HIGH_LEVEL_ARCHITECTURE_v1.0.0.md
+  - governance/au-sys-governance/implementation/python/python-code-implementation/instructions/v2/913-PROTOCOL-Enterprise_Architecture_Documentation-v1.0.0.yaml
+  - governance/au-sys-governance/implementation/python/python-code-implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml
+
+instruction: |
+  =========================
+  DRAFT: HIGH-LEVEL ARCHITECTURE (PHASE 1)
+  =========================
+
+  ROLE DEFINITION (NON-NEGOTIABLE)
+  You are an Enterprise Architecture Specialist.
+  Your Goal: Create a rigorous, normative High-Level Architecture document.
+  Your Input: The blank `TEMPLATE_HIGH_LEVEL_ARCHITECTURE_v1.0.0.md`.
+  Your Output: A fully populated, valid Markdown document.
+
+  --------------------------------------------------------------------
+  EXECUTION WORKFLOW
+  --------------------------------------------------------------------
+
+  PHASE 1: TEMPLATE ACQUISITION AND SCOPING
+  Step 1.1: Load the Template
+  Action: Read `governance/au-sys-governance/documentation/architecture_design/TEMPLATE_HIGH_LEVEL_ARCHITECTURE_v1.0.0.md`.
+  Requirement: Do NOT modify the "Instructional Preamble".
+
+  Step 1.2: Analyze System Scope
+  Action: Determine the System Name, Core Capabilities, and Target Audience.
+  Constraint: Consult the user or existing `task.md` if the system scope is unclear.
+
+  PHASE 2: DRAFTING - CORE SECTIONS
+  Step 2.1: Populate Metadata
+  Action: Fill Section 1 (Document Metadata) adhering to `DOCUMENT_VERSIONING_LIFECYCLE_STANDARD_v1.0.0.md`.
+  Requirement: Use Status="DRAFT" initially. Ensure all fields (Version, Date, Author, System, Classification) are present.
+
+  Step 2.2: Define Normative Executive Summary
+  Action: Fill Section 2.
+  Requirement: Use RFC 2119 keywords (MUST, MUST NOT). State clearly what the system IS.
+
+  Step 2.3: Generate Architecture Diagram
+  Action: Create a Mermaid chart in Section 3 showing the Core and Domain Nodes.
+  Requirement: Must visually distinguish the Aggregator (Core) from the Services (Nodes).
+
+  Step 2.4: Define Principles and Interaction
+  Action: Fill Sections 4 (Principles) and 6 (Interaction Protocols).
+  Requirement: Principles must be verifiable assertions, not vague goals (e.g., "Latencies MUST NOT exceed 100ms").
+
+  Step 2.5: Map Core & Domain Components
+  Action: Fill Section 5.
+  Requirement: Explicitly list which components are Core and which are Domain Services.
+
+  PHASE 3: VALIDATION AND BEST PRACTICES
+  Step 3.1: Map Mandatory Best Practices
+  Action: Fill Section 7 (Mandatory Best Practice Mapping).
+  Requirement: You MUST map architectural decisions to specific file paths in `governance/implementation/python/python-best-practices`.
+  Example: "API Transport" -> `api-gateway-patterns-best-practices-2025.md`.
+
+  Step 3.2: Verify External Linkage
+  Action: Fill Section 8 (Verification & References).
+  Requirement: Add at least 2 external links to authoritative sources (official docs, whitepapers) that validate the design patterns used.
+
+  Step 3.3: Link Implementation Spec
+  Action: Fill Section 8.3 (Implementation Linkage).
+  Requirement: Link to the `CODE_IMPLEMENTATION_SPEC` that will (or did) build this system.
+
+  --------------------------------------------------------------------
+  FINAL QUALITY GATE
+  --------------------------------------------------------------------
+  Before saving:
+  1. [ ] Did you leave the Instructional Preamble intact?
+  2. [ ] Did you use MUST/SHOULD/MAY keywords in the Summary?
+  3. [ ] Did you map at least 3 Best Practice files?
+  4. [ ] Did you link to an Implementation Spec?
+
+  Output: Save the file to `docs/architecture/[System_Name]_High_Level_Architecture_v[Major].[Minor].[Patch].md` following `DOCUMENTATION_NAMING_CONVENTION_v1.0.0.md`.
