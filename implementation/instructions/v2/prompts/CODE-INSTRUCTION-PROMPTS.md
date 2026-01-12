@@ -52,12 +52,12 @@ LOAD_AND_PARSE:
     - "004-PROTOCOL-Validate_Remediate_Codebase"
     - "006-PROTOCOL-RFC2119_Requirements_Language"
 
-ENFORCE:
+LOAD_AND_ENFORCE:
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
   - "004-PROTOCOL-Validate_Remediate_Codebase"
 
-EXECUTE:
+LOAD_AND_EXECUTE:
   - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
   - "202-INSTRUCTIONS-Pure_Code_Implementation_Execution_Protocol"
   - "203-INSTRUCTIONS-FastAPI_Design_Implementation_Refactor"
@@ -78,6 +78,40 @@ Then, Halt
 
 - Copy the "docs\implementation\CODE_IMPLEMENTATION_SPEC_TEMPLATE.md" to the directory "docs\implementation\in_progress\"  DO NOT RE-WRITE IT,
 - Copy the "docs\implementation\WEB_APP_CODE_SPEC_TEMPLATE_v1.0.0.md" to the directory "docs\implementation\in_progress\"  DO NOT RE-WRITE IT,
+
+
+for this CODE SPEC you are going to use the instructions and scripts to discover, extract, standardise and prepare the services and features from this dir ... "C:\github_development\AustralisSystems\apps\digital-angels\src\services" .... YOU MUST ENSURE THAT YOU DO NOT OVER-WRITE ANY EXISTING SERVICES IN THE library python services here "C:\github_development\AustralisSystems\libraries\python\services" ... if there is a dir name that clashes, create a similar name to ensure that its clear what the source of the service was. .... update the CODE SPEC doc with this detail, then halt
+
+
+
+LOAD_AND_EXECUTE: "C:\github_development\AustralisSystems\libraries\_ai_agent\instructions\003-INSTRUCTION-Service_Extraction_and_Integration-v1.0.0.yaml"
+
+CONTINUE WITH THE CURRENT {{ CODE_IMPLEMENTATION_SPEC }}
+REMEMBER:
+  - "Use the scripts in this directory "C:\github_development\AustralisSystems\libraries\_ai_agent\tools" to fast track the process"
+  - MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC }}.
+
+CODE_IMPLEMENTATION_SPEC:C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_20260113.md
+
+CODE_IMPLEMENTATION_SPEC: C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_20260113_005422.md
+
+
+CODE_IMPLEMENTATION_SPEC:C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_20260113.md
+
+DIRECTIVE:
+  - THIS IS A CODE IMPLEMENTAITON, REFACTORING AND VALIDATION FOCUSED SESSION.
+  - THE USE OF SCRIPTS OR MASS MODIFICATIONS TO THE CODE IS STRICTLY FORBIDDEN.
+  - ALL CODE MUST BE IMPLEMENTED ONE STEP AT A TIME, IN A SEQUENTIAL MANNER.
+  - NO DOCUMENTATION OF ANY KIND IS PERMITTED UNLESS I EXPLICITLY ASK FOR IT.
+
+LOAD_AND_EXECUTE:
+  - "C:\github_development\AustralisSystems\libraries\_ai_agent\instructions\003-INSTRUCTION-Service_Extraction_and_Integration-v1.0.0.yaml"
+  - CONTINUE WITH THE CURRENT {{ CODE_IMPLEMENTATION_SPEC }} ...
+  - Continue to iterate through the plans in the {{ CODE_IMPLEMENTATION_SPEC }} until all plans are completed, pass code quality checks and have been validated
+
+REMEMBER:
+  - "Use the scripts in this directory "C:\github_development\AustralisSystems\libraries\_ai_agent\tools" to fast track the process"
+  - MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC }}.
 
 
 ######################################################################################################################
@@ -219,7 +253,7 @@ DIRECTIVES:
   - THIS IS A FULL RE-WRITE.
 
 EXECUTE:
-  - "204-INSTRUCTIONS-Live-Debugging-and-Remedation"
+  - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
     INPUTS: {{ CODE_IMPLEMENTATION_SPEC_DOCS }}
 
 
