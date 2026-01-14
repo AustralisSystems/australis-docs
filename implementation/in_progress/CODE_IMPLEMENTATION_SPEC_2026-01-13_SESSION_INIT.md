@@ -2,7 +2,7 @@
 
 **Version**: v1.3.0
 **Date**: 2026-01-13
-**Last Updated**: 2026-01-13 18:35:00 (Australia/Adelaide)
+**Last Updated**: 2026-01-14 23:50:00 (Australia/Adelaide)
 **Status**: � Complete
 **Priority**: P0 - CRITICAL
 **Session Type**: Code Implementation and Remediation Session
@@ -539,3 +539,38 @@ The `au_sys_identity` capability is currently incomplete. It possesses the schem
 *   [x] **TASK 16.1.3**: Unified Registration
     *   **Method**: `plugin.register(app)` mounts everything in one ordered pass.
     *   **Resilience**: Validated Lazy-Loading of RBAC Middleware (Lambda Enforcer).
+### PHASE 17: Integration Testing & Verification (The Final Gauntlet)
+**Objective**: Deploy the updated capability into a host application and systematically verify all resilience features.
+
+#### ACTION 17.1: Resilience Integration
+*   **Context**: Verify the new Backup/Restore and Redis Sync features in a live environment.
+*   [x] **TASK 17.1.1**: Deploy `au_sys_identity` into `au_sys_app_digital_angels` (Host) and configure Redis.
+    *   **Status**: COMPLETED
+    *   **Notes**: Authenticated, RBAC active, and standard routes functional in `fsp_shell` verification.
+    *   **Verification**: Verified via `fsp_shell` integration tests.
+
+*   [ ] **TASK 17.1.2**: Verify Redis synchronization of policies.
+    *   **Status**: DEFERRED
+    *   **Notes**: Verified conceptually via `RedisWatcher` code, but integration test skipped due to complexity of reliable Redis clustering in ephemeral `fsp_shell`. To be validated in Staging.
+    *   **Verification**: Requires multi-container setup with shared Redis.
+
+*   [x] **TASK 17.1.3**: Verify the full state Backup/Restore process.
+    *   **Status**: COMPLETED
+    *   **Notes**: `BackupService` validated for full graph cycle (Users -> Roles -> System). Handling joined loads and JSON serialization verified.
+    *   **Verification**: `verify_identity_capability.py` steps 9 & 10 passed.
+    *   **Proof**: Integrity check passes after restoration.
+
+#### ACTION 17.2: Production Refactoring
+*   **Context**: Eliminate mocks and stubs introduced during rapid prototyping.
+*   [x] **TASK 17.2.1**: Refactor `MFAOrchestrator` to use proper Dependency Injection for cache.
+    *   **Status**: COMPLETED
+    *   **Notes**: Implemented `CacheProvider` (Protocol), `RedisCache` (Adapter), and `get_mfa_orchestrator` (Dependency).
+    *   **Verification**: Verified `fsp_shell` builds and runs; logic inspection confirms DI usage.
+
+#### ACTION 17.3: Observability Maturity
+*   [x] **TASK 17.3.1**: Integrate granular auditing with `IAMAuditLog` (capture detailed context).
+    *   **Status**: COMPLETED
+    *   **Notes**: Updated `RBACService` to inject `CoreAuditLogger`. Implemented security event logging for Policy/Role changes. Verified via Backup/Restore cycle (Audit Log persistence).
+    *   **Verification**: `verify_identity_capability.py` passed full cycle including Audit table restoration.
+
+### Phase 18: Handover & Documentation (Final)
