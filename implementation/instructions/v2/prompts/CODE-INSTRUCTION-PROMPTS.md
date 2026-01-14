@@ -42,15 +42,15 @@ File_Extension: .yaml
 SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
-LOAD_AND_PARSE:
+LOAD_AND_ENFORCE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  PROTOCOLS:
-    - "001-PROTOCOL-The_GoldenRule_Execution"
-    - "002-PROTOCOL-Zero_Tolerance_Remediation"
-    - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
-    - "004-PROTOCOL-Validate_Remediate_Codebase"
-    - "006-PROTOCOL-RFC2119_Requirements_Language"
+LOAD_AND_ENFORCE:
+  - "001-PROTOCOL-The_GoldenRule_Execution"
+  - "002-PROTOCOL-Zero_Tolerance_Remediation"
+  - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
+  - "004-PROTOCOL-Validate_Remediate_Codebase"
+  - "006-PROTOCOL-RFC2119_Requirements_Language"
 
 LOAD_AND_ENFORCE:
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
@@ -80,11 +80,75 @@ Then, Halt
 - Copy the "docs\implementation\WEB_APP_CODE_SPEC_TEMPLATE_v1.0.0.md" to the directory "docs\implementation\in_progress\"  DO NOT RE-WRITE IT,
 
 
+######################################################################################################################
+
+
+
 for this CODE SPEC you are going to use the instructions and scripts to discover, extract, standardise and prepare the services and features from this dir ... "C:\github_development\AustralisSystems\apps\digital-angels\src\services" .... YOU MUST ENSURE THAT YOU DO NOT OVER-WRITE ANY EXISTING SERVICES IN THE library python services here "C:\github_development\AustralisSystems\libraries\python\services" ... if there is a dir name that clashes, create a similar name to ensure that its clear what the source of the service was. .... update the CODE SPEC doc with this detail, then halt
 
 
 
-LOAD_AND_EXECUTE: "C:\github_development\AustralisSystems\libraries\_ai_agent\instructions\003-INSTRUCTION-Service_Extraction_and_Integration-v1.0.0.yaml"
+
+
+LOAD_AND_EXECUTE:
+  - C:\github_development\AustralisSystems\libraries\_ai_agent\instructions\205-PROTOCOL-Sovereign_Capability_Construction-v1.1.0.yaml
+  - C:\github_development\AustralisSystems\libraries\_ai_agent\instructions\003-INSTRUCTION-Service_Extraction_and_Integration-v1.0.0.yaml
+
+DIRECTIVE: Proceed and do not wait for approval during the 003 steps, consider this the approval.
+
+TARGETS:
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\api_client
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\auth
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\aws
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\celery
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\config
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\conversion
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\discovery
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\feature_flags
+
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\google
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\graphql
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\integration
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\logging
+
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\microsoft
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\monitoring
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\notifications
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\optimization
+
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\providers
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\redis_cache
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\runtime
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\secrets
+
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\security
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\sessions
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\shared
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\storage
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\sync
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\system
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\websocket
+
+
+LOAD_AND_EXECUTE:
+  - C:\github_development\AustralisSystems\libraries\_ai_agent\instructions\205-PROTOCOL-Sovereign_Capability_Construction-v1.1.0.yaml
+  - C:\github_development\AustralisSystems\libraries\_ai_agent\instructions\003-INSTRUCTION-Service_Extraction_and_Integration-v1.0.0.yaml
+
+DIRECTIVE: Proceed and do not wait for approval during the 003 steps, consider this the approval.
+
+TARGETS:
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\security
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\sessions
+ - C:\github_development\AustralisSystems\apps\digital-angels\src\services\shared
+
+
+
+REMEMBER:
+  - "Use the scripts in this directory "C:\github_development\AustralisSystems\libraries\_ai_agent\tools" to fast track the process"
+
+
+
+
 
 CONTINUE WITH THE CURRENT {{ CODE_IMPLEMENTATION_SPEC }}
 REMEMBER:
@@ -228,20 +292,16 @@ SPEC_File_Extention: .md
 
 CODE_IMPLEMENTATION_SPEC_DOCS: "The provided CODE SPEC document(s) and OTHER document(s) provided in this instruction SHALL BE YOUR ONLY FOCUS."
 
-LOAD_AND_PARSE:
+LOAD_AND_EXECUTE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
+LOAD_AND_EXECUTE::
   PROTOCOLS:
     - "001-PROTOCOL-The_GoldenRule_Execution"
     - "002-PROTOCOL-Zero_Tolerance_Remediation"
     - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
     - "004-PROTOCOL-Validate_Remediate_Codebase"
     - "006-PROTOCOL-RFC2119_Requirements_Language"
-
-ENFORCE:
-  - "002-PROTOCOL-Zero_Tolerance_Remediation"
-  - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
-  - "004-PROTOCOL-Validate_Remediate_Codebase"
 
 DIRECTIVES:
   - THIS IS A CODE IMPLEMENTAITON, REFACTORING AND VALIDATION FOCUSED SESSION.
@@ -252,7 +312,7 @@ DIRECTIVES:
   - MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC_DOCS }}.
   - THIS IS A FULL RE-WRITE.
 
-EXECUTE:
+LOAD_AND_EXECUTE:
   - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
     INPUTS: {{ CODE_IMPLEMENTATION_SPEC_DOCS }}
 

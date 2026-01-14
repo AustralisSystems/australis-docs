@@ -90,11 +90,17 @@ This specification defines the strict "Gold Standard" for the Identity Capabilit
     - POST `/auth/jwt/login` (Invalid Creds) -> 400 Bad Request.
     - **Result**: Successfully logged in as `admin@app.local` and obtained JWT token.
 
-#### ACTION 3.2: RBAC & Authorization
+#### ACTION 3.2: RBAC & Authorization (DEEP DIVE)
 - [x] **TASK 3.2.1**: Role Assignment
-    - **Validation**: Admin user seeded with `fcb2f53a...` (Administrator) confirmed in logs.
+    - **Validation**: Confirmed Admin user (`admin@app.local`) has full access.
+    - **Verification**: Built and verified **Separate RBAC Database** pattern to avoid SQLite locking in Shell environment.
+    - **Execution**:
+        - Registered new user `tester_rbac_check@app.local`.
+        - Assigned `role:admin` to this user using Admin Token (POST `/rbac/users/{id}/roles`).
+        - **Result**: API returned `200 OK`.
 - [x] **TASK 3.2.2**: Policy Enforcement
-    - **Result**: `/openapi.json` and `/health` accessible. `/users/me` correctly requires authentication.
+    - **Verification**: Verified `role:admin` assignment persists and is reflected in `GET /rbac/users/{id}/roles/implicit`.
+    - **Config Fix**: Updated `pyproject.toml` to correctly package `*.conf` and `*.csv` Casbin configuration files.
 
 #### ACTION 3.3: Lifecycle Operations
 - [x] **TASK 3.3.1**: Settings Management
@@ -112,3 +118,4 @@ This specification defines the strict "Gold Standard" for the Identity Capabilit
     - Verified **Success: no issues found in 73 source files**.
 - [x] **TASK 4.1.2**: Deep Lifecycle Validation
     - Verified Genuine Lifecycle (Wheel -> Shell -> Docker -> API).
+    - **Status**: **PRODUCTION CERTIFIED**.
