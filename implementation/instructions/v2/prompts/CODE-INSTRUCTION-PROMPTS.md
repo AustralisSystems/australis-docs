@@ -17,6 +17,21 @@ then HALT
 
 ######################################################################################################################
 
+
+This doc is the previous session chat log, review it to uncover futher info NOT included in the handover.
+
+READ_AND_REVIEW:
+  - the provided content from the previous session
+
+DOCUMENTS:
+
+
+
+then HALT
+
+######################################################################################################################
+
+# CONTEXT
 CONTEXT: You are planning to refactor existing code in this codebase to the "Universal Fractal Codebase" (UFC) Archiecture. Following this, you are to package and deploy the UFC compliant code onto the "FastAPI Services Platform Shell" (FSP_Shell) and confirm the FSP_Shell bootstrap and is running flawlessly. Once the FSP_Shell is running flawlessly, You are to systematically test the CRUD and lifecycle mgmt operations for every service, endpoint, interface and function. To do this, you must discover and inventory every single element of the UFC compliant package, then think, then formulate a real world testing strategy and strucutred test plan, which you will then document in the CODE SPEC document.
 
 # IMPLEMENTATION PLANS
@@ -64,6 +79,68 @@ HALT and wait for further instructions
 
 
 
+######################################################################################################################
+
+
+
+### INSERT A NEW VERSION OF THE INSTRUCTIONS BELOW ###
+
+# CONTEXT
+CONTEXT: You are planning to refactor existing code in this codebase to the "Universal Fractal Codebase" (UFC) Architecture. Following this, you are to package and deploy the UFC compliant code onto the "FastAPI Services Platform Shell" (FSP_Shell) and confirm the FSP_Shell bootstrap and is running flawlessly. Once the FSP_Shell is running flawlessly, You are to systematically test the CRUD and lifecycle mgmt operations for EVERY service, endpoint, interface, internal utility and function. To do this, you must discover and inventory EVERY SINGLE structural and logical element (Modules, Classes, Methods, Functions, Schemas) of the UFC compliant package. You must then think, and formulate a Granular Testing Strategy that covers the entire internal surface area, not just the public API. You will then document this "Deep Inventory" and "Test Strategy" in the CODE SPEC document.
+
+# IMPLEMENTATION PLANS
+CODE_IMPLEMENTATION_SPEC: "The current CODE IMPLEMENTATION SPEC document for this session"
+
+# ARCHITECTURE DESIGN DOCS
+CODEBASE_ARCHITECTURE:  C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_ARCHITECTURE_v1.0.0.md"
+CODEBASE_BLUEPRINT: "C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_STRUCTURE_BLUEPRINT_v1.0.0.md
+
+# CODE DIRS
+UFC_TEMPLATE: C:\github_development\AustralisSystems\libraries\python\_templates\universal_fractal_codebase_architecture
+# TARGET CODE
+TARGET_CODE: C:\github_development\AustralisSystems\libraries\python\capabilities\au_sys_identity
+FSP_Shell: C:\github_development\AustralisSystems\platforms\_testing\fsp_shell
+
+DIRECTIVES:
+  - THE plan MUST ONLY use MCP tools and/or file system operations for the copying, moving, renaming and deleting the dirs & files, AND MUST NOT rewrite the file contents to a new or existing file.
+  - The plan MUST broadly follow the process of:
+    1. Copy the dirs and files from the UFC template,
+    2. Move, copy, rename the dirs and files to comply with the UFC standards
+    3. Adapt the code to the {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
+    4. Perform code quality checks including AST, compile, Lint, Typecheck
+    5. Prepare and execute the packaging of the code.
+    6. Prepare and execute the build and deployment of the {{ FSP_Shell }} with the package to the local docker desktop host. The {{ FSP_Shell }} MUST NOT be deployed with any code or packages which is NOT required to test the packaged code.
+    7. Perform container health checks, and docker log checks, resolve any issues and ensure flawless operation of the {{ FSP_Shell }} BEFORE commencing the test plan.
+    8. EXECUTE DEEP INVENTORY: Systematically traverse the codebase and list every Service, Class, Method, and Function in the SPEC.
+    9. FORMULATE STRATEGY: Map every inventory item to a specific Code Verification Plan (Happy Path + Edge Case).
+    10. EXECUTE VALIDATION: Progress iteratively through the test plan, step by step, validating and checking the {{ FSP_Shell }} docker logs.
+    11. Identify and resolve all issues in the code, then repackage and deploy the container.
+    12. Confirm the {{ FSP_Shell }} and the packaged code works flawlessly with 100% functional pass rate (0 Errors, 0 Warnings, 0 Issues).
+
+# EXECUTION WORKFLOW
+WORKFLOW:
+1. READ_AND_REVIEW:
+  - {{ CODEBASE_ARCHITECTURE }}
+  - {{ CODEBASE_BLUEPRINT }}
+
+2. REVIEW_CODE: {{ UFC_TEMPLATE }}
+
+3. COMPARE_CODE: {{ TARGET_CODE }} WITH {{ UFC_TEMPLATE }} + {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
+
+4. DEEP_INVENTORY:
+  - Discover and List every Service, Utility, and internal Function in the {{ CODE_IMPLEMENTATION_SPEC }}.
+
+5. STRATEGY_DESIGN:
+  - Define the specific Verification Logic for each item in the Inventory in the {{ CODE_IMPLEMENTATION_SPEC }}.
+
+6. UPDATE_DOCS:
+  - The {{ CODE_IMPLEMENTATION_SPEC }} with the findings and the aligned plan.
+
+HALT and wait for further instructions
+
+
+
+
 
 ######################################################################################################################
 
@@ -93,7 +170,7 @@ READ_AND_IMPLEMENT:
 - "004-PROTOCOL-Validate_Remediate_Codebase"
 
 # IMPLEMENTATION PLANS
-CODE_IMPLEMENTATION_SPEC: C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_20260113.md
+CODE_IMPLEMENTATION_SPEC: C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_2026-01-15_2111.md
 
 # EXECUTION DIRECTIVES
 DIRECTIVE:
@@ -129,9 +206,11 @@ File_Extension: .yaml
 SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
+# AUSTRALIS SYSTEMS DOCTRINE
 READ_AND_EXECUTE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
+# AUSTRALIS SYSTEMS PROTOCOLS
 READ_AND_IMPLEMENT:
   - "001-PROTOCOL-The_GoldenRule_Execution"
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
@@ -139,11 +218,13 @@ READ_AND_IMPLEMENT:
   - "004-PROTOCOL-Validate_Remediate_Codebase"
   - "006-PROTOCOL-RFC2119_Requirements_Language"
 
+# AUSTRALIS SYSTEMS PROTOCOLS
 READ_AND_IMPLEMENT:
 - "002-PROTOCOL-Zero_Tolerance_Remediation"
 - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
 - "004-PROTOCOL-Validate_Remediate_Codebase"
 
+# EXECUTION INSTRUCTIONS
 EXECUTE:
 Review the following documents to acquire a comprehensive understanding of the fastapi_services_platform:
 
@@ -151,7 +232,8 @@ Review the following documents to acquire a comprehensive understanding of the f
 - @src/services/fastapi_services_platform/engine/README.md
 - @src/services/fastapi_services_platform/docs/README.md
 - @src/services/fastapi_services_platform/docs/architecture/README.md
-  These resources provide detailed information and insights into the various components and architectural design of the fastapi_services_platform, which will be essential for thorough knowledge and effective utilization.
+
+These resources provide detailed information and insights into the various components and architectural design of the fastapi_services_platform, which will be essential for thorough knowledge and effective utilization.
 
 Then, HALT
 
