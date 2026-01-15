@@ -14,6 +14,57 @@ DOCUMENTS:
 
 then HALT
 
+
+######################################################################################################################
+
+CONTEXT: You are planning to refactor existing code in this codebase to the "Universal Fractal Codebase" (UFC) Archiecture. Following this, you are to package and deploy the UFC compliant code onto the "FastAPI Services Platform Shell" (FSP_Shell) and confirm the FSP_Shell bootstrap and is running flawlessly. Once the FSP_Shell is running flawlessly, You are to systematically test the CRUD and lifecycle mgmt operations for every service, endpoint, interface and function. To do this, you must discover and inventory every single element of the UFC compliant package, then think, then formulate a real world testing strategy and strucutred test plan, which you will then document in the CODE SPEC document.
+
+# IMPLEMENTATION PLANS
+CODE_IMPLEMENTATION_SPEC: "The current CODE IMPLEMENTATION SPEC document for this session"
+
+# ARCHTIECTURE DESIGN DOCS
+CODEBASE_ARCHITECTURE:  C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_ARCHITECTURE_v1.0.0.md"
+CODEBASE_BLUEPRINT: "C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_STRUCTURE_BLUEPRINT_v1.0.0.md
+
+# CODE DIRS
+UFC_TEMPLATE: C:\github_development\AustralisSystems\libraries\python\_templates\universal_fractal_codebase_architecture
+# TARGET CODE
+TARGET_CODE: C:\github_development\AustralisSystems\libraries\python\capabilities\au_sys_identity
+FSP_Shell: C:\github_development\AustralisSystems\platforms\_testing\fsp_shell
+
+DIRECTIVES:
+  - THE plan MUST ONLY use MCP tools and/or file system operations for the copying, moving, renaming and deleting the dirs & files, AND MUST NOT rewrite the file contents to a new or existing file.
+  - The plan MUST broadly follow the process of:
+    1. Copy the dirs and files from teh UFC template,
+    2. Move, copy, rename the dirs and files to comply with the UFC standards
+    3. Adapt the code to the {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
+    4. Perform code quality checks including AST, compile, Lint, Typecheck
+    5. Prepare and execute the packaging of the code.
+    6. Prepare and execute the build and deployment of the {{ FSP_Shell }} with the package to the local docker desktop host. The {{ FSP_Shell }} MUST NOT be deploy with any code or packages which is NOT required to test the packaged code.
+    7. Perform container health checks, and docker log checks, resolve any issues and ensure flawless operation of the {{ FSP_Shell }} BEFORE commencing the test plan.
+    8. Execute the real world testing strategy and structured test plan.
+    9. Progress iteratevly through the test plan, step by step, validating and checking the {{ FSP_Shell }} docker logs, Identifying and resolving all issues in the code, then repackaging and deploying the container.
+    10. Confirm the {{ FSP_Shell }} and the packaged code works flawlessly with 100% pass rate.
+
+# EXECUTION WORKFLOW
+WORKFLOW:
+1. READ_AND_REVIEW:
+  - {{ CODEBASE_ARCHITECTURE }}
+  - {{ CODEBASE_BLUEPRINT }}
+
+2. REVIEW_CODE: {{ UFC_TEMPLATE }}
+
+3. COMPARE_CODE: {{ TARGET_CODE }} WITH {{ UFC_TEMPLATE }} + {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
+
+4. UPDATE_DOCS:
+  - The {{ CODE_IMPLEMENTATION_SPEC }} with the findings
+  - The {{ CODE_IMPLEMENTATION_SPEC }} with plan to align the {{ TARGET_CODE }} to the {{ UFC_TEMPLATE }} + {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }} AND this Software Factory codebase.
+
+HALT and wait for further instructions
+
+
+
+
 ######################################################################################################################
 
 
@@ -23,14 +74,72 @@ File_Extension: .yaml
 SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
-PROTOCOLS:
+# AUSTRALIS SYSTEMS DOCTRINE
+READ_AND_EXECUTE:
+  DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
+
+# AUSTRALIS SYSTEMS PROTOCOLS
+READ_AND_IMPLEMENT:
   - "001-PROTOCOL-The_GoldenRule_Execution"
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
   - "004-PROTOCOL-Validate_Remediate_Codebase"
   - "006-PROTOCOL-RFC2119_Requirements_Language"
 
-ENFORCE:
+# AUSTRALIS SYSTEMS PROTOCOLS
+READ_AND_IMPLEMENT:
+- "002-PROTOCOL-Zero_Tolerance_Remediation"
+- "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
+- "004-PROTOCOL-Validate_Remediate_Codebase"
+
+# IMPLEMENTATION PLANS
+CODE_IMPLEMENTATION_SPEC: C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_20260113.md
+
+# EXECUTION DIRECTIVES
+DIRECTIVE:
+  - THIS IS A CODE IMPLEMENTAITON, REFACTORING AND VALIDATION FOCUSED SESSION.
+  - THE USE OF SCRIPTS OR MASS MODIFICATIONS TO THE CODE IS STRICTLY FORBIDDEN.
+  - ALL CODE MUST BE IMPLEMENTED ONE STEP AT A TIME, IN A SEQUENTIAL MANNER.
+  - NO DOCUMENTATION OF ANY KIND IS PERMITTED UNLESS I EXPLICITLY ASK FOR IT.
+
+# EXECUTE INSTRUCTIONS WORKFLOW
+LOAD_AND_EXECUTE:
+  - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
+  - "202-INSTRUCTIONS-Pure_Code_Implementation_Execution_Protocol"
+  - "203-INSTRUCTIONS-FastAPI_Design_Implementation_Refactor"
+
+# INSTRUCTION INPUTS
+INPUTS:
+  - CONTINUE WITH THE CURRENT {{ CODE_IMPLEMENTATION_SPEC }} ...
+  - Continue to iterate through the plans in the {{ CODE_IMPLEMENTATION_SPEC }} until all plans are completed, pass code quality checks and have been validated
+
+# EXECUTION REMINDERS
+REMEMBER:
+  - "CONSIDER using the scripts in this directory "C:\github_development\AustralisSystems\libraries\_ai_agent\tools" to fast track the process"
+  - MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC }}.
+
+
+
+######################################################################################################################
+
+
+Base_Directory: docs/implementation/instructions/v2/
+File_Extension: .yaml
+
+SPEC_Directory: docs/implementation/in_progress
+SPEC_File_Extention: .md
+
+READ_AND_EXECUTE:
+  DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
+
+READ_AND_IMPLEMENT:
+  - "001-PROTOCOL-The_GoldenRule_Execution"
+  - "002-PROTOCOL-Zero_Tolerance_Remediation"
+  - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
+  - "004-PROTOCOL-Validate_Remediate_Codebase"
+  - "006-PROTOCOL-RFC2119_Requirements_Language"
+
+READ_AND_IMPLEMENT:
 - "002-PROTOCOL-Zero_Tolerance_Remediation"
 - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
 - "004-PROTOCOL-Validate_Remediate_Codebase"
@@ -57,17 +166,17 @@ File_Extension: .yaml
 SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
-LOAD_AND_ENFORCE:
+READ_AND_ENFORCE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-LOAD_AND_ENFORCE:
+READ_AND_ENFORCE:
   - "001-PROTOCOL-The_GoldenRule_Execution"
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
   - "004-PROTOCOL-Validate_Remediate_Codebase"
   - "006-PROTOCOL-RFC2119_Requirements_Language"
 
-LOAD_AND_ENFORCE:
+READ_AND_ENFORCE:
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
   - "004-PROTOCOL-Validate_Remediate_Codebase"
@@ -163,11 +272,11 @@ REMEMBER:
 
 
 
-
+CODE_IMPLEMENTATION_SPEC: C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_20260115.md
 
 CONTINUE WITH THE CURRENT {{ CODE_IMPLEMENTATION_SPEC }}
 REMEMBER:
-  - "Use the scripts in this directory "C:\github_development\AustralisSystems\libraries\_ai_agent\tools" to fast track the process"
+  - "Consider using the scripts in this directory "C:\github_development\AustralisSystems\libraries\_ai_agent\tools" to fast track the process"
   - MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC }}.
 
 CODE_IMPLEMENTATION_SPEC:C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_20260113.md
@@ -205,7 +314,7 @@ SPEC_File_Extention: .md
 LOAD_AND_PARSE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  PROTOCOLS:
+  READ_AND_COMPLY:
     - "001-PROTOCOL-The_GoldenRule_Execution"
     - "002-PROTOCOL-Zero_Tolerance_Remediation"
     - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
@@ -319,7 +428,7 @@ LOAD_AND_EXECUTE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
 LOAD_AND_EXECUTE::
-  PROTOCOLS:
+  READ_AND_COMPLY:
     - "001-PROTOCOL-The_GoldenRule_Execution"
     - "002-PROTOCOL-Zero_Tolerance_Remediation"
     - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
@@ -371,7 +480,7 @@ CODE_IMPLEMENTATION_SPEC_DOCS: [{{ CODE_IMPLEMENTATION_SPEC }}]
 LOAD_AND_PARSE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  PROTOCOLS:
+  READ_AND_COMPLY:
     - "001-PROTOCOL-The_GoldenRule_Execution"
     - "002-PROTOCOL-Zero_Tolerance_Remediation"
     - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
@@ -447,7 +556,7 @@ SPEC_File_Extention: .md
 LOAD_AND_PARSE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  PROTOCOLS:
+  READ_AND_COMPLY:
     - "001-PROTOCOL-The_GoldenRule_Execution"
     - "002-PROTOCOL-Zero_Tolerance_Remediation"
     - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
@@ -582,7 +691,7 @@ SPEC_File_Extention: .md
 LOAD_AND_PARSE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  PROTOCOLS:
+  READ_AND_COMPLY:
     - "001-PROTOCOL-The_GoldenRule_Execution"
     - "002-PROTOCOL-Zero_Tolerance_Remediation"
     - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
@@ -638,7 +747,7 @@ SPEC_File_Extention: .md
 LOAD_AND_PARSE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  PROTOCOLS:
+  READ_AND_COMPLY:
     - "001-PROTOCOL-The_GoldenRule_Execution"
     - "002-PROTOCOL-Zero_Tolerance_Remediation"
     - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
@@ -684,7 +793,7 @@ SPEC_File_Extention: .md
 LOAD_AND_PARSE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  PROTOCOLS:
+  READ_AND_COMPLY:
     - "001-PROTOCOL-The_GoldenRule_Execution"
     - "002-PROTOCOL-Zero_Tolerance_Remediation"
     - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
