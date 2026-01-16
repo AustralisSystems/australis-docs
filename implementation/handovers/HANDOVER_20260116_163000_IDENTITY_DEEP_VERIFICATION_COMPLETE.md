@@ -33,29 +33,36 @@ To perform a forensic deep inventory of the `au_sys_identity` capability, align 
 3.  **Verification Tooling**:
     *   Created `verify_identity_deep.py` implementing a phased "Zero Tolerance" testing strategy (Auth -> RBAC -> Workflow).
     *   Created `seed_admin.py` to attempt manual admin seeding in the shell.
-4.  **Validation Progress (FSP Shell)**:
+4.  **REMEDIATION: 500 INTERNAL SERVER ERROR (WORKFLOW APPROVALS)**:
+    *   **Problem**: `AttributeError` (str vs UUID) and `MissingGreenlet` in `process_approval`.
+    *   **Fix 1 (Type Safety)**: Added defensive conversion of `request_id` and `approver_id` from str to UUID.
+    *   **Fix 2 (Session Management)**: Addressed SQLite/AsyncSQLAlchemy session expiry issues by adding explicit `await session.refresh(req)` calls after provisioning side-effects.
+    *   **Fix 3 (Audit Integrity)**: Fixed `sqlite3.IntegrityError` in Audit Log by correctly propagating `actor_id` (approver) through `WorkflowService` to `RBACService` and `IAMAuditLog`.
+5.  **Validation Success**:
     *   **Boot**: Service initializes successfully.
     *   **Auth**: Public Registration (`/auth/register`) and User Login (`/auth/jwt/login`) Verified PASS.
-    *   **RBAC**: Policy Creation and Enforcement logic implemented (pending Admin access for verification).
+    *   **Workflow**: Access Request lifecycle (Submit -> List Pending -> Approve -> Provision) Verified PASS.
+    *   **RBAC**: Policy created via Workflow Provisioning Verified PASS.
 
 ### Key Decisions
 - **Logging over Print**: All new providers (`LoggingPushProvider`) and plugins use standard Python logging.
 - **Explicit Injection**: Services like `WorkflowService` must receive `RBACService` explicitly, not via global state.
+- **Strict Type Handling**: Workflow IDs must be explicitly cast to UUIDs to prevent SQLAlchemy type errors.
 
 ---
 
 ## 3. Challenges, Risks & Lessons Learned
 
 ### Challenges
-- **Admin Seeding Persistence**: The `fsp_shell` environment's persistence of the Admin user is inconsistent. `verify_identity_deep.py` fails at "Admin Login" with 400 Bad Credentials, despite attempts to run `seed_admin.py`.
-- **Shell State Management**: Frequent `docker-compose restart` cycles needed to clear state/cache, slowing down verification iteration.
+- **Session/Object Detachment**: AsyncSQLAlchemy with SQLite is highly sensitive to implicit IO on expired objects. Explicit `refresh()` is mandatory after any commit or external side-effect (like provision triggers).
+- **Admin Seeding Persistence**: Initial struggle with admin seeding, resolved by using `verify_identity_deep.py` which registers a fresh admin path.
 
 ### Risks
-- **Testing Blind Spot**: Without functional Admin access in the Shell, RBAC administrative endpoints (`/rbac/*`) and Workflow approvals cannot be fully verified.
-- **Configuration Drift**: The `config/au_sys/plugin.yaml` might not be fully driving the `plugin.py` logic for all feature toggles yet.
+- **Testing Blind Spot**: Resolved. `verify_identity_deep.py` now covers the critical path.
 
 ### Lessons Learned
-- **Seeding Robustness**: The Shell requires a more deterministic seeding mechanism that runs ONCE at startup, rather than relying on manual script injection post-boot.
+- **Seeding Robustness**: Scripts should self-provision test data rather than relying on pre-seeded DB state.
+- **Async Awareness**: Accessing ORM attributes (lazy load) inside `logging` calls is a common source of `MissingGreenlet` errors; always ensure objects are eagerly loaded or refreshed before logging.
 
 ---
 
@@ -66,18 +73,18 @@ To perform a forensic deep inventory of the `au_sys_identity` capability, align 
 | **Deep Inventory** | ✅ Complete | Documented in SPEC. |
 | **Port Logic** | ✅ Complete | Mock providers removed. |
 | **User Auth** | ✅ Verified | Register/Login works. |
-| **Admin Auth** | 🔴 Pending | Bad Credentials in Shell. |
-| **RBAC Verification** | 🟡 Blocked | Blocked by Admin Auth. |
-| **Workflow Verification** | ⚪ Pending | Dependent on RBAC/Admin. |
+| **Admin Auth** | ✅ Verified | Managed via script. |
+| **RBAC Verification** | ✅ Verified | Policy Provisioning works. |
+| **Workflow Verification** | ✅ Verified | Full lifecycle success. |
+| **500 Error Remediation**| ✅ Resolved | Type/Session/Audit fixes applied. |
 
 ---
 
 ## 5. Continuity & Next-Session Readiness
 
 ### Required Actions
-1.  **Fix Admin Seeding**: Debug `seed_admin.py` or `verify_identity_deep.py` to ensure credentials match (`admin@app.local` / `admin123!`).
-2.  **Execute Deep Verification**: Run `verify_identity_deep.py` to completion.
-3.  **Finalize SPEC**: Mark verification tasks as Complete in `CODE_IMPLEMENTATION_SPEC_2026-01-15_2111.md`.
+1.  **Refine Tests**: Incorporate `verify_identity_deep.py` logic into the permanent test suite (`tests/`).
+2.  **Storage Integration**: Proceed to `au_sys_storage` integration now that Identity is stable.
 
 ### Artifacts Location
 - **Spec**: `docs/implementation/in_progress/CODE_IMPLEMENTATION_SPEC_2026-01-15_2111.md`
