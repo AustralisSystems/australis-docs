@@ -99,7 +99,7 @@ CODEBASE_BLUEPRINT: "C:\github_development\AustralisSystems\governance\au-sys-go
 UFC_TEMPLATE: C:\github_development\AustralisSystems\libraries\python\_templates\universal_fractal_codebase_architecture
 # TARGET CODE
 TARGET_CODE: C:\github_development\AustralisSystems\libraries\python\capabilities\au_sys_identity
-FSP_Shell: C:\github_development\AustralisSystems\platforms\_testing\fsp_shell
+FSP_Shell: C:\github_development\AustralisSystems\platforms\_testing\fsp_shell_001
 
 DIRECTIVES:
   - THE plan MUST ONLY use MCP tools and/or file system operations for the copying, moving, renaming and deleting the dirs & files, AND MUST NOT rewrite the file contents to a new or existing file.
@@ -116,6 +116,17 @@ DIRECTIVES:
     10. EXECUTE VALIDATION: Progress iteratively through the test plan, step by step, validating and checking the {{ FSP_Shell }} docker logs.
     11. Identify and resolve all issues in the code, then repackage and deploy the container.
     12. Confirm the {{ FSP_Shell }} and the packaged code works flawlessly with 100% functional pass rate (0 Errors, 0 Warnings, 0 Issues).
+
+  **IMPORTANT**
+  It is PROHIBITED to perform MOCK tests of ANY THE PRODUCTION CODE functionallity AND external endpoints, storage, network, idenentity resources and/or backends.
+  It is PROHIBITED to perform MOCK tests of ANY THE PRODUCTION CODE CONNECTIVITY OR ACCESS TO ANY external resources... including but not limited to: endpoints, storage, network, idenentity resources and/or backends. this achieves NOTHING!...
+  YOU MUST ALWAYS DEPLOY, CONNECT TO AND PROVISION REAL RESORUCES AND STORAGE BACKENDS TO VALIDATE THE PRODUCTION CODE
+
+  **IMPORTANT**
+  For each of the tests and commands... YOU MUST ALWAYS ensure there is trace level logging so that all the commands, data in and data out, errors, warnings and issues are visable to improve DX, troubleshooting and issue resolution.
+
+  **IMPORTANT**
+  great, now in the actual production codebase... we are going to create a suite of "produciton validation scripts" which will run scripts akin to what we have just created.. BUT... they are to be executed at runtime once the container and its external resources are provisioned.... these tests must be designed to pressively test all aspsects of the au_sys_storage code, down to a deep functional level. exactly 100% of the produciton code MUST be covered by these production validation scripts. the scripts themselves must be single purpose with a runner or harness script developed to iteratively run each script that is developed in the expected order. each script MUST perform all the functional commands and actions required to be a fully self contained scripts and NOT rely on any previous scripts in the chain.
 
 # EXECUTION WORKFLOW
 WORKFLOW:

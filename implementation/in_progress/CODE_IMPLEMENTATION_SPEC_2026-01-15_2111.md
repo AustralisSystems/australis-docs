@@ -208,3 +208,63 @@ This session is initialized for code implementation and remediation following th
 - [x] **Admin Capability**: Refactor User Management into proper Admin Dashboard (`admin.py`, `users.html`).
 
 ---
+
+## 🛠️ IMPLEMENTATION PLAN: DEEP INVENTORY & VERIFICATION
+
+### 1. Forensic Code Inventory
+
+#### A. Internal Architecture (Services & Core)
+*   **RBAC System**: `RBACService`, `RBACFactory`, `RBACWatcher` (Infrastructure), `CasbEnforcer`
+*   **Identity Graph**: `IdentityGraphService`, `AssociationService` (Links Users<->Agents<->Resources)
+*   **AI Identity**: `AIAgentIdentityService`, `AIProviderService`, `CustodianService` (Human-in-the-loop)
+*   **Security Core**: `MFAOrchestrator`, `EncryptionService`, `OAuthProviderFactory`, `APIKeyService`
+*   **Lifecycle**: `WorkflowService` (Access Requests), `BackupService`, `RecoveryService`, `ConsistencyService`
+*   **Storage**: `StorageFactory`, `DynamicStorageManager` (Multi-backend abstraction)
+*   **Models**: `User`, `FSPConfiguration`, `AIAgent`, `AIProvider`, `ServiceAccount`, `Association`, `AccessRequest`, `AuditLog`, `Snapshot`, `Credential`
+
+#### B. API Surface (Routers)
+*   **AuthN**: `/auth` (Login, Register, Reset), `/auth/{provider}` (OAuth), `/magic-link`
+*   **AuthZ**: `/rbac` (Check, Policies, Roles, Permissions)
+*   **Identity**: `/users` (CRUD), `/service-accounts` (Machine Auth), `/ai-agents` (AI Auth), `/ai-providers`
+*   **Graph**: `/associations` (Link/Unlink entities)
+*   **Ops**: `/sync` (State Recon), `/recovery` (Backup/Restore), `/settings` (Runtime Config)
+*   **Workflows**: `/iam/requests` (Submit, Approve/Reject)
+
+#### C. Web Surface (Adapters)
+*   **Public**: `/auth/login`
+*   **Protected**: `/dashboard` (User Home), `/admin/users` (Superuser Mgmt)
+*   **Static**: `/static/au_sys_identity` (CSS/JS assets)
+
+#### D. Gap Analysis & Risk
+*   **Critical**: `WorkflowService` provisioning logic was a placeholder (Fixed in this session).
+*   **Critical**: `PushNotificationProvider` was a mock (Fixed in this session).
+*   **Risk**: `RBACService` integration with `WorkflowService` is newly implemented and requires integration testing.
+*   **Risk**: `IdentityGraphService` complexity is high; coverage needs to be verified.
+*   **Gap**: `mfa_orchestrator` relies on a cache provider that might need explicit configuration in `fsp_shell`.
+
+### 2. Granular Verification Strategy
+
+#### A. Core Pathway Verification (Critical)
+1.  **Boot & Config**: Verify `plugin.py` loads without errors, connects to DB, Seeding works.
+2.  **Auth & Session**: Register user -> Login -> Verify JWT -> Access Protected Route (`/users/me`).
+3.  **RBAC Enforcement**:
+    *   Create Policy (`p, alice, data, read`).
+    *   Verify Check (`alice` can `read` `data`).
+    *   Verify Denial (`bob` cannot `read` `data`).
+4.  **Workflow Lifecycle**:
+    *   User submits Request (`target_type=resource`, `target_id=res1`).
+    *   Admin lists Pending.
+    *   Admin Approves.
+    *   **Verify Side Effect**: User now has `read` permission on `res1` (via `WorkflowService._provision_access`).
+5.  **Service Accounts**: Create SA -> Generate Key -> Authenticate with Key -> Verify `service-account` Identity.
+
+#### B. Deep Edge Case Verification
+1.  **State Recovery**: Create Policies -> Backup -> WIPE DB -> Restore -> Verify Policies persist.
+2.  **MFA Flow (Mocked Push)**: Initiate Challenge -> Verify "Pending" -> Approve (via Code) -> Verify "Approved".
+3.  **Graph Consistency**: Link User-Agent -> Delete User -> Verify Agent Unlinked (or cascaded).
+
+### 3. Execution & Validation
+- [ ] **Draft Verification Script**: Create/Update `verify_identity_deep.py` to implement the strategy.
+- [ ] **Execute dry-run**: Ensure the verification script runs against `fsp_shell`.
+
+---
