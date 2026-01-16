@@ -1,0 +1,242 @@
+mcp:
+  version: "Model Context Protocol"
+  context_type: "policy+task+gates"
+  title: "API Validation — 100% REST/Web/Admin Endpoints via REAL HTTP, REAL Resources, Full Trace Visibility"
+  priority: "HIGHEST"
+
+  intent: >
+    Validate 100% of REST/Web/Admin API endpoints and HTTP methods for au_sys_storage
+    using REAL HTTP requests against the running deployed container and REAL provisioned resources.
+    This suite MUST execute AFTER the internal production-code validation suite passes.
+    These tests validate adapters and external calls end-to-end and MUST provide 100% trace visibility
+    for all commands, operations, data-in, and data-out.
+
+  execution_order:
+    rule: "MANDATORY"
+    statement: >
+      API validation MUST execute only after the production validation suite passes with 100% success.
+      If production validation is not 100% passing, API validation MUST NOT start.
+
+  api_surface_source_of_truth:
+    rule: "MANDATORY"
+    statement: >
+      The endpoint+method inventory used for API validation MUST come ONLY from previously produced artifacts.
+      Endpoints and methods MUST NOT be inferred, guessed, or hallucinated.
+    required_inputs:
+      - "api_endpoint_method_inventory.json"
+      - "web_adapter_endpoint_inventory.json"
+      - "openapi.json"
+    enforcement:
+      - "If any required artifact is missing, abort."
+      - "If inventories conflict, abort and produce a reconciliation report."
+      - "If any endpoint/method is tested that is not in the inventories/openapi.json, abort."
+      - "If any endpoint/method in inventories/openapi.json is NOT tested, abort."
+
+  prerequisites_management:
+    - id: API_PREREQ_INVENTORY_REQUIRED
+      rule: "MANDATORY"
+      statement: >
+        Before executing ANY API tests, create an explicit prerequisites inventory to guarantee
+        the use of REAL resources and dependencies.
+      inventory_must_include:
+        - "SERVICE_BASE_URL for the deployed container"
+        - "healthcheck endpoints"
+        - "auth prerequisites (credential reference IDs only)"
+        - "external backends (db/storage/identity/etc.) with real endpoints"
+        - "network requirements (ports/DNS/routes)"
+        - "required seeded data and how it is created"
+      output_artifacts:
+        - "api_prereqs_inventory.json"
+        - "api_prereqs_inventory.md"
+
+    - id: API_PREREQ_VALIDATION_GATE
+      rule: "HARD_GATE"
+      statement: >
+        Validate all prerequisites BEFORE any API tests execute.
+      validation_must_confirm:
+        - "container is running and healthy"
+        - "SERVICE_BASE_URL reachable over the network"
+        - "auth succeeds using real credentials"
+        - "external backends are real, reachable, and permissioned"
+        - "basic read/write operations succeed"
+      enforcement:
+        - "If any prerequisite fails, abort the entire API plan."
+        - "Do not execute API tests until fixed and revalidated."
+      output_artifacts:
+        - "api_prereqs_validation_report.json"
+        - "api_prereqs_validation_report.md"
+
+    - id: PREREQ_PROVISION_AND_CONNECT
+      rule: "MANDATORY"
+      statement: >
+        Provision and connect to REAL prerequisites using the inventory as source-of-truth.
+      constraints:
+        - "No mocks, no emulators, no fakes."
+        - "Provisioning must be repeatable and idempotent."
+        - "Secrets must never be logged; only reference IDs may appear."
+      output_artifact:
+        - "api_provisioning_actions.log (trace-level, timestamped)"
+
+  api_execution_mode:
+    rule: "MANDATORY"
+    statement: >
+      API validation MUST use REAL HTTP requests against SERVICE_BASE_URL.
+      In-process request simulators are PROHIBITED.
+    prohibited:
+      - "fastapi.testclient.TestClient"
+      - "any in-process router mounting or request simulation"
+
+  non_negotiables:
+    - id: NO_MOCKS
+      rule: "PROHIBITED"
+      statement: >
+        Mocks, stubs, fakes, or emulators are prohibited for API validation and external integrations.
+
+    - id: TRACE_VISIBILITY_100_PERCENT
+      rule: "MANDATORY"
+      statement: >
+        All scripts MUST provide TRACE-level logging for 100% of commands and operations.
+        All data-in and data-out MUST be logged (secrets redacted).
+        There must be NO silent operations.
+
+    - id: LOG_TO_FILE_WITH_TIMESTAMP_NAME
+      rule: "MANDATORY"
+      statement: >
+        All scripts and the harness MUST log to uniquely named files with datetime-stamp suffixes.
+      enforcement:
+        - "Filename MUST include YYYYMMDD_HHMMSS."
+        - "No overwrite; unique per run."
+
+  logging_requirements:
+    - id: LOG_EVERY_OPERATION
+      rule: "MANDATORY"
+      statement: >
+        EVERY operation MUST emit a trace log entry.
+      required_fields:
+        - timestamp
+        - script_id
+        - run_id
+        - operation_id
+        - operation_sequence_number
+        - operation_type
+        - command_executed
+        - inputs
+        - outputs
+        - status
+        - duration_ms
+        - warnings
+        - errors
+        - correlation_id
+        - request_id
+
+    - id: DATA_REDACTION_RULE
+      rule: "MANDATORY"
+      statement: >
+        Secrets MUST NOT be logged.
+      prohibited:
+        - "raw API keys"
+        - "raw tokens"
+        - "passwords"
+        - "private keys"
+      required_instead:
+        - "credential_ref_id"
+        - "secret_ref_id"
+
+  api_validation_suite:
+    packaging_requirement:
+      rule: "MANDATORY"
+      statement: >
+        All API validation scripts and the harness MUST be included in the production wheel package.
+
+    coverage_requirements:
+      - id: ENDPOINT_METHOD_COVERAGE_100
+        rule: "MANDATORY"
+        statement: >
+          100% of endpoints AND 100% of supported HTTP methods MUST be tested.
+
+    positive_and_negative_testing:
+      rule: "MANDATORY"
+      statement: >
+        Every endpoint+method MUST have positive and negative tests using REAL failure conditions.
+
+    expected_vs_actual_requirements:
+      - id: EXPECTED_VS_ACTUAL_ENFORCEMENT
+        rule: "MANDATORY"
+        statement: >
+          Every test MUST define machine-verifiable expected results and compare against actual results.
+      - id: EXPECTED_RESULT_OMISSION_ABORT
+        rule: "HARD_ABORT"
+        statement: >
+          Missing expected results in ANY test aborts the entire plan.
+
+    allowed_comparison_types:
+      allowed:
+        - equality
+        - invariant
+        - predicate
+        - tolerance
+
+    required_script_format:
+      rule: "MANDATORY"
+      required_at_script_start:
+        - suite_id
+        - run_id
+        - log_file_path
+        - total_tests_planned
+      required_for_each_test:
+        - test_sequence_number
+        - endpoint
+        - method
+        - expected_http_status
+        - actual_http_status
+        - expected_result
+        - actual_result
+        - comparison_type
+        - comparison_result
+      required_at_script_end:
+        - total_tests_executed
+        - passed_count
+        - failed_count
+        - warnings_count
+        - errors_count
+        - successful_tests
+        - unsuccessful_tests
+
+  api_harness_runner:
+    execution_rules:
+      - id: FAIL_FAST_GLOBAL
+        rule: "HARD_ABORT"
+        statement: >
+          Any test failure aborts the entire API plan immediately.
+      - id: ISSUE_RESOLUTION_GATE
+        rule: "MANDATORY"
+        statement: >
+          All issues MUST be resolved before restarting.
+          Restart MUST begin from the start after revalidating prerequisites.
+
+    requirements:
+      - "Run prereqs inventory and validation first."
+      - "Load inventories and openapi.json."
+      - "Generate endpoint+method execution matrix."
+      - "Execute tests deterministically."
+      - "Log to timestamped files."
+      - "Produce final summary only if ALL tests pass."
+
+  failure_conditions:
+    - "Any use of mocks/stubs/fakes/emulators."
+    - "Use of TestClient or in-process simulators."
+    - "Missing or conflicting endpoint inventories."
+    - "Failed prereqs validation."
+    - "Any operation without trace log of inputs/outputs."
+    - "Missing expected results."
+    - "Any failed comparison."
+    - "Continuing after failure."
+    - "Missing timestamped logs or summaries."
+
+  success_criteria:
+    - "Production validation passed first."
+    - "Prereqs inventory created and validated."
+    - "100% endpoint+method coverage achieved."
+    - "All API tests executed via REAL HTTP."
+    - "Full trace logs with data-in/data-out captured."
+    - "All tests pass in a single uninterrupted run."

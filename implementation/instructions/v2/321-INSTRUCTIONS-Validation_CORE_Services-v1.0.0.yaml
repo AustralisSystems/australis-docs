@@ -1,0 +1,240 @@
+mcp:
+  version: "Model Context Protocol"
+  context_type: "policy+task+gates"
+  title: "Production Validation — Real Resources Only, No Mocks, No Slop"
+  priority: "HIGHEST"
+
+  intent: >
+    Validate production code strictly against real, provisioned resources.
+    Prevent AI-driven rewriting, mocking, or speculative behavior.
+    Ensure deterministic, traceable, runtime validation with 100% coverage.
+    All validation logic must ship with the production artifact and must
+    PROVE actual code behavior via explicit expected-vs-actual comparisons.
+
+  non_negotiables:
+    - id: NO_MOCKS
+      rule: "PROHIBITED"
+      statement: >
+        Mock tests are strictly prohibited for ALL production code functionality
+        and ALL external integrations.
+      enforcement: >
+        Tests MUST deploy, connect to, and validate against REAL provisioned resources.
+        If real resources cannot be provisioned, testing MUST halt and report the blocker.
+
+    - id: TRACE_LOGGING_ALWAYS
+      rule: "MANDATORY"
+      statement: >
+        Every command and every test MUST run with trace-level logging enabled and MUST be
+        written to a uniquely named log file for post-run analysis.
+      required_log_content:
+        - timestamp
+        - test_id
+        - test_sequence_number
+        - command_executed
+        - inputs
+        - expected_result
+        - actual_result
+        - comparison_type
+        - comparison_result
+        - warnings
+        - errors
+        - correlation_id (if applicable)
+
+    - id: LOG_TO_FILE_WITH_TIMESTAMP_NAME
+      rule: "MANDATORY"
+      statement: >
+        Each script MUST write logs to a file (not just stdout).
+        Each log file MUST be uniquely named using a datetime-stamp suffix.
+      enforcement:
+        - "Log filename MUST include ISO-like datetime suffix (e.g., YYYYMMDD_HHMMSS)."
+        - "Log file MUST be unique per script execution (no overwrite)."
+        - "Log directory location MUST be deterministic and documented."
+
+    - id: RUNTIME_EXECUTION_ONLY
+      rule: "MANDATORY"
+      statement: >
+        All production validation scripts MUST execute at runtime AFTER the container
+        is running and AFTER all required external resources are provisioned.
+
+    - id: NO_WHERE_APPLICABLE_LANGUAGE
+      rule: "PROHIBITED"
+      statement: >
+        Compliance claims MUST NOT use softening language such as "where applicable".
+        Requirements are absolute unless explicitly scoped in this MCP block.
+
+  prerequisites_management:
+    - id: PREREQ_INVENTORY_REQUIRED
+      rule: "MANDATORY"
+      statement: >
+        Before ANY validation scripts execute, the system MUST create an explicit inventory
+        of all prerequisites (REAL external resources and dependencies) required by the test plan.
+      inventory_must_include:
+        - "resource_type (e.g., mongo, sqlite file path, object storage, secrets, identity)"
+        - "resource_identifier (hostname/endpoint or file path; secrets must be referenced by ID only)"
+        - "required_permissions/roles"
+        - "network requirements (ports, DNS, routing)"
+        - "health/readiness criteria"
+        - "provisioning method (how it is created)"
+        - "connection method (how code connects)"
+      output_artifact:
+        - "prereqs_inventory.json (machine-readable)"
+        - "prereqs_inventory.md (human-readable)"
+
+    - id: PREREQ_VALIDATION_GATE
+      rule: "HARD_GATE"
+      statement: >
+        The prerequisites inventory MUST be validated BEFORE tests run to ensure all resources are REAL,
+        reachable, correctly permissioned, and ready.
+      validation_must_confirm:
+        - "resource exists (real backend, not stub/mock)"
+        - "connectivity works from the running container"
+        - "authentication/authorization succeeds using real credentials (referenced, not logged as secrets)"
+        - "read/write operations succeed where required"
+        - "expected schema/bucket/db/file location exists or is created"
+      enforcement:
+        - "If any prerequisite fails validation, the entire test plan MUST halt."
+        - "Testing MUST NOT proceed until prerequisites are fixed and revalidated."
+      output_artifact:
+        - "prereqs_validation_report.json"
+        - "prereqs_validation_report.md"
+
+    - id: PREREQ_PROVISION_AND_CONNECT
+      rule: "MANDATORY"
+      statement: >
+        The process MUST support provisioning and connection to prerequisites, using the inventory as the source of truth.
+        Provisioning must create REAL resources, then configure the runtime/container to connect to them.
+      constraints:
+        - "No mocks, no emulators, no fakes."
+        - "Provisioning must be repeatable and idempotent."
+        - "Secrets must never be logged; only secret reference IDs may appear in logs."
+      output_artifact:
+        - "provisioning_actions.log (trace-level, file-based, timestamped)"
+
+  production_validation_scripts:
+    scope: "current inscope production code"
+    packaging_requirement:
+      rule: "MANDATORY"
+      statement: >
+        ALL production validation scripts AND the validation harness MUST be incorporated into the production wheel package
+        and shipped as part of the PROD CODE artifact.
+
+    testing_completeness_requirements:
+      - id: POSITIVE_AND_NEGATIVE_REQUIRED
+        rule: "MANDATORY"
+        statement: >
+          Test coverage MUST include BOTH positive and negative testing for all code paths.
+          Negative testing must exercise failure branches, exception paths, boundary conditions,
+          and auth failures where applicable — using REAL failure conditions, not mocks.
+        enforcement:
+          - "Every public operation must have at least one positive and one negative test path."
+          - "All failure branches and exception paths must be exercised by negative tests."
+          - "A 'happy path only' test suite is invalid."
+
+    requirements:
+      - "Exactly 100% of production code MUST be covered (including failure/exception paths)."
+      - "Coverage must be achieved via real execution paths, not mocks."
+      - "Each script MUST be single-purpose and fully self-contained."
+      - "Each script MUST perform its own setup, execution, and verification."
+      - "Scripts MUST NOT rely on state or side-effects from other scripts."
+
+      - id: EXPECTED_VS_ACTUAL_ENFORCEMENT
+        rule: "MANDATORY"
+        statement: >
+          Every validation script MUST define expected results as concrete, machine-verifiable values
+          and compare them against actual results produced by executing production code.
+        enforcement:
+          - "Expected results MUST be code-level values (NOT descriptive text)."
+          - "Actual results MUST be captured from real execution."
+          - "A deterministic comparison MUST be performed."
+          - "Absence of error is NOT a valid success condition."
+
+      - id: EXPECTED_RESULT_OMISSION_ABORT
+        rule: "HARD_ABORT"
+        statement: >
+          If ANY validation script omits an explicit expected result definition, the entire test plan MUST abort.
+        enforcement:
+          - "No further scripts may execute."
+          - "The run is marked INVALID."
+          - "Testing may NOT resume until corrected."
+
+      - id: ALLOWED_COMPARISON_TYPES
+        rule: "MANDATORY"
+        statement: >
+          Every test MUST declare comparison_type and use ONLY allowed comparison semantics.
+        allowed:
+          - type: equality
+            definition: "expected == actual (exact match)"
+          - type: invariant
+            definition: "a property must always hold for actual/state"
+          - type: predicate
+            definition: "a boolean function returns true over actual/state"
+          - type: tolerance
+            definition: "numeric/temporal comparisons within allowed delta"
+            required_fields: [tolerance_value, tolerance_unit]
+
+      - id: SCRIPT_START_AND_END_SUMMARY_FORMAT
+        rule: "MANDATORY"
+        statement: >
+          Each script MUST emit deterministic run header/footer summaries and number each test.
+        required_at_script_start:
+          - script_id
+          - run_id
+          - log_file_path
+          - total_tests_planned
+        required_for_each_test:
+          - test_sequence_number
+          - test_id
+          - expected_result
+          - actual_result
+          - comparison_type
+          - comparison_result
+        required_at_script_end:
+          - total_tests_executed
+          - passed_count
+          - failed_count
+          - warnings_count
+          - errors_count
+          - successful_tests: [list of test_sequence_number]
+          - unsuccessful_tests: [list of test_sequence_number]
+
+  harness_runner:
+    execution_rules:
+      - id: FAIL_FAST_GLOBAL
+        rule: "HARD_ABORT"
+        statement: >
+          If ANY validation script fails, the entire test plan MUST halt immediately.
+      - id: NO_CONTINUE_ON_FAILURE
+        rule: "PROHIBITED"
+        statement: >
+          Continuing execution after a failure is NOT allowed.
+      - id: ISSUE_RESOLUTION_GATE
+        rule: "MANDATORY"
+        statement: >
+          All errors, warnings, and issues MUST be resolved BEFORE restarting.
+          Restart MUST begin from the start after revalidating prerequisites.
+
+    requirements:
+      - "Harness MUST run prerequisites inventory + validation before executing any scripts."
+      - "Harness MUST log to its own timestamped file and record per-script summaries."
+      - "Harness MUST capture expected/actual/comparison results and final summary."
+
+  failure_conditions:
+    - "Any use of mocks/stubs/fakes/emulators."
+    - "Any missing prereqs inventory or prereqs validation step."
+    - "Any prerequisite not real, not reachable, or not ready."
+    - "Any validation script/harness not included in wheel."
+    - "Any script missing expected results or comparison_type."
+    - "Any comparison failure."
+    - "Any attempt to continue after failure."
+    - "Any restart without resolving issues and revalidating prerequisites."
+    - "Any lack of negative testing for failure paths."
+    - "Any uncovered production code path."
+    - "Any script missing required start/end summaries or numbered test refs."
+    - "Any lack of timestamped log files."
+
+  success_criteria:
+    - "Prereqs inventory created and validated successfully using real resources."
+    - "Production wheel contains application code + validation scripts + harness."
+    - "All tests run with trace logs written to timestamped files."
+    - "100% production code coverage including failure paths."
+    - "All scripts pass in a single uninterrupted run."
