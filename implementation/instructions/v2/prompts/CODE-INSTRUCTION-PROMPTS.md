@@ -47,129 +47,8 @@ then HALT
 
 
 
-######################################################################################################################
-
-# CONTEXT
-CONTEXT: You are planning to refactor existing code in this codebase to the "Universal Fractal Codebase" (UFC) Archiecture. Following this, you are to package and deploy the UFC compliant code onto the "FastAPI Services Platform Shell" (FSP_Shell) and confirm the FSP_Shell bootstrap and is running flawlessly. Once the FSP_Shell is running flawlessly, You are to systematically test the CRUD and lifecycle mgmt operations for every service, endpoint, interface and function. To do this, you must discover and inventory every single element of the UFC compliant package, then think, then formulate a real world testing strategy and strucutred test plan, which you will then document in the CODE SPEC document.
-
-# IMPLEMENTATION PLANS
-CODE_IMPLEMENTATION_SPEC: "The current CODE IMPLEMENTATION SPEC document for this session"
-
-# ARCHTIECTURE DESIGN DOCS
-CODEBASE_ARCHITECTURE:  C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_ARCHITECTURE_v1.0.0.md"
-CODEBASE_BLUEPRINT: "C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_STRUCTURE_BLUEPRINT_v1.0.0.md
-
-# CODE DIRS
-UFC_TEMPLATE: C:\github_development\AustralisSystems\libraries\python\_templates\universal_fractal_codebase_architecture
-# TARGET CODE
-TARGET_CODE: C:\github_development\AustralisSystems\libraries\python\capabilities\au_sys_identity
-FSP_Shell: C:\github_development\AustralisSystems\platforms\_testing\fsp_shell
-
-DIRECTIVES:
-  - THE plan MUST ONLY use MCP tools and/or file system operations for the copying, moving, renaming and deleting the dirs & files, AND MUST NOT rewrite the file contents to a new or existing file.
-  - The plan MUST broadly follow the process of:
-    1. Copy the dirs and files from teh UFC template,
-    2. Move, copy, rename the dirs and files to comply with the UFC standards
-    3. Adapt the code to the {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
-    4. Perform code quality checks including AST, compile, Lint, Typecheck
-    5. Prepare and execute the packaging of the code.
-    6. Prepare and execute the build and deployment of the {{ FSP_Shell }} with the package to the local docker desktop host. The {{ FSP_Shell }} MUST NOT be deploy with any code or packages which is NOT required to test the packaged code.
-    7. Perform container health checks, and docker log checks, resolve any issues and ensure flawless operation of the {{ FSP_Shell }} BEFORE commencing the test plan.
-    8. Execute the real world testing strategy and structured test plan.
-    9. Progress iteratevly through the test plan, step by step, validating and checking the {{ FSP_Shell }} docker logs, Identifying and resolving all issues in the code, then repackaging and deploying the container.
-    10. Confirm the {{ FSP_Shell }} and the packaged code works flawlessly with 100% pass rate.
-
-# EXECUTION WORKFLOW
-WORKFLOW:
-1. READ_AND_REVIEW:
-  - {{ CODEBASE_ARCHITECTURE }}
-  - {{ CODEBASE_BLUEPRINT }}
-
-2. REVIEW_CODE: {{ UFC_TEMPLATE }}
-
-3. COMPARE_CODE: {{ TARGET_CODE }} WITH {{ UFC_TEMPLATE }} + {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
-
-4. UPDATE_DOCS:
-  - The {{ CODE_IMPLEMENTATION_SPEC }} with the findings
-  - The {{ CODE_IMPLEMENTATION_SPEC }} with plan to align the {{ TARGET_CODE }} to the {{ UFC_TEMPLATE }} + {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }} AND this Software Factory codebase.
-
-HALT and wait for further instructions
-
-
 
 ######################################################################################################################
-
-
-
-### INSERT A NEW VERSION OF THE INSTRUCTIONS BELOW ###
-
-# CONTEXT
-CONTEXT: You are planning to refactor existing code in this codebase to the "Universal Fractal Codebase" (UFC) Architecture. Following this, you are to package and deploy the UFC compliant code onto the "FastAPI Services Platform Shell" (FSP_Shell) and confirm the FSP_Shell bootstrap and is running flawlessly. Once the FSP_Shell is running flawlessly, You are to systematically test the CRUD and lifecycle mgmt operations for EVERY service, endpoint, interface, internal utility and function. To do this, you must discover and inventory EVERY SINGLE structural and logical element (Modules, Classes, Methods, Functions, Schemas) of the UFC compliant package. You must then think, and formulate a Granular Testing Strategy that covers the entire internal surface area, not just the public API. You will then document this "Deep Inventory" and "Test Strategy" in the CODE SPEC document.
-
-# IMPLEMENTATION PLANS
-CODE_IMPLEMENTATION_SPEC: "The current CODE IMPLEMENTATION SPEC document for this session"
-
-# ARCHITECTURE DESIGN DOCS
-CODEBASE_ARCHITECTURE:  C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_ARCHITECTURE_v1.0.0.md"
-CODEBASE_BLUEPRINT: "C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_STRUCTURE_BLUEPRINT_v1.0.0.md
-
-# CODE DIRS
-UFC_TEMPLATE: C:\github_development\AustralisSystems\libraries\python\_templates\universal_fractal_codebase_architecture
-# TARGET CODE
-TARGET_CODE: C:\github_development\AustralisSystems\libraries\python\capabilities\au_sys_identity
-FSP_Shell: C:\github_development\AustralisSystems\platforms\_testing\fsp_shell_001
-
-DIRECTIVES:
-  - THE plan MUST ONLY use MCP tools and/or file system operations for the copying, moving, renaming and deleting the dirs & files, AND MUST NOT rewrite the file contents to a new or existing file.
-  - The plan MUST broadly follow the process of:
-    1. Copy the dirs and files from the UFC template,
-    2. Move, copy, rename the dirs and files to comply with the UFC standards
-    3. Adapt the code to the {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
-    4. Perform code quality checks including AST, compile, Lint, Typecheck
-    5. Prepare and execute the packaging of the code.
-    6. Prepare and execute the build and deployment of the {{ FSP_Shell }} with the package to the local docker desktop host. The {{ FSP_Shell }} MUST NOT be deployed with any code or packages which is NOT required to test the packaged code.
-    7. Perform container health checks, and docker log checks, resolve any issues and ensure flawless operation of the {{ FSP_Shell }} BEFORE commencing the test plan.
-    8. EXECUTE DEEP INVENTORY: Systematically traverse the codebase and list every Service, Class, Method, and Function in the SPEC.
-    9. FORMULATE STRATEGY: Map every inventory item to a specific Code Verification Plan (Happy Path + Edge Case).
-    10. EXECUTE VALIDATION: Progress iteratively through the test plan, step by step, validating and checking the {{ FSP_Shell }} docker logs.
-    11. Identify and resolve all issues in the code, then repackage and deploy the container.
-    12. Confirm the {{ FSP_Shell }} and the packaged code works flawlessly with 100% functional pass rate (0 Errors, 0 Warnings, 0 Issues).
-
-  **IMPORTANT**
-  It is PROHIBITED to perform MOCK tests of ANY THE PRODUCTION CODE functionallity AND external endpoints, storage, network, idenentity resources and/or backends.
-  It is PROHIBITED to perform MOCK tests of ANY THE PRODUCTION CODE CONNECTIVITY OR ACCESS TO ANY external resources... including but not limited to: endpoints, storage, network, idenentity resources and/or backends. this achieves NOTHING!...
-  YOU MUST ALWAYS DEPLOY, CONNECT TO AND PROVISION REAL RESORUCES AND STORAGE BACKENDS TO VALIDATE THE PRODUCTION CODE
-
-  **IMPORTANT**
-  For each of the tests and commands... YOU MUST ALWAYS ensure there is trace level logging so that all the commands, data in and data out, errors, warnings and issues are visable to improve DX, troubleshooting and issue resolution.
-
-  **IMPORTANT**
-  great, now in the actual production codebase... we are going to create a suite of "produciton validation scripts" which will run scripts akin to what we have just created.. BUT... they are to be executed at runtime once the container and its external resources are provisioned.... these tests must be designed to pressively test all aspsects of the au_sys_storage code, down to a deep functional level. exactly 100% of the produciton code MUST be covered by these production validation scripts. the scripts themselves must be single purpose with a runner or harness script developed to iteratively run each script that is developed in the expected order. each script MUST perform all the functional commands and actions required to be a fully self contained scripts and NOT rely on any previous scripts in the chain.
-
-# EXECUTION WORKFLOW
-WORKFLOW:
-1. READ_AND_REVIEW:
-  - {{ CODEBASE_ARCHITECTURE }}
-  - {{ CODEBASE_BLUEPRINT }}
-
-2. REVIEW_CODE: {{ UFC_TEMPLATE }}
-
-3. COMPARE_CODE: {{ TARGET_CODE }} WITH {{ UFC_TEMPLATE }} + {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
-
-4. DEEP_INVENTORY:
-  - Discover and List every Service, Utility, and internal Function in the {{ CODE_IMPLEMENTATION_SPEC }}.
-
-5. STRATEGY_DESIGN:
-  - Define the specific Verification Logic for each item in the Inventory in the {{ CODE_IMPLEMENTATION_SPEC }}.
-
-6. UPDATE_DOCS:
-  - The {{ CODE_IMPLEMENTATION_SPEC }} with the findings and the aligned plan.
-
-HALT and wait for further instructions
-
-
-
-
 
 ######################################################################################################################
 
@@ -195,7 +74,7 @@ READ_AND_ACKNOWLEDGE:
 ---
 
 # CODE IMPLEMENTATION SPEC PLAN
-CODE_IMPLEMENTATION_SPEC: C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_2026-01-15_2111.md
+CODE_IMPLEMENTATION_SPEC: C:\github_development\AustralisSystems\docs\implementation\in_progress\CODE_IMPLEMENTATION_SPEC_20260118_FSP_Shell_UFC_Blueprint.md
 
 # EXECUTION DIRECTIVES
 DIRECTIVE:
@@ -207,8 +86,6 @@ DIRECTIVE:
 # EXECUTE INSTRUCTIONS WORKFLOW
 LOAD_AND_EXECUTE:
   - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
-  - "202-INSTRUCTIONS-Pure_Code_Implementation_Execution_Protocol"
-  - "203-INSTRUCTIONS-FastAPI_Design_Implementation_Refactor"
 
 # INSTRUCTION INPUTS
 INPUTS:
@@ -219,6 +96,13 @@ INPUTS:
 REMEMBER:
   - "CONSIDER using the scripts in this directory "C:\github_development\AustralisSystems\libraries\_ai_agent\tools" to fast track the process"
   - MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC }}.
+
+
+# EXECUTE INSTRUCTIONS WORKFLOW
+LOAD_AND_EXECUTE:
+  - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
+  - "202-INSTRUCTIONS-Pure_Code_Implementation_Execution_Protocol"
+  - "203-INSTRUCTIONS-FastAPI_Design_Implementation_Refactor"
 
 
 
@@ -232,11 +116,11 @@ SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
 # AUSTRALIS SYSTEMS DOCTRINE
-READ_AND_EXECUTE:
+READ_AND_ACKNOWLEDGE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
 # AUSTRALIS SYSTEMS PROTOCOLS
-READ_AND_IMPLEMENT:
+READ_AND_ACKNOWLEDGE:
   - "001-PROTOCOL-The_GoldenRule_Execution"
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
@@ -940,6 +824,130 @@ EXECUTE:
 INPUT:
   - Code you have touched in this session
   - OUTPUT: 106-INSTRUCTIONS-Validate_Code_Quality_and_Compliance
+
+
+
+######################################################################################################################
+
+
+# CONTEXT
+CONTEXT: You are planning to refactor existing code in this codebase to the "Universal Fractal Codebase" (UFC) Archiecture. Following this, you are to package and deploy the UFC compliant code onto the "FastAPI Services Platform Shell" (FSP_Shell) and confirm the FSP_Shell bootstrap and is running flawlessly. Once the FSP_Shell is running flawlessly, You are to systematically test the CRUD and lifecycle mgmt operations for every service, endpoint, interface and function. To do this, you must discover and inventory every single element of the UFC compliant package, then think, then formulate a real world testing strategy and strucutred test plan, which you will then document in the CODE SPEC document.
+
+# IMPLEMENTATION PLANS
+CODE_IMPLEMENTATION_SPEC: "The current CODE IMPLEMENTATION SPEC document for this session"
+
+# ARCHTIECTURE DESIGN DOCS
+CODEBASE_ARCHITECTURE:  C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_ARCHITECTURE_v1.0.0.md"
+CODEBASE_BLUEPRINT: "C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_STRUCTURE_BLUEPRINT_v1.0.0.md
+
+# CODE DIRS
+UFC_TEMPLATE: C:\github_development\AustralisSystems\libraries\python\_templates\universal_fractal_codebase_architecture
+# TARGET CODE
+TARGET_CODE: C:\github_development\AustralisSystems\libraries\python\capabilities\au_sys_identity
+FSP_Shell: C:\github_development\AustralisSystems\platforms\_testing\fsp_shell
+
+DIRECTIVES:
+  - THE plan MUST ONLY use MCP tools and/or file system operations for the copying, moving, renaming and deleting the dirs & files, AND MUST NOT rewrite the file contents to a new or existing file.
+  - The plan MUST broadly follow the process of:
+    1. Copy the dirs and files from teh UFC template,
+    2. Move, copy, rename the dirs and files to comply with the UFC standards
+    3. Adapt the code to the {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
+    4. Perform code quality checks including AST, compile, Lint, Typecheck
+    5. Prepare and execute the packaging of the code.
+    6. Prepare and execute the build and deployment of the {{ FSP_Shell }} with the package to the local docker desktop host. The {{ FSP_Shell }} MUST NOT be deploy with any code or packages which is NOT required to test the packaged code.
+    7. Perform container health checks, and docker log checks, resolve any issues and ensure flawless operation of the {{ FSP_Shell }} BEFORE commencing the test plan.
+    8. Execute the real world testing strategy and structured test plan.
+    9. Progress iteratevly through the test plan, step by step, validating and checking the {{ FSP_Shell }} docker logs, Identifying and resolving all issues in the code, then repackaging and deploying the container.
+    10. Confirm the {{ FSP_Shell }} and the packaged code works flawlessly with 100% pass rate.
+
+# EXECUTION WORKFLOW
+WORKFLOW:
+1. READ_AND_REVIEW:
+  - {{ CODEBASE_ARCHITECTURE }}
+  - {{ CODEBASE_BLUEPRINT }}
+
+2. REVIEW_CODE: {{ UFC_TEMPLATE }}
+
+3. COMPARE_CODE: {{ TARGET_CODE }} WITH {{ UFC_TEMPLATE }} + {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
+
+4. UPDATE_DOCS:
+  - The {{ CODE_IMPLEMENTATION_SPEC }} with the findings
+  - The {{ CODE_IMPLEMENTATION_SPEC }} with plan to align the {{ TARGET_CODE }} to the {{ UFC_TEMPLATE }} + {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }} AND this Software Factory codebase.
+
+HALT and wait for further instructions
+
+
+
+######################################################################################################################
+
+
+
+### INSERT A NEW VERSION OF THE INSTRUCTIONS BELOW ###
+
+# CONTEXT
+CONTEXT: You are planning to refactor existing code in this codebase to the "Universal Fractal Codebase" (UFC) Architecture. Following this, you are to package and deploy the UFC compliant code onto the "FastAPI Services Platform Shell" (FSP_Shell) and confirm the FSP_Shell bootstrap and is running flawlessly. Once the FSP_Shell is running flawlessly, You are to systematically test the CRUD and lifecycle mgmt operations for EVERY service, endpoint, interface, internal utility and function. To do this, you must discover and inventory EVERY SINGLE structural and logical element (Modules, Classes, Methods, Functions, Schemas) of the UFC compliant package. You must then think, and formulate a Granular Testing Strategy that covers the entire internal surface area, not just the public API. You will then document this "Deep Inventory" and "Test Strategy" in the CODE SPEC document.
+
+# IMPLEMENTATION PLANS
+CODE_IMPLEMENTATION_SPEC: "The current CODE IMPLEMENTATION SPEC document for this session"
+
+# ARCHITECTURE DESIGN DOCS
+CODEBASE_ARCHITECTURE:  C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_ARCHITECTURE_v1.0.0.md"
+CODEBASE_BLUEPRINT: "C:\github_development\AustralisSystems\governance\au-sys-governance\architecture\python\codebase_standards\CODEBASE_STRUCTURE_BLUEPRINT_v1.0.0.md
+
+# CODE DIRS
+UFC_TEMPLATE: C:\github_development\AustralisSystems\libraries\python\_templates\universal_fractal_codebase_architecture
+# TARGET CODE
+TARGET_CODE: C:\github_development\AustralisSystems\libraries\python\capabilities\au_sys_identity
+FSP_Shell: C:\github_development\AustralisSystems\platforms\_testing\fsp_shell_001
+
+DIRECTIVES:
+  - THE plan MUST ONLY use MCP tools and/or file system operations for the copying, moving, renaming and deleting the dirs & files, AND MUST NOT rewrite the file contents to a new or existing file.
+  - The plan MUST broadly follow the process of:
+    1. Copy the dirs and files from the UFC template,
+    2. Move, copy, rename the dirs and files to comply with the UFC standards
+    3. Adapt the code to the {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
+    4. Perform code quality checks including AST, compile, Lint, Typecheck
+    5. Prepare and execute the packaging of the code.
+    6. Prepare and execute the build and deployment of the {{ FSP_Shell }} with the package to the local docker desktop host. The {{ FSP_Shell }} MUST NOT be deployed with any code or packages which is NOT required to test the packaged code.
+    7. Perform container health checks, and docker log checks, resolve any issues and ensure flawless operation of the {{ FSP_Shell }} BEFORE commencing the test plan.
+    8. EXECUTE DEEP INVENTORY: Systematically traverse the codebase and list every Service, Class, Method, and Function in the SPEC.
+    9. FORMULATE STRATEGY: Map every inventory item to a specific Code Verification Plan (Happy Path + Edge Case).
+    10. EXECUTE VALIDATION: Progress iteratively through the test plan, step by step, validating and checking the {{ FSP_Shell }} docker logs.
+    11. Identify and resolve all issues in the code, then repackage and deploy the container.
+    12. Confirm the {{ FSP_Shell }} and the packaged code works flawlessly with 100% functional pass rate (0 Errors, 0 Warnings, 0 Issues).
+
+  **IMPORTANT**
+  It is PROHIBITED to perform MOCK tests of ANY THE PRODUCTION CODE functionallity AND external endpoints, storage, network, idenentity resources and/or backends.
+  It is PROHIBITED to perform MOCK tests of ANY THE PRODUCTION CODE CONNECTIVITY OR ACCESS TO ANY external resources... including but not limited to: endpoints, storage, network, idenentity resources and/or backends. this achieves NOTHING!...
+  YOU MUST ALWAYS DEPLOY, CONNECT TO AND PROVISION REAL RESORUCES AND STORAGE BACKENDS TO VALIDATE THE PRODUCTION CODE
+
+  **IMPORTANT**
+  For each of the tests and commands... YOU MUST ALWAYS ensure there is trace level logging so that all the commands, data in and data out, errors, warnings and issues are visable to improve DX, troubleshooting and issue resolution.
+
+  **IMPORTANT**
+  great, now in the actual production codebase... we are going to create a suite of "produciton validation scripts" which will run scripts akin to what we have just created.. BUT... they are to be executed at runtime once the container and its external resources are provisioned.... these tests must be designed to pressively test all aspsects of the au_sys_storage code, down to a deep functional level. exactly 100% of the produciton code MUST be covered by these production validation scripts. the scripts themselves must be single purpose with a runner or harness script developed to iteratively run each script that is developed in the expected order. each script MUST perform all the functional commands and actions required to be a fully self contained scripts and NOT rely on any previous scripts in the chain.
+
+# EXECUTION WORKFLOW
+WORKFLOW:
+1. READ_AND_REVIEW:
+  - {{ CODEBASE_ARCHITECTURE }}
+  - {{ CODEBASE_BLUEPRINT }}
+
+2. REVIEW_CODE: {{ UFC_TEMPLATE }}
+
+3. COMPARE_CODE: {{ TARGET_CODE }} WITH {{ UFC_TEMPLATE }} + {{ CODEBASE_ARCHITECTURE }} AND {{ CODEBASE_BLUEPRINT }}
+
+4. DEEP_INVENTORY:
+  - Discover and List every Service, Utility, and internal Function in the {{ CODE_IMPLEMENTATION_SPEC }}.
+
+5. STRATEGY_DESIGN:
+  - Define the specific Verification Logic for each item in the Inventory in the {{ CODE_IMPLEMENTATION_SPEC }}.
+
+6. UPDATE_DOCS:
+  - The {{ CODE_IMPLEMENTATION_SPEC }} with the findings and the aligned plan.
+
+HALT and wait for further instructions
+
 
 
 
