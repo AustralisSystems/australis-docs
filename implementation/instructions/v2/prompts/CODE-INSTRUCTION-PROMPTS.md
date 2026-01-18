@@ -735,20 +735,15 @@ File_Extension: .yaml
 SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
-LOAD_AND_PARSE:
+READ_AND_COMPLY:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  READ_AND_COMPLY:
-    - "001-PROTOCOL-The_GoldenRule_Execution"
-    - "002-PROTOCOL-Zero_Tolerance_Remediation"
-    - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
-    - "004-PROTOCOL-Validate_Remediate_Codebase"
-    - "006-PROTOCOL-RFC2119_Requirements_Language"
-
-ENFORCE:
+READ_AND_COMPLY:
+  - "001-PROTOCOL-The_GoldenRule_Execution"
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
   - "004-PROTOCOL-Validate_Remediate_Codebase"
+  - "006-PROTOCOL-RFC2119_Requirements_Language"
 
 DIRECTIVES:
   - THIS IS A CODE IMPLEMENTAITON, REFACTORING AND VALIDATION FOCUSED SESSION.
@@ -781,20 +776,15 @@ File_Extension: .yaml
 SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
-LOAD_AND_PARSE:
+READ_AND_COMPLY:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  READ_AND_COMPLY:
-    - "001-PROTOCOL-The_GoldenRule_Execution"
-    - "002-PROTOCOL-Zero_Tolerance_Remediation"
-    - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
-    - "004-PROTOCOL-Validate_Remediate_Codebase"
-    - "006-PROTOCOL-RFC2119_Requirements_Language"
-
-ENFORCE:
+READ_AND_COMPLY:
+  - "001-PROTOCOL-The_GoldenRule_Execution"
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
   - "004-PROTOCOL-Validate_Remediate_Codebase"
+  - "006-PROTOCOL-RFC2119_Requirements_Language"
 
 DIRECTIVES:
   - THIS IS A CODE IMPLEMENTAITON, REFACTORING AND VALIDATION FOCUSED SESSION.

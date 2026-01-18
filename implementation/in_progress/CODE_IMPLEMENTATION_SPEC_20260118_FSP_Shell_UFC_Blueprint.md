@@ -30,7 +30,7 @@ This CODE IMPLEMENTATION SPECIFICATION document declares that **ALL** requiremen
 **COMPLIANCE REQUIREMENTS:**
 
 1. **MUST IMPLEMENT**: Every component, protocol, and provider specified in the technical blueprint
-2. **MUST COMPLY**: With all runtime requirements (Python 3.12+/3.13, package versions)
+2. **MUST COMPLY**: With all runtime requirements (Python 3.12-slim mandatory based Docker image, package versions)
 3. **MUST ENFORCE**: All code quality mandates (SOLID, DRY, KISS, YAGNI)
 4. **MUST APPLY**: All design patterns (Singleton, Factory, Decorator, Observer, Pooling)
 5. **MUST ACHIEVE**: All architecture qualities (Extensible, Modular, Idempotent, etc.)
@@ -233,7 +233,7 @@ Layer 4: Services (domain/business services within capabilities)
 
 **FSP Shell Layered Structure**:
 ```
-src/fsp_shell/
+src/au_sys_fsp_plugin/
 ├── core/                    # ✅ Layer 1: Core domain
 │   ├── logging.py           # ILogger protocol + StructlogLogger
 │   ├── database.py          # DatabaseManager with logger DI
