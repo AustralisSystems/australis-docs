@@ -88,6 +88,9 @@ DIRECTIVE:
 READ_AND_EXECUTE:
   - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
 
+
+
+
 # INSTRUCTION INPUTS
 INPUTS:
   - CONTINUE WITH THE CURRENT {{ CODE_IMPLEMENTATION_SPEC }} ...
@@ -135,7 +138,7 @@ READ_AND_IMPLEMENT:
 - "004-PROTOCOL-Validate_Remediate_Codebase"
 
 # EXECUTION INSTRUCTIONS
-EXECUTE:
+READ_AND_EXECUTE:
 Review the following documents to acquire a comprehensive understanding of the fastapi_services_platform:
 
 - @src/services/fastapi_services_platform/README.md
@@ -158,22 +161,22 @@ File_Extension: .yaml
 SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
-LOAD_AND_EXECUTE:
+READ_AND_ACKNOWLEDGE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-LOAD_AND_EXECUTE:
+READ_AND_ACKNOWLEDGE:
   - "001-PROTOCOL-The_GoldenRule_Execution"
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
   - "004-PROTOCOL-Validate_Remediate_Codebase"
   - "006-PROTOCOL-RFC2119_Requirements_Language"
 
-LOAD_AND_EXECUTE:
+READ_AND_ACKNOWLEDGE:
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
   - "004-PROTOCOL-Validate_Remediate_Codebase"
 
-LOAD_AND_EXECUTE:
+READ_AND_ACKNOWLEDGE:
   - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
   - "202-INSTRUCTIONS-Pure_Code_Implementation_Execution_Protocol"
   - "203-INSTRUCTIONS-FastAPI_Design_Implementation_Refactor"
@@ -736,10 +739,10 @@ File_Extension: .yaml
 SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
-READ_AND_COMPLY:
+READ_AND_ACKNOWLEDGE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-READ_AND_COMPLY:
+READ_AND_ACKNOWLEDGE:
   - "001-PROTOCOL-The_GoldenRule_Execution"
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
@@ -761,7 +764,7 @@ REMEMBER:
   - If there are pending items, your responsibilities are considered unfulfilled, reflecting a lack of diligence similar to previous efforts.
   - Prompt action is required to address these matters without delay.
 
-EXECUTE:
+READ_AND_EXECUTE:
   "106-INSTRUCTIONS-Validate_Code_Quality_and_Compliance"
 
 FOCUS:
@@ -777,10 +780,10 @@ File_Extension: .yaml
 SPEC_Directory: docs/implementation/in_progress
 SPEC_File_Extention: .md
 
-READ_AND_COMPLY:
+READ_AND_ACKNOWLEDGE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-READ_AND_COMPLY:
+READ_AND_ACKNOWLEDGE:
   - "001-PROTOCOL-The_GoldenRule_Execution"
   - "002-PROTOCOL-Zero_Tolerance_Remediation"
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
@@ -802,14 +805,14 @@ REMEMBER:
   - If there are pending items, your responsibilities are considered unfulfilled, reflecting a lack of diligence similar to previous efforts.
   - Prompt action is required to address these matters without delay.
 
-EXECUTE:
+READ_AND_EXECUTE:
   "107-INSTRUCTIONS-Remediate_And_Refactor_Codebase"
 
 INPUT:
   - Code you have touched in this session
   - OUTPUT: 106-INSTRUCTIONS-Validate_Code_Quality_and_Compliance
 
-EXECUTE:
+READ_AND_EXECUTE:
   "203-INSTRUCTIONS-FastAPI_Design_Implementation_Refactor"
 
 INPUT:
