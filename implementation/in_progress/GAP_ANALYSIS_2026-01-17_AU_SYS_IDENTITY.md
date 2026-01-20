@@ -1,9 +1,15 @@
-# Gap Analysis: au_sys_identity Validation & Wiring Coverage
-
-## Executive Summary
-**Date:** 2026-01-17
-**Status:** Core Identity Features are Production-Ready. Enterprise & Ops Features have significant Gaps.
+**Date:** 2026-01-17 (Updated 2026-01-19)
+**Status:** Phase 1 (Wiring) COMPLETED. Phase 2 & 3 in Progress.
 **Scope:** Verification (Testing) Gaps and Implementation (Wiring) Gaps.
+
+---
+
+## Progress Tracking
+- [x] **Phase 1: Close Wiring Gaps** (Completed 2026-01-19)
+- [ ] **Phase 2: Close Validation Gaps** (Pending)
+- [ ] **Phase 3: Close Process Gaps** (Pending)
+
+---
 
 The `au_sys_identity` capability is verified generally stable (100% Core Pass Rate). However, a deep architectural scan reveals two categories of deficiencies preventing a "Enterprise V1.0" release:
 1.  **Validation Gaps:** Dormant code that is not currently tested.
@@ -31,25 +37,17 @@ These components exist and are wired, but have **0% Test Coverage** in the curre
 
 These components exist in `core/services/` but are **NOT accessible** via the API or Web UI, rendering them "Dead Code" to external consumers (Agents/Users).
 
-### 1. Missing API Endpoints
+### 1. Missing API Endpoints (COMPLETED)
 *   **MFA Orchestrator (`mfa.py`):**
-    *   **Gap:** The router exposes `/approve` (Human Action) but **MISSES** `/request` (Agent Action).
-    *   **Impact:** An external Agent cannot trigger a delegated approval flow.
-    *   **Required Endpoint:** `POST /mfa/delegated/request`
+    *   **Status:** ✅ **RESOLVED** (Implemented `POST /mfa/delegated/request`).
 *   **Custodian Service (`custodian.py`):**
-    *   **Gap:** No endpoint to inspect the "Chain of Custody" or ownership tree.
-    *   **Impact:** Operators cannot debug "Who owns this Agent?" at runtime.
-    *   **Required Endpoint:** `GET /iam/custody/{identity_id}`
+    *   **Status:** ✅ **RESOLVED** (Implemented `GET /iam/custody/{identity_id}`).
 
-### 2. Missing Web UI Panels
+### 2. Missing Web UI Panels (COMPLETED)
 *   **Audit Logger (`audit.py`):**
-    *   **Gap:** The Admin UI (`/admin`) lists Users but **hides** the Audit Log.
-    *   **Impact:** Security Blindspot. Admins cannot verify activity without SQL access.
-    *   **Required View:** `/admin/audit` (Datatable of `iam_audit_logs`).
+    *   **Status:** ✅ **RESOLVED** (Implemented `/admin/audit`).
 *   **RBAC Manager (`rbac.py`):**
-    *   **Gap:** No UI for creating Roles or Assigning Permissions.
-    *   **Impact:** Operational friction (API-only management).
-    *   **Required View:** `/admin/rbac` (Role/Permission Editor).
+    *   **Status:** ✅ **RESOLVED** (Implemented `/admin/rbac`).
 
 ---
 

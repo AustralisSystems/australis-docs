@@ -90,7 +90,7 @@ DIRECTIVE:
 
 # EXECUTE INSTRUCTIONS WORKFLOW
 READ_AND_EXECUTE:
-  - "202-INSTRUCTIONS-Pure_Code_Implementation_Execution_Protocol"
+  - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
 
 
 
