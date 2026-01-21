@@ -714,6 +714,41 @@ PHASE 0 (UFC Scaffolding)
 - [x] **Handover Review**: Reviewed previous session handover and planning documents.
 - [x] **Audit Review**: Reviewed `au_sys_unified_storage_audit.md` - confirmed CRITICAL FAILURE status.
 - [x] **SPEC Enhancement**: Added audit findings, detailed implementation plans, and comprehensive checklists.
+
+### 2026-01-21 (Code & Instruction Discovery - MAJOR BREAKTHROUGH)
+- [x] **Production Scripts Discovery**: Found 10 production-ready automation scripts in `libraries/_ai_agent/tools/`
+  - `analyze_repo_structure.py` (691 lines) - AST-based analysis, service candidate identification
+  - `discover_capabilities.py` (477 lines) - Capability inventory, quality metrics (1-5 scoring)
+  - `capability_generator.py` (232 lines) - Jinja2 scaffolding engine
+  - `extract_code.py` (328 lines) - Smart file extraction with manifests
+  - `adapt_extracted_code.py` (366 lines) - AST-based tri-layer mapping, framework detection
+  - `scaffold_capability.py` (150 lines) - Factory wrapper for scaffolding
+  - `verify_capability.py` (150 lines) - 3-phase validation (structure/build/import)
+  - `build_services.py` (50 lines) - Batch build automation
+  - `prepare_onboarding.py` (610 lines) - Pre-flight validation & conflict detection
+  - `standardize_service.py` (880 lines) - **GOLDMINE**: LibCST import rewriting + smart sync (MD5)
+- [x] **MCP Instructions Discovery**: Found 8 comprehensive MCP YAML instruction files in `libraries/_ai_agent/instructions/`
+  - `001-INSTRUCTION-Library_Capability_Discovery-v1.0.0.yaml` (454 lines) - 5-phase discovery workflow
+  - `002-INSTRUCTION-Library_Capability_Onboarding_Prep-v1.0.0.yaml` (550 lines) - 6-phase preparation workflow
+  - `003-INSTRUCTION-Service_Extraction_and_Integration-v1.0.0.yaml` (877 lines) - 7-phase extraction workflow
+  - `205-INSTRUCTION-Construct_Capability_Lifecycle-v1.0.0.yaml` (415 lines) - 6-step construction workflow
+  - `205-PROTOCOL-Sovereign_Capability_Construction-v1.1.0.yaml` (477 lines) - Master governance protocol
+  - `SERVICE_EXTRACTION_WORKFLOW_GUIDE_v1.0.0.md` (992 lines) - Human-readable companion guide
+  - `205-PROTOCOL-UPDATE-SUMMARY.md` (229 lines) - Protocol evolution documentation
+  - `LIBRARIES-INSTRUCTION-PROMPTS.md` (604 lines) - Agent invocation patterns
+- [x] **Documentation Created**:
+  - `COMPLETE_TOOLSET_ANALYSIS.md` - Comprehensive analysis of all 10 production scripts
+  - `INSTRUCTION_FILES_ANALYSIS.md` - Complete breakdown of MCP instruction files
+  - `LEGACY_SCRIPTS_ANALYSIS.md` - Analysis of 15 repo onboarding scripts
+  - `CRITICAL_FIND_standardize_service.md` - Deep dive on import rewriting capabilities
+- [x] **Key Findings**:
+  - ~3,900 lines of battle-tested automation code already exists
+  - MCP YAML instruction format provides machine-readable + agent-guided execution
+  - Zero-tolerance validation with exact grep commands defined
+  - 14-domain taxonomy standardized across all protocols
+  - SERVICE_MANIFEST.yaml spec for complete metadata
+  - AST-based file classification and import rewriting proven in production
+  - Quality scoring algorithms (architecture 1-5, code quality 1-5) ready to port
 - [ ] **UFC Structure Creation**: Pending - Create missing Core, Manifest, Scaffold, Scripts directories.
 - [ ] **Legacy Retrofit**: Pending - Migrate legacy logic to UFC-compliant structure.
 - [ ] **Automated Verification**: Pending - Run UFC validation pipeline.
@@ -724,6 +759,287 @@ PHASE 0 (UFC Scaffolding)
 - **Root Cause**: Pre-UFC or divergent architecture without UFC awareness
 - **Impact**: Package is effectively unusable in UFC v1.0.0 system
 - **Action Plan**: Systematic 6-phase rebuild with automation-first approach
+
+---
+
+## 10. INTEGRATION STRATEGY: Aligning Process Guide with MCP Instructions
+
+### 10.1 Prerequisites: Copy Source Files Before Adaptation
+
+**CRITICAL**: Before adapting ANY files, copy them to the toolkit directory to preserve originals.
+
+#### Step 1: Copy MCP Instruction Files
+
+**Source**: `libraries/_ai_agent/instructions/`
+**Destination**: `tooling/au-sys-tools/ufc_capability_factory/_ai_agent/instructions/`
+
+```bash
+# Create destination directory
+mkdir -p tooling/au-sys-tools/ufc_capability_factory/_ai_agent/instructions/
+
+# Copy all YAML instruction files
+cp libraries/_ai_agent/instructions/*.yaml \
+   tooling/au-sys-tools/ufc_capability_factory/_ai_agent/instructions/
+
+# Copy markdown guides
+cp libraries/_ai_agent/instructions/*.md \
+   tooling/au-sys-tools/ufc_capability_factory/_ai_agent/instructions/
+
+# Verify copy
+ls -la tooling/au-sys-tools/ufc_capability_factory/_ai_agent/instructions/
+```
+
+**Expected Files** (8 total):
+- `001-INSTRUCTION-Library_Capability_Discovery-v1.0.0.yaml` (454 lines)
+- `002-INSTRUCTION-Library_Capability_Onboarding_Prep-v1.0.0.yaml` (550 lines)
+- `003-INSTRUCTION-Service_Extraction_and_Integration-v1.0.0.yaml` (877 lines)
+- `205-INSTRUCTION-Construct_Capability_Lifecycle-v1.0.0.yaml` (415 lines)
+- `205-PROTOCOL-Sovereign_Capability_Construction-v1.1.0.yaml` (477 lines)
+- `SERVICE_EXTRACTION_WORKFLOW_GUIDE_v1.0.0.md` (992 lines)
+- `205-PROTOCOL-UPDATE-SUMMARY.md` (229 lines)
+- `LIBRARIES-INSTRUCTION-PROMPTS.md` (604 lines)
+
+#### Step 2: Copy Production Scripts
+
+**Source**: `libraries/_ai_agent/tools/`
+**Destination**: `tooling/au-sys-tools/ufc_capability_factory/_ai_agent/tools/`
+
+```bash
+# Create destination directory
+mkdir -p tooling/au-sys-tools/ufc_capability_factory/_ai_agent/tools/
+
+# Copy all production automation scripts
+cp libraries/_ai_agent/tools/*.py \
+   tooling/au-sys-tools/ufc_capability_factory/_ai_agent/tools/
+
+# Verify copy
+ls -la tooling/au-sys-tools/ufc_capability_factory/_ai_agent/tools/
+```
+
+**Expected Files** (10 total):
+- `analyze_repo_structure.py` (691 lines)
+- `discover_capabilities.py` (477 lines)
+- `capability_generator.py` (232 lines)
+- `extract_code.py` (328 lines)
+- `adapt_extracted_code.py` (366 lines)
+- `scaffold_capability.py` (150 lines)
+- `verify_capability.py` (150 lines)
+- `build_services.py` (50 lines)
+- `prepare_onboarding.py` (610 lines)
+- `standardize_service.py` (880 lines)
+
+#### Step 3: Validate Copy Integrity
+
+```bash
+# Count files in destination
+YAML_COUNT=$(find tooling/au-sys-tools/ufc_capability_factory/_ai_agent/instructions -name "*.yaml" | wc -l)
+MD_COUNT=$(find tooling/au-sys-tools/ufc_capability_factory/_ai_agent/instructions -name "*.md" | wc -l)
+PY_COUNT=$(find tooling/au-sys-tools/ufc_capability_factory/_ai_agent/tools -name "*.py" | wc -l)
+
+echo "YAML files copied: $YAML_COUNT (expected: 5)"
+echo "Markdown files copied: $MD_COUNT (expected: 3)"
+echo "Python scripts copied: $PY_COUNT (expected: 10)"
+
+# Verify source files still exist (NOT moved)
+if [ ! -f "libraries/_ai_agent/instructions/001-INSTRUCTION-Library_Capability_Discovery-v1.0.0.yaml" ]; then
+    echo "ERROR: Source files were moved instead of copied!"
+    exit 1
+fi
+
+echo "✅ Copy validation complete - originals preserved"
+```
+
+### 10.2 UFC Capability Factory Stage Mapping
+
+**Alignment Between UFC_CAPABILITY_FACTORY_PROCESS_GUIDE.md (9 Stages) and MCP Instructions**
+
+| Stage | UFC Guide | MCP Instructions | Production Scripts | Duration |
+|-------|-----------|------------------|-------------------|----------|
+| **STAGE 1: EXTRACT** | Inventory legacy code, analyze dependencies | 001-INSTRUCTION (Discovery)<br>002-INSTRUCTION (Onboarding Prep) | `discover_capabilities.py`<br>`analyze_repo_structure.py`<br>`prepare_onboarding.py` | 30-45 min |
+| **STAGE 2: SCAFFOLD** | Create UFC-compliant directory structure | 205-INSTRUCTION (Step 2: CLI Scaffold) | `scaffold_capability.py`<br>`capability_generator.py` | 15-20 min |
+| **STAGE 3: DEVELOP** | Migrate code with AST-based transformation | 003-INSTRUCTION (Extraction)<br>205-INSTRUCTION (Step 3: Code Adaptation) | `extract_code.py`<br>`adapt_extracted_code.py`<br>`standardize_service.py` | 60-90 min |
+| **STAGE 4: PACKAGE** | Generate manifest, plugin interface, DI container | 205-INSTRUCTION (Step 4: Plugin Manifest Wiring) | Manual templates<br>(to be ported from instructions) | 45-60 min |
+| **STAGE 5: BUILD** | Create wheel distributions | 205-INSTRUCTION (Step 5: Wheel Generation) | `build_services.py` | 10-15 min |
+| **STAGE 6: DEPLOY** | Install to local/remote environments | 205-INSTRUCTION (Step 6: Import Verification) | Manual pip install<br>(to be scripted) | 10-15 min |
+| **STAGE 7: TEST** | Run integration tests with au_sys_ufc_app | 003-INSTRUCTION (Phase 7: Integration)<br>205-PROTOCOL (Integration Testing) | `verify_capability.py` | 20-30 min |
+| **STAGE 8: VALIDATE** | Verify UFC compliance and code quality | 003-INSTRUCTION (Phase 6: Validation)<br>205-PROTOCOL (Zero-Tolerance Enforcement) | Zero-tolerance grep commands<br>(from protocols) | 15-20 min |
+| **STAGE 9: INTEGRATE** | Register with Software Factory plugin system | 205-PROTOCOL (Service Extraction Mandate) | Manual registration<br>(to be scripted) | 10-15 min |
+
+### 10.3 Port Priorities: Features to Extract from Discovered Scripts
+
+#### P0 (Immediate - Critical for MVP)
+
+**From `adapt_extracted_code.py` (366 lines)**:
+- **AST-based FileClassifier** (lines 45-180)
+  - Detects: Models, Schemas, Services, Routers, Config, Tests
+  - Framework detection: FastAPI, Pydantic, SQLAlchemy, Typer, Celery, FastMCP
+  - **Target**: Create `008_classify_files.py` in toolkit
+
+- **Tri-Layer Mapping Logic** (lines 200-290)
+  - Maps classified files → Core/Adapters/Manifest
+  - Handles subdirectory preservation
+  - **Target**: Integrate into `008_migrate_and_rewrite.py`
+
+**From `standardize_service.py` (880 lines)**:
+- **LibCST Import Rewriting** (lines 128-200, 737-760)
+  - AST-based transformation (not regex)
+  - Handles relative imports conversion
+  - Preserves code formatting
+  - **Target**: Create `006_rewrite_imports.py` in toolkit
+
+- **Smart File Sync with MD5 Hashing** (lines 320-360)
+  - Idempotent operations (skip unchanged files)
+  - Detects source modifications
+  - **Target**: Integrate into all file copy operations
+
+**From MCP Instructions**:
+- **SERVICE_MANIFEST.yaml Generation** (003-INSTRUCTION lines 600-680)
+  - Complete metadata specification
+  - 14-domain taxonomy enforcement
+  - **Target**: Create `012_generate_service_manifest.py`
+
+- **Zero-Tolerance Validation Commands** (205-PROTOCOL lines 350-400)
+  - Exact grep patterns for TODO/FIXME/XXX
+  - NotImplementedError detection
+  - Silent `pass` statement checking
+  - **Target**: Create `017_zero_tolerance_check.py`
+
+#### P1 (Next - Enhanced Functionality)
+
+**From `discover_capabilities.py` (477 lines)**:
+- **Quality Scoring Algorithm** (lines 280-350)
+  - Architecture score (1-5): Tri-layer compliance
+  - Code quality score (1-5): Docstrings, type hints, complexity
+  - **Target**: Create `004_score_quality.py`
+
+**From `analyze_repo_structure.py` (691 lines)**:
+- **Complexity Calculation** (lines 450-520)
+  - Cyclomatic complexity per function
+  - Function length analysis
+  - Import chain depth
+  - **Target**: Integrate into `003_legacy_code_inventory.py`
+
+- **Service Candidate Identification** (lines 550-620)
+  - Cohesion scoring
+  - Dependency analysis
+  - Extraction priority ranking
+  - **Target**: Create `004_identify_candidates.py`
+
+**From `prepare_onboarding.py` (610 lines)**:
+- **Name Validation** (lines 150-220)
+  - `au_sys_` prefix enforcement
+  - `snake_case` validation
+  - Reserved name checking
+  - **Target**: Integrate into `002_ufc_compliance_audit.py`
+
+- **Conflict Detection** (lines 300-380)
+  - Workspace collision detection
+  - Duplicate capability scanning
+  - **Target**: Create `003_detect_conflicts.py`
+
+#### P2 (Later - Nice to Have)
+
+**From `capability_generator.py` (232 lines)**:
+- **Jinja2 Template Engine** (lines 80-180)
+  - Conditional generation (API/Web/CLI/MCP)
+  - Variable substitution
+  - **Target**: Port templates to toolkit `templates/` directory
+
+**From `build_services.py` (50 lines)**:
+- **Batch Build Automation** (lines 20-45)
+  - Parallel builds
+  - Error aggregation
+  - **Target**: Enhance `015_build_package.py`
+
+### 10.4 Adaptation Workflow: From Source to Toolkit
+
+**For Each Script/Instruction File:**
+
+1. **Copy** (Prerequisites completed - see 10.1)
+   - Source preserved in `libraries/_ai_agent/`
+   - Working copy in `tooling/au-sys-tools/ufc_capability_factory/_ai_agent/`
+
+2. **Review**
+   - Read source file completely
+   - Extract key algorithms/patterns
+   - Identify dependencies
+
+3. **Adapt**
+   - Update file paths to new toolkit location
+   - Replace hardcoded values with parameters
+   - Add UFC-specific validations
+   - Enhance error handling
+
+4. **Test**
+   - Create test fixtures
+   - Run on sample capability
+   - Validate output against expectations
+
+5. **Document**
+   - Add docstrings (Google style)
+   - Update SPEC progress log
+   - Add to toolkit README
+
+6. **Integrate**
+   - Link to process guide stages
+   - Add to MCP instruction workflows
+   - Create runbook entries
+
+### 10.5 MCP YAML Enhancement Strategy
+
+**Upgrade Existing Instructions to UFC Capability Factory Standards:**
+
+**001-INSTRUCTION-Library_Capability_Discovery-v1.0.0.yaml**:
+- ✅ KEEP: 5-phase workflow structure (proven)
+- ✅ KEEP: Blocking validation approach
+- ✅ KEEP: Evidence-based output requirements
+- 🔄 ADAPT: Update tool paths to `tooling/au-sys-tools/ufc_capability_factory/_ai_agent/tools/`
+- ➕ ADD: Quality scoring thresholds (architecture ≥3, code ≥3)
+- ➕ ADD: 14-domain taxonomy enforcement
+
+**002-INSTRUCTION-Library_Capability_Onboarding_Prep-v1.0.0.yaml**:
+- ✅ KEEP: 6-phase preparation workflow
+- ✅ KEEP: Conflict detection logic
+- 🔄 ADAPT: Integrate name validation from `prepare_onboarding.py`
+- ➕ ADD: Workspace collision detection
+- ➕ ADD: Prerequisite verification (Python version, dependencies)
+
+**003-INSTRUCTION-Service_Extraction_and_Integration-v1.0.0.yaml**:
+- ✅ KEEP: 7-phase extraction workflow
+- ✅ KEEP: SERVICE_MANIFEST.yaml specification
+- 🔄 ADAPT: Add LibCST import rewriting step
+- 🔄 ADAPT: Add smart file sync (MD5 hashing)
+- ➕ ADD: AST-based file classification
+- ➕ ADD: Framework detection automation
+
+**205-INSTRUCTION-Construct_Capability_Lifecycle-v1.0.0.yaml**:
+- ✅ KEEP: 6-step construction workflow
+- ✅ KEEP: CLI-first mandate
+- 🔄 ADAPT: Integrate discovered production scripts
+- ➕ ADD: Quality gate enforcement (MyPy/Ruff/Bandit)
+- ➕ ADD: SBOM generation step
+
+**205-PROTOCOL-Sovereign_Capability_Construction-v1.1.0.yaml**:
+- ✅ KEEP: Master governance framework
+- ✅ KEEP: Zero-Tolerance Enforcement rules
+- ✅ KEEP: Authority hierarchy
+- 🔄 ADAPT: Reference toolkit scripts instead of generic tools
+- ➕ ADD: Toolkit-specific execution checklist
+
+### 10.6 Integration Validation Checklist
+
+**Before Declaring Integration Complete:**
+
+- [ ] **File Copy Complete**: All 18 files copied to toolkit directories (8 YAML/MD + 10 Python)
+- [ ] **Source Preservation Verified**: Original files still exist in `libraries/_ai_agent/`
+- [ ] **Path References Updated**: All tool paths point to toolkit location
+- [ ] **P0 Features Ported**: AST classification, import rewriting, zero-tolerance checks, SERVICE_MANIFEST generation
+- [ ] **MCP Instructions Enhanced**: All 5 YAML files updated with toolkit references
+- [ ] **Process Guide Aligned**: 9 stages mapped to MCP instructions and scripts
+- [ ] **Quick Wins Implemented**: Import classification, complexity calculation, framework detection, AST file classification
+- [ ] **Documentation Complete**: SPEC updated, README enhanced, runbooks created
+- [ ] **Test Suite Created**: Fixtures for each script, end-to-end workflow test
+- [ ] **Quality Gates Configured**: MyPy/Ruff/Bandit integrated into all scripts
 
 ---
 
@@ -1524,3 +1840,34 @@ git tag phase-1-complete -m "PHASE 1: Legacy Migration - Complete"
 **Status**: 🔵 Enhanced with Audit Findings - Ready for PHASE 0 Execution
 **Maintainer**: Australis Systems Development Team
 **Audit Status**: CRITICAL FAILURE → REMEDIATION IN PROGRESS → TARGET: 100% COMPLIANT
+
+---
+
+
+## 11. INTEGRATION STRATEGY & TOOLKIT STATUS
+
+**Status**: 🟢 IN PROGRESS
+**Added**: 2026-01-21 (Session 2)
+
+### 11.1 Toolkit Construction (P0 Priorities)
+
+The following core automation components have been extracted from production lineage and established in the `ufc_capability_factory` toolkit.
+
+#### ✅ Completed P0 Features
+- [x] **Toolkit Initialization**: Resources copied from `libraries/_ai_agent` to `tooling/au-sys-tools/ufc_capability_factory`
+- [x] **Instruction Set**: 8 MCP instruction files established
+- [x] **Smart Sync**: `smart_sync.py` extracted (MD5-based idempotent synchronization)
+- [x] **AST Classification**: `008_classify_files.py` extracted (UFC Tri-Layer component detection)
+- [x] **Import Rewriting**: `008_migrate_and_rewrite.py` extracted (LibCST-based relative import refactoring)
+- [x] **Manifest Generation**: `000_generate_manifest.py` extracted (AST-based dependency & component mapping)
+- [x] **Zero Tolerance**: `017_zero_tolerance_check.py` created (Enforcement of 205-PROTOCOL rules)
+
+#### 📝 Validation Setup
+- [x] **Validation Directory**: `tooling/au-sys-tools/ufc_capability_factory/validation/` created
+- [x] **Reference Spec**: Copy of this spec saved as `00_reference_spec.md` for immutable reference
+
+### 11.2 Integration Next Steps (P1 Priorities)
+
+1. **Verify Toolkit Functionality**: Run each new tool against the validation spec or a dummy target.
+2. **Complete Script Suite**: Fill in gaps for remaining scripts (001-007, 009-016).
+3. **Execute PHASE 0**: Begin applying toolkit to `au_sys_unified_storage` (Reference Implementation).

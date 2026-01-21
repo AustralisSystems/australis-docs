@@ -1,0 +1,48 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "fastapi.pure_code_implementation"
+    title: "FastAPI Pure Code Implementation"
+    description: "Enforce UFC tri-layer boundaries and async-first practices for FastAPI work."
+    enforce: true
+    tags: ["fastapi", "ufc", "architecture"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://src/**"]
+    directives:
+      - id: "tri_layer_boundaries"
+        level: "required"
+        statement: "Follow the UFC Tri-Layer Standard (core/adapters/manifest) and dependency direction (inwards)."
+        rationale: "Prevent framework bleed and hidden coupling."
+        verification: "Core contains no framework imports; adapters depend on core; manifest wires only."
+
+      - id: "no_framework_in_core"
+        level: "required"
+        statement: "Do not import FastAPI (or other frameworks) inside core/."
+        rationale: "Core must remain pure domain logic."
+        verification: "Search confirms no fastapi imports in core/."
+
+      - id: "async_first_io"
+        level: "required"
+        statement: "All I/O in adapters must be async/await; avoid blocking I/O."
+        rationale: "Maintain performance and correctness under async runtimes."
+        verification: "No blocking filesystem/network calls in async paths without offloading."
+
+    inputs: []
+    outputs: []
+    notes: []
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 003-PROTOCOL-FastAPI_Pure_Code_Implementation-v2.0.0.yaml; key directives extracted."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/003-PROTOCOL-FastAPI_Pure_Code_Implementation-v2.0.0.yaml"

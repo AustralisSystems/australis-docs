@@ -1,0 +1,41 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "implementation.session"
+    title: "Implementation Session (Single Item, Validated)"
+    description: "Execute one approved plan item with minimal changes, validate, record evidence, then halt."
+    action: "execute"
+    tags: ["implementation", "validation"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "execution.golden_rule"
+      - "quality.zero_tolerance_remediation"
+      - "validation.validate_remediate_codebase"
+    directives: ["capture_evidence", "single_step_remediation"]
+    inputs: ["spec_path", "approved_item"]
+    outputs: ["diff", "validation_evidence", "spec_updates"]
+    steps:
+      - id: "read_spec"
+        description: "Read spec_path and identify the next single approved_item to execute."
+      - id: "implement"
+        description: "Apply the smallest scoped change required for approved_item (prefer one file at a time)."
+      - id: "validate"
+        description: "Run the most relevant validation commands for the change and capture evidence."
+      - id: "record"
+        description: "Update spec_path with what changed, evidence, and any follow-up items."
+      - id: "halt"
+        description: "Halt for operator approval before continuing."
+    halt: true
+    notes: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "New v3 instruction to replace legacy v2 session runner patterns."

@@ -1,0 +1,84 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "swarm.agent_task_coordination.session"
+    title: "Agent Task Coordination Session"
+    description: "Coordinate a single task via delegation, monitoring, aggregation, validation, and stdout reporting; then halt."
+    action: "execute"
+    tags: ["swarm", "agent", "coordination"]
+
+  content:
+    doctrine_refs:
+      - "enterprise.canonical_execution"
+      - "swarm.prime_strategic_command"
+    protocol_refs:
+      - "execution.golden_rule"
+      - "language.rfc2119_requirements"
+      - "tools.mcp_tools_workflow"
+      - "swarm.agent_task_coordination"
+    directives:
+      - "one_task_only"
+      - "coordination_agents_delegate_not_execute"
+      - "validate_before_reporting"
+      - "report_via_stdout_for_aggregation"
+    inputs:
+      - "task"
+      - "success_criteria"
+      - "input_context"
+    outputs:
+      - "agent_report"
+      - "delegation_plan"
+    steps:
+      - id: "understand"
+        description: "Restate the single task, identify constraints and success_criteria, and confirm required input_context is present."
+
+      - id: "plan_delegation"
+        description: "Select the minimum set of specialist sub-agents/skills needed and define a delegation_plan (objectives, inputs, expected outputs)."
+        produces: ["delegation_plan"]
+
+      - id: "delegate"
+        description: "Delegate execution to the chosen specialists; provide explicit success criteria and required output formats for each."
+        requires: ["delegation_plan"]
+
+      - id: "monitor"
+        description: "Monitor delegated work for completion/failure; capture outputs and surface blockers immediately."
+
+      - id: "aggregate"
+        description: "Aggregate specialist outputs into a single coherent task result aligned to the required output format."
+
+      - id: "validate"
+        description: "Validate the aggregated result against success_criteria and applicable protocols; if unmet, iterate remediation via delegation or report BLOCKED/FAILED."
+
+      - id: "report"
+        description: "Emit a structured agent_report via stdout with status, result, validation evidence, and issues/blockers."
+        produces: ["agent_report"]
+
+      - id: "halt"
+        description: "Halt after one coordination cycle and await operator input before continuing."
+
+    variables:
+      task:
+        required: true
+        description: "The single discrete task assigned to this coordination agent."
+      success_criteria:
+        required: true
+        description: "Explicit criteria used to validate completion and decide COMPLETE vs BLOCKED vs FAILED."
+      input_context:
+        required: false
+        description: "Relevant context and references required to delegate effectively (paths, links, constraints)."
+    halt: true
+    notes:
+      - "This instruction is intended for coordination agents (delegate/aggregate/validate). Direct implementation agents should use an execution-focused instruction instead."
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 113-INSTRUCTIONS-Agent_Task_Coordination-v1.0.0.yaml; converted to structured v3 steps."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/113-INSTRUCTIONS-Agent_Task_Coordination-v1.0.0.yaml"

@@ -1,0 +1,55 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.draft_diataxis_explanation"
+    title: "Draft Diataxis Explanation"
+    description: "Draft a conceptual explanation document (context, rationale, trade-offs) using the governance Diataxis explanation template."
+    action: "create-file"
+    tags: ["docs", "diataxis", "explanation", "template"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "docs.diataxis_framework"
+    inputs:
+      - "template_path"
+      - "concept"
+      - "target_path"
+    outputs:
+      - "document"
+      - "document_path"
+    steps:
+      - id: "load_template"
+        description: "Read template_path and preserve any instructional preamble sections."
+      - id: "define_concept"
+        description: "Define the concept/design choice/history to explain; explicitly avoid procedural steps and avoid purely factual spec tables."
+      - id: "populate_metadata"
+        description: "Populate required metadata and clearly state the topic and intended audience."
+      - id: "write_context"
+        description: "Write introduction and context: why this exists, what problem it solves, and any relevant history."
+      - id: "write_rationale"
+        description: "Explain design rationale, alternatives, and trade-offs; include decision criteria."
+      - id: "map_best_practices"
+        description: "Map conceptual choices to best-practice references where applicable."
+      - id: "quality_gate"
+        description: "Verify: discursive explanatory tone, no step-by-step guide content, alternatives discussed, best-practice mapping present."
+        produces: ["document"]
+    variables:
+      template_path:
+        required: false
+        default: "governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_EXPLANATION_v1.0.0.md"
+        description: "Governance template to use for Diataxis explanation docs."
+    halt: true
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 927-INSTRUCTIONS-Draft_Diataxis_Explanation-v1.0.0.yaml; converted to structured v3 steps." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/927-INSTRUCTIONS-Draft_Diataxis_Explanation-v1.0.0.yaml"

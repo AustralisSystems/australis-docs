@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://australissystems.github.io/au-sys-docs/schemas/prompt-schema.json",
-  "title": "AU-SYS Prompt Schema (MCP Tier, authoring-aligned)",
+  "title": "AU-SYS Prompt Schema (MCP Tier, authoring-aligned to MCP 2025-11-25)",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -18,7 +18,7 @@
     "mcp_spec_revision": {
       "type": "string",
       "description": "The upstream MCP spec revision this prompt format is intended to map to (informational but enforceable).",
-      "minLength": 4
+      "const": "2025-11-25"
     },
     "artifact": {
       "type": "object",
@@ -78,6 +78,14 @@
               },
               "default": [],
               "description": "Optional discoverability tags (e.g., 'fastapi', 'refactor', 'review', 'safe-mode')."
+            },
+            "icons": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/icon"
+              },
+              "default": [],
+              "description": "Optional icons for UI display (aligned to MCP Prompt.icons)."
             }
           }
         },
@@ -377,82 +385,57 @@
           "$ref": "#/$defs/content"
         },
         "annotations": {
-          "$ref": "#/$defs/annotations"
+          "$ref": "#/$defs/annotations",
+          "description": "Legacy location for annotations (prefer content.annotations to align with MCP)."
+        }
+      }
+    },
+    "icon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "src"
+      ],
+      "properties": {
+        "src": {
+          "type": "string",
+          "description": "URI for an icon. May be HTTP(S) or data: URI."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Optional MIME type override (e.g. image/svg+xml)."
+        },
+        "sizes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional sizes list, e.g. ['48x48', 'any']."
+        },
+        "theme": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark"
+          ],
+          "description": "Optional theme hint for the icon."
         }
       }
     },
     "content": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ],
-      "description": "Typed content block for prompt messages. Designed to support common MCP prompt content patterns.",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "text",
-            "resource"
-          ],
-          "description": "Supported content types for prompt templates. Extend with image/audio if your tooling supports it."
-        },
-        "text": {
-          "type": "string",
-          "description": "For type=text. May include template placeholders like {{argument_name}}."
-        },
-        "resource": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "uri",
-            "mimeType"
-          ],
-          "description": "For type=resource. Provides a reference or embedded resource for context (e.g., doctrine/protocol files).",
-          "properties": {
-            "uri": {
-              "type": "string",
-              "description": "URI or repo path of the resource."
-            },
-            "mimeType": {
-              "type": "string",
-              "description": "MIME type of the resource (e.g., text/markdown, application/json)."
-            },
-            "text": {
-              "type": "string",
-              "description": "Optional embedded text version of the resource."
-            }
-          }
-        }
-      },
-      "allOf": [
+      "description": "Prompt content block. Aligned to MCP 2025-11-25 content types used in PromptMessage.content.",
+      "oneOf": [
         {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "text"
-              }
-            }
-          },
-          "then": {
-            "required": [
-              "text"
-            ]
-          }
+          "$ref": "#/$defs/textContent"
         },
         {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "resource"
-              }
-            }
-          },
-          "then": {
-            "required": [
-              "resource"
-            ]
-          }
+          "$ref": "#/$defs/imageContent"
+        },
+        {
+          "$ref": "#/$defs/audioContent"
+        },
+        {
+          "$ref": "#/$defs/embeddedResource"
         }
       ]
     },
@@ -469,16 +452,147 @@
           "description": "Optional audience tags (e.g., roles or model classes)."
         },
         "priority": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 5,
-          "description": "Priority of this message/content. Use 1 for non-negotiable rules, higher numbers for guidance."
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Priority where 1 is most important, 0 is least important. (Aligned to MCP resources annotations.)"
         },
         "lastModified": {
           "type": "string",
           "description": "ISO-8601 timestamp for change tracking (optional)."
         }
       }
+    },
+    "textContent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "text"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "text"
+        },
+        "text": {
+          "type": "string",
+          "description": "Text content. May include template placeholders like {{argument_name}}."
+        },
+        "annotations": {
+          "$ref": "#/$defs/annotations"
+        }
+      }
+    },
+    "imageContent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "data",
+        "mimeType"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "image"
+        },
+        "data": {
+          "type": "string",
+          "description": "Base64-encoded image data."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Image MIME type (e.g., image/png)."
+        },
+        "annotations": {
+          "$ref": "#/$defs/annotations"
+        }
+      }
+    },
+    "audioContent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "data",
+        "mimeType"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "audio"
+        },
+        "data": {
+          "type": "string",
+          "description": "Base64-encoded audio data."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Audio MIME type (e.g., audio/wav)."
+        },
+        "annotations": {
+          "$ref": "#/$defs/annotations"
+        }
+      }
+    },
+    "embeddedResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "resource"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "resource"
+        },
+        "resource": {
+          "$ref": "#/$defs/resourceContents"
+        },
+        "annotations": {
+          "$ref": "#/$defs/annotations"
+        }
+      }
+    },
+    "resourceContents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uri",
+        "mimeType"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "description": "Resource URI (e.g., resource://..., file path, or https URL)."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Resource MIME type (e.g., text/markdown, application/json)."
+        },
+        "text": {
+          "type": "string",
+          "description": "Embedded text content (mutually exclusive with blob)."
+        },
+        "blob": {
+          "type": "string",
+          "description": "Base64-encoded blob content (mutually exclusive with text)."
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "text"
+          ]
+        },
+        {
+          "required": [
+            "blob"
+          ]
+        }
+      ]
     }
   }
 }

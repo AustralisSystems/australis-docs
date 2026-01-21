@@ -1,0 +1,77 @@
+authoring_schema_version: 1.0.0
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: 1.0.0
+    schema: mcp.runbook/v1
+    id: au-sys.runbook.code-implementation-session
+    title: Code Implementation Session (Legacy v2-style)
+    description: >
+      Example runbook showing a combined doctrine -> protocols -> directives -> execution instruction workflow.
+    tags: ["implementation", "legacy-v2", "execution"]
+
+  content:
+    governed_by:
+      doctrine_refs: ["000-DOCTRINE-Enterprise_Canonical_Execution"]
+      protocol_refs:
+        - "001-PROTOCOL-The_GoldenRule_Execution"
+        - "002-PROTOCOL-Zero_Tolerance_Remediation"
+        - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
+        - "004-PROTOCOL-Validate_Remediate_Codebase"
+        - "006-PROTOCOL-RFC2119_Requirements_Language"
+
+    variables:
+      base_directory: "docs/implementation/instructions/v2/"
+      file_extension: ".yaml"
+      spec_directory: "docs/implementation/in_progress"
+      spec_file_extension: ".md"
+      code_implementation_spec: "{{ CODE_IMPLEMENTATION_SPEC }}"
+
+    workflow:
+      - id: ACK-001
+        type: acknowledge
+        acknowledge:
+          doctrine: "000-DOCTRINE-Enterprise_Canonical_Execution"
+          protocols:
+            - "001-PROTOCOL-The_GoldenRule_Execution"
+            - "002-PROTOCOL-Zero_Tolerance_Remediation"
+            - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
+            - "004-PROTOCOL-Validate_Remediate_Codebase"
+            - "006-PROTOCOL-RFC2119_Requirements_Language"
+
+      - id: SPEC-001
+        type: spec_refs
+        spec_refs:
+          - "{{ CODE_IMPLEMENTATION_SPEC }}"
+
+      - id: DIR-001
+        type: directives
+        directives:
+          - "THIS IS A CODE IMPLEMENTATION, REFACTORING AND VALIDATION FOCUSED SESSION."
+          - "THE USE OF SCRIPTS OR MASS MODIFICATIONS TO THE CODE IS STRICTLY FORBIDDEN."
+          - "ALL CODE MUST BE IMPLEMENTED ONE STEP AT A TIME, IN A SEQUENTIAL MANNER."
+          - "NO DOCUMENTATION OF ANY KIND IS PERMITTED UNLESS I EXPLICITLY ASK FOR IT."
+
+      - id: EXEC-001
+        type: execute_instruction
+        instruction_ref: "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
+        inputs:
+          - "CONTINUE WITH THE CURRENT {{ CODE_IMPLEMENTATION_SPEC }} ..."
+          - "Continue to iterate through the plans in the {{ CODE_IMPLEMENTATION_SPEC }} until all plans are completed, pass code quality checks and have been validated"
+
+      - id: REM-001
+        type: remember
+        items:
+          - "CONSIDER using scripts in C:\\github_development\\AustralisSystems\\libraries\\_ai_agent\\tools"
+          - "MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC }}."
+
+      - id: HALT-001
+        type: halt
+        reason: "Runbook completed; await operator inputs"
+
+  governance:
+    owners: ["au-sys"]
+    status: draft
+    changeLog:
+      - "Initial v3 runbook example mapped from legacy v2 combined YAML patterns"

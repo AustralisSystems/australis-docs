@@ -1,0 +1,70 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "swarm.agent_task_coordination"
+    title: "Agent Task Coordination"
+    description: "Protocol for Level-2 agents coordinating a single task via delegation, aggregation, validation, and stdout reporting."
+    enforce: true
+    tags: ["swarm", "agent", "coordination"]
+
+  content:
+    related_doctrine: "swarm.prime_strategic_command"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "one_task_only"
+        level: "required"
+        statement: "Agents MUST accept and execute exactly one discrete task; multi-task requests MUST be rejected or escalated as a scope error."
+        rationale: "Atomic scope improves reliability, validation, and aggregation across parallel execution."
+        verification: "Agent report describes one task with explicit success criteria and does not include unrelated extra work."
+
+      - id: "coordination_agents_delegate_not_execute"
+        level: "required"
+        statement: "If the agent is operating as a coordination agent, it MUST coordinate through delegation and MUST NOT perform direct implementation work itself."
+        rationale: "Coordination agents exist to orchestrate specialists and to keep execution focused and auditable."
+        verification: "Worklog/report shows delegation to sub-agents/tools and aggregation of their results; no direct implementation steps are performed by the coordinator."
+
+      - id: "use_appropriate_tools_for_delegation"
+        level: "required"
+        statement: "Coordination agents MUST use the appropriate delegation mechanisms (skills/sub-agents/tools) for execution work and MUST provide clear objectives, inputs, and success criteria."
+        rationale: "Clear delegation prevents ambiguous work and reduces retries."
+        verification: "Delegated tasks include objective, inputs, expected output format, and success criteria."
+
+      - id: "validate_before_reporting"
+        level: "required"
+        statement: "Agents MUST validate completion against success criteria and required protocols before reporting COMPLETE."
+        rationale: "Prevents partial or incorrect completion reports from contaminating aggregated results."
+        verification: "Report includes explicit validation evidence and does not claim COMPLETE when criteria are unmet."
+
+      - id: "report_via_stdout_for_aggregation"
+        level: "required"
+        statement: "Agents MUST report results in a structured stdout format suitable for orchestrator aggregation (status, result, validation evidence, issues/blockers)."
+        rationale: "Orchestrators rely on deterministic parsing to aggregate results across many agents."
+        verification: "Output includes status and predictable sections (result, validation, issues/blockers)."
+
+      - id: "no_interactive_questions"
+        level: "required"
+        statement: "Agents running in subprocess mode MUST NOT depend on interactive operator Q&A; if blocked, they MUST report BLOCKED with the minimal required missing information."
+        rationale: "Subprocess agents cannot reliably obtain interactive input; blockers must be surfaced clearly."
+        verification: "On missing inputs, agent reports BLOCKED with concrete missing items instead of continuing speculatively."
+
+    inputs:
+      - "task"
+      - "success_criteria"
+    outputs:
+      - "agent_report"
+    notes:
+      - "This protocol focuses on enforceable behavioural constraints; agent-tier heuristics and model-specific guidance should live in agent implementation docs."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 012-PROTOCOL-Agent_Task_Coordination-v1.0.0.yaml; condensed to enforceable coordination directives."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/012-PROTOCOL-Agent_Task_Coordination-v1.0.0.yaml"

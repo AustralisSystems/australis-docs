@@ -1,0 +1,62 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "quality.production_code_quality"
+    title: "Production Code Quality"
+    description: "Validation and remediation rules for 100% production-ready code."
+    enforce: true
+    tags: ["quality", "validation", "security"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "zero_errors_zero_warnings"
+        level: "required"
+        statement: "Production code MUST have zero errors and zero warnings across the configured quality toolchain."
+        rationale: "Warnings often indicate latent defects and are treated as blocking in this governance model."
+        verification: "Validation commands exit successfully with no warnings; evidence is recorded."
+
+      - id: "ast_and_sast_mandatory"
+        level: "required"
+        statement: "AST analysis and SAST analysis MUST be performed for all files in scope before claiming completion of implementation or remediation."
+        rationale: "Ensures structural correctness and security posture before progress."
+        verification: "Provide commands run and relevant output excerpts for AST and SAST scans."
+
+      - id: "use_repo_canonical_commands"
+        level: "required"
+        statement: "When repository-standard scripts exist (Makefile, pyproject tooling, package scripts, CI), they MUST be used for validation instead of ad-hoc substitutes."
+        rationale: "Canonical scripts encode project configuration and avoid drift from CI expectations."
+        verification: "Evidence shows validation ran via the repo's documented commands where available."
+
+      - id: "no_custom_fix_scripts"
+        level: "required"
+        statement: "Creating custom one-off remediation scripts to automatically fix the codebase is prohibited; use standard tooling instead."
+        rationale: "Custom fix scripts frequently introduce corruption and are not reviewable or deterministic."
+        verification: "No new ad-hoc remediation scripts were introduced; fixes are applied via standard tools or manual changes."
+
+      - id: "line_length_120"
+        level: "required"
+        statement: "Where Python tooling is used, formatting and linting MUST enforce a 120 character line length (not default tool settings)."
+        rationale: "The project standard uses 120 as the maximum for consistency across tools."
+        verification: "Tool configs/commands show line-length=120 and checks pass."
+
+    inputs: []
+    outputs: []
+    notes:
+      - "The exact tool set varies per repository; apply the repo's canonical validations when present (pytest/black/isort/mypy/flake8/bandit/etc.)."
+      - "This protocol governs quality gates. How to run local runtime testing is governed by runtime instructions (eg runtime.run_local_and_test)."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 008-PROTOCOL-Production_Code_Quality-v1.0.0.yaml; condensed into enforceable quality directives."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/008-PROTOCOL-Production_Code_Quality-v1.0.0.yaml"

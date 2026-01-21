@@ -1,0 +1,55 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.draft_diataxis_reference"
+    title: "Draft Diataxis Reference"
+    description: "Draft an austere, factual reference document using the governance Diataxis reference template."
+    action: "create-file"
+    tags: ["docs", "diataxis", "reference", "template"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "docs.diataxis_framework"
+    inputs:
+      - "template_path"
+      - "subject"
+      - "target_path"
+    outputs:
+      - "document"
+      - "document_path"
+    steps:
+      - id: "load_template"
+        description: "Read template_path and preserve any instructional preamble sections."
+      - id: "scope_subject"
+        description: "Define the exact subject being described (API, component, config object) and the coverage boundaries."
+      - id: "populate_metadata"
+        description: "Populate required metadata and precise coverage statement (eg module path, endpoint group)."
+      - id: "document_specs"
+        description: "Document signatures/parameters/returns/raises (or endpoints/payloads/responses) using tables where appropriate; avoid step-by-step guidance."
+      - id: "document_configuration"
+        description: "Document configuration keys (type, default, description) when relevant."
+      - id: "map_best_practices"
+        description: "Map implementation facts/patterns to best-practice references where applicable."
+      - id: "quality_gate"
+        description: "Verify: tone is factual, no procedural steps included, parameters/return types are complete, best-practice mapping present."
+        produces: ["document"]
+    variables:
+      template_path:
+        required: false
+        default: "governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_REFERENCE_v1.0.0.md"
+        description: "Governance template to use for Diataxis reference docs."
+    halt: true
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 926-INSTRUCTIONS-Draft_Diataxis_Reference-v1.0.0.yaml; converted to structured v3 steps." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/926-INSTRUCTIONS-Draft_Diataxis_Reference-v1.0.0.yaml"

@@ -1,0 +1,55 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "validation.validation_suite_architecture"
+    title: "Validation Suite Standard Architecture"
+    description: "Mandatory directory structure and runner pattern for production validation suites."
+    enforce: true
+    tags: ["validation", "architecture", "standards"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://libraries/python/capabilities/*"]
+    directives:
+      - id: "suite_directory_structure"
+        level: "required"
+        statement: "Production validation suites MUST follow the standard directory structure under the capability package (validation/ with framework.py, runner.py, validate_00_prereqs.py, validate_xx_*.py)."
+        rationale: "A consistent structure enables deterministic discovery, packaging, and execution."
+        verification: "Validation suite directory and required files exist in the expected location."
+
+      - id: "fail_fast_runner"
+        level: "required"
+        statement: "The validation suite runner MUST execute scripts sequentially and MUST fail fast (abort on first failure)."
+        rationale: "A single failure makes the run invalid; continuing wastes time and obscures root causes."
+        verification: "Runner exits non-zero immediately upon first failing script."
+
+      - id: "logs_gitignored"
+        level: "required"
+        statement: "Validation suite log output directories MUST be deterministic and MUST be gitignored (no logs committed)."
+        rationale: "Logs are per-run artefacts and should not pollute the repository history."
+        verification: "logs/ (or equivalent) is excluded from git and does not appear in commits."
+
+      - id: "prereqs_gatekeeper_script"
+        level: "required"
+        statement: "A prerequisite gatekeeper script (validate_00_prereqs.py) MUST validate environment and real resource connectivity before any other validation scripts execute."
+        rationale: "Prevents false failures due to missing dependencies and enforces real-resource validation posture."
+        verification: "validate_00_prereqs.py exists and is executed first by the runner."
+
+    inputs: []
+    outputs: []
+    notes:
+      - "Template code for the framework/runner is preserved in v2 traceability to avoid embedding large code blocks in v3 directive content."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 320-INSTRUCTIONS-Validation_Suite_Standard_Structure-v1.0.0.yaml; expressed as protocol directives."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/320-INSTRUCTIONS-Validation_Suite_Standard_Structure-v1.0.0.yaml"

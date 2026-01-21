@@ -1,0 +1,61 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "validation.api_real_http"
+    title: "API Validation - Real HTTP"
+    description: "Adapter/API validation must use real HTTP requests against a running service and real resources, with full trace visibility and inventory-driven coverage."
+    enforce: true
+    tags: ["validation", "api", "http"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "execute_after_production_validation"
+        level: "required"
+        statement: "API validation MUST execute only after the internal production validation suite passes with 100% success."
+        rationale: "Adapter tests are end-to-end; internal failures must be resolved first to avoid cascading noise."
+        verification: "Run order shows internal production validation completed successfully before API validation began."
+
+      - id: "inventory_is_source_of_truth"
+        level: "required"
+        statement: "The endpoint+method test matrix MUST come from authoritative artifacts (eg openapi.json and endpoint inventories); endpoints/methods MUST NOT be inferred."
+        rationale: "Prevents hallucinated coverage and ensures 100% surface area accounting."
+        verification: "Test plan references the inventories/openapi and reports reconciliation if they conflict."
+
+      - id: "real_http_only"
+        level: "required"
+        statement: "API validation MUST use real HTTP requests against the running service base URL; in-process request simulators are prohibited."
+        rationale: "Only real HTTP validates routing, middleware, serialization, auth, and network behavior."
+        verification: "No use of in-process clients (eg FastAPI TestClient); requests are made over HTTP to SERVICE_BASE_URL."
+
+      - id: "prereqs_gate"
+        level: "required"
+        statement: "Before executing API tests, create and validate an API prerequisite inventory (base URL, auth, external backends); if any prereq fails, abort."
+        rationale: "Guarantees tests run against real running services and real dependencies."
+        verification: "Prereq inventory and validation reports exist; failures abort the run."
+
+      - id: "trace_visibility_and_redaction"
+        level: "required"
+        statement: "All API validation operations MUST be trace logged to timestamped files with inputs/outputs captured; secrets MUST be redacted and referenced by id only."
+        rationale: "Ensures forensic traceability without leaking sensitive material."
+        verification: "Logs exist per run; no secrets are present; operations include request/response evidence."
+
+    inputs: []
+    outputs: []
+    notes:
+      - "This protocol governs adapter/API validation. It complements validation.real_resources_only (core validation posture)."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 322-INSTRUCTIONS-Validation_ADAPTER_API_REST_Web-v1.0.0.yaml; expressed as enforceable protocol directives."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/322-INSTRUCTIONS-Validation_ADAPTER_API_REST_Web-v1.0.0.yaml"

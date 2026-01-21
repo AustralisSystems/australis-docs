@@ -1,0 +1,93 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "swarm.orchestrator.session"
+    title: "Swarm Orchestrator Session"
+    description: "Execute one orchestrator cycle: validate infra, spawn agents in parallel, monitor, aggregate results, report to PRIME; then halt."
+    action: "execute"
+    tags: ["swarm", "orchestrator", "spawning"]
+
+  content:
+    doctrine_refs:
+      - "enterprise.canonical_execution"
+      - "swarm.prime_strategic_command"
+    protocol_refs:
+      - "execution.golden_rule"
+      - "language.rfc2119_requirements"
+      - "tools.mcp_tools_workflow"
+      - "swarm.orchestrator"
+    directives:
+      - "spawner_only"
+      - "validate_infrastructure_before_spawning"
+      - "use_universal_spawn_template"
+      - "replace_all_template_variables"
+      - "spawn_in_parallel"
+      - "monitor_and_capture_outputs"
+      - "aggregate_before_reporting"
+    inputs:
+      - "spawn_request"
+      - "orchestrator_profile"
+    outputs:
+      - "spawned_agents"
+      - "aggregated_report"
+      - "per_agent_outputs"
+    steps:
+      - id: "parse_request"
+        description: "Parse spawn_request into discrete agent tasks with identifiers, success criteria, and expected outputs."
+        produces: ["spawned_agents"]
+
+      - id: "check_capacity"
+        description: "Verify requested agent count fits orchestrator capacity; if not, report capacity mismatch and stop."
+
+      - id: "validate_infrastructure"
+        description: "Validate local infrastructure prerequisites required to spawn the requested model/CLI (tools installed, configs present, routing/proxy readiness if applicable)."
+
+      - id: "prepare_prompts"
+        description: "Construct per-agent prompts using the universal spawn template and verify all template variables are replaced."
+        produces: ["per_agent_outputs"]
+
+      - id: "spawn_agents"
+        description: "Spawn agents in parallel and record a stable execution handle/id for each agent."
+        requires: ["per_agent_outputs"]
+        produces: ["spawned_agents"]
+
+      - id: "monitor"
+        description: "Monitor each agent by handle/id until completion or failure; capture stdout/stderr outputs for aggregation."
+        requires: ["spawned_agents"]
+        produces: ["per_agent_outputs"]
+
+      - id: "aggregate"
+        description: "Aggregate per-agent outcomes into a single consolidated report (summary, metrics, per-agent statuses, blockers, evidence excerpts)."
+        requires: ["per_agent_outputs"]
+        produces: ["aggregated_report"]
+
+      - id: "report"
+        description: "Report aggregated_report to PRIME, including any infra failures, capacity issues, or failed agents."
+        requires: ["aggregated_report"]
+
+      - id: "halt"
+        description: "Halt after one orchestrator cycle and await operator input before continuing."
+
+    variables:
+      orchestrator_profile:
+        required: true
+        description: "Orchestrator implementation profile (model, capacity, CLI/routing strategy, template reference)."
+      spawn_request:
+        required: true
+        description: "Structured request from PRIME describing agent tasks, success criteria, and target orchestrator type."
+    halt: true
+    notes:
+      - "This instruction describes orchestrator behaviour, not PRIME behaviour; PRIME remains responsible for decomposition and validation of overall outcomes."
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 112-INSTRUCTIONS-Swarm_Orchestrator-v1.0.0.yaml; replaced narrative execution protocol with structured v3 steps."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/112-INSTRUCTIONS-Swarm_Orchestrator-v1.0.0.yaml"

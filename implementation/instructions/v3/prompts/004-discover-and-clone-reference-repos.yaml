@@ -1,24 +1,67 @@
-version: "1.0"
-schema: "mcp.prompt/v1"
-id: "004-discover_and_clone_reference_repos"
-title: "Discover and clone reference repositories using MCP tools"
-description: "Use MCP tools (grep/fetch) and GitHub search to find semantically similar code and authoritative examples, clone useful repositories locally for reference, and record them in the CODE_IMPLEMENTATION_SPEC. Do not perform mass copy/adapt without explicit approval."
-source_md_section_index: 4
-action: "discover-and-clone"
-steps:
-  - "Use MCP grep/fetch (or GitHub search) to identify useful repositories, code snippets, and canonical examples relevant to the treatments in the CODE_IMPLEMENTATION_SPEC."
-  - "Clone identified repositories into a local 'reference_repos' directory and record origin URL, license, and purpose in the CODE_IMPLEMENTATION_SPEC."
-  - "Do not remove cloned repos; they are kept for future reference."
-  - "Prepare candidate files/modules for potential copy-and-adapt remediation; do not copy until authorized."
-variables:
-  code_implementation_spec_doc:
-    required: true
-    default: "{{ CODE_IMPLEMENTATION_SPEC_DOCS }}"
-notes:
-  - "The original instructions require using MCP TOOLS to fetch and clone; this prompt preserves that behavior but flags the need for clear authorization before any content is copied into the prod codebase."
-raw: |
-  - You MUST use MCP TOOLS grep and fetch to retrieve additional useful repositories, code examples or semantically similar code base from GitHub to quickly use as a base and / or to scaffold.
-  - You MUST use GIT TO CLONE all the useful discovered GitHub repos to the local repository, even if they are only going to provide a small benefit to this code base NOTE: this is to use for future references and examples, do not remove the cloned repos.
-  - Focus on implementing, rectifying, or refactoring groups of items identified on your list, ensuring that all necessary improvements are executed with precision and adherence to best practices.
-  - Record in the {{ CODE_IMPLEMENTATION_SPEC_DOCS }} treatment plan structured checklists, DO NOT include code examples.
-  - You MUST COPY and adapt the acquired directory structures, files, modules, functions, code blocks and content to the prod code base DO NOT re-write any part of the content, THIS IS ERROR PRONE (require explicit authorization before copying).
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.prompt/v1"
+    id: "discover.clone_reference_repos"
+    name: "discover-and-clone-reference-repos"
+    title: "Discover and clone reference repositories"
+    description: "Use MCP tools and GitHub search to find relevant reference repos, clone them locally for reuse, and record them in the session spec."
+    tags: ["discovery", "git"]
+    icons: []
+  content:
+    governed_by:
+      doctrine_refs: ["enterprise.canonical_execution"]
+      protocol_refs:
+        - "execution.golden_rule"
+        - "quality.zero_tolerance_remediation"
+      directive_refs: []
+    mode: "execute"
+    halt: true
+    arguments:
+      - name: "spec_path"
+        description: "Repo-relative path to the CODE_IMPLEMENTATION_SPEC for this session"
+        required: true
+        type: "string"
+      - name: "reference_dir"
+        description: "Directory to clone reference repositories into"
+        required: false
+        type: "string"
+        default: "docs/implementation/instructions/reference_repos"
+      - name: "topics"
+        description: "Search topics/keywords for discovery"
+        required: false
+        type: "json"
+        default: []
+    template:
+      messages:
+        - role: "user"
+          content:
+            type: "text"
+            text: |
+              Discover and clone reference repositories relevant to the current work.
+
+              Requirements:
+              - Use MCP tools (e.g. grep/fetch) and/or GitHub search to find authoritative examples.
+              - Clone discovered repositories into: {{reference_dir}}
+              - Do not delete cloned repos; keep them for future reference.
+              - Record in {{spec_path}}: origin URL, license (if known), and why each repo is useful.
+              - Do not copy anything into production code without explicit operator authorization.
+
+              Topics: {{topics}}
+
+              Then halt.
+    output_contract:
+      format: "markdown"
+      required_sections: ["Candidates", "Repos Cloned", "Spec Updates", "Open Questions", "Halt"]
+    notes:
+      - "This prompt is discovery-focused; treat copy-and-adapt as a separate, explicitly approved step."
+    conflicts: []
+  traceability:
+    raw: |
+      - You MUST use MCP TOOLS grep and fetch to retrieve additional useful repositories, code examples or semantically similar code base from GitHub to quickly use as a base and / or to scaffold.
+      - You MUST use GIT TO CLONE all the useful discovered GitHub repos to the local repository, even if they are only going to provide a small benefit to this code base NOTE: this is to use for future references and examples, do not remove the cloned repos.
+      - Focus on implementing, rectifying, or refactoring groups of items identified on your list, ensuring that all necessary improvements are executed with precision and adherence to best practices.
+      - Record in the {{ CODE_IMPLEMENTATION_SPEC_DOCS }} treatment plan structured checklists, DO NOT include code examples.
+      - You MUST COPY and adapt the acquired directory structures, files, modules, functions, code blocks and content to the prod code base DO NOT re-write any part of the content, THIS IS ERROR PRONE (require explicit authorization before copying).

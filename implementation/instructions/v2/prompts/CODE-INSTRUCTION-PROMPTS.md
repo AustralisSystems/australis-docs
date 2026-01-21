@@ -25,7 +25,7 @@ READ_AND_REVIEW:
   - the provided content from the previous session
 
 DOCUMENTS:
-{{ The provided  }}
+{{ The provided files in the context }}
 
 
 
@@ -85,7 +85,8 @@ READ_AND_ACKNOWLEDGE:
   - "004-PROTOCOL-Validate_Remediate_Codebase"
   - "006-PROTOCOL-RFC2119_Requirements_Language"
 
-Then, HALT
+
+Then HALT
 
 ---
 

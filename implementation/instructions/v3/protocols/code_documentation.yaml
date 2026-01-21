@@ -1,0 +1,61 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "docs.code_documentation"
+    title: "Code Documentation"
+    description: "Protocol for producing comprehensive code documentation artefacts (APIs, developer guides, operations, security) without changing system behaviour."
+    enforce: true
+    tags: ["docs", "code"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "documentation_only"
+        level: "required"
+        statement: "Code documentation tasks MUST be documentation-only and MUST NOT include implementation changes or environment/system changes."
+        rationale: "Separates documentation work from code delivery and keeps scope auditable."
+        verification: "Diff contains documentation-only artefacts unless explicitly authorized otherwise."
+
+      - id: "markdown_only"
+        level: "required"
+        statement: "Documentation deliverables MUST be produced as markdown (.md) unless an explicit exception is approved."
+        rationale: "Markdown is the canonical format in this repo and supports diff-based review."
+        verification: "Deliverables are .md and render correctly in the repository."
+
+      - id: "document_public_interfaces"
+        level: "required"
+        statement: "All public interfaces (APIs, public modules/classes/functions, CLI entrypoints) MUST be documented with purpose, inputs/outputs, and examples where applicable."
+        rationale: "Undocumented public interfaces create maintenance and support costs."
+        verification: "Docs include coverage list of public interfaces and sample usage for key entrypoints."
+
+      - id: "include_validation_and_limits"
+        level: "recommended"
+        statement: "Documentation SHOULD include validation steps, known limitations, and common failure modes/troubleshooting."
+        rationale: "Operational usability improves when docs anticipate real-world issues."
+        verification: "Docs include a section for validation and a section for limitations/troubleshooting when relevant."
+
+      - id: "validate_examples_and_links"
+        level: "required"
+        statement: "Code blocks, examples, and links in documentation MUST be reviewed for correctness and validity."
+        rationale: "Broken examples or links are worse than missing documentation."
+        verification: "Examples are consistent with the codebase and links resolve (local links exist; external links are credible)."
+
+    inputs: ["codebase_scope"]
+    outputs: ["documentation_package"]
+    notes:
+      - "Where applicable, align artefact type (tutorial/how-to/reference/explanation) with docs.diataxis_framework."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 912-PROTOCOL-Code_Documentation-v1.0.0.yaml; reduced to enforceable documentation coverage and quality gates."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/912-PROTOCOL-Code_Documentation-v1.0.0.yaml"

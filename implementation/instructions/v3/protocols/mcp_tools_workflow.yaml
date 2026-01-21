@@ -1,0 +1,62 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "tools.mcp_tools_workflow"
+    title: "MCP Tools Workflow"
+    description: "Tool usage workflow that reduces hallucination risk and improves traceability."
+    enforce: true
+    tags: ["tools", "workflow", "research"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "golden_rule_sequence"
+        level: "recommended"
+        statement: "For non-trivial tasks, use the workflow: docs research -> code example search -> implement -> validate."
+        rationale: "Evidence-backed decisions reduce rework and prevent ungrounded output."
+        verification: "Worklog includes citations to docs and/or real code examples for unfamiliar APIs."
+
+      - id: "research_required_for_unfamiliar"
+        level: "required"
+        statement: "Before implementing unfamiliar APIs/libraries, documentation research and real code example search MUST be performed."
+        rationale: "Prevents incorrect implementations caused by missing or stale knowledge."
+        verification: "References to docs and example sources are provided for unfamiliar APIs."
+
+      - id: "avoid_overbroad_scans"
+        level: "required"
+        statement: "Avoid overbroad repository scans; prefer targeted file search and targeted content search to limit scope."
+        rationale: "Keeps investigation bounded and reduces accidental changes or missed context."
+        verification: "Search queries are scoped; no root-level full-tree dumps."
+
+      - id: "plan_for_complex_work"
+        level: "recommended"
+        statement: "For complex multi-step work, create an explicit step plan with validation checkpoints before editing files."
+        rationale: "Prevents mid-flight scope drift and ensures predictable checkpoints."
+        verification: "Plan exists and includes checkpoints that match executed validations."
+
+      - id: "persist_significant_outcomes"
+        level: "recommended"
+        statement: "Persist significant patterns and decisions for future sessions in the project knowledge system."
+        rationale: "Reduces repeated rediscovery cost across sessions."
+        verification: "Significant outcomes are recorded (when the project uses a knowledge store)."
+
+    inputs: []
+    outputs: []
+    notes:
+      - "This protocol is workflow guidance; it does not override doctrine/protocol requirements that are explicitly 'required' or 'halt'."
+      - "The v2 artefact contains extended narrative workflow content; v3 keeps only enforceable gates and high-signal guidance."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 007-PROTOCOL-MCP_Tools_Workflow-v1.0.0.yaml; reduced to enforceable gates and short guidance."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/007-PROTOCOL-MCP_Tools_Workflow-v1.0.0.yaml"

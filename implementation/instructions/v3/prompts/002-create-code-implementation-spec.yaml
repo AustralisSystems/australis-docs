@@ -1,43 +1,86 @@
-version: "1.0"
-schema: "mcp.prompt/v1"
-id: "002-create_code_implementation_spec"
-title: "Create CODE_IMPLEMENTATION_SPEC for session"
-description: "Copy the provided CODE_IMPLEMENTATION_SPEC_TEMPLATE.md into docs/implementation/in_progress/, rename with date suffix, and use it to maintain session progress (do not rewrite template)."
-source_md_section_index: 2
-action: "create-file"
-steps:
-  - "Copy 'docs/implementation/CODE_IMPLEMENTATION_SPEC_TEMPLATE.md' to 'docs/implementation/in_progress/CODE_IMPLEMENTATION_SPEC_<YYYY-MM-DD>.md'."
-  - "Do not change the template content; only copy and rename for this session."
-  - "Use the created file to maintain and update session progress for every change; do not include code examples in the spec unless explicitly requested."
-halt: true
-variables:
-  code_implementation_spec_doc:
-    required: true
-    default: "docs/implementation/in_progress/CODE_IMPLEMENTATION_SPEC_<DATE>.md"
-notes:
-  - "This prompt enforces: maintain and update your progress in the CODE_IMPLEMENTATION_SPEC as per original instructions."
-raw: |
-  LOAD_AND_PARSE:
-    DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.prompt/v1"
+    id: "create.code_implementation_spec"
+    name: "create-code-implementation-spec"
+    title: "Create CODE_IMPLEMENTATION_SPEC for session"
+    description: "Copy the CODE_IMPLEMENTATION_SPEC template into docs/implementation/in_progress/ with a date suffix and use it to track session progress."
+    tags: ["spec", "session"]
+    icons: []
+  content:
+    governed_by:
+      doctrine_refs: ["enterprise.canonical_execution"]
+      protocol_refs:
+        - "execution.golden_rule"
+        - "quality.zero_tolerance_remediation"
+        - "fastapi.pure_code_implementation"
+        - "validation.validate_remediate_codebase"
+      directive_refs: []
+    mode: "execute"
+    halt: true
+    arguments:
+      - name: "date"
+        description: "Date suffix for the spec filename (YYYY-MM-DD)"
+        required: true
+        type: "string"
+        example: "2026-01-21"
+      - name: "template_path"
+        description: "Repo-relative path to the CODE_IMPLEMENTATION_SPEC template"
+        required: false
+        type: "string"
+        default: "docs/implementation/CODE_IMPLEMENTATION_SPEC_TEMPLATE.md"
+      - name: "destination_dir"
+        description: "Repo-relative directory to place the session spec"
+        required: false
+        type: "string"
+        default: "docs/implementation/in_progress"
+    template:
+      messages:
+        - role: "user"
+          content:
+            type: "text"
+            text: |
+              Create a CODE_IMPLEMENTATION_SPEC document to track this session.
 
-  ENFORCE:
-    - "002-PROTOCOL-Zero_Tolerance_Remediation"
-    - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
-    - "004-PROTOCOL-Validate_Remediate_Codebase"
+              Requirements:
+              - Copy {{template_path}} to {{destination_dir}}/CODE_IMPLEMENTATION_SPEC_{{date}}.md
+              - Do not rewrite the template; only copy and rename.
+              - Use the created file to maintain and update progress for every change.
+              - Do not include code examples in the spec unless explicitly instructed.
 
-  EXECUTE:
-    - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
-    - "202-INSTRUCTIONS-Pure_Code_Implementation_Execution_Protocol"
-    - "203-INSTRUCTIONS-FastAPI_Design_Implementation_Refactor"
+              Then halt.
+    output_contract:
+      format: "markdown"
+      required_sections: ["Created File", "Notes", "Halt"]
+    notes:
+      - "This prompt exists to enforce continuous progress tracking in a session spec."
+    conflicts: []
+  traceability:
+    raw: |
+      LOAD_AND_PARSE:
+        DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-  INPUTS:
-  Create a "CODE_IMPLEMENTATION_SPEC" document to track this session, by:
-  following the instructions and examples from:
-    - "docs\implementation\SPEC_TEMPLATE_v1.0.0.md"
-    - "docs\implementation\SPEC_CREATION_GUIDE_v1.0.0.md"
+      ENFORCE:
+        - "002-PROTOCOL-Zero_Tolerance_Remediation"
+        - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
+        - "004-PROTOCOL-Validate_Remediate_Codebase"
 
-  - Copy the "docs\implementation\CODE_IMPLEMENTATION_SPEC_TEMPLATE.md" to the directory "docs\implementation\in_progress\"  DO NOT RE-WRITE IT,
-  - Then rename the file for this session and include a date stamp suffix in the name
-  - MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC }}.
+      EXECUTE:
+        - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
+        - "202-INSTRUCTIONS-Pure_Code_Implementation_Execution_Protocol"
+        - "203-INSTRUCTIONS-FastAPI_Design_Implementation_Refactor"
 
-  Then, Halt
+      INPUTS:
+      Create a "CODE_IMPLEMENTATION_SPEC" document to track this session, by:
+      following the instructions and examples from:
+        - "docs\\implementation\\SPEC_TEMPLATE_v1.0.0.md"
+        - "docs\\implementation\\SPEC_CREATION_GUIDE_v1.0.0.md"
+
+      - Copy the "docs\\implementation\\CODE_IMPLEMENTATION_SPEC_TEMPLATE.md" to the directory "docs\\implementation\\in_progress\\"  DO NOT RE-WRITE IT,
+      - Then rename the file for this session and include a date stamp suffix in the name
+      - MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC }}.
+
+      Then, Halt

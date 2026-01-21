@@ -1,0 +1,55 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.code_documentation.session"
+    title: "Code Documentation Session"
+    description: "Produce or update a documentation package for a scoped part of the codebase; then halt."
+    action: "create-file"
+    tags: ["docs", "code"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "language.rfc2119_requirements"
+      - "docs.diataxis_framework"
+      - "docs.code_documentation"
+    directives:
+      - "documentation_only"
+      - "markdown_only"
+      - "document_public_interfaces"
+      - "validate_examples_and_links"
+    inputs:
+      - "codebase_scope"
+      - "target_doc_paths"
+    outputs:
+      - "documentation_package"
+      - "validation_notes"
+    steps:
+      - id: "scope"
+        description: "Define the documentation scope (modules/services/APIs) and identify target_doc_paths for new/updated markdown documents."
+      - id: "discover"
+        description: "Discover public interfaces in the scope (APIs, entrypoints, public modules/classes/functions) and list them for coverage tracking."
+      - id: "author"
+        description: "Write or update documentation artefacts using appropriate Diataxis types (how-to, reference, explanation, tutorial)."
+        produces: ["documentation_package"]
+      - id: "validate"
+        description: "Validate examples, code blocks, and links; record any gaps or TODOs explicitly."
+        produces: ["validation_notes"]
+      - id: "halt"
+        description: "Halt after producing documentation_package and validation_notes."
+    halt: true
+    notes:
+      - "This session is documentation-only; use separate implementation instructions for code changes."
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 921-INSTRUCTIONS-Code_Documentation-v1.0.0.yaml; condensed to a scoped doc authoring session." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/921-INSTRUCTIONS-Code_Documentation-v1.0.0.yaml"

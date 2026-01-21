@@ -1,0 +1,55 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.draft_diataxis_howto"
+    title: "Draft Diataxis How-To"
+    description: "Draft a problem-solving recipe using the governance Diataxis how-to template."
+    action: "create-file"
+    tags: ["docs", "diataxis", "how-to", "template"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "docs.diataxis_framework"
+    inputs:
+      - "template_path"
+      - "problem_statement"
+      - "target_path"
+    outputs:
+      - "document"
+      - "document_path"
+    steps:
+      - id: "load_template"
+        description: "Read template_path and preserve any instructional preamble sections."
+      - id: "define_problem"
+        description: "Define the specific real-world problem/task the user needs to solve."
+      - id: "populate_metadata"
+        description: "Populate required metadata and prerequisites; ensure the doc title is task/verb oriented."
+      - id: "write_solution_steps"
+        description: "Write practical solution steps focused on achieving the result; avoid deep theory (link to explanations instead)."
+      - id: "add_troubleshooting"
+        description: "Add at least one common failure mode and remediation guidance."
+      - id: "map_best_practices_and_links"
+        description: "Map the solution pattern to best-practice references and link to reference/explanation docs for deeper details."
+      - id: "quality_gate"
+        description: "Verify: practical steps (not theory), troubleshooting present, best-practice mapping present, title is task/verb oriented."
+        produces: ["document"]
+    variables:
+      template_path:
+        required: false
+        default: "governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_HOWTO_v1.0.0.md"
+        description: "Governance template to use for Diataxis how-to guides."
+    halt: true
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 925-INSTRUCTIONS-Draft_Diataxis_HowTo-v1.0.0.yaml; converted to structured v3 steps." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/925-INSTRUCTIONS-Draft_Diataxis_HowTo-v1.0.0.yaml"

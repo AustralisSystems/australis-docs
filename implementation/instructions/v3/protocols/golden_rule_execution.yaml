@@ -1,0 +1,54 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "execution.golden_rule"
+    title: "Golden Rule Execution"
+    description: "Enforce minimal, safe, evidence-backed implementation."
+    enforce: true
+    tags: ["execution", "safety"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "smallest_change"
+        level: "required"
+        statement: "Prefer the smallest change that resolves the issue; avoid unnecessary refactors."
+        rationale: "Reduce blast radius and review effort."
+        verification: "Diff is minimal and scoped to the requested outcome."
+
+      - id: "verify_non_trivial"
+        level: "required"
+        statement: "For non-trivial changes, run a relevant validation step (tests/lint/build) and report evidence."
+        rationale: "Ensure correctness and prevent regressions."
+        verification: "Provide command(s) run and relevant output excerpt(s)."
+
+      - id: "ask_minimum"
+        level: "required"
+        statement: "If blocked, ask only for the minimum missing information required to proceed safely."
+        rationale: "Avoid speculative work and reduce cycle time."
+        verification: "Questions are specific and limited to blockers."
+
+      - id: "no_unrelated_changes"
+        level: "required"
+        statement: "Do not modify unrelated files or broaden scope without explicit operator instruction."
+        rationale: "Maintain predictable change sets."
+        verification: "Changed files are directly related to the task."
+
+    inputs: []
+    outputs: []
+    notes: []
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 001-PROTOCOL-The_GoldenRule_Execution-v2.0.1.yaml; key directives extracted."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/001-PROTOCOL-The_GoldenRule_Execution-v2.0.1.yaml"

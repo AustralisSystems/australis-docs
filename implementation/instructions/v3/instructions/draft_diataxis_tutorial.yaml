@@ -1,0 +1,53 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.draft_diataxis_tutorial"
+    title: "Draft Diataxis Tutorial"
+    description: "Draft a strictly guided learning tutorial using the governance Diataxis tutorial template."
+    action: "create-file"
+    tags: ["docs", "diataxis", "tutorial", "template"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "docs.diataxis_framework"
+    inputs:
+      - "template_path"
+      - "learning_goal"
+      - "target_path"
+    outputs:
+      - "document"
+      - "document_path"
+    steps:
+      - id: "load_template"
+        description: "Read template_path and preserve any instructional preamble sections."
+      - id: "define_goal"
+        description: "Define a concrete learning_goal (what the learner will build/achieve by the end)."
+      - id: "populate_metadata"
+        description: "Populate required metadata fields; set status to DRAFT; ensure objectives are measurable."
+      - id: "write_steps"
+        description: "Write sequential tutorial steps with imperative instructions, concrete commands/code, and expected output for each command; do not offer branching choices."
+      - id: "map_best_practices"
+        description: "Map taught patterns to relevant best-practice references and link supporting how-to/reference/explanation docs where relevant."
+      - id: "quality_gate"
+        description: "Verify: instructional tone, zero branching choices, expected output shown for each command, best-practice mapping present."
+        produces: ["document"]
+    variables:
+      template_path:
+        required: false
+        default: "governance/au-sys-governance/documentation/diataxis/TEMPLATE_DIATAXIS_TUTORIAL_v1.0.0.md"
+        description: "Governance template to use for Diataxis tutorials."
+    halt: true
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 924-INSTRUCTIONS-Draft_Diataxis_Tutorial-v1.0.0.yaml; converted to structured v3 steps." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/924-INSTRUCTIONS-Draft_Diataxis_Tutorial-v1.0.0.yaml"

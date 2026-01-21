@@ -1,0 +1,54 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.diataxis_framework.session"
+    title: "Diataxis Documentation Session"
+    description: "Select the correct Diataxis documentation type and produce a structured outline for authoring; then halt."
+    action: "plan"
+    tags: ["docs", "diataxis"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "language.rfc2119_requirements"
+      - "docs.diataxis_framework"
+    directives:
+      - "select_type_before_writing"
+      - "do_not_mix_types"
+      - "match_audience_and_depth"
+    inputs:
+      - "doc_goal"
+      - "audience"
+      - "topic"
+    outputs:
+      - "diataxis_type"
+      - "outline"
+    steps:
+      - id: "analyze_goal"
+        description: "Analyze doc_goal and audience; identify whether the user needs learning, task completion, information lookup, or conceptual understanding."
+      - id: "select_type"
+        description: "Select the Diataxis type (tutorial/how-to/reference/explanation) and justify selection in one sentence."
+        produces: ["diataxis_type"]
+      - id: "define_success"
+        description: "Define what 'success' means for the chosen type (eg learner can complete steps; user can solve task; reader can lookup facts; reader understands rationale)."
+      - id: "draft_outline"
+        description: "Draft an outline that matches the chosen type (headings and key sections)."
+        produces: ["outline"]
+      - id: "halt"
+        description: "Halt after producing diataxis_type and outline and await operator input."
+    halt: true
+    notes:
+      - "Use follow-on drafting instructions for the chosen type (tutorial/how-to/reference/explanation) to produce a complete markdown document."
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 920-INSTRUCTIONS-Diataxis_Documentation_Framework-v1.0.0.yaml; simplified to a planning/selection session." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/920-INSTRUCTIONS-Diataxis_Documentation_Framework-v1.0.0.yaml"

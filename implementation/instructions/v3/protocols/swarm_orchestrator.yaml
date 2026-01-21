@@ -1,0 +1,96 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "swarm.orchestrator"
+    title: "Swarm Orchestrator"
+    description: "Protocol for Tier-2 orchestrators that spawn agents in parallel for PRIME and report aggregated results."
+    enforce: true
+    tags: ["swarm", "orchestrator", "spawning"]
+
+  content:
+    related_doctrine: "swarm.prime_strategic_command"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "spawner_only"
+        level: "required"
+        statement: "Orchestrators MUST act as spawning services only and MUST NOT make strategic decisions (task decomposition, task classification, architecture redesign)."
+        rationale: "Separating orchestration from execution keeps delegation deterministic and prevents scope drift."
+        verification: "Orchestrator output shows it only spawns/monitors/aggregates; task breakdown and classification remain owned by PRIME."
+
+      - id: "validate_infrastructure_before_spawning"
+        level: "required"
+        statement: "Before spawning any agent, orchestrators MUST validate required local infrastructure (CLI availability, config presence, and any routing/proxy prerequisites)."
+        rationale: "Failing fast on environment issues prevents wasted agent work and confusing partial results."
+        verification: "Report includes an explicit infra validation step and either (a) evidence it passed or (b) a clear failure reason."
+
+      - id: "abort_on_infrastructure_failure"
+        level: "required"
+        statement: "If infrastructure validation fails, orchestrators MUST NOT spawn agents and MUST report the blocker to PRIME."
+        rationale: "Avoids creating non-deterministic failures and untraceable partial work."
+        verification: "No spawn attempt occurs after infra failure; report includes blocker details and suggested remediation."
+
+      - id: "use_universal_spawn_template"
+        level: "required"
+        statement: "Orchestrators MUST use the universal agent spawn template when constructing per-agent prompts; ad-hoc custom prompt structures MUST NOT be used."
+        rationale: "A single template enforces consistent governance, reporting, and parsing expectations across orchestrators."
+        verification: "Spawn prompts include the expected template sections and required governance requirements."
+
+      - id: "replace_all_template_variables"
+        level: "required"
+        statement: "Orchestrators MUST replace all template variables prior to spawning and MUST NOT leave unreplaced placeholders."
+        rationale: "Unreplaced placeholders break agent understanding and invalidate standardized reporting."
+        verification: "Orchestrator validates prompts contain no unreplaced placeholder tokens before spawning."
+
+      - id: "respect_capacity_limits"
+        level: "required"
+        statement: "Orchestrators MUST respect their concurrency/capacity limits; if a request exceeds capacity, orchestrators MUST report the limit and decline/partial-accept per PRIME guidance."
+        rationale: "Prevents overload, timeouts, and unstable outcomes."
+        verification: "Requested agent count is compared against orchestrator capacity and reflected in the report."
+
+      - id: "spawn_in_parallel"
+        level: "required"
+        statement: "When multiple agents are requested, orchestrators MUST spawn them in parallel (non-blocking) and track each execution handle for monitoring."
+        rationale: "Parallelism is the primary throughput advantage of the swarm architecture."
+        verification: "Spawn implementation uses background execution and yields a stable handle/id per agent for monitoring."
+
+      - id: "monitor_and_capture_outputs"
+        level: "required"
+        statement: "Orchestrators MUST monitor spawned agents until completion/failure and capture stdout/stderr output for aggregation."
+        rationale: "Without captured outputs, results cannot be validated or aggregated reliably."
+        verification: "Orchestrator report includes per-agent status and captured evidence excerpts where relevant."
+
+      - id: "aggregate_before_reporting"
+        level: "required"
+        statement: "Orchestrators MUST aggregate per-agent results into a single report to PRIME and MUST NOT forward raw, unstructured output as the only deliverable."
+        rationale: "PRIME needs consolidated outcomes to validate and decide next actions."
+        verification: "Report includes summary, metrics, and per-agent outcomes, not only raw logs."
+
+      - id: "report_scannably"
+        level: "recommended"
+        statement: "Orchestrators SHOULD report in a scannable structure: summary, metrics, per-agent outcomes, and blockers."
+        rationale: "Improves operator comprehension and reduces coordination friction."
+        verification: "Report uses consistent headings/fields and is easy to scan."
+
+    inputs:
+      - "spawn_request"
+      - "orchestrator_profile"
+    outputs:
+      - "spawned_agents"
+      - "aggregated_report"
+    notes:
+      - "This protocol intentionally avoids hard-coding third-party CLI flags, API keys, or local filesystem paths; keep those details in orchestrator implementation documentation."
+      - "If an orchestrator implementation uses Bash subprocesses, ensure outputs are persisted/captured per agent to support aggregation."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 011-PROTOCOL-Swarm_Orchestrator-v1.0.0.yaml; reduced to enforceable orchestration directives and removed CLI-specific narrative."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/011-PROTOCOL-Swarm_Orchestrator-v1.0.0.yaml"

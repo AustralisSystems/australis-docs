@@ -1,0 +1,73 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "docs.enterprise_architecture_documentation"
+    title: "Enterprise Architecture Documentation"
+    description: "Protocol for producing professional enterprise architecture documentation (scope, views, diagrams, decisions) as markdown artefacts."
+    enforce: true
+    tags: ["docs", "architecture"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "documentation_only"
+        level: "required"
+        statement: "Enterprise architecture documentation work MUST be documentation-only and MUST NOT include implementation changes or system/environment changes."
+        rationale: "Keeps architecture work reviewable and avoids accidental production impact."
+        verification: "Only documentation artefacts are created/modified as part of the task."
+
+      - id: "scope_and_audience_first"
+        level: "required"
+        statement: "Architecture documents MUST state scope, system boundaries, and target audience (executive/technical/developer/operations) before detailed design."
+        rationale: "Architecture without scope is untestable and often unusable."
+        verification: "Doc includes an explicit scope/boundaries/audience section."
+
+      - id: "include_required_views"
+        level: "required"
+        statement: "Architecture documentation MUST cover the relevant views for the scope (at minimum: high-level context + component/service relationships; optionally data/security/performance/network as required)."
+        rationale: "Architecture is multi-view; missing views create downstream ambiguity."
+        verification: "Doc includes the declared views with consistent terminology and cross-references."
+
+      - id: "include_diagrams"
+        level: "required"
+        statement: "Architecture documents MUST include at least one diagram (eg Mermaid) that reflects the described system boundaries and component interactions."
+        rationale: "Diagrams improve comprehension and expose gaps/contradictions."
+        verification: "Diagram is present and consistent with the text."
+
+      - id: "rfc2119_for_normative_docs"
+        level: "required"
+        statement: "If a document is normative, it MUST use RFC 2119 keywords correctly and include any required RFC 2119 preamble/metadata indicators."
+        rationale: "Normative language must be explicit and unambiguous."
+        verification: "RFC 2119 keywords are uppercase and used consistently for normative statements."
+
+      - id: "markdown_only"
+        level: "required"
+        statement: "Architecture deliverables MUST be markdown (.md) unless an explicit exception is approved."
+        rationale: "Markdown is diff-friendly and is the repo's canonical documentation format."
+        verification: "Deliverables are .md and render correctly."
+
+      - id: "use_templates_when_available"
+        level: "recommended"
+        statement: "When governance architecture templates exist, authors SHOULD start from the template and preserve any instructional preamble sections."
+        rationale: "Templates enforce consistent structure and required metadata."
+        verification: "Doc structure matches the template and required template sections remain intact."
+
+    inputs: ["system_context"]
+    outputs: ["architecture_docs"]
+    notes:
+      - "When producing Diataxis-typed architecture documents (eg explanation vs reference), apply docs.diataxis_framework."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 913-PROTOCOL-Enterprise_Architecture_Documentation-v1.0.0.yaml; extracted enforceable architecture documentation requirements."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/913-PROTOCOL-Enterprise_Architecture_Documentation-v1.0.0.yaml"

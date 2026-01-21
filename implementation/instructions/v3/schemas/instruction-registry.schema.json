@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://australissystems.github.io/au-sys-docs/schemas/instruction-registry.schema.json",
+  "title": "AU-SYS Instruction Registry Schema (v3, repo-local)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "authoring_schema_version",
+    "mcp_spec_revision",
+    "artifact"
+  ],
+  "properties": {
+    "authoring_schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "mcp_spec_revision": {
+      "type": "string",
+      "const": "2025-11-25"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "meta",
+        "content"
+      ],
+      "properties": {
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "schema",
+            "id",
+            "title",
+            "description"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "schema": {
+              "type": "string",
+              "const": "mcp.instruction-registry/v1"
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.:-]+$"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 120
+            },
+            "description": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 2000
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            }
+          }
+        },
+        "content": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "instructions"
+          ],
+          "properties": {
+            "instructions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/registryEntry"
+              }
+            }
+          }
+        },
+        "governance": {
+          "$ref": "#/$defs/governance"
+        },
+        "traceability": {
+          "$ref": "#/$defs/traceability"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "registryEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "title",
+        "version",
+        "action"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.:-]+$"
+        },
+        "path": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120
+        },
+        "version": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "read",
+            "plan",
+            "create-file",
+            "modify-files",
+            "validate",
+            "refactor",
+            "execute",
+            "halt"
+          ]
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "description": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 1200
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owners": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "review",
+            "approved",
+            "deprecated"
+          ],
+          "default": "draft"
+        },
+        "changeLog": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
+    "traceability": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "raw": {
+          "type": "string"
+        },
+        "raw_ref": {
+          "type": "string",
+          "format": "uri"
+        },
+        "raw_hash": {
+          "type": "string",
+          "pattern": "^[A-Fa-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

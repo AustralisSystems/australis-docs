@@ -1,0 +1,56 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.enterprise_architecture_documentation.session"
+    title: "Enterprise Architecture Documentation Session"
+    description: "Create a coherent set of architecture documents for a system or component using governance templates where available; then halt."
+    action: "create-file"
+    tags: ["docs", "architecture"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "language.rfc2119_requirements"
+      - "docs.diataxis_framework"
+      - "docs.enterprise_architecture_documentation"
+    directives:
+      - "documentation_only"
+      - "scope_and_audience_first"
+      - "include_required_views"
+      - "include_diagrams"
+      - "markdown_only"
+    inputs:
+      - "system_context"
+      - "target_doc_paths"
+    outputs:
+      - "architecture_docs"
+      - "validation_notes"
+    steps:
+      - id: "scope"
+        description: "Define scope, boundaries, and audience for the architecture documentation set."
+      - id: "collect_context"
+        description: "Collect required system_context (components, services, data stores, integrations, constraints, quality attributes)."
+      - id: "draft"
+        description: "Draft architecture docs (high-level + required views) and include at least one diagram consistent with the text."
+        produces: ["architecture_docs"]
+      - id: "validate"
+        description: "Validate completeness/consistency across views, RFC2119 usage for normative sections, and link correctness."
+        produces: ["validation_notes"]
+      - id: "halt"
+        description: "Halt after producing architecture_docs and validation_notes."
+    halt: true
+    notes:
+      - "Use more specific drafting instructions (eg high-level architecture, technical design) for template-driven documents."
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 922-INSTRUCTIONS-Enterprise_Architecture_Documentation-v1.0.0.yaml; condensed to a session instruction and delegated specifics to template-driven instructions." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/922-INSTRUCTIONS-Enterprise_Architecture_Documentation-v1.0.0.yaml"

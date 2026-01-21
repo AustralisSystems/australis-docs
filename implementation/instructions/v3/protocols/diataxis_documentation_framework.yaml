@@ -1,0 +1,73 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "docs.diataxis_framework"
+    title: "Diataxis Documentation Framework"
+    description: "Protocol for selecting and authoring documentation as Tutorial, How-To, Reference, or Explanation with strict type integrity."
+    enforce: true
+    tags: ["docs", "diataxis"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "select_type_before_writing"
+        level: "required"
+        statement: "Before writing, authors MUST select the Diataxis type (tutorial, how-to, reference, explanation) based on audience and goal."
+        rationale: "Correct type selection prevents confusing mixed-mode documents and improves usability."
+        verification: "Document states its type and the content matches that type's intent."
+
+      - id: "do_not_mix_types"
+        level: "required"
+        statement: "Documentation MUST NOT mix Diataxis types in a single artefact (eg tutorial + reference)."
+        rationale: "Mixed modes increase cognitive load and break user expectations."
+        verification: "Headings and content remain consistent with the selected type; misplaced sections are removed or moved to separate docs."
+
+      - id: "match_audience_and_depth"
+        level: "required"
+        statement: "Documentation MUST target a defined audience and use language, depth, and prerequisites appropriate to that audience."
+        rationale: "Audience mismatch is a common reason documentation fails in practice."
+        verification: "Prerequisites and assumed knowledge are explicit and consistent with the writing."
+
+      - id: "documentation_only"
+        level: "required"
+        statement: "Diataxis documentation tasks MUST be documentation-only and MUST NOT introduce implementation changes as part of the documentation workflow."
+        rationale: "Keeps doc work auditable and prevents unintended code changes."
+        verification: "Only documentation artefacts are created/modified; no production code changes are bundled into the doc task."
+
+      - id: "follow_naming_and_versioning"
+        level: "required"
+        statement: "Documentation outputs MUST follow governance naming conventions and include required metadata/versioning fields."
+        rationale: "Consistent naming/versioning enables lifecycle management and discoverability."
+        verification: "Filename and document metadata/version fields align and follow the documented conventions."
+
+      - id: "validate_quality"
+        level: "required"
+        statement: "Before publishing, documentation MUST be reviewed for clarity, completeness, technical accuracy, and usability."
+        rationale: "Quality gates prevent publishing misleading or incomplete guidance."
+        verification: "Review checklist is completed and issues are addressed or explicitly tracked."
+
+      - id: "use_templates_when_available"
+        level: "recommended"
+        statement: "When governance documentation templates exist for the chosen type, authors SHOULD start from the template and preserve any instructional preamble sections."
+        rationale: "Templates encode required structure and reduce variance across authors."
+        verification: "Document structure matches the template and required template sections remain intact."
+
+    inputs: ["doc_goal", "audience"]
+    outputs: ["diataxis_type", "documentation_artifact"]
+    notes:
+      - "See governance standards for documentation naming and version lifecycle management."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 911-PROTOCOL-Diataxis_Documentation_Framework-v1.0.0.yaml; extracted enforceable Diataxis rules and removed phase-by-phase narrative."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/911-PROTOCOL-Diataxis_Documentation_Framework-v1.0.0.yaml"

@@ -1,0 +1,76 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.runbook/v1"
+    id: "au-sys.runbook.v3-implementation-session"
+    title: "Implementation Session (v3-native)"
+    description: "Orchestrate a governed implementation session using v3 doctrine/protocols, v3 prompts, and a v3 instruction."
+    tags: ["implementation", "v3", "execution"]
+
+  content:
+    governed_by:
+      doctrine_refs: ["enterprise.canonical_execution"]
+      protocol_refs:
+        - "execution.golden_rule"
+        - "quality.zero_tolerance_remediation"
+        - "fastapi.pure_code_implementation"
+        - "validation.validate_remediate_codebase"
+        - "language.rfc2119_requirements"
+
+    variables:
+      spec_dir: "docs/implementation/in_progress"
+
+    workflow:
+      - id: "ACK-001"
+        type: "acknowledge"
+        acknowledge:
+          doctrine: "enterprise.canonical_execution"
+          protocols:
+            - "execution.golden_rule"
+            - "quality.zero_tolerance_remediation"
+            - "fastapi.pure_code_implementation"
+            - "validation.validate_remediate_codebase"
+            - "language.rfc2119_requirements"
+
+      - id: "SPEC-001"
+        type: "execute_prompt"
+        prompt_ref: "create.code_implementation_spec"
+        arguments:
+          date: "YYYY-MM-DD"
+          destination_dir: "{{spec_dir}}"
+
+      - id: "SCAN-001"
+        type: "execute_prompt"
+        prompt_ref: "scan.incomplete_code_eradication"
+        arguments:
+          spec_path: "{{spec_dir}}/CODE_IMPLEMENTATION_SPEC_YYYY-MM-DD.md"
+          scan_root: "src"
+
+      - id: "DISCOVER-001"
+        type: "execute_prompt"
+        prompt_ref: "discover.clone_reference_repos"
+        arguments:
+          spec_path: "{{spec_dir}}/CODE_IMPLEMENTATION_SPEC_YYYY-MM-DD.md"
+          topics:
+            - "fastapi"
+            - "ufc"
+
+      - id: "EXEC-001"
+        type: "execute_instruction"
+        instruction_ref: "implementation.session"
+        inputs:
+          - "spec_path={{spec_dir}}/CODE_IMPLEMENTATION_SPEC_YYYY-MM-DD.md"
+          - "approved_item=<operator-provided>"
+
+      - id: "HALT-001"
+        type: "halt"
+        reason: "Runbook completed (v3-native); await operator inputs"
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Initial v3-native runbook example using v3 registries and artefacts."

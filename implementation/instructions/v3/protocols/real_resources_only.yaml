@@ -1,0 +1,61 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "validation.real_resources_only"
+    title: "Production Validation - Real Resources Only"
+    description: "Production validation must exercise real runtime behavior against real provisioned resources with trace logs and expected-vs-actual checks."
+    enforce: true
+    tags: ["validation", "runtime", "no-mocks"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "no_mocks_for_production_validation"
+        level: "required"
+        statement: "Production validation suites MUST NOT use mocks, stubs, fakes, emulators, or in-memory substitutes for external integrations."
+        rationale: "Production validation exists to prove real end-to-end behavior, not simulated behavior."
+        verification: "Validation code contains no mock frameworks for external integrations; tests connect to real endpoints/resources."
+
+      - id: "prereqs_inventory_and_gate"
+        level: "required"
+        statement: "Before executing validation scripts, a prerequisite inventory MUST be created and validated; if any prerequisite is missing or unreachable, the run MUST halt."
+        rationale: "Guarantees the run exercises real resources and fails explicitly on missing infrastructure."
+        verification: "Prerequisite inventory artefacts exist and the gate aborts on missing prereqs."
+
+      - id: "trace_logging_to_file"
+        level: "required"
+        statement: "Validation scripts MUST emit trace-level logs to uniquely named timestamped log files; secrets MUST NOT be logged."
+        rationale: "Enables post-run forensics and deterministic evidence without leaking credentials."
+        verification: "Each script produces a timestamped log file containing inputs/outputs and redacted secrets."
+
+      - id: "expected_vs_actual_required"
+        level: "required"
+        statement: "Every validation test MUST define machine-verifiable expected results and compare them against actual results from executing production code."
+        rationale: "Absence of errors is not a sufficient success condition."
+        verification: "Each test records expected vs actual values and a comparison type."
+
+      - id: "fail_fast_global"
+        level: "required"
+        statement: "If any validation script/test fails, the suite MUST abort immediately; continuing after failure is prohibited."
+        rationale: "Fail-fast reduces noise and prevents interpreting partial runs as successful."
+        verification: "Runner halts on first failure and returns non-zero."
+
+    inputs: []
+    outputs: []
+    notes:
+      - "This protocol is intended for production validation suites shipped with the production artefact."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 321-INSTRUCTIONS-Validation_CORE_Services-v1.0.0.yaml; expressed as enforceable protocol directives."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/321-INSTRUCTIONS-Validation_CORE_Services-v1.0.0.yaml"

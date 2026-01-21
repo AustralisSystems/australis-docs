@@ -1,0 +1,49 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.review_documentation"
+    title: "Review Documentation"
+    description: "Review a markdown document for governance compliance (naming, metadata/versioning, RFC2119, Diataxis integrity) and either promote status or produce remediation list."
+    action: "modify-files"
+    tags: ["docs", "review", "quality"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "language.rfc2119_requirements"
+      - "docs.diataxis_framework"
+    inputs:
+      - "document_path"
+    outputs:
+      - "review_result"
+      - "remediation_list"
+    steps:
+      - id: "naming"
+        description: "Verify document_path filename conforms to documentation naming conventions and uses valid characters and version markers where required."
+      - id: "metadata"
+        description: "Verify metadata/versioning fields are present and consistent with the filename (version, status, date, author, classification)."
+      - id: "rfc2119"
+        description: "If the document is normative, verify RFC 2119 keywords are uppercase and used correctly; ensure any required preamble exists."
+      - id: "diataxis"
+        description: "Identify the Diataxis type and verify the structure matches that type; ensure no mixed-mode sections exist."
+      - id: "technical"
+        description: "Check links and references (local links resolve; external links are credible) and code blocks specify languages for syntax highlighting."
+      - id: "decision"
+        description: "Decide PASS or FAIL. If PASS, update status to REVIEW (or FINAL if authorized). If FAIL, add a remediation_list and keep status as DRAFT."
+        produces: ["review_result", "remediation_list"]
+    halt: true
+    notes:
+      - "Never promote a document that violates naming conventions or lacks required metadata."
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 930-INSTRUCTIONS-Review_Documentation-v1.0.0.yaml; converted to structured v3 review steps." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/930-INSTRUCTIONS-Review_Documentation-v1.0.0.yaml"

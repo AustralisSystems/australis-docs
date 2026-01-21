@@ -1,0 +1,73 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "swarm.prime_orchestration.session"
+    title: "PRIME Orchestration Session"
+    description: "Run a single PRIME orchestration cycle: analyze, decompose, delegate, validate, report; then halt."
+    action: "execute"
+    tags: ["swarm", "orchestration", "prime"]
+
+  content:
+    doctrine_refs:
+      - "enterprise.canonical_execution"
+      - "swarm.prime_strategic_command"
+    protocol_refs:
+      - "execution.golden_rule"
+      - "tools.mcp_tools_workflow"
+      - "language.rfc2119_requirements"
+      - "roles.digital_assistant_roles"
+      - "swarm.prime_strategic_orchestration"
+    directives:
+      - "no_direct_execution"
+      - "task_is_atomic"
+      - "classification_required"
+      - "validate_agent_results"
+    inputs:
+      - "user_request"
+      - "constraints"
+    outputs:
+      - "delegation_plan"
+      - "validated_results"
+    steps:
+      - id: "analyze"
+        description: "Analyze user_request and constraints; identify goals, assumptions, and validation expectations."
+
+      - id: "decompose"
+        description: "Decompose work into atomic tasks (one discrete task per agent) with explicit success criteria, inputs, and outputs."
+        produces: ["delegation_plan"]
+
+      - id: "classify_and_select"
+        description: "Classify each task by complexity and select orchestrator(s) consistent with model strengths and concurrency limits."
+
+      - id: "delegate"
+        description: "Delegate tasks to orchestrators via Task tool; include success criteria and required protocols to enforce."
+
+      - id: "monitor"
+        description: "Wait for orchestrator reports; capture results and surface blockers or failures immediately."
+
+      - id: "validate"
+        description: "Validate aggregated results against success criteria and applicable quality protocols; identify gaps and remediation tasks if needed."
+        produces: ["validated_results"]
+
+      - id: "respond"
+        description: "Respond with outcomes, evidence, and next actions; do not include internal swarm mechanics unless requested."
+
+      - id: "halt"
+        description: "Halt after one orchestration cycle and await operator input before continuing."
+
+    halt: true
+    notes:
+      - "Use this instruction when you need PRIME behaviour (strategic orchestration), not hands-on execution."
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 111-INSTRUCTIONS-PRIME_Strategic_Orchestration-v1.0.0.yaml; converted to structured v3 steps and references."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/111-INSTRUCTIONS-PRIME_Strategic_Orchestration-v1.0.0.yaml"

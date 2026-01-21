@@ -1,0 +1,63 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.draft_high_level_architecture"
+    title: "Draft High-Level Architecture"
+    description: "Draft a template-driven, normative high-level architecture document (scope, principles, diagram, component map, references)."
+    action: "create-file"
+    tags: ["docs", "architecture", "template"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "language.rfc2119_requirements"
+      - "docs.enterprise_architecture_documentation"
+    inputs:
+      - "template_path"
+      - "system_name"
+      - "system_context"
+      - "target_path"
+    outputs:
+      - "document_path"
+      - "document"
+    steps:
+      - id: "load_template"
+        description: "Read template_path and preserve any instructional preamble sections."
+      - id: "scope"
+        description: "Determine system scope, core capabilities, and target audience; record in the document."
+      - id: "populate_metadata"
+        description: "Populate document metadata (status DRAFT, version, date, author, classification) per governance standards."
+      - id: "write_summary"
+        description: "Write a normative executive summary using RFC 2119 keywords where appropriate."
+      - id: "diagram"
+        description: "Create a diagram (eg Mermaid) showing core/service relationships and system boundaries."
+      - id: "principles_and_interactions"
+        description: "Document verifiable architecture principles and interaction protocols."
+      - id: "map_components"
+        description: "Map core vs domain/service components and list key responsibilities and boundaries."
+      - id: "references"
+        description: "Add verification references (internal and external) and link to any related implementation spec(s)."
+      - id: "quality_gate"
+        description: "Run the template quality checklist (preamble intact, RFC2119 usage correct, best-practice mapping present, references present)."
+        produces: ["document"]
+    variables:
+      template_path:
+        required: false
+        default: "governance/au-sys-governance/documentation/architecture_design/TEMPLATE_HIGH_LEVEL_ARCHITECTURE_v1.0.0.md"
+        description: "Governance template to use for high-level architecture documents."
+    halt: true
+    notes:
+      - "Save output to target_path following documentation naming conventions."
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 923-INSTRUCTIONS-Draft_High_Level_Architecture-v1.0.0.yaml; converted to structured v3 steps with template_path variable." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/923-INSTRUCTIONS-Draft_High_Level_Architecture-v1.0.0.yaml"

@@ -1,0 +1,62 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "roles.digital_assistant_roles"
+    title: "Digital Assistant Roles"
+    description: "Standardized role identifiers and role-loading rules for orchestrated execution."
+    enforce: true
+    tags: ["roles", "governance", "execution"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "role_reference_format"
+        level: "required"
+        statement: "Instructions and protocols MUST reference execution roles using a stable role identifier."
+        rationale: "Standard role identifiers make behavior repeatable and auditable across artefacts."
+        verification: "Referenced role ids are stable strings, not free-form descriptions."
+
+      - id: "inheritance_load_order"
+        level: "required"
+        statement: "If a role declares inheritance, parent role guidance MUST be loaded first; child guidance overrides conflicts."
+        rationale: "Deterministic inheritance prevents ambiguous and conflicting behavior."
+        verification: "Execution notes show parent roles were applied before child roles."
+
+      - id: "stop_on_invalid_role"
+        level: "required"
+        statement: "If a referenced role id does not exist or inheritance is invalid (missing parent, circular), execution MUST halt until corrected."
+        rationale: "Invalid role references create uncontrolled behavior in downstream execution."
+        verification: "Invalid role references are treated as blocking and reported."
+
+      - id: "role_versioning"
+        level: "recommended"
+        statement: "When a role is versioned, downstream references SHOULD specify a minimum acceptable version."
+        rationale: "Prevents silently using older role guidance after a breaking role change."
+        verification: "Role references include a minimum version where appropriate."
+
+      - id: "multi_role_merge"
+        level: "recommended"
+        statement: "When multiple roles are referenced, their guidance SHOULD be merged; conflicts are resolved deterministically by explicit ordering."
+        rationale: "Complex tasks often require more than one operational posture (eg validation + remediation)."
+        verification: "Role ordering is stated and merge conflicts are resolved consistently."
+
+    inputs: []
+    outputs: []
+    notes:
+      - "This protocol intentionally does not re-encode the full v2 role catalogue into v3 structure; role catalogues remain in traceability."
+      - "Common role ids from v2 include: implementation_execution_agent, validation_compliance_agent, remediation_execution_agent, debugging_incident_response_agent."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 005-PROTOCOL-Digital_Assistant_Roles-v1.0.0.yaml; converted into enforceable directives plus curated notes."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/005-PROTOCOL-Digital_Assistant_Roles-v1.0.0.yaml"

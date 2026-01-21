@@ -1,0 +1,55 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.instruction/v1"
+    id: "docs.draft_code_documentation"
+    title: "Apply Code Documentation Standards"
+    description: "Apply docstrings, type hints, and meaningful comments to source files without changing behaviour."
+    action: "modify-files"
+    tags: ["docs", "code", "quality"]
+
+  content:
+    doctrine_refs: ["enterprise.canonical_execution"]
+    protocol_refs:
+      - "language.rfc2119_requirements"
+      - "docs.code_documentation"
+    inputs:
+      - "target_files"
+      - "doc_standard_ref"
+    outputs:
+      - "updated_files"
+      - "documentation_checklist"
+    steps:
+      - id: "identify_gaps"
+        description: "Scan target_files for missing/weak module docstrings, missing class/function docstrings, missing type hints, and unhelpful comments."
+      - id: "module_docstrings"
+        description: "Ensure each target file has a module docstring describing purpose, main types, and high-level usage."
+      - id: "docstrings"
+        description: "Add or improve class/function docstrings; document behaviour, args, returns, raises (as applicable)."
+      - id: "type_hints"
+        description: "Add missing type hints for function arguments and return types; keep changes behaviour-preserving."
+      - id: "comment_audit"
+        description: "Remove trivial 'what' comments and add minimal 'why' comments where the intent is non-obvious."
+      - id: "validate_no_behaviour_change"
+        description: "Confirm modifications are documentation-only (docstrings/types/comments) and do not change runtime behaviour."
+        produces: ["updated_files", "documentation_checklist"]
+    variables:
+      doc_standard_ref:
+        required: false
+        default: "governance/au-sys-governance/documentation/code/TEMPLATE_CODE_DOCUMENTATION_v1.0.0.md"
+        description: "Governance reference describing code documentation standards (docstrings/types/comments)."
+    halt: true
+    notes:
+      - "Prefer minimal comments; document non-obvious intent and invariants rather than restating code."
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 929-INSTRUCTIONS-Draft_Code_Documentation-v1.0.0.yaml; converted to structured v3 steps." 
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/929-INSTRUCTIONS-Draft_Code_Documentation-v1.0.0.yaml"

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://australissystems.github.io/au-sys-docs/schemas/mcp-prompt-authoring.schema.json",
-  "title": "AU-SYS MCP Prompt Authoring Schema (aligned to MCP 2025-06-18 Prompts)",
+  "title": "AU-SYS MCP Prompt Authoring Schema (aligned to MCP 2025-11-25 Prompts)",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -18,7 +18,7 @@
     "mcp_spec_revision": {
       "type": "string",
       "description": "MCP Prompts spec revision this file targets.",
-      "const": "2025-06-18"
+      "const": "2025-11-25"
     },
     "prompt": {
       "type": "object",
@@ -41,6 +41,38 @@
     }
   },
   "$defs": {
+    "icon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "src"
+      ],
+      "properties": {
+        "src": {
+          "type": "string",
+          "description": "URI for an icon. May be HTTP(S) or data: URI."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Optional MIME type override (e.g. image/svg+xml)."
+        },
+        "sizes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional sizes list, e.g. ['48x48', 'any']."
+        },
+        "theme": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark"
+          ],
+          "description": "Optional theme hint for the icon."
+        }
+      }
+    },
     "promptMeta": {
       "type": "object",
       "additionalProperties": false,
@@ -64,6 +96,14 @@
           "description": "MCP Prompt.description (optional in spec, recommended).",
           "minLength": 10,
           "maxLength": 800
+        },
+        "icons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/icon"
+          },
+          "default": [],
+          "description": "Optional icons for UI display."
         },
         "arguments": {
           "type": "array",
@@ -140,79 +180,23 @@
         },
         "content": {
           "$ref": "#/$defs/content"
-        },
-        "annotations": {
-          "$ref": "#/$defs/annotations"
         }
       }
     },
     "content": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ],
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "text",
-            "resource"
-          ],
-          "description": "MCP content types commonly used in prompts. Extend if you adopt image/audio."
-        },
-        "text": {
-          "type": "string",
-          "description": "For type=text. May include {{argument_name}} placeholders."
-        },
-        "resource": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "uri",
-            "mimeType"
-          ],
-          "properties": {
-            "uri": {
-              "type": "string"
-            },
-            "mimeType": {
-              "type": "string"
-            },
-            "text": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "allOf": [
+      "description": "Prompt content block. Aligned to MCP 2025-11-25 content types used in PromptMessage.content.",
+      "oneOf": [
         {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "text"
-              }
-            }
-          },
-          "then": {
-            "required": [
-              "text"
-            ]
-          }
+          "$ref": "#/$defs/textContent"
         },
         {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "resource"
-              }
-            }
-          },
-          "then": {
-            "required": [
-              "resource"
-            ]
-          }
+          "$ref": "#/$defs/imageContent"
+        },
+        {
+          "$ref": "#/$defs/audioContent"
+        },
+        {
+          "$ref": "#/$defs/embeddedResource"
         }
       ]
     },
@@ -227,14 +211,161 @@
           }
         },
         "priority": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 5,
-          "description": "1 = highest priority (matches spec intent)."
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Priority where 1 is most important, 0 is least important."
         },
         "lastModified": {
           "type": "string",
           "description": "ISO-8601 timestamp."
+        }
+      }
+    },
+    "textContent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "text"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "text"
+        },
+        "text": {
+          "type": "string",
+          "description": "Text content. May include {{argument_name}} placeholders."
+        },
+        "annotations": {
+          "$ref": "#/$defs/annotations"
+        }
+      }
+    },
+    "imageContent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "data",
+        "mimeType"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "image"
+        },
+        "data": {
+          "type": "string",
+          "description": "Base64-encoded image data."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Image MIME type (e.g., image/png)."
+        },
+        "annotations": {
+          "$ref": "#/$defs/annotations"
+        }
+      }
+    },
+    "audioContent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "data",
+        "mimeType"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "audio"
+        },
+        "data": {
+          "type": "string",
+          "description": "Base64-encoded audio data."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Audio MIME type (e.g., audio/wav)."
+        },
+        "annotations": {
+          "$ref": "#/$defs/annotations"
+        }
+      }
+    },
+    "embeddedResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "resource"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "resource"
+        },
+        "resource": {
+          "$ref": "#/$defs/resourceContents"
+        },
+        "annotations": {
+          "$ref": "#/$defs/annotations"
+        }
+      }
+    },
+    "resourceContents": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/textResourceContents"
+        },
+        {
+          "$ref": "#/$defs/blobResourceContents"
+        }
+      ]
+    },
+    "textResourceContents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uri",
+        "text"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "description": "Resource URI (e.g., resource://..., file path, or https URL)."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Optional MIME type (e.g., text/markdown)."
+        },
+        "text": {
+          "type": "string",
+          "description": "Embedded resource text content."
+        }
+      }
+    },
+    "blobResourceContents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uri",
+        "blob"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "description": "Resource URI (e.g., resource://..., file path, or https URL)."
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Optional MIME type for the blob."
+        },
+        "blob": {
+          "type": "string",
+          "description": "Base64-encoded blob content."
         }
       }
     },

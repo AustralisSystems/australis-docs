@@ -1,0 +1,48 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "language.rfc2119_requirements"
+    title: "RFC2119 Requirements Language"
+    description: "Interpret MUST/SHOULD/MAY consistently when reading AU-SYS specs and governance artefacts."
+    enforce: true
+    tags: ["language", "requirements"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "must_is_mandatory"
+        level: "required"
+        statement: "Treat MUST / REQUIRED / SHALL as mandatory unless explicitly waived by the operator."
+        rationale: "Avoid accidental non-compliance."
+        verification: "Mandatory items are not skipped without an explicit waiver recorded."
+
+      - id: "should_is_default"
+        level: "required"
+        statement: "Treat SHOULD as the default; deviations require a documented rationale."
+        rationale: "Encourage consistency while allowing justified exceptions."
+        verification: "Any SHOULD deviation includes rationale and risk assessment."
+
+      - id: "may_is_optional"
+        level: "required"
+        statement: "Treat MAY as optional and do not assume it is required."
+        rationale: "Prevent over-constraining work."
+        verification: "Optional items are not treated as blocking unless another rule says so."
+
+    inputs: []
+    outputs: []
+    notes: []
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml; structured directives extracted."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/006-PROTOCOL-RFC2119_Requirements_Language-v1.0.0.yaml"

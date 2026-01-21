@@ -1,0 +1,48 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "validation.validate_remediate_codebase"
+    title: "Validate and Remediate Codebase"
+    description: "Run required checks for the change; capture evidence; remediate failures in small steps."
+    enforce: true
+    tags: ["validation", "quality"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "run_required_checks"
+        level: "required"
+        statement: "Run relevant validations (tests/lint/type-check) appropriate to the change and repo conventions."
+        rationale: "Prevent regressions and enforce standards."
+        verification: "Provide command(s) and results."
+
+      - id: "capture_evidence"
+        level: "required"
+        statement: "Capture evidence for validations run (commands + relevant output excerpts)."
+        rationale: "Ensure changes are auditable and repeatable."
+        verification: "Output includes evidence sections."
+
+      - id: "single_step_remediation"
+        level: "required"
+        statement: "Remediate failures one item at a time, re-validating after each fix."
+        rationale: "Isolate causes and reduce churn."
+        verification: "Each fix is paired with a re-run of the relevant check."
+
+    inputs: []
+    outputs: []
+    notes: []
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 004-PROTOCOL-Validate_Remediate_Codebase-v2.0.0.yaml; key directives extracted."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/004-PROTOCOL-Validate_Remediate_Codebase-v2.0.0.yaml"

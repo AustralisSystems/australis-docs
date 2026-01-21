@@ -16,7 +16,7 @@
     },
     "mcp_spec_revision": {
       "type": "string",
-      "minLength": 4
+      "const": "2025-11-25"
     },
     "artifact": {
       "type": "object",

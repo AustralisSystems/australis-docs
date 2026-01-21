@@ -1,0 +1,42 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "quality.zero_tolerance_remediation"
+    title: "Zero Tolerance Remediation"
+    description: "Block on incomplete code markers (TODOs, stubs, mocks, placeholders) in production paths."
+    enforce: true
+    tags: ["quality", "remediation"]
+
+  content:
+    related_doctrine: "enterprise.canonical_execution"
+    applies_to: ["repo://src/**"]
+    directives:
+      - id: "eradicate_incomplete_markers"
+        level: "required"
+        statement: "Do not leave TODOs, stubs, mocks, placeholders, or 'pass' as production behaviour in governed code."
+        rationale: "Incomplete code is a latent defect."
+        verification: "Scan for markers; no remaining occurrences in production paths or they are fully remediated."
+
+      - id: "stop_on_violation"
+        level: "required"
+        statement: "If a violation is found, stop further work and propose a single-item remediation plan for approval."
+        rationale: "Prevents compounding incomplete work."
+        verification: "Session halts and records findings and proposed next action."
+
+    inputs: []
+    outputs: []
+    notes: []
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 002-PROTOCOL-Zero_Tolerance_Remediation-v2.0.0.yaml; key directives extracted."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/002-PROTOCOL-Zero_Tolerance_Remediation-v2.0.0.yaml"

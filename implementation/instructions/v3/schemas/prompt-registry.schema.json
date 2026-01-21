@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://australissystems.github.io/au-sys-docs/schemas/prompt-registry.schema.json",
+  "title": "AU-SYS Prompt Registry Schema (v3, repo-local)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "authoring_schema_version",
+    "mcp_spec_revision",
+    "artifact"
+  ],
+  "properties": {
+    "authoring_schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Version of this AU-SYS authoring schema (not the upstream MCP spec)."
+    },
+    "mcp_spec_revision": {
+      "type": "string",
+      "const": "2025-11-25",
+      "description": "Pinned MCP spec revision for v3 authoring artefacts."
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "meta",
+        "content"
+      ],
+      "properties": {
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "schema",
+            "id",
+            "title",
+            "description"
+          ],
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Semantic version of this registry file (e.g., '1.0.0')."
+            },
+            "schema": {
+              "type": "string",
+              "const": "mcp.prompt-registry/v1",
+              "description": "Fixed schema identifier for AU-SYS prompt registries."
+            },
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9_.:-]+$",
+              "description": "Canonical registry identifier."
+            },
+            "title": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 120
+            },
+            "description": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 2000
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            }
+          }
+        },
+        "content": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "prompts"
+          ],
+          "properties": {
+            "prompts": {
+              "type": "array",
+              "minItems": 1,
+              "description": "Registry entries for v3 prompt artefacts.",
+              "items": {
+                "$ref": "#/$defs/registryEntry"
+              }
+            }
+          }
+        },
+        "governance": {
+          "$ref": "#/$defs/governance"
+        },
+        "traceability": {
+          "$ref": "#/$defs/traceability"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "registryEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "path",
+        "title",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_.:-]+$",
+          "description": "artifact.meta.id of the referenced prompt."
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9\\-]{2,80}$",
+          "description": "artifact.meta.name of the referenced prompt (kebab-case)."
+        },
+        "path": {
+          "type": "string",
+          "description": "Repo-relative path to the prompt YAML file."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120,
+          "description": "Human-friendly title (mirrors prompt meta)."
+        },
+        "version": {
+          "type": "string",
+          "description": "Prompt version (mirrors prompt meta.version)."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Optional tags to make registry filtering easier (mirrors prompt meta.tags)."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 1200,
+          "description": "Optional short description (mirrors prompt meta.description)."
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Ownership and lifecycle metadata.",
+      "properties": {
+        "owners": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "review",
+            "approved",
+            "deprecated"
+          ],
+          "default": "draft"
+        },
+        "changeLog": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
+    "traceability": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional traceability fields for migration, auditing, and integrity verification.",
+      "properties": {
+        "raw": {
+          "type": "string",
+          "description": "Embedded original content for traceability. Prefer raw_ref for large or sensitive items."
+        },
+        "raw_ref": {
+          "type": "string",
+          "format": "uri",
+          "description": "Reference (URI or repo path) to original/raw content stored externally."
+        },
+        "raw_hash": {
+          "type": "string",
+          "pattern": "^[A-Fa-f0-9]{64}$",
+          "description": "SHA-256 hex digest of the original content for integrity verification."
+        }
+      }
+    }
+  }
+}

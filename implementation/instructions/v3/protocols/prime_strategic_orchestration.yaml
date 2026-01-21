@@ -1,0 +1,90 @@
+authoring_schema_version: "1.0.0"
+mcp_spec_revision: "2025-11-25"
+
+artifact:
+  meta:
+    version: "1.0.0"
+    schema: "mcp.protocol/v1"
+    id: "swarm.prime_strategic_orchestration"
+    title: "PRIME Strategic Orchestration"
+    description: "Protocol for PRIME orchestration: analyze, decompose, classify, delegate via orchestrators, monitor, validate, and respond with evidence."
+    enforce: true
+    tags: ["swarm", "orchestration", "prime"]
+
+  content:
+    related_doctrine: "swarm.prime_strategic_command"
+    applies_to: ["repo://*"]
+    directives:
+      - id: "no_direct_execution"
+        level: "required"
+        statement: "PRIME MUST NOT execute implementation tasks directly; PRIME MUST delegate execution to orchestrators/agents."
+        rationale: "Preserves separation between strategic coordination and execution and improves throughput via parallelism."
+        verification: "PRIME output shows delegation and validation; execution work is performed by delegated agents."
+
+      - id: "two_tier_delegation"
+        level: "required"
+        statement: "PRIME MUST maintain a 2-tier delegation chain: PRIME -> ORCHESTRATOR -> AGENT."
+        rationale: "Reduces handoffs and ambiguity while keeping orchestration deterministic."
+        verification: "Delegation uses orchestrators for spawning; no extra command layer is introduced."
+
+      - id: "task_is_atomic"
+        level: "required"
+        statement: "PRIME MUST decompose work into atomic tasks (one discrete task per agent) with explicit success criteria."
+        rationale: "Atomic tasks reduce failure modes and make results verifiable."
+        verification: "Each delegated task has scope, inputs, outputs, and success criteria."
+
+      - id: "classification_required"
+        level: "required"
+        statement: "Before delegating, PRIME MUST classify tasks (complex/strategic vs simple/fast vs agentic coding) and choose an appropriate orchestrator based on model strengths and concurrency limits."
+        rationale: "Correct classification optimizes accuracy, speed, and cost while preventing overload."
+        verification: "Plan lists task classification and chosen orchestrator(s) with brief rationale."
+
+      - id: "use_task_tool_for_orchestrators"
+        level: "required"
+        statement: "PRIME MUST use the Task tool to engage orchestrators; PRIME MUST NOT spawn agents directly."
+        rationale: "Enforces governance, monitoring, and consistent orchestration mechanics."
+        verification: "Delegation is performed via Task-based orchestrator calls." 
+
+      - id: "progressive_context_retrieval"
+        level: "required"
+        statement: "When using a knowledge system, PRIME MUST retrieve prior context progressively (start narrow, expand only if needed)."
+        rationale: "Limits noise and prevents overbroad context pulls."
+        verification: "Search/query strategy starts narrow and broadens only if required." 
+
+      - id: "sequential_thinking_for_strategy"
+        level: "required"
+        statement: "PRIME MUST use structured reasoning (sequential thinking) for strategic decomposition, classification, and resource allocation decisions."
+        rationale: "Improves decision quality and auditability for high-level orchestration."
+        verification: "Strategy includes explicit reasoning steps or a structured plan derived from sequential thinking." 
+
+      - id: "validate_agent_results"
+        level: "required"
+        statement: "PRIME MUST validate orchestrator/agent outputs against success criteria and quality protocols before reporting completion."
+        rationale: "Prevents partial or incorrect results from being accepted."
+        verification: "Response includes validation evidence or explicitly lists failures and remediation steps." 
+
+      - id: "report_scannably"
+        level: "recommended"
+        statement: "PRIME SHOULD report results in a concise, scannable format focused on outcomes, evidence, and next actions."
+        rationale: "Improves operator comprehension and reduces coordination friction."
+        verification: "Output is organized by outcomes/evidence/next steps and avoids unnecessary narrative." 
+
+    inputs:
+      - "user_request"
+      - "available_orchestrators"
+    outputs:
+      - "task_breakdown"
+      - "delegation_plan"
+      - "validated_results"
+    notes:
+      - "This protocol intentionally avoids encoding specific third-party CLI details; keep implementation-specifics in orchestrator tooling documentation."
+    conflicts: []
+
+  governance:
+    owners: ["au-sys"]
+    status: "draft"
+    changeLog:
+      - "Migrated from v2 010-PROTOCOL-PRIME_Strategic_Orchestration-v1.0.0.yaml; transformed narrative sections into enforceable directives."
+
+  traceability:
+    raw_ref: "repo://docs/implementation/instructions/v2/010-PROTOCOL-PRIME_Strategic_Orchestration-v1.0.0.yaml"
