@@ -1,0 +1,1257 @@
+{
+  "package_name": "src",
+  "total_files": 43,
+  "total_lines": 5339,
+  "total_classes": 78,
+  "total_functions": 263,
+  "avg_complexity": 13.16,
+  "files": [
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\__init__.py",
+      "relative_path": "__init__.py",
+      "lines_of_code": 4,
+      "import_count": 0,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\storage_factory.py",
+      "relative_path": "core\\storage_factory.py",
+      "lines_of_code": 212,
+      "import_count": 13,
+      "class_count": 1,
+      "function_count": 11,
+      "complexity_score": 39,
+      "imports": [
+        "models.storage_backend_config",
+        "interfaces.storage_provider",
+        "typing",
+        "providers.mongodb_provider",
+        "providers.failover_provider",
+        "providers.sqlite_provider",
+        "os",
+        "features.migration.encryption_migration",
+        "logging",
+        "pathlib",
+        "json",
+        "providers.memory_provider",
+        "providers.tinydb_provider"
+      ],
+      "classes": [
+        "StorageFactory"
+      ],
+      "functions": [
+        "__new__",
+        "__init__",
+        "get_storage",
+        "_create_provider_from_config",
+        "_create_default_provider",
+        "close_all",
+        "tinydb_path_path",
+        "detect_inaccessible_databases",
+        "_check_tinydb_access",
+        "unlock_database",
+        "unlock_all_databases"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\__init__.py",
+      "relative_path": "core\\__init__.py",
+      "lines_of_code": 7,
+      "import_count": 3,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "models.storage_backend_config",
+        "storage_factory",
+        "interfaces.storage_provider"
+      ],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\__init__.py",
+      "relative_path": "features\\__init__.py",
+      "lines_of_code": 4,
+      "import_count": 0,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\providers\\failover_provider.py",
+      "relative_path": "providers\\failover_provider.py",
+      "lines_of_code": 148,
+      "import_count": 3,
+      "class_count": 1,
+      "function_count": 11,
+      "complexity_score": 26,
+      "imports": [
+        "logging",
+        "typing",
+        "core.interfaces.storage_provider"
+      ],
+      "classes": [
+        "FailoverProvider"
+      ],
+      "functions": [
+        "__init__",
+        "get",
+        "set",
+        "delete",
+        "exists",
+        "list_keys",
+        "clear",
+        "batch_get",
+        "batch_set",
+        "batch_delete",
+        "close"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\providers\\memory_provider.py",
+      "relative_path": "providers\\memory_provider.py",
+      "lines_of_code": 52,
+      "import_count": 3,
+      "class_count": 1,
+      "function_count": 13,
+      "complexity_score": 4,
+      "imports": [
+        "fnmatch",
+        "typing",
+        "core.interfaces.storage_provider"
+      ],
+      "classes": [
+        "MemoryProvider"
+      ],
+      "functions": [
+        "__init__",
+        "get",
+        "set",
+        "delete",
+        "exists",
+        "list_keys",
+        "clear",
+        "batch_get",
+        "batch_set",
+        "batch_delete",
+        "supports_ttl",
+        "set_with_ttl",
+        "close"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\providers\\mongodb_provider.py",
+      "relative_path": "providers\\mongodb_provider.py",
+      "lines_of_code": 96,
+      "import_count": 5,
+      "class_count": 1,
+      "function_count": 12,
+      "complexity_score": 11,
+      "imports": [
+        "pymongo.errors",
+        "typing",
+        "pymongo",
+        "core.interfaces.storage_provider",
+        "logging"
+      ],
+      "classes": [
+        "MongoDBProvider"
+      ],
+      "functions": [
+        "__init__",
+        "get",
+        "set",
+        "delete",
+        "exists",
+        "list_keys",
+        "clear",
+        "batch_get",
+        "batch_set",
+        "batch_delete",
+        "close",
+        "list"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\providers\\sqlite_provider.py",
+      "relative_path": "providers\\sqlite_provider.py",
+      "lines_of_code": 226,
+      "import_count": 8,
+      "class_count": 1,
+      "function_count": 15,
+      "complexity_score": 41,
+      "imports": [
+        "typing",
+        "cryptography.fernet",
+        "core.interfaces.storage_provider",
+        "sqlite3",
+        "os",
+        "logging",
+        "pathlib",
+        "json"
+      ],
+      "classes": [
+        "SQLiteProvider"
+      ],
+      "functions": [
+        "__init__",
+        "_connect",
+        "_init_db",
+        "_serialize",
+        "_deserialize",
+        "get",
+        "set",
+        "delete",
+        "exists",
+        "list_keys",
+        "clear",
+        "batch_get",
+        "batch_set",
+        "batch_delete",
+        "close"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\providers\\tinydb_provider.py",
+      "relative_path": "providers\\tinydb_provider.py",
+      "lines_of_code": 137,
+      "import_count": 10,
+      "class_count": 2,
+      "function_count": 15,
+      "complexity_score": 23,
+      "imports": [
+        "fnmatch",
+        "typing",
+        "tinydb",
+        "tinydb.storages",
+        "cryptography.fernet",
+        "core.interfaces.storage_provider",
+        "os",
+        "logging",
+        "pathlib",
+        "json"
+      ],
+      "classes": [
+        "CryptoJSONStorage",
+        "TinyDBProvider"
+      ],
+      "functions": [
+        "__init__",
+        "read",
+        "write",
+        "__init__",
+        "get",
+        "set",
+        "delete",
+        "exists",
+        "list_keys",
+        "clear",
+        "batch_get",
+        "batch_set",
+        "batch_delete",
+        "close",
+        "list"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\providers\\__init__.py",
+      "relative_path": "providers\\__init__.py",
+      "lines_of_code": 16,
+      "import_count": 5,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "sqlite_provider",
+        "mongodb_provider",
+        "memory_provider",
+        "failover_provider",
+        "tinydb_provider"
+      ],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\scripts\\run_migration.py",
+      "relative_path": "scripts\\run_migration.py",
+      "lines_of_code": 31,
+      "import_count": 5,
+      "class_count": 0,
+      "function_count": 1,
+      "complexity_score": 4,
+      "imports": [
+        "argparse",
+        "sys",
+        "os",
+        "logging",
+        "features.migration.primary_to_default_migration"
+      ],
+      "classes": [],
+      "functions": [
+        "run_migration"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\scripts\\setup_storage.py",
+      "relative_path": "scripts\\setup_storage.py",
+      "lines_of_code": 25,
+      "import_count": 4,
+      "class_count": 0,
+      "function_count": 1,
+      "complexity_score": 3,
+      "imports": [
+        "os",
+        "logging",
+        "pathlib",
+        "argparse"
+      ],
+      "classes": [],
+      "functions": [
+        "setup_storage"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\api\\admin\\admin_router.py",
+      "relative_path": "api\\admin\\admin_router.py",
+      "lines_of_code": 42,
+      "import_count": 5,
+      "class_count": 1,
+      "function_count": 1,
+      "complexity_score": 2,
+      "imports": [
+        "typing",
+        "fastapi",
+        "pydantic",
+        "features.recovery.break_glass",
+        "core.storage_factory"
+      ],
+      "classes": [
+        "RecoveryRequest"
+      ],
+      "functions": [
+        "get_factory"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\api\\admin\\__init__.py",
+      "relative_path": "api\\admin\\__init__.py",
+      "lines_of_code": 5,
+      "import_count": 1,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "admin_router"
+      ],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\api\\routers\\storage_router.py",
+      "relative_path": "api\\routers\\storage_router.py",
+      "lines_of_code": 59,
+      "import_count": 5,
+      "class_count": 3,
+      "function_count": 1,
+      "complexity_score": 2,
+      "imports": [
+        "core.models.storage_backend_config",
+        "typing",
+        "fastapi",
+        "pydantic",
+        "core.storage_factory"
+      ],
+      "classes": [
+        "StorageItem",
+        "BatchSetRequest",
+        "SimpleResponse"
+      ],
+      "functions": [
+        "get_factory"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\api\\routers\\__init__.py",
+      "relative_path": "api\\routers\\__init__.py",
+      "lines_of_code": 5,
+      "import_count": 1,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "storage_router"
+      ],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\interfaces\\archiving.py",
+      "relative_path": "core\\interfaces\\archiving.py",
+      "lines_of_code": 233,
+      "import_count": 2,
+      "class_count": 1,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "typing",
+        "abc"
+      ],
+      "classes": [
+        "IArchivingStorageProvider"
+      ],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\interfaces\\backup.py",
+      "relative_path": "core\\interfaces\\backup.py",
+      "lines_of_code": 146,
+      "import_count": 6,
+      "class_count": 2,
+      "function_count": 8,
+      "complexity_score": 11,
+      "imports": [
+        "typing",
+        "datetime",
+        "abc",
+        "celery.schedules",
+        "logging",
+        "pathlib"
+      ],
+      "classes": [
+        "IBackupProvider",
+        "BackupManager"
+      ],
+      "functions": [
+        "create_backup",
+        "restore_backup",
+        "list_backups",
+        "validate_backup",
+        "__init__",
+        "create_incremental_backup",
+        "schedule_backup",
+        "cleanup_old_backups"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\interfaces\\collection.py",
+      "relative_path": "core\\interfaces\\collection.py",
+      "lines_of_code": 169,
+      "import_count": 3,
+      "class_count": 2,
+      "function_count": 10,
+      "complexity_score": 8,
+      "imports": [
+        "storage_provider",
+        "typing",
+        "abc"
+      ],
+      "classes": [
+        "ICollectionProvider",
+        "CollectionManager"
+      ],
+      "functions": [
+        "store_objects",
+        "get_objects",
+        "search_objects",
+        "count_objects",
+        "list_collections",
+        "delete_collection",
+        "__init__",
+        "batch_store",
+        "_store_individually",
+        "get_collection_stats"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\interfaces\\health.py",
+      "relative_path": "core\\interfaces\\health.py",
+      "lines_of_code": 70,
+      "import_count": 3,
+      "class_count": 2,
+      "function_count": 8,
+      "complexity_score": 3,
+      "imports": [
+        "datetime",
+        "typing",
+        "abc"
+      ],
+      "classes": [
+        "IHealthCheck",
+        "HealthMonitor"
+      ],
+      "functions": [
+        "is_healthy",
+        "get_health_status",
+        "get_last_health_check",
+        "__init__",
+        "update_health",
+        "is_healthy",
+        "get_health_status",
+        "get_last_health_check"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\interfaces\\storage_provider.py",
+      "relative_path": "core\\interfaces\\storage_provider.py",
+      "lines_of_code": 105,
+      "import_count": 3,
+      "class_count": 1,
+      "function_count": 12,
+      "complexity_score": 2,
+      "imports": [
+        "asyncio",
+        "typing",
+        "abc"
+      ],
+      "classes": [
+        "IStorageProvider"
+      ],
+      "functions": [
+        "get",
+        "set",
+        "delete",
+        "exists",
+        "list_keys",
+        "clear",
+        "batch_get",
+        "batch_set",
+        "batch_delete",
+        "supports_ttl",
+        "set_with_ttl",
+        "close"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\interfaces\\sync.py",
+      "relative_path": "core\\interfaces\\sync.py",
+      "lines_of_code": 233,
+      "import_count": 5,
+      "class_count": 5,
+      "function_count": 13,
+      "complexity_score": 8,
+      "imports": [
+        "typing",
+        "datetime",
+        "abc",
+        "enum",
+        "storage_provider"
+      ],
+      "classes": [
+        "SyncDirection",
+        "SyncConflictResolution",
+        "SyncResult",
+        "ISyncProvider",
+        "SyncManager"
+      ],
+      "functions": [
+        "__init__",
+        "to_dict",
+        "sync_to",
+        "get_sync_metadata",
+        "prepare_for_sync",
+        "cleanup_after_sync",
+        "get_data_for_sync",
+        "apply_sync_data",
+        "__init__",
+        "sync_providers",
+        "_sync_bidirectional",
+        "get_sync_history",
+        "get_active_syncs"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\interfaces\\__init__.py",
+      "relative_path": "core\\interfaces\\__init__.py",
+      "lines_of_code": 5,
+      "import_count": 1,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "storage_provider"
+      ],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\models\\storage_backend_config.py",
+      "relative_path": "core\\models\\storage_backend_config.py",
+      "lines_of_code": 37,
+      "import_count": 3,
+      "class_count": 2,
+      "function_count": 1,
+      "complexity_score": 8,
+      "imports": [
+        "dataclasses",
+        "typing",
+        "enum"
+      ],
+      "classes": [
+        "StorageType",
+        "StorageBackendConfig"
+      ],
+      "functions": [
+        "validate"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\core\\models\\__init__.py",
+      "relative_path": "core\\models\\__init__.py",
+      "lines_of_code": 5,
+      "import_count": 1,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "storage_backend_config"
+      ],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\migration\\database_unlock.py",
+      "relative_path": "features\\migration\\database_unlock.py",
+      "lines_of_code": 324,
+      "import_count": 12,
+      "class_count": 2,
+      "function_count": 10,
+      "complexity_score": 32,
+      "imports": [
+        "encryption_migration",
+        "typing",
+        "hashlib",
+        "datetime",
+        "cryptography.fernet",
+        "os",
+        "shutil",
+        "time",
+        "logging",
+        "pathlib",
+        "json",
+        "providers.tinydb_provider"
+      ],
+      "classes": [
+        "UnlockResult",
+        "DatabaseUnlockService"
+      ],
+      "functions": [
+        "__init__",
+        "to_dict",
+        "__init__",
+        "unlock_database",
+        "_get_database_path",
+        "_detect_encryption_status",
+        "_unlock_with_key",
+        "_validate_unlock",
+        "_re_encrypt_database",
+        "_validate_encryption_key"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\migration\\decryption_migration.py",
+      "relative_path": "features\\migration\\decryption_migration.py",
+      "lines_of_code": 486,
+      "import_count": 14,
+      "class_count": 1,
+      "function_count": 15,
+      "complexity_score": 70,
+      "imports": [
+        "encryption_migration",
+        "typing",
+        "hashlib",
+        "providers.mongodb_provider",
+        "datetime",
+        "cryptography.fernet",
+        "core.interfaces.storage_provider",
+        "os",
+        "shutil",
+        "time",
+        "logging",
+        "pathlib",
+        "json",
+        "providers.tinydb_provider"
+      ],
+      "classes": [
+        "DatabaseDecryptionMigration"
+      ],
+      "functions": [
+        "__init__",
+        "migrate_database_to_unencrypted",
+        "_get_encrypted_source_provider",
+        "_is_provider_encrypted",
+        "_get_provider_path",
+        "_get_unencrypted_path",
+        "_create_unencrypted_provider",
+        "_migrate_data",
+        "_validate_entry",
+        "_perform_consistency_check",
+        "_compute_value_hash",
+        "_atomic_switchover",
+        "_rollback_switchover",
+        "_cleanup_failed_migration",
+        "_validate_encryption_key"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\migration\\encryption_migration.py",
+      "relative_path": "features\\migration\\encryption_migration.py",
+      "lines_of_code": 502,
+      "import_count": 13,
+      "class_count": 2,
+      "function_count": 17,
+      "complexity_score": 69,
+      "imports": [
+        "typing",
+        "hashlib",
+        "datetime",
+        "cryptography.fernet",
+        "core.interfaces.storage_provider",
+        "os",
+        "shutil",
+        "time",
+        "logging",
+        "pathlib",
+        "json",
+        "providers.tinydb_provider",
+        "providers.mongodb_provider"
+      ],
+      "classes": [
+        "MigrationResult",
+        "DatabaseEncryptionMigration"
+      ],
+      "functions": [
+        "__init__",
+        "to_dict",
+        "__init__",
+        "migrate_database_to_encrypted",
+        "_get_source_provider",
+        "_is_provider_encrypted",
+        "_get_provider_path",
+        "_get_encrypted_path",
+        "_create_encrypted_provider",
+        "_migrate_data",
+        "_validate_entry",
+        "_perform_consistency_check",
+        "_compute_value_hash",
+        "_atomic_switchover",
+        "_rollback_switchover",
+        "_cleanup_failed_migration",
+        "_validate_encryption_key"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\migration\\primary_to_default_migration.py",
+      "relative_path": "features\\migration\\primary_to_default_migration.py",
+      "lines_of_code": 319,
+      "import_count": 10,
+      "class_count": 2,
+      "function_count": 7,
+      "complexity_score": 44,
+      "imports": [
+        "typing",
+        "datetime",
+        "tinydb",
+        "cryptography.fernet",
+        "os",
+        "shutil",
+        "logging",
+        "pathlib",
+        "json",
+        "providers.tinydb_provider"
+      ],
+      "classes": [
+        "MigrationResult",
+        "PrimaryToDefaultMigration"
+      ],
+      "functions": [
+        "migrate_primary_to_default",
+        "__init__",
+        "to_dict",
+        "__init__",
+        "migrate_primary_to_default",
+        "_validate_entry",
+        "_perform_consistency_check"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\migration\\__init__.py",
+      "relative_path": "features\\migration\\__init__.py",
+      "lines_of_code": 20,
+      "import_count": 4,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "decryption_migration",
+        "database_unlock",
+        "primary_to_default_migration",
+        "encryption_migration"
+      ],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\optimization\\batch_operations_manager.py",
+      "relative_path": "features\\optimization\\batch_operations_manager.py",
+      "lines_of_code": 119,
+      "import_count": 5,
+      "class_count": 6,
+      "function_count": 5,
+      "complexity_score": 18,
+      "imports": [
+        "typing",
+        "core.interfaces.storage_provider",
+        "logging",
+        "enum",
+        "dataclasses"
+      ],
+      "classes": [
+        "BatchOperationType",
+        "BatchStrategy",
+        "BatchOperation",
+        "BatchResult",
+        "BatchOperationConfig",
+        "BatchOperationsManager"
+      ],
+      "functions": [
+        "__init__",
+        "execute_batch",
+        "get_batch",
+        "set_batch",
+        "delete_batch"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\optimization\\connection_pool_manager.py",
+      "relative_path": "features\\optimization\\connection_pool_manager.py",
+      "lines_of_code": 490,
+      "import_count": 11,
+      "class_count": 5,
+      "function_count": 37,
+      "complexity_score": 45,
+      "imports": [
+        "typing",
+        "pymongo",
+        "datetime",
+        "pymongo.monitoring",
+        "threading",
+        "dataclasses",
+        "time",
+        "logging",
+        "enum",
+        "contextlib",
+        "collections"
+      ],
+      "classes": [
+        "PoolScalingStrategy",
+        "ConnectionPoolMetrics",
+        "ConnectionPoolConfig",
+        "ConnectionPoolManager",
+        "PoolEventListener"
+      ],
+      "functions": [
+        "to_dict",
+        "_calculate_efficiency_score",
+        "validate",
+        "__init__",
+        "_initialize_pool",
+        "_create_pool_event_listener",
+        "_on_pool_ready",
+        "_on_pool_cleared",
+        "_on_connection_checked_out",
+        "_on_connection_checked_in",
+        "_on_connection_checkout_failed",
+        "_update_pool_metrics",
+        "_get_pool_statistics",
+        "_evaluate_scaling_needs",
+        "_scale_pool_up",
+        "_scale_pool_down",
+        "_resize_pool",
+        "_trigger_scaling_event",
+        "_start_health_monitoring",
+        "_health_monitor_loop",
+        "_check_performance_issues",
+        "get_client",
+        "get_metrics",
+        "get_metrics_history",
+        "get_health_status",
+        "_is_pool_healthy",
+        "force_scale",
+        "reset_metrics",
+        "stop_monitoring",
+        "close",
+        "__del__",
+        "__init__",
+        "pool_ready",
+        "pool_cleared",
+        "connection_checked_out",
+        "connection_checked_in",
+        "connection_check_out_failed"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\optimization\\database_index_manager.py",
+      "relative_path": "features\\optimization\\database_index_manager.py",
+      "lines_of_code": 111,
+      "import_count": 7,
+      "class_count": 5,
+      "function_count": 7,
+      "complexity_score": 10,
+      "imports": [
+        "typing",
+        "core.interfaces.storage_provider",
+        "providers.sqlite_provider",
+        "logging",
+        "enum",
+        "dataclasses",
+        "providers.mongodb_provider"
+      ],
+      "classes": [
+        "IndexType",
+        "IndexPriority",
+        "IndexDefinition",
+        "QueryPattern",
+        "DatabaseIndexManager"
+      ],
+      "functions": [
+        "__init__",
+        "add_index",
+        "ensure_indexes",
+        "_create_provider_index",
+        "_create_mongodb_index",
+        "_create_sqlite_index",
+        "drop_all_indexes"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\optimization\\health_check_optimizer.py",
+      "relative_path": "features\\optimization\\health_check_optimizer.py",
+      "lines_of_code": 103,
+      "import_count": 6,
+      "class_count": 5,
+      "function_count": 5,
+      "complexity_score": 10,
+      "imports": [
+        "typing",
+        "core.interfaces.storage_provider",
+        "time",
+        "logging",
+        "enum",
+        "dataclasses"
+      ],
+      "classes": [
+        "BackendHealthState",
+        "HealthCheckStrategy",
+        "HealthCheckResult",
+        "HealthCheckConfig",
+        "HealthCheckOptimizer"
+      ],
+      "functions": [
+        "__init__",
+        "monitor_backend",
+        "get_healthiest_backend",
+        "get_state",
+        "avg_latency"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\optimization\\pagination_manager.py",
+      "relative_path": "features\\optimization\\pagination_manager.py",
+      "lines_of_code": 106,
+      "import_count": 7,
+      "class_count": 6,
+      "function_count": 5,
+      "complexity_score": 4,
+      "imports": [
+        "typing",
+        "core.interfaces.storage_provider",
+        "logging",
+        "enum",
+        "json",
+        "dataclasses",
+        "base64"
+      ],
+      "classes": [
+        "SortOrder",
+        "CursorInfo",
+        "PaginationConfig",
+        "PaginationMetadata",
+        "PaginatedResult",
+        "PaginationManager"
+      ],
+      "functions": [
+        "__init__",
+        "paginate",
+        "_encode_cursor",
+        "decode_cursor",
+        "get_paginated_keys"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\optimization\\performance_monitor.py",
+      "relative_path": "features\\optimization\\performance_monitor.py",
+      "lines_of_code": 121,
+      "import_count": 6,
+      "class_count": 7,
+      "function_count": 4,
+      "complexity_score": 6,
+      "imports": [
+        "typing",
+        "dataclasses",
+        "time",
+        "logging",
+        "enum",
+        "collections"
+      ],
+      "classes": [
+        "AlertSeverity",
+        "MetricType",
+        "PerformanceMetric",
+        "PerformanceAlert",
+        "OptimizationSummary",
+        "OperationMetric",
+        "PerformanceMonitor"
+      ],
+      "functions": [
+        "__init__",
+        "record_operation",
+        "get_summary",
+        "clear_history"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\optimization\\sync_algorithm_optimizer.py",
+      "relative_path": "features\\optimization\\sync_algorithm_optimizer.py",
+      "lines_of_code": 87,
+      "import_count": 4,
+      "class_count": 7,
+      "function_count": 4,
+      "complexity_score": 9,
+      "imports": [
+        "dataclasses",
+        "typing",
+        "logging",
+        "enum"
+      ],
+      "classes": [
+        "SyncStrategy",
+        "ConflictResolutionStrategy",
+        "SyncItem",
+        "SyncDifference",
+        "SyncResult",
+        "SyncMetrics",
+        "SyncAlgorithmOptimizer"
+      ],
+      "functions": [
+        "__init__",
+        "optimize_sync_payload",
+        "recommend_strategy",
+        "record_sync"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\optimization\\__init__.py",
+      "relative_path": "features\\optimization\\__init__.py",
+      "lines_of_code": 95,
+      "import_count": 7,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "batch_operations_manager",
+        "sync_algorithm_optimizer",
+        "connection_pool_manager",
+        "pagination_manager",
+        "performance_monitor",
+        "health_check_optimizer",
+        "database_index_manager"
+      ],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\recovery\\break_glass.py",
+      "relative_path": "features\\recovery\\break_glass.py",
+      "lines_of_code": 216,
+      "import_count": 3,
+      "class_count": 1,
+      "function_count": 6,
+      "complexity_score": 14,
+      "imports": [
+        "datetime",
+        "logging",
+        "typing"
+      ],
+      "classes": [
+        "BreakGlassRecoveryService"
+      ],
+      "functions": [
+        "__init__",
+        "detect_break_glass_scenario",
+        "enable_recovery_mode",
+        "is_recovery_mode_enabled",
+        "provide_recovery_key",
+        "get_recovery_status"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\recovery\\__init__.py",
+      "relative_path": "features\\recovery\\__init__.py",
+      "lines_of_code": 5,
+      "import_count": 1,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "break_glass"
+      ],
+      "classes": [],
+      "functions": []
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\sharding\\sharding_service.py",
+      "relative_path": "features\\sharding\\sharding_service.py",
+      "lines_of_code": 133,
+      "import_count": 7,
+      "class_count": 1,
+      "function_count": 7,
+      "complexity_score": 25,
+      "imports": [
+        "typing",
+        "hashlib",
+        "os",
+        "sharding_strategy",
+        "logging",
+        "pathlib",
+        "providers.tinydb_provider"
+      ],
+      "classes": [
+        "ShardingService"
+      ],
+      "functions": [
+        "__init__",
+        "initialize_shards",
+        "get_shard_for_key",
+        "_determine_shard_index",
+        "store",
+        "get",
+        "close"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\sharding\\sharding_strategy.py",
+      "relative_path": "features\\sharding\\sharding_strategy.py",
+      "lines_of_code": 24,
+      "import_count": 3,
+      "class_count": 2,
+      "function_count": 1,
+      "complexity_score": 2,
+      "imports": [
+        "dataclasses",
+        "typing",
+        "enum"
+      ],
+      "classes": [
+        "ShardingAlgorithm",
+        "ShardingStrategy"
+      ],
+      "functions": [
+        "__post_init__"
+      ]
+    },
+    {
+      "path": "C:\\github_development\\AustralisSystems\\libraries\\python\\services\\_backups\\au_sys_unified_storage\\src\\au_sys_unified_storage_v2\\features\\sharding\\__init__.py",
+      "relative_path": "features\\sharding\\__init__.py",
+      "lines_of_code": 6,
+      "import_count": 2,
+      "class_count": 0,
+      "function_count": 0,
+      "complexity_score": 1,
+      "imports": [
+        "sharding_strategy",
+        "sharding_service"
+      ],
+      "classes": [],
+      "functions": []
+    }
+  ],
+  "external_dependencies": [
+    "sqlite_provider",
+    "batch_operations_manager",
+    "interfaces.storage_provider",
+    "typing",
+    "fnmatch",
+    "sync_algorithm_optimizer",
+    "connection_pool_manager",
+    "pymongo.monitoring",
+    "providers.sqlite_provider",
+    "celery.schedules",
+    "sharding_strategy",
+    "shutil",
+    "time",
+    "logging",
+    "primary_to_default_migration",
+    "pathlib",
+    "health_check_optimizer",
+    "dataclasses",
+    "collections",
+    "tinydb_provider",
+    "providers.mongodb_provider",
+    "storage_backend_config",
+    "core.models.storage_backend_config",
+    "providers.tinydb_provider",
+    "models.storage_backend_config",
+    "hashlib",
+    "break_glass",
+    "cryptography.fernet",
+    "storage_factory",
+    "threading",
+    "tinydb.storages",
+    "pagination_manager",
+    "abc",
+    "features.migration.primary_to_default_migration",
+    "storage_router",
+    "core.storage_factory",
+    "providers.memory_provider",
+    "storage_provider",
+    "pymongo.errors",
+    "pymongo",
+    "tinydb",
+    "pydantic",
+    "sqlite3",
+    "os",
+    "encryption_migration",
+    "asyncio",
+    "database_index_manager",
+    "providers.failover_provider",
+    "argparse",
+    "datetime",
+    "sys",
+    "fastapi",
+    "admin_router",
+    "memory_provider",
+    "features.recovery.break_glass",
+    "mongodb_provider",
+    "sharding_service",
+    "core.interfaces.storage_provider",
+    "features.migration.encryption_migration",
+    "failover_provider",
+    "performance_monitor",
+    "enum",
+    "json",
+    "contextlib",
+    "decryption_migration",
+    "database_unlock",
+    "base64"
+  ],
+  "internal_modules": []
+}

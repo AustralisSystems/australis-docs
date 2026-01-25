@@ -162,6 +162,20 @@ instruction: |
   - Violations = BLOCKING ISSUE - execution MUST STOP until fixed
 
   --------------------------------------------------------------------
+  FACTORY PROCESS INTEGRITY MANDATE (ABSOLUTE - NON-NEGOTIABLE)
+  --------------------------------------------------------------------
+  The UFC Capability Factory process is the ONLY authorized method for capability production.
+
+  Requirements:
+  - ALL legacy code MUST be processed through the Factory Pipeline (Stages 1-4)
+  - Manual copy-paste of code into `libraries/python/services/` is STRICTLY PROHIBITED
+  - Monoliths (>300 lines) MUST be decomposed (Auto or Manual)
+  - Factory Hard Stops (Decomposition Failure, Blueprint Violoation, Build Exhaustion) are BLOCKING ISSUES
+  - Verification MUST be performed in the `_testing` container context
+
+  Violations = BLOCKING ISSUE - execution MUST STOP until fixed.
+
+  --------------------------------------------------------------------
   SPEC HANDLING RULES (IRONCLAD)
   --------------------------------------------------------------------
   - The SPEC is executable law, not guidance

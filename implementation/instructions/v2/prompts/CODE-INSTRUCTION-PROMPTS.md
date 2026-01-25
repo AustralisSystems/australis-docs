@@ -199,6 +199,10 @@ READ_AND_ACKNOWLEDGE:
   - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
   - "004-PROTOCOL-Validate_Remediate_Codebase"
 
+THEN HALT
+
+---
+
 READ_AND_ACKNOWLEDGE:
   - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
   - "202-INSTRUCTIONS-Pure_Code_Implementation_Execution_Protocol"
@@ -442,16 +446,15 @@ SPEC_File_Extention: .md
 
 CODE_IMPLEMENTATION_SPEC_DOCS: "The provided CODE SPEC document(s) and OTHER document(s) provided in this instruction SHALL BE YOUR ONLY FOCUS."
 
-LOAD_AND_EXECUTE:
+READ_AND_ACKNOWLEDGE:
   DOCTRINE: "000-DOCTRINE-Enterprise_Canonical_Execution"
 
-LOAD_AND_EXECUTE::
-  READ_AND_COMPLY:
-    - "001-PROTOCOL-The_GoldenRule_Execution"
-    - "002-PROTOCOL-Zero_Tolerance_Remediation"
-    - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
-    - "004-PROTOCOL-Validate_Remediate_Codebase"
-    - "006-PROTOCOL-RFC2119_Requirements_Language"
+READ_AND_ACKNOWLEDGE:
+  - "001-PROTOCOL-The_GoldenRule_Execution"
+  - "002-PROTOCOL-Zero_Tolerance_Remediation"
+  - "003-PROTOCOL-FastAPI_Pure_Code_Implementation"
+  - "004-PROTOCOL-Validate_Remediate_Codebase"
+  - "006-PROTOCOL-RFC2119_Requirements_Language"
 
 DIRECTIVES:
   - THIS IS A CODE IMPLEMENTAITON, REFACTORING AND VALIDATION FOCUSED SESSION.
@@ -462,7 +465,7 @@ DIRECTIVES:
   - MAINTAIN AND UPDATE YOUR PROGRESS IN THE {{ CODE_IMPLEMENTATION_SPEC_DOCS }}.
   - THIS IS A FULL RE-WRITE.
 
-LOAD_AND_EXECUTE:
+EXECUTE:
   - "104-INSTRUCTIONS-Execute_Implementation_Phase_Tasks"
     INPUTS: {{ CODE_IMPLEMENTATION_SPEC_DOCS }}
 

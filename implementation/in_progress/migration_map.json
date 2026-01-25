@@ -1,0 +1,258 @@
+{
+  "package_name": "au_sys_unified_storage",
+  "total_migrations": 31,
+  "trivial_count": 4,
+  "simple_count": 8,
+  "moderate_count": 9,
+  "complex_count": 10,
+  "migrations": [
+    {
+      "source_path": "core\\storage_factory.py",
+      "target_path": "src/au_sys_unified_storage/core/services/storage_factory.py",
+      "migration_type": "split",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; Heavy imports (13); High complexity (39)"
+    },
+    {
+      "source_path": "providers\\failover_provider.py",
+      "target_path": "src/au_sys_unified_storage/core/services/failover_provider.py",
+      "migration_type": "split",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; High complexity (26)"
+    },
+    {
+      "source_path": "providers\\memory_provider.py",
+      "target_path": "src/au_sys_unified_storage/core/services/memory_provider.py",
+      "migration_type": "split",
+      "complexity": "simple",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "providers\\mongodb_provider.py",
+      "target_path": "src/au_sys_unified_storage/adapters/infrastructure/database/mongodb_provider.py",
+      "migration_type": "split",
+      "complexity": "moderate",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "providers\\sqlite_provider.py",
+      "target_path": "src/au_sys_unified_storage/core/services/sqlite_provider.py",
+      "migration_type": "split",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; High complexity (41)"
+    },
+    {
+      "source_path": "providers\\tinydb_provider.py",
+      "target_path": "src/au_sys_unified_storage/core/services/tinydb_provider.py",
+      "migration_type": "split",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; High complexity (23)"
+    },
+    {
+      "source_path": "scripts\\run_migration.py",
+      "target_path": "src/au_sys_unified_storage/adapters/cli/run_migration.py",
+      "migration_type": "move",
+      "complexity": "trivial",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "scripts\\setup_storage.py",
+      "target_path": "src/au_sys_unified_storage/adapters/cli/setup_storage.py",
+      "migration_type": "move",
+      "complexity": "trivial",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "api\\admin\\admin_router.py",
+      "target_path": "src/au_sys_unified_storage/adapters/api/admin/admin_router.py",
+      "migration_type": "move",
+      "complexity": "trivial",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "api\\routers\\storage_router.py",
+      "target_path": "src/au_sys_unified_storage/adapters/api/routing/storage_router.py",
+      "migration_type": "move",
+      "complexity": "simple",
+      "requires_refactor": false,
+      "notes": "Multiple classes (3)"
+    },
+    {
+      "source_path": "core\\interfaces\\archiving.py",
+      "target_path": "src/au_sys_unified_storage/core/services/archiving.py",
+      "migration_type": "move",
+      "complexity": "moderate",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "core\\interfaces\\backup.py",
+      "target_path": "src/au_sys_unified_storage/core/services/backup.py",
+      "migration_type": "move",
+      "complexity": "moderate",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "core\\interfaces\\collection.py",
+      "target_path": "src/au_sys_unified_storage/core/services/collection.py",
+      "migration_type": "move",
+      "complexity": "moderate",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "core\\interfaces\\health.py",
+      "target_path": "src/au_sys_unified_storage/core/services/health.py",
+      "migration_type": "move",
+      "complexity": "simple",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "core\\interfaces\\storage_provider.py",
+      "target_path": "src/au_sys_unified_storage/core/services/storage_provider.py",
+      "migration_type": "split",
+      "complexity": "simple",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "core\\interfaces\\sync.py",
+      "target_path": "src/au_sys_unified_storage/core/services/sync.py",
+      "migration_type": "split",
+      "complexity": "moderate",
+      "requires_refactor": false,
+      "notes": "Multiple classes (5)"
+    },
+    {
+      "source_path": "core\\models\\storage_backend_config.py",
+      "target_path": "src/au_sys_unified_storage/manifest/config/storage_backend_config.py",
+      "migration_type": "move",
+      "complexity": "simple",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "features\\migration\\database_unlock.py",
+      "target_path": "src/au_sys_unified_storage/core/services/database_unlock.py",
+      "migration_type": "move",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; Heavy imports (12); High complexity (32)"
+    },
+    {
+      "source_path": "features\\migration\\decryption_migration.py",
+      "target_path": "src/au_sys_unified_storage/core/services/decryption_migration.py",
+      "migration_type": "split",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; Heavy imports (14); High complexity (70)"
+    },
+    {
+      "source_path": "features\\migration\\encryption_migration.py",
+      "target_path": "src/au_sys_unified_storage/core/services/encryption_migration.py",
+      "migration_type": "split",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; Heavy imports (13); High complexity (69)"
+    },
+    {
+      "source_path": "features\\migration\\primary_to_default_migration.py",
+      "target_path": "src/au_sys_unified_storage/core/services/primary_to_default_migration.py",
+      "migration_type": "move",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; High complexity (44)"
+    },
+    {
+      "source_path": "features\\optimization\\batch_operations_manager.py",
+      "target_path": "src/au_sys_unified_storage/core/services/batch_operations_manager.py",
+      "migration_type": "split",
+      "complexity": "moderate",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; Multiple classes (6)"
+    },
+    {
+      "source_path": "features\\optimization\\connection_pool_manager.py",
+      "target_path": "src/au_sys_unified_storage/adapters/infrastructure/database/connection_pool_manager.py",
+      "migration_type": "split",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; Heavy imports (11); Multiple classes (5); High complexity (45)"
+    },
+    {
+      "source_path": "features\\optimization\\database_index_manager.py",
+      "target_path": "src/au_sys_unified_storage/core/services/database_index_manager.py",
+      "migration_type": "split",
+      "complexity": "moderate",
+      "requires_refactor": false,
+      "notes": "Multiple classes (5)"
+    },
+    {
+      "source_path": "features\\optimization\\health_check_optimizer.py",
+      "target_path": "src/au_sys_unified_storage/core/services/health_check_optimizer.py",
+      "migration_type": "split",
+      "complexity": "moderate",
+      "requires_refactor": false,
+      "notes": "Multiple classes (5)"
+    },
+    {
+      "source_path": "features\\optimization\\pagination_manager.py",
+      "target_path": "src/au_sys_unified_storage/core/services/pagination_manager.py",
+      "migration_type": "split",
+      "complexity": "simple",
+      "requires_refactor": false,
+      "notes": "Multiple classes (6)"
+    },
+    {
+      "source_path": "features\\optimization\\performance_monitor.py",
+      "target_path": "src/au_sys_unified_storage/core/services/performance_monitor.py",
+      "migration_type": "split",
+      "complexity": "simple",
+      "requires_refactor": false,
+      "notes": "Multiple classes (7)"
+    },
+    {
+      "source_path": "features\\optimization\\sync_algorithm_optimizer.py",
+      "target_path": "src/au_sys_unified_storage/core/services/sync_algorithm_optimizer.py",
+      "migration_type": "split",
+      "complexity": "simple",
+      "requires_refactor": false,
+      "notes": "Multiple classes (7)"
+    },
+    {
+      "source_path": "features\\recovery\\break_glass.py",
+      "target_path": "src/au_sys_unified_storage/core/services/break_glass.py",
+      "migration_type": "move",
+      "complexity": "moderate",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    },
+    {
+      "source_path": "features\\sharding\\sharding_service.py",
+      "target_path": "src/au_sys_unified_storage/core/services/sharding_service.py",
+      "migration_type": "move",
+      "complexity": "complex",
+      "requires_refactor": true,
+      "notes": "Requires refactoring; High complexity (25)"
+    },
+    {
+      "source_path": "features\\sharding\\sharding_strategy.py",
+      "target_path": "src/au_sys_unified_storage/core/services/sharding_strategy.py",
+      "migration_type": "move",
+      "complexity": "trivial",
+      "requires_refactor": false,
+      "notes": "Standard migration"
+    }
+  ]
+}
